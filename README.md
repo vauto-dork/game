@@ -4,11 +4,13 @@ Requires NodeJS, NPM, and MongoDB.
 Remote DB is for production use ONLY. Use a local mongodb for testing.
 
 #Running
-*Node JS Server*
+__Node JS Server__
+
 on Mac: `> DEBUG=dork-api ./bin/www`
 
-*MongoDb Instance*
-> `mongod`
+__MongoDb Instance__
+
+`> mongod`
 
 #Files
 * app.js - starting point. Update this when adding new routes
