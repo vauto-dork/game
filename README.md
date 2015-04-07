@@ -11,6 +11,11 @@ __MongoDb Instance__\s\s
 `> mongod`
 
 #Openshift info
+##Jenkins
+https://jenkins-sababado.rhcloud.com/
+User:   `admin`\s\s
+Pwd:    `uberdork`\s\s
+
 ##Dev
 Root User:  `admin`\s\s
 Root Pwd:   `arTF1_tXyu_S`\s\s
