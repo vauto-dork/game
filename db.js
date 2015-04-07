@@ -18,9 +18,9 @@ var DB = function(){
     self.dbPass = process.env.OPENSHIFT_MONGODB_DB_PASSWORD;
 
     // Logic to open a database connection. We are going to call this outside of app so it is available to all our functions inside.
-
-    mongoose.connect(
-        'mongodb://'+self.dbUser+":"+self.dbPass+"@"+self.dbHost+":"+self.dbPort+"/"+self.dbAppName);
+    var dbUri = 'mongodb://'+self.dbUser+":"+self.dbPass+"@"+self.dbHost+":"+self.dbPort+"/"+self.dbAppName;
+    console.info("DB Connecting to ", dbUri);
+    mongoose.connect(dbUri);
 
     //self.connectDb = function(callback){
     //    self.db.open(function(err, db){

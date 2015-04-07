@@ -23,6 +23,7 @@ app.set('view engine', 'jade');
 
 // Database
 if(conf.MONGO_URI) {
+  console.info("DB Connecting to ", conf.MONGO_URI);
   mongoose.connect(conf.MONGO_URI);
 } else {
   // Connect with OpenShift

@@ -26,13 +26,17 @@ Pwd:    `arTF1_tXyu_S`
 Root User:  `admin`  
 Root Pwd:   `arTF1_tXyu_S`  
 Database Name:  `dork_db`  
-Connection URL: `mongodb://$OPENSHIFT_MONGODB_DB_HOST:$OPENSHIFT_MONGODB_DB_PORT/`
 
 ##Prod
 ####Jenkins
 https://jenkins-vautodork.rhcloud.com  
 User:   `admin`  
 Pwd:    `uberdork`
+
+####MongoDb
+Root User:  `admin`  
+Root Pwd:   `9JAIxATRPsxq`  
+Database Name: `prod`
 
 #Files
 * app.js - starting point. Update this when adding new routes
