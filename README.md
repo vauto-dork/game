@@ -14,7 +14,12 @@ __MongoDb Instance__
 ##Jenkins
 https://jenkins-sababado.rhcloud.com/  
 User:   `admin`  
-Pwd:    `uberdork`  
+Pwd:    `uberdork`
+  
+##RockMongo
+https://dorktest-sababado.rhcloud.com/rockmongo/  
+User:   `admin`  
+Pwd:    `arTF1_tXyu_S`
 
 ##Dev
 Root User:  `admin`  

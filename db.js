@@ -13,13 +13,14 @@ var DB = function(){
     self.dbHost = process.env.OPENSHIFT_MONGODB_DB_HOST;
     self.dbPort = process.env.OPENSHIFT_MONGODB_DB_PORT;
     //self.db = new mongodb.Db(process.env.OPENSHIFT_APP_NAME, self.dbServer, {auto_reconnect: true});
+    self.dbAppName = process.env.OPENSHIFT_APP_NAME
     self.dbUser = process.env.OPENSHIFT_MONGODB_DB_USERNAME;
     self.dbPass = process.env.OPENSHIFT_MONGODB_DB_PASSWORD;
 
     // Logic to open a database connection. We are going to call this outside of app so it is available to all our functions inside.
 
     mongoose.connect(
-        'mongodb://'+self.dbUser+":"+self.dbPass+"@"+self.dbHost+":"+self.dbPort+"/dork_db");
+        'mongodb://'+self.dbUser+":"+self.dbPass+"@"+self.dbHost+":"+self.dbPort+"/"+self.dbAppName);
 
     //self.connectDb = function(callback){
     //    self.db.open(function(err, db){
