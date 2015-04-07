@@ -13,7 +13,9 @@ var conf = new Config();
 /**
  * Get port from environment and store in Express.
  */
+console.info("Using config: ", conf);
 var port = normalizePort(process.env.PORT || conf.NODE_PORT);
+console.info("Setting port: ", port);
 app.set('port', port);
 
 /**
