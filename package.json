@@ -1,6 +1,6 @@
 {
   "name": "dork-api",
-  "main": "app.js",
+  "main": "./bin/www",
   "version": "0.0.0",
   "private": true,
   "scripts": {
