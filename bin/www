@@ -7,12 +7,14 @@
 var app = require('../app');
 var debug = require('debug')('dork-api:server');
 var http = require('http');
+var Config = require ('../config');
+var conf = new Config();
 
 /**
  * Get port from environment and store in Express.
  */
-
-var port = normalizePort(process.env.PORT || '80');
+console.info("config: ", conf);
+var port = normalizePort(process.env.PORT || conf.NODE_PORT);
 app.set('port', port);
 
 /**

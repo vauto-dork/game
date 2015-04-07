@@ -4,13 +4,18 @@ Requires NodeJS, NPM, and MongoDB.
 Remote DB is for production use ONLY. Use a local mongodb for testing.
 
 #Running
-__Node JS Server__
-
+__Node JS Server__\s\s
 on Mac: `> DEBUG=dork-api ./bin/www`
 
-__MongoDb Instance__
-
+__MongoDb Instance__\s\s
 `> mongod`
+
+#Openshift info
+##Dev
+Root User:  `admin`\s\s
+Root Pwd:   `arTF1_tXyu_S`\s\s
+Database Name:  `dork_db`\s\s
+Connection URL: `mongodb://$OPENSHIFT_MONGODB_DB_HOST:$OPENSHIFT_MONGODB_DB_PORT/`
 
 #Files
 * app.js - starting point. Update this when adding new routes
