@@ -18,7 +18,10 @@ router.get('/', function (req, res, next) {
 /* POST save game. */
 router.post('/', function (req, res, next) {
 	GameHelper.saveGame(null, req.body, next, function(game) {
-		res.end();
+		game.populate("winner", function (err) {
+			if (err) return next(err);
+			res.json(game);
+		});
 	});
 });
 

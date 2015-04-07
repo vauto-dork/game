@@ -9,13 +9,14 @@ module.exports =
 				if (err) return next(err);
 				if(onSuccess) onSuccess(game);
 			};
-
 		if(id) {
 			// update existing game
+			console.info("Saving game: ", id, ": ", game);
 			GameModel.findByIdAndUpdate(id, game, resultFunction);
 		}
 		else {
 			//create new game
+			console.info("Creating game: ", game);
 			GameModel.create(game, resultFunction);
 		}
 	}

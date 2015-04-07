@@ -16,9 +16,8 @@ router.post('/', function (req, res, next){
 		for (var i=0; i<gamePlayers.length; i++) {
 			gamePlayers[i].game._id = game._id;
 		}
-		console.info('saved game for ', gamePlayers);
 		// insert
-		GamePlayerModel.collection.insert(gamePlayers, function (err, docs) {
+		GamePlayerModel.create(gamePlayers, function (err, docs) {
 			if (err) return next(err);
 			res.end();
 		});
@@ -38,10 +37,24 @@ router.get('/:gameId', function (req, res, next) {
 });
 
 router.get('/', function (req, res, next) {
-	GamePlayerModel.find(function (err, gamePlayers) {
-		if (err) return next(err);
-		res.json(gamePlayers);
-	});
+	//GamePlayerModel.find(function (err, gamePlayers) {
+	//	if (err) return next(err);
+	//	res.json(gamePlayers);
+	//})
+	//.select('game player points place')
+	//.populate('game')
+	//.populate('player')
+	//.exec();
+
+	GamePlayerModel
+		.find()
+		.populate({
+			path: 'game player'
+		})
+		.exec(function (err, gamePlayers) {
+			if (err) return next(err);
+			res.json(gamePlayers);
+		})
 });
 
 module.exports = router;
