@@ -33,6 +33,11 @@ https://jenkins-vautodork.rhcloud.com
 User:   `admin`  
 Pwd:    `uberdork`
 
+####RockMongo
+https://prod-vautodork.rhcloud.com/rockmongo/  
+User:   `admin`  
+Pwd:    `9JAIxATRPsxq`
+
 ####MongoDb
 Root User:  `admin`  
 Root Pwd:   `9JAIxATRPsxq`  
