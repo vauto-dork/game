@@ -22,7 +22,12 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 // Database
-mongoose.connect(conf.MONGO_URI);
+if(conf.MONGO_URI) {
+  mongoose.connect(conf.MONGO_URI);
+} else {
+  // Connect with OpenShift
+  require('./db');
+}
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
