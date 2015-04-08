@@ -14,9 +14,11 @@ var conf = new Config();
  * Get port from environment and store in Express.
  */
 console.info("Using config: ", conf);
-var port = normalizePort(process.env.PORT);
+//var port = normalizePort(process.env.PORT);
 console.info("Setting port: ", port);
-app.set('port', port);
+//app.set('port', port);
+app.set('port', (process.env.PORT || 3000));
+app.use(express.static(__dirname + '/public'));
 
 /**
  * Create HTTP server.
@@ -30,9 +32,9 @@ var server = http.createServer(app);
  */
 
 console.info("Listening...");
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+app.listen(port, connectionListener);
+//server.on('error', onError);
+//server.on('listening', onListening);
 
 /**
  * Normalize a port into a number, string, or false.
@@ -52,6 +54,11 @@ function normalizePort(val) {
   }
 
   return false;
+}
+
+function connectionListener(error) {
+  if(error) onError(error);
+  else onListening();
 }
 
 /**
@@ -87,9 +94,10 @@ function onError(error) {
  */
 
 function onListening() {
-  var addr = server.address();
-  var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
+  //var addr = server.address();
+  //var bind = typeof addr === 'string'
+  //  ? 'pipe ' + addr
+  //  : 'port ' + addr.port;
+  var bind = app.get('port');
   console.info('Listening on ' + bind);
 }
