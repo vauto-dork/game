@@ -1,7 +1,7 @@
 #Setup
 Requires NodeJS, NPM, and MongoDB.
 
-Remote DB is for production use ONLY. Use a local mongodb for testing.
+Remote DB is for production use ONLY. Use a local mongodb or setup a Heroku dev env for testing.
 
 #Running
 __Node JS Server__  
@@ -10,29 +10,26 @@ on Mac: `> DEBUG=dork-api ./bin/www`
 __MongoDb Instance__  
 `> mongod`
 
-#Openshift info
-##Dev
-A dev environment can easily be setup using Heroku. No etra configuration is necessary.
-Create an account on heroku.com. Follow the getting started guide to create a Node JS application,
-however instead of using their sample git repo use this one. Before deploying the app make sure
-to install a MongoLabs add-on to the app. This requires credit card information in case you
-choose something other than the free option. Again: **No extra configuration is necessary**.
+#Heroku Setup
+Login to Heroku with the credentials
 
-##Prod
-####Jenkins
-https://jenkins-vautodork.rhcloud.com  
-User:   `admin`  
-Pwd:    `uberdork`
+Username:   `vautodork@gmail.com`  
+Password:   `uberdork`
 
-####RockMongo
-https://prod-vautodork.rhcloud.com/rockmongo/  
-User:   `admin`  
-Pwd:    `9JAIxATRPsxq`
+Please do **not** do anything that is not free. My card is attached to the account and I'll
+discontinue service immediately if unexpected charges show up.
 
-####MongoDb
-Root User:  `admin`  
-Root Pwd:   `9JAIxATRPsxq`  
-Database Name: `prod`
+There is an app on Heroku for each environment.
+
+Follow these steps for each env (dev, prod) to set up your local environment:
+
+1. Add the git repo as a remote. When "code is good" `git push <remote_name> master` to deploy your changes.
+
+##dork-dev
+**Git Repo**    `https://git.heroku.com/dork-dev.git`  
+
+##dork-prod
+**Git Repo**    `https://git.heroku.com/dork-prod.git`
 
 #Files
 * app.js - starting point. Update this when adding new routes
