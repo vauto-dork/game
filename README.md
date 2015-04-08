@@ -12,20 +12,11 @@ __MongoDb Instance__
 
 #Openshift info
 ##Dev
-####Jenkins
-https://jenkins-sababado.rhcloud.com/  
-User:   `admin`  
-Pwd:    `uberdork`
-  
-####RockMongo
-https://dorktest-sababado.rhcloud.com/rockmongo/  
-User:   `admin`  
-Pwd:    `arTF1_tXyu_S`
-
-####MongoDb
-Root User:  `admin`  
-Root Pwd:   `arTF1_tXyu_S`  
-Database Name:  `dork_db`  
+A dev environment can easily be setup using Heroku. No etra configuration is necessary.
+Create an account on heroku.com. Follow the getting started guide to create a Node JS application,
+however instead of using their sample git repo use this one. Before deploying the app make sure
+to install a MongoLabs add-on to the app. This requires credit card information in case you
+choose something other than the free option. Again: **No extra configuration is necessary**.
 
 ##Prod
 ####Jenkins

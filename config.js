@@ -2,9 +2,7 @@ module.exports = function(){
     switch(process.env.NODE_ENV){
         case 'development':
             return {
-                "MONGO_URI": process.env.MONGOLAB_URI,
-                "NODE_PORT": process.env.OPENSHIFT_NODEJS_PORT,
-                "NODE_IP": process.env.OPENSHIFT_NODEJS_IP
+                "MONGO_URI": process.env.MONGOLAB_URI
             };
 
         case 'production':
