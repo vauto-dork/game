@@ -14,7 +14,7 @@ var conf = new Config();
  * Get port from environment and store in Express.
  */
 console.info("Using config: ", conf);
-var port = normalizePort(process.env.PORT || conf.NODE_PORT);
+var port = normalizePort(process.env.PORT);
 console.info("Setting port: ", port);
 app.set('port', port);
 
@@ -30,7 +30,7 @@ var server = http.createServer(app);
  */
 
 console.info("Listening...");
-server.listen(conf.NODE_IP, port);
+server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 
