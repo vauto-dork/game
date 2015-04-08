@@ -26,6 +26,7 @@ if(conf.MONGO_URI) {
   console.info("DB Connecting to ", conf.MONGO_URI);
   mongoose.connect(conf.MONGO_URI);
 } else {
+  //mongoose.connect("mongodb://dorkAdmin:uberdork@ds061641.mongolab.com:61641/heroku_app35659971");
   // Connect with OpenShift
   require('./db');
 }
