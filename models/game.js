@@ -15,7 +15,7 @@ var GameSchema = new Schema({
   players: [{
     player: { type: Schema.Types.ObjectId, ref: 'Player', required: true},
     points: { type: Number, default: 0 },
-    place: { type: Number, default: 0 }
+    rank: { type: Number, default: 0 }
   }]
 });
 
