@@ -12,13 +12,15 @@ router.get('/', function (req, res, next) {
 		res.json(game);
 	})
 	.populate('winner')
+	.populate('players.player')
 	.exec();
 });
 
 /* POST save game. */
 router.post('/', function (req, res, next) {
 	GameHelper.saveGame(null, req.body, next, function(game) {
-		game.populate("winner", function (err) {
+		game.populate('players.player')
+			.populate("winner", function (err) {
 			if (err) return next(err);
 			res.json(game);
 		});
@@ -31,6 +33,7 @@ router.get('/:id', function (req, res, next) {
 		res.json(game);
 	})
 	.populate('winner')
+	.populate('players.player')
 	.exec();
 })
 

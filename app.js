@@ -13,7 +13,6 @@ var models = require('./models');
 var routes = require('./routes/index');
 var players = require('./routes/players');
 var games = require('./routes/games');
-var scores = require('./routes/scores');
 
 var app = express();
 
@@ -36,7 +35,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/games', games);
 app.use('/players', players);
-app.use('/scores', scores);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

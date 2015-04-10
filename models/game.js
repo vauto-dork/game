@@ -12,6 +12,11 @@ var Schema = mongoose.Schema;
 var GameSchema = new Schema({
   winner: { type: Schema.Types.ObjectId, ref: 'Player', required: true},
   datePlayed: { type: Date, default: Date.now, required: true },
+  players: [{
+    player: { type: Schema.Types.ObjectId, ref: 'Player', required: true},
+    points: { type: Number, default: 0 },
+    place: { type: Number, default: 0 }
+  }]
 });
 
 /**
