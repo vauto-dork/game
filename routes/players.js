@@ -102,17 +102,46 @@ router.get('/ranked/', function (req, res, next) {
 				}
 			}
 
-			res.json(rankedPlayers);
+			// Now fetch the complete list of players and append any
+			// of them to the list if need be. These are the "un-ranked" players.
+			PlayerModel.find(function (err, players) {
+				if(err) return next(err);
+
+				for(var i=0; i<players.length; i++) {
+					if(!rankedPlayersArrContainsPlayer(rankedPlayers, players[i])) {
+						rankedPlayers.push(getEmptyRankedPlayerObject(players[i]));
+					}
+				}
+
+				res.json(rankedPlayers);
+			})
+
+			//res.json(rankedPlayers);
 		});
 });
+
+/**
+ * Check if an array of Ranked Players contains a Player
+ * @param rankedPlayersArr
+ * @param player
+ * @returns {boolean} True if it contains the player, false if not.
+ */
+var rankedPlayersArrContainsPlayer = function(rankedPlayersArr, player) {
+	for(var i=0; i<rankedPlayersArr.length; i++) {
+		if(rankedPlayersArr[i].player.id == player.id) {
+			return true;
+		}
+	}
+	return false;
+}
 
 var getPlayerAverage = function(gamePlayer) {
 	return gamePlayer.totalPoints / gamePlayer.gamesPlayed;
 }
 
-var getEmptyRankedPlayerObject = function() {
+var getEmptyRankedPlayerObject = function(player) {
 	return {
-		player: {},
+		player: player ? player : {},
 		totalPoints: 0,
 		gamesPlayed: 0,
 		rank: 0
