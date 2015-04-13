@@ -27,7 +27,16 @@ var PlayerSchema = new Schema({
  */
 
 PlayerSchema.method({
+  getDisplayName: function() {
+    if(this.nickname && this.nickname.length > 0) {
+      return this.nickname;
+    }
+    return this.getFullName();
+  },
 
+  getFullName: function() {
+    return this.firstName.concat(" ", this.lastName);
+  }
 });
 
 /**

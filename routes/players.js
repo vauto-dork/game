@@ -4,10 +4,26 @@ var router = express.Router();
 var PlayerModel = mongoose.model('Player');
 var GameModel = mongoose.model('Game');
 
-/* GET players listing. */
+/**
+ * GET players.
+ * @queryParam sort - True to sort the result by display name, false to not.
+ * @return List of players.
+ */
 router.get('/', function (req, res, next) {
+	// TODO Make this return only Active players. At the time of writing there is no concept of 'Active' players.
 	PlayerModel.find(function (err, players) {
 		if(err) return next(err);
+		//sort
+		if(req.query.sort) {
+			var stripTheRegex = /^The/;
+			if (players) {
+				players.sort(function (a, b) {
+					var aName = a.getDisplayName().replace(stripTheRegex, "").trim();
+					var bName = b.getDisplayName().replace(stripTheRegex, "").trim();
+					return aName.localeCompare(bName);
+				});
+			}
+		}
 		res.json(players);
 	})
 });
