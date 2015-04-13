@@ -36,6 +36,10 @@ PlayerSchema.method({
 
   getFullName: function() {
     return this.firstName.concat(" ", this.lastName);
+  },
+
+  getAbbreviatedName: function() {
+    return this.firstName.charAt(0).concat(this.lastName.charAt(0));
   }
 });
 

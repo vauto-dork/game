@@ -18,8 +18,8 @@ router.get('/', function (req, res, next) {
 			var stripTheRegex = /^The/;
 			if (players) {
 				players.sort(function (a, b) {
-					var aName = a.getDisplayName().replace(stripTheRegex, "").trim();
-					var bName = b.getDisplayName().replace(stripTheRegex, "").trim();
+					var aName = a.getAbbreviatedName().replace(stripTheRegex, "").trim();
+					var bName = b.getAbbreviatedName().replace(stripTheRegex, "").trim();
 					return aName.localeCompare(bName);
 				});
 			}
