@@ -4,11 +4,11 @@ Requires NodeJS, NPM, and MongoDB.
 Remote DB is for production use ONLY. Use a local mongodb or setup a Heroku dev env for testing.
 
 #Running
-__Node JS Server__  
-on Mac: `> DEBUG=dork-api ./bin/www`
-
-__MongoDb Instance__  
+1. First start a MongoDb instance  
 `> mongod`
+2. Start the Node JS server  
+on Mac: `> DEBUG=dork-api ./bin/www`
+3. Test that the server is running by going to `localhost:5000` in your browser.
 
 #Account Info
 username: `vautodork@gmail.com`  
