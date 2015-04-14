@@ -13,7 +13,7 @@ __MongoDb Instance__
 #Account Info
 username: `vautodork@gmail.com`  
 password: `uberdork`  
-This account is used for gmail, Trello, and Parse
+This account is used for gmail, Trello, pretty much anything that this account should be associated with.
 
 #Trello
 https://trello.com/b/Es8lXpIL/dork-android
