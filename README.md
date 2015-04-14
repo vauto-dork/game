@@ -1,3 +1,5 @@
+[![Codacy Badge](https://www.codacy.com/project/badge/e8b26b82697c41af8dbfec0da42caeb2)](https://www.codacy.com)
+
 #Setup
 Requires NodeJS, NPM, and MongoDB.
 
