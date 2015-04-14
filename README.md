@@ -10,6 +10,14 @@ on Mac: `> DEBUG=dork-api ./bin/www`
 __MongoDb Instance__  
 `> mongod`
 
+#Account Info
+username: `vautodork@gmail.com`  
+password: `uberdork`  
+This account is used for gmail, Trello, and Parse
+
+#Trello
+https://trello.com/b/Es8lXpIL/dork-android
+
 #Heroku Setup
 Login to Heroku with the credentials
 
@@ -26,10 +34,10 @@ Follow these steps for each env (dev, prod) to set up your local environment:
 1. Add the git repo as a remote. When "code is good" `git push <remote_name> master` to deploy your changes.
 
 ##dork-dev
-**Git Repo**    `https://git.heroku.com/dork-dev.git`  
+**Git Repo**    https://git.heroku.com/dork-dev.git  
 
 ##dork-prod
-**Git Repo**    `https://git.heroku.com/dork-prod.git`
+**Git Repo**    https://git.heroku.com/dork-prod.git
 
 #Files
 * app.js - starting point. Update this when adding new routes
