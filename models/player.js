@@ -48,6 +48,13 @@ PlayerSchema.method({
  */
 
 PlayerSchema.static({
+  SortTypes: {
+    Alphabetical : 0,
+    Rating: 1,
+    Board: 2, // sort order that is used for the white board.
+    Salty: 3 // Reverse Board sort.
+  },
+
   arrContains: function(playerArr, player) {
     if(!playerArr || !player) {
       return false;
@@ -91,12 +98,58 @@ PlayerSchema.static({
     return gamePlayer.totalPoints / gamePlayer.gamesPlayed;
   },
 
-  rankedPlayerSort: function(rankedPlayers) {
-    rankedPlayers.sort(function(a,b){
+  /**
+   *
+   * @param rankedPlayers
+   * @param sortType
+   */
+  rankedPlayerSort: function(rankedPlayers, sortType) {
+    var sTypes = PlayerSchema.statics.SortTypes;
+    if(!sortType) {
+      sortType = sTypes.Rating
+    }
+
+    if(sortType == sTypes.Alphabetical) {
+      // do this at some point
+    } else if(sortType == sTypes.Rating) {
+      PlayerSchema.statics.rankedPlayerSortByRating(rankedPlayers);
+    } else if(sortType == sTypes.Board) {
+      // sort by rating first
+      PlayerSchema.statics.rankedPlayerSortByRating(rankedPlayers);
+      // then put in game order.
+      PlayerSchema.statics.rankedPlayerSortForGame(rankedPlayers);
+    } else if(sortType == sTypes.Salty) {
+      // do this at some point
+    }
+  },
+
+  rankedPlayerSortByRating: function(rankedPlayers) {
+    rankedPlayers.sort(function (a, b) {
       var aAvg = PlayerSchema.statics.getRankedPlayerAverage(a);
       var bAvg = PlayerSchema.statics.getRankedPlayerAverage(b);
       return bAvg - aAvg;
     });
+  },
+
+  rankedPlayerSortForGame: function(rankedPlayers) {
+    var copy = rankedPlayers.slice(0);
+    for(var i=1; i<copy.length; i++) {
+      var newIndex = Math.floor(i/2);
+      if(i%2 == 1) {
+        // even rank (odd index)
+        rankedPlayers[rankedPlayers.length - 1 - newIndex] = copy[i];
+      } else {
+        //odd rank (even index)
+        rankedPlayers[newIndex] = copy[i];
+      }
+    }
+  },
+
+  isSortTypeValid: function(sortType) {
+    return sortType == PlayerSchema.statics.SortTypes.Alphabetical ||
+        sortType == PlayerSchema.statics.SortTypes.Board ||
+        sortType == PlayerSchema.statics.SortTypes.Rating ||
+        sortType == PlayerSchema.statics.SortTypes.Salty;
   }
 });
 

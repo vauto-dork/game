@@ -68,6 +68,7 @@ router.post('/', function (req, res, next) {
  * 		- 1: game - Game order. Example 1,3,5,7,9,10,8,6,4,2
  * Post params:
  *  playerArray - array of players. Get the ranks for only these players
+ *  sortType
  *
  * @return A list of ranked players.
  * <pre>
@@ -96,6 +97,12 @@ function getRankedPlayers(req, next, success) {
 	var startDateRange = dateRange[0];
 	var endDateRange = dateRange[1];
 
+	// validate sort type
+	var sortType = req.query.sortType;
+	if(sortType && !PlayerModel.isSortTypeValid(sortType)) {
+		return next(new Error("Invalid sort type \"" + sortType + "\"."));
+	}
+
 	// get all games that happened in the time span
 
 	var returnAllPlayers = true;
@@ -119,7 +126,7 @@ function getRankedPlayers(req, next, success) {
 					for(var j=0; j < game.players.length; j++) {
 						var gamePlayer = game.players[j];
 						// TODO There's gotta be a more efficient way to do this...
-						rankedPlayers = getRankedPlayerObject(rankedPlayers, gamePlayer);
+						rankedPlayers = pushGamePlayerToRankedArray(rankedPlayers, gamePlayer);
 					} // end loop for players
 				} // end loop for game
 				//all ranked players are set at this point
@@ -135,7 +142,7 @@ function getRankedPlayers(req, next, success) {
 				}
 
 				// sort array by rank (points per games played)
-				PlayerModel.rankedPlayerSort(rankedPlayers);
+				PlayerModel.rankedPlayerSort(rankedPlayers, PlayerModel.SortTypes.Rating);
 				// add rank value to each player so it is explicit
 				for(var i=0; i<rankedPlayers.length; i++) {
 					rankedPlayers[i].rank = i+1;
@@ -165,6 +172,10 @@ function getRankedPlayers(req, next, success) {
 					}
 				}
 
+				// rating sort is already done so don't redo that work.
+				if(sortType != PlayerModel.SortTypes.Rating) {
+					PlayerModel.rankedPlayerSort(rankedPlayers, sortType);
+				}
 				success(rankedPlayers);
 			})
 		});
@@ -195,7 +206,7 @@ function getDateRange(req) {
 	return [startDateRange, endDateRange];
 }
 
-function getRankedPlayerObject(rankedPlayersArr, gamePlayer) {
+function pushGamePlayerToRankedArray(rankedPlayersArr, gamePlayer) {
 	// first look for an existing player. If found then update it.
 	for(var i=0; i < rankedPlayersArr.length; i++) {
 		var rankedPlayer = rankedPlayersArr[i];
