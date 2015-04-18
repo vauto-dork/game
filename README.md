@@ -9,11 +9,11 @@ Remote DB is for production use ONLY. Use a local mongodb or setup a Heroku dev 
 1. First start a MongoDb instance
 `> mongod`
 2. Start the Node JS server
-on Mac: `> DEBUG=dork-api ./bin/www`
-on Windows:
-    1. Open a node command prompt, navigate to the Dork API working folder, and make sure the packages are installed by typing `npm install`
-    2. Download the Heroku Toolbelt: https://devcenter.heroku.com/articles/getting-started-with-nodejs#set-up
-    3. Open a Heroku command prompt and type `foreman start web` to start instance.
+    * on Mac: `> DEBUG=dork-api ./bin/www`
+    * on Windows:
+        1. Open a node command prompt, navigate to the Dork API working folder, and make sure the packages are installed by typing `npm install`
+        2. Download the Heroku Toolbelt: https://devcenter.heroku.com/articles/getting-started-with-nodejs#set-up
+        3. Open a Heroku command prompt and type `foreman start web` to start instance.
 3. Test that the server is running by going to `localhost:5000` in your browser.
 
 #Account Info
