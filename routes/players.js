@@ -40,20 +40,26 @@ router.post('/sort/', function (req, res, next) {
 
 /* POST save a player. */
 router.post('/', function (req, res, next) {
-	console.info("saving player: ", req.body);
 	if(!req.body) {
 		return next(new Error("Cannot save a player without data!"));
 	}
-	if(!req.body.firstName) {
-		return next(new Error("Cannot save a player without a first name!"));
+	if (req.body && req.body.constructor === Array) {
+		PlayerModel.create(req.body, function(err, player) {
+			if(err) return next(err);
+			res.json();
+		});
+	} else {
+		if(!req.body.firstName) {
+			return next(new Error("Cannot save a player without a first name!"));
+		}
+		if(!req.body.lastName) {
+			return next(new Error("Cannot save a player without a last name!"));
+		}
+		PlayerModel.create(req.body, function (err, player){
+			if(err) return next(err);
+			res.json(player);
+		});
 	}
-	if(!req.body.lastName) {
-		return next(new Error("Cannot save a player without a last name!"));
-	}
-	PlayerModel.create(req.body, function (err, player){
-		if(err) return next(err);
-		res.json(player);
-	})
 });
 
 /**
@@ -99,7 +105,10 @@ function getRankedPlayers(req, next, success) {
 
 	// validate sort type
 	var sortType = req.query.sortType;
-	if(sortType && !PlayerModel.isSortTypeValid(sortType)) {
+	if(!sortType) {
+		sortType = PlayerModel.SortTypes.Rating;
+	}
+	if(!PlayerModel.isSortTypeValid(sortType)) {
 		return next(new Error("Invalid sort type \"" + sortType + "\"."));
 	}
 
