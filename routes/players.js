@@ -28,6 +28,13 @@ router.get('/', function (req, res, next) {
 	})
 });
 
+/**
+ * Get a list of players that are sorted by data from a time span.
+ * This is defined as "/players/sort/" because there is already a POST for "/players/"
+ * @query (Optional) month - Sort players by data from this month. Default is all year.
+ * @query (Optional) year - Sort players by data from this year. Default is current year.
+ * @body List of players to sort
+ */
 router.post('/sort/', function (req, res, next) {
 	var rankedPlayers = getRankedPlayers(req, next, function(rankedPlayers) {
 		var players = [];
@@ -261,6 +268,6 @@ router.delete('/:id', function (req, res, next) {
 		res.end();
 		// res.json(player);
 	})
-})
+});
 
 module.exports = router;
