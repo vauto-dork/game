@@ -25,7 +25,7 @@ router.get('/', function (req, res, next) {
 			}
 		}
 		res.json(players);
-	})
+	});
 });
 
 /**
@@ -36,7 +36,7 @@ router.get('/', function (req, res, next) {
  * @body List of players to sort
  */
 router.post('/sort/', function (req, res, next) {
-	var rankedPlayers = getRankedPlayers(req, next, function(rankedPlayers) {
+	getRankedPlayers(req, next, function(rankedPlayers) {
 		var players = [];
 		for(var i=0; i<rankedPlayers.length; i++) {
 			players.push(rankedPlayers[i].player);
@@ -94,12 +94,12 @@ router.post('/', function (req, res, next) {
  * 	</pre>
  */
 router.post('/ranked/sort/', function(req, res, next) {
-	var rankedPlayers = getRankedPlayers(req, next, function(rankedPlayers) {
+	getRankedPlayers(req, next, function(rankedPlayers) {
 		res.json(rankedPlayers);
 	});
 });
 router.get('/ranked/', function(req, res, next) {
-	var rankedPlayers = getRankedPlayers(req, next, function(rankedPlayers) {
+	getRankedPlayers(req, next, function(rankedPlayers) {
 		res.json(rankedPlayers);
 	});
 });
@@ -125,7 +125,7 @@ function getRankedPlayers(req, next, success) {
 	if (req.body && req.body.constructor === Array) {
 		returnAllPlayers = false;
 	}
-	query = GameModel.find()
+	GameModel.find()
 		.select('winner datePlayed players')
 		.where('datePlayed').gte(startDateRange).lt(endDateRange)
 		.populate('players')
@@ -160,8 +160,19 @@ function getRankedPlayers(req, next, success) {
 				// sort array by rank (points per games played)
 				PlayerModel.rankedPlayerSort(rankedPlayers, PlayerModel.SortTypes.Rating);
 				// add rank value to each player so it is explicit
+				var previousRank = 1;
+				var previousRating = -999; //impossibru
 				for(var i=0; i<rankedPlayers.length; i++) {
-					rankedPlayers[i].rank = i+1;
+					var rankedPlayer = rankedPlayers[i];
+					var currentRating = PlayerModel.getRankedPlayerAverage(rankedPlayer);
+					var currentRank;
+					if(currentRating == previousRating) {
+						currentRank = previousRank;
+					} else {
+						currentRank = i+1;
+						previousRating = currentRating;
+					}
+					rankedPlayers[i].rank = currentRank;
 				}
 			}
 
@@ -193,7 +204,7 @@ function getRankedPlayers(req, next, success) {
 					PlayerModel.rankedPlayerSort(rankedPlayers, sortType);
 				}
 				success(rankedPlayers);
-			})
+			});
 		});
 }
 
@@ -250,7 +261,7 @@ router.get('/:id', function (req, res, next) {
 	PlayerModel.findById(req.params.id, function (err, player){
 		if(err) return next(err);
 		res.json(player);
-	})
+	});
 });
 
 /* PUT update a player. */
@@ -259,7 +270,7 @@ router.put('/:id', function (req, res, next) {
 		if(err) return next(err);
 		res.end();
 		// res.json(player);
-	})
+	});
 });
 
 router.delete('/:id', function (req, res, next) {
@@ -267,7 +278,7 @@ router.delete('/:id', function (req, res, next) {
 		if (err) return next(err);
 		res.end();
 		// res.json(player);
-	})
+	});
 });
 
 module.exports = router;

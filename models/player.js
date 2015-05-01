@@ -94,8 +94,8 @@ PlayerSchema.static({
     return false;
   },
 
-  getRankedPlayerAverage: function(gamePlayer) {
-    return gamePlayer.totalPoints / gamePlayer.gamesPlayed;
+  getRankedPlayerAverage: function(rankedPlayer) {
+    return rankedPlayer.totalPoints / rankedPlayer.gamesPlayed;
   },
 
   /**
@@ -125,9 +125,7 @@ PlayerSchema.static({
 
   rankedPlayerSortByRating: function(rankedPlayers) {
     rankedPlayers.sort(function (a, b) {
-      var aAvg = PlayerSchema.statics.getRankedPlayerAverage(a);
-      var bAvg = PlayerSchema.statics.getRankedPlayerAverage(b);
-      return bAvg - aAvg;
+      return PlayerSchema.statics.compareGamePlayerRating(a,b);
     });
   },
 
@@ -143,6 +141,16 @@ PlayerSchema.static({
         rankedPlayers[newIndex] = copy[i];
       }
     }
+  },
+  
+  /**
+   * Given two ranked players, compare their average.
+   * bAvg - aAvg
+   */
+  compareGamePlayerRating: function(rankedPlayerA, rankedPlayerB) {
+      var aAvg = PlayerSchema.statics.getRankedPlayerAverage(rankedPlayerA);
+      var bAvg = PlayerSchema.statics.getRankedPlayerAverage(rankedPlayerB);
+      return bAvg - aAvg;
   },
 
   isSortTypeValid: function(sortType) {
