@@ -142,7 +142,7 @@ function getRankedPlayers(req, next, success) {
 					for(var j=0; j < game.players.length; j++) {
 						var gamePlayer = game.players[j];
 						// TODO There's gotta be a more efficient way to do this...
-						rankedPlayers = pushGamePlayerToRankedArray(rankedPlayers, gamePlayer);
+						pushGamePlayerToRankedArray(rankedPlayers, gamePlayer);
 					} // end loop for players
 				} // end loop for game
 				//all ranked players are set at this point
@@ -160,20 +160,7 @@ function getRankedPlayers(req, next, success) {
 				// sort array by rank (points per games played)
 				PlayerModel.rankedPlayerSort(rankedPlayers, PlayerModel.SortTypes.Rating);
 				// add rank value to each player so it is explicit
-				var previousRank = 1;
-				var previousRating = -999; //impossibru
-				for(var i=0; i<rankedPlayers.length; i++) {
-					var rankedPlayer = rankedPlayers[i];
-					var currentRating = PlayerModel.getRankedPlayerAverage(rankedPlayer);
-					var currentRank;
-					if(currentRating == previousRating) {
-						currentRank = previousRank;
-					} else {
-						currentRank = i+1;
-						previousRating = currentRating;
-					}
-					rankedPlayers[i].rank = currentRank;
-				}
+				addRanksToPlayers(rankedPlayers);
 			}
 
 			// Get array of all requested player ids
@@ -209,6 +196,27 @@ function getRankedPlayers(req, next, success) {
 }
 
 /**
+ * Add ranks to ranked player objects. Ranks are assigned based on rating.
+ * @param rankedPlayers Array of ranked players.
+ */
+function addRanksToPlayers(rankedPlayers) {
+	var previousRank = 1;
+	var previousRating = -999; //impossibru
+	for(var i=0; i<rankedPlayers.length; i++) {
+		var rankedPlayer = rankedPlayers[i];
+		var currentRating = PlayerModel.getRankedPlayerAverage(rankedPlayer);
+		var currentRank;
+		if(currentRating == previousRating) {
+			currentRank = previousRank;
+		} else {
+			currentRank = previousRank = i+1;
+			previousRating = currentRating;
+		}
+		rankedPlayers[i].rank = currentRank;
+	}
+}
+
+/**
  * Get date ranges from a request object.
  * @param req Should contain a month and optionally a year. Default is current year.
  * @returns {*[]} Array containing the start date and end date.
@@ -239,14 +247,12 @@ function pushGamePlayerToRankedArray(rankedPlayersArr, gamePlayer) {
 		var rankedPlayer = rankedPlayersArr[i];
 		if(rankedPlayer.player._id == gamePlayer.player._id) {
 			rankedPlayersArr[i] = mergeRankedPlayerObjects(rankedPlayer, gamePlayer);
-			return rankedPlayersArr;
 		}
 	}
 	// No existing player was found so add a new one.
 	var newRankedPlayer = mergeRankedPlayerObjects(
 		PlayerModel.getEmptyRankedPlayerObject(), gamePlayer);
 	rankedPlayersArr.push(newRankedPlayer);
-	return rankedPlayersArr;
 }
 
 function mergeRankedPlayerObjects(rp1, rp2) {
