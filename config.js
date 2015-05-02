@@ -12,7 +12,7 @@ module.exports = function(){
 
         default:
             return {
-                "MONGO_URI": "mongodb://localhost/dork_db",
+                "MONGO_URI": "mongodb://heroku_app35661006:6i3jtqth00cld8qgtumsbgsim@ds061681.mongolab.com:61681/heroku_app35661006",
                 "NODE_PORT": "5000",
                 "NODE_IP": '127.0.0.1'
             };

@@ -20,6 +20,8 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
+app.locals.pretty = true;
+
 // Database
 console.info("DB Connecting to ", conf.MONGO_URI);
 mongoose.connect(conf.MONGO_URI);
