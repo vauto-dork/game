@@ -1,8 +1,8 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-}
+.outline {
+  border: 1px solid black; }
 
-a {
-  color: #00B7FF;
-}
+.table-striped > tbody > tr:nth-child(odd) > td,
+.table-striped > tbody > tr:nth-child(odd) > th {
+  background-color: #e5efe4; }
+
+/*# sourceMappingURL=style.css.map */

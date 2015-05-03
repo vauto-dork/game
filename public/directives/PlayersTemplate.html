@@ -1,3 +1,12 @@
-<div ng-repeat="player in players">
-{{player.firstName}} {{player.lastName}} ({{player.nickname}})
-</div>
+<table class="table table-striped">
+<thead>
+<th>Rank</th>
+<th>Name</th>
+<th>Points/Games</th>
+</thead>
+<tr ng-repeat="playerRank in players">
+<td>{{playerRank.rank}}&nbsp; {{ctrl.playerAverage(playerRank.totalPoints, playerRank.gamesPlayed)}}</td>
+<td>{{playerRank.player.firstName}} {{playerRank.player.lastName}} <span ng-if="playerRank.player.nickname">({{playerRank.player.nickname}})</span></td>
+<td>{{playerRank.totalPoints}} / {{playerRank.gamesPlayed}}</td>
+</tr>
+</table>
