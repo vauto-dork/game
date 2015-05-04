@@ -142,7 +142,7 @@ function getRankedPlayers(req, next, success) {
 					for(var j=0; j < game.players.length; j++) {
 						var gamePlayer = game.players[j];
 						// TODO There's gotta be a more efficient way to do this...
-						pushGamePlayerToRankedArray(rankedPlayers, gamePlayer);
+						rankedPlayers = pushGamePlayerToRankedArray(rankedPlayers, gamePlayer);
 					} // end loop for players
 				} // end loop for game
 				//all ranked players are set at this point
@@ -247,12 +247,14 @@ function pushGamePlayerToRankedArray(rankedPlayersArr, gamePlayer) {
 		var rankedPlayer = rankedPlayersArr[i];
 		if(rankedPlayer.player._id == gamePlayer.player._id) {
 			rankedPlayersArr[i] = mergeRankedPlayerObjects(rankedPlayer, gamePlayer);
+			return rankedPlayersArr;
 		}
 	}
 	// No existing player was found so add a new one.
 	var newRankedPlayer = mergeRankedPlayerObjects(
 		PlayerModel.getEmptyRankedPlayerObject(), gamePlayer);
 	rankedPlayersArr.push(newRankedPlayer);
+	return rankedPlayersArr;
 }
 
 function mergeRankedPlayerObjects(rp1, rp2) {
