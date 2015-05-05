@@ -1,3 +1,4 @@
 .idea
 node_modules
-*.iml
+*.iml/.sass-cache/279f01ff80e890627a20c70cf9f651d6f40409d6/style.scssc
+/.sass-cache/279f01ff80e890627a20c70cf9f651d6f40409d6/styles.scssc

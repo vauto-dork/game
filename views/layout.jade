@@ -2,6 +2,13 @@ doctype html
 html
   head
     title= title
+    |<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    link(rel='stylesheet', href='/stylesheets/normalize.css')
+    link(rel='stylesheet', href='/stylesheets/bootstrap.min.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
-  body
+    script(src='/scripts/jquery.min.js')
+    script(src='/scripts/angular.min.js')
+    script(src='/directives/Players.js')
+    script(src='/directives/DorkModule.js')
+  body(ng-app="DorkModule")
     block content
