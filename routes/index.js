@@ -6,4 +6,9 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Current Rankings' });
 });
 
+/* GET home page. */
+router.get('/Playlist', function(req, res, next) {
+  res.render('playlist', { title: 'Playlist Maker' });
+});
+
 module.exports = router;

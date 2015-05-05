@@ -1,0 +1,19 @@
+<div class="form-group">
+	<label>
+	Name:
+	<input type="text" data=provide="typeahead" autocomplete="off" class="form-control" />
+	</label>
+</div>
+
+<table class="table table-striped">
+<thead>
+<th>Rank</th>
+<th>Name</th>
+<th>Points/Games</th>
+</thead>
+<tr ng-repeat="playerRank in players">
+<td>{{playerRank.rank}}&nbsp; {{ctrl.playerAverage(playerRank.totalPoints, playerRank.gamesPlayed)}}</td>
+<td>{{playerRank.player.firstName}} {{playerRank.player.lastName}} <span ng-if="playerRank.player.nickname">({{playerRank.player.nickname}})</span></td>
+<td>{{playerRank.totalPoints}} / {{playerRank.gamesPlayed}}</td>
+</tr>
+</table>
