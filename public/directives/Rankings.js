@@ -1,16 +1,16 @@
-var Players = function() {
+var Rankings = function() {
 	return {
 		scope: {
 
 		},
-		templateUrl: '/directives/PlayersTemplate.html',
-		controller: 'PlayersController',
+		templateUrl: '/directives/RankingsTemplate.html',
+		controller: 'RankingsController',
 		controllerAs: 'ctrl',
 		bindToController: true
 	};
 }
 
-var PlayersController = function ($scope, $http) {
+var RankingsController = function ($scope, $http) {
 	
 	$http.get('/players/ranked').success(function(data, status, headers, config) {
     // this callback will be called asynchronously
@@ -34,4 +34,4 @@ var PlayersController = function ($scope, $http) {
   };
 }
 
-PlayersController.$inject = ['$scope', '$http'];
+RankingsController.$inject = ['$scope', '$http'];
