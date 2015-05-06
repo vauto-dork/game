@@ -2,10 +2,41 @@ $defaultBorder: 1px solid black;
 
 body {
 	font-family: 'Ubuntu', sans-serif;
+	font-size: 1.2em;
+	background-color: #e4e9ef;
 }
 
-.outline {
-	border: $defaultBorder;
+.ranking-row {
+	line-height: 2em;
+	padding: 1em 0;
+
+	.ranking-rank {
+		padding-right: 0;
+		text-align: right;
+		line-height: 2em;
+		font-size: 3em;
+		color: #df6d2e;
+	}
+
+	.ranking-nickname {
+		white-space: nowrap;
+	}
+
+	.ranking-player-name,
+	.ranking-value {
+		font-size: 1.4em;
+	}
+
+	.ranking-label {
+		display: inline-block;
+		margin-right: 0.5em;
+		color: #7a8394;
+	}
+
+	.ranking-player-name {
+		font-weight: bold;
+	}
+
 }
 
 .table-striped>tbody>tr:nth-child(odd)>td,
