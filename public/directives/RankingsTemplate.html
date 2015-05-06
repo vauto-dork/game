@@ -1,0 +1,23 @@
+<div class="ranking-row row" ng-repeat="playerRank in players">
+	<div class="ranking-rank col-xs-2 col-sm-1 col-md-1 col-lg-1">
+		{{playerRank.rank}}
+	</div>
+	<div class="ranking-data col-xs-10 col-sm-11 col-md-11 col-lg-11">
+		<div class="ranking-player-name">
+			{{playerRank.player.firstName}} {{playerRank.player.lastName}} <span class="ranking-nickname" ng-if="playerRank.player.nickname">({{playerRank.player.nickname}})</span>
+		</div>
+		<div class="ranking-player-rating">
+			<span class="ranking-label">Rating</span>
+			<span class="ranking-value">
+				{{ctrl.playerAverage(playerRank.totalPoints, playerRank.gamesPlayed)}}
+			</span>
+		</div>
+		<div class="ranking-player-rating">
+			<span class="ranking-label">Points / Game</span>
+			<span class="ranking-value">
+				{{playerRank.totalPoints}} / {{playerRank.gamesPlayed}}
+			</span>
+		</div>
+	</div>
+</div>
+
