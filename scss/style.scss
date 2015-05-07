@@ -1,9 +1,32 @@
+$background-color: #e4e9ef;
+$dark-bg: darken($background-color, 50%);
+$dark-orange: #7a8394;
+$light-orange: #e7c0ab;
 $defaultBorder: 1px solid black;
+
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Ubuntu'), url(/fonts/sDGTilo5QRsfWu6Yc11AXg.woff2) format('woff2'), url(/fonts/_xyN3apAT_yRRDeqB3sPRg.woff) format('woff');
+}
 
 body {
 	font-family: 'Ubuntu', sans-serif;
 	font-size: 1.2em;
-	background-color: #e4e9ef;
+	background-color: $background-color;
+}
+
+/* 
+.ranking-row,
+.ranking-rank,
+.ranking-data,
+.row {
+	border: $defaultBorder;
+} */
+
+.ranking-no-rank {
+	opacity: 0.5;
 }
 
 .ranking-row {
@@ -11,32 +34,46 @@ body {
 	padding: 1em 0;
 
 	.ranking-rank {
-		padding-right: 0;
+		float: left;
+		width: 2.5em;
+		padding-right: 0.5em;
 		text-align: right;
 		line-height: 2em;
+		height: 3em;
 		font-size: 3em;
 		color: #df6d2e;
 	}
 
 	.ranking-nickname {
+		margin-left: 0.3em;
+		padding-left: 0.5em;
+		border-left: 2px solid $background-color;
+		display: inline-block;
 		white-space: nowrap;
 	}
 
 	.ranking-player-name,
+	.ranking-player-fullname,
 	.ranking-value {
 		font-size: 1.4em;
+	}
+
+	.ranking-player-name {
+		background-color: $dark-bg;
+		color: $background-color;
+		display: inline;
+		padding: 0 0.5em;
 	}
 
 	.ranking-label {
 		display: inline-block;
 		margin-right: 0.5em;
-		color: #7a8394;
+		color: $dark-orange;
 	}
 
 	.ranking-player-name {
 		font-weight: bold;
 	}
-
 }
 
 .table-striped>tbody>tr:nth-child(odd)>td,
