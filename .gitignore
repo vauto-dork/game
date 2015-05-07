@@ -4,3 +4,4 @@ node_modules
 *.iml/.sass-cache/279f01ff80e890627a20c70cf9f651d6f40409d6/style.scssc
 /.gitignore.swp
 /.env
+*.iml
