@@ -5,6 +5,10 @@ Requires NodeJS, NPM, and MongoDB.
 
 Remote DB is for production use ONLY. Use a local mongodb or setup a Heroku dev env for testing.
 
+## Documentation
+If updating any API make sure the documentation is up to date.  
+http://docs.dorkapi.apiary.io/
+
 #Running
 1. First start a MongoDb instance (only required if using local mongodb; not necessary if pointing to dev or prod DB via config file)
 `> mongod`
