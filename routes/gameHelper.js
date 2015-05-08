@@ -7,7 +7,16 @@ module.exports =
 	saveGame: function (id, game, next, onSuccess) {
 		var resultFunction = function (err, game) {
 				if (err) return next(err);
-				if(onSuccess) onSuccess(game);
+				if(onSuccess) {
+					var opts = [
+					      { path: 'winner', model: 'Player' }
+					    , { path: 'players.player', model: 'Player' }
+					  ];
+					GameModel.populate(game, opts, function(err, game){
+						if(err) return next(err);
+						onSuccess(game);
+					});
+				}
 			};
 		if(id) {
 			// update existing game

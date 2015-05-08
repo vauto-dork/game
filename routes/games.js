@@ -19,12 +19,7 @@ router.get('/', function (req, res, next) {
 /* POST save game. */
 router.post('/', function (req, res, next) {
 	GameHelper.saveGame(null, req.body, next, function(game) {
-		game.populate('players')
-            .populate('players.player')
-			.populate("winner", function (err, populatedGame) {
-				if (err) return next(err);
-				res.json(populatedGame);
-			});
+		res.json(game);
 	});
 });
 
