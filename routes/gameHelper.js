@@ -5,6 +5,11 @@ var GameModel = mongoose.model('Game');
 module.exports = 
 {
 	saveGame: function (id, game, next, onSuccess) {
+		
+		if(!game || !game.players || game.players.length <3) {
+			return next(new Error("Cannot save game with fewer than three players"));
+		}
+		
 		var resultFunction = function (err, game) {
 				if (err) return next(err);
 				if(onSuccess) {
