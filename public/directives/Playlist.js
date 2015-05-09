@@ -10,17 +10,24 @@ var Playlist = function() {
 	};
 }
 
-var PlaylistController = function ($scope, $http) {
+var PlaylistController = function ($scope, $http, playerNameFactory) {
 	$http.get('/players?sort=true').success(function(data, status, headers, config) {
-    // this callback will be called asynchronously
-    // when the response is available
-    $scope.players = data;
-  }).
-  error(function(data, status, headers, config) {
-    // called asynchronously if an error occurs
-    // or server returns response with an error status.
-    debugger;
-  });
+		// this callback will be called asynchronously
+	    // when the response is available
+	    $scope.players = data.filter(function (el) {
+                        // Removes 'New Guy' and 'New Girl'
+                        return el.firstName !== "New";
+                       });
+	}).
+		error(function(data, status, headers, config) {
+	    // called asynchronously if an error occurs
+	    // or server returns response with an error status.
+	    debugger;
+	});
+
+	this.playerFullName = playerNameFactory.playerFullName;
+
+	this.playerInitials = playerNameFactory.playerInitials;
 }
 
-PlaylistController.$inject = ['$scope', '$http'];
+PlaylistController.$inject = ['$scope', '$http', 'playerNameFactory'];

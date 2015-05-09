@@ -1,5 +1,7 @@
 var DorkModule = angular.module('DorkModule', []);
 
+DorkModule.factory('playerNameFactory', PlayerNameFactory);
+
 DorkModule.controller('RankingsController', RankingsController);
 DorkModule.directive('rankings', Rankings);
 
