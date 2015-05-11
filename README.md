@@ -5,15 +5,26 @@ Requires NodeJS, NPM, and MongoDB.
 
 Remote DB is for production use ONLY. Use a local mongodb or setup a Heroku dev env for testing.
 
+## Documentation
+If updating any API make sure the documentation is up to date.  
+http://docs.dorkapi.apiary.io/
+
 #Running
-1. First start a MongoDb instance
+1. First start a MongoDb instance (only required if using local mongodb; not necessary if pointing to dev or prod DB via config file)
 `> mongod`
 2. Start the Node JS server
     * on Mac: `> DEBUG=dork-api ./bin/www`
-    * on Windows:
-        1. Open a node command prompt, navigate to the Dork API working folder, and make sure the packages are installed by typing `npm install`
-        2. Download the Heroku Toolbelt: https://devcenter.heroku.com/articles/getting-started-with-nodejs#set-up
-        3. Open a Heroku command prompt and type `foreman start web` to start instance.
+    * on Windows/Linux:
+        1. Download the Heroku Toolbelt: https://devcenter.heroku.com/articles/getting-started-with-nodejs#set-up
+        2. Make sure Heroku Toolbelt installed the Ruby package `foreman` by typing `foreman -v` into command prompt. If not found, then install via Ruby.
+        2. Ensure the paths to NPM, Node, and Heroku are registered as environment variables after installation of packages.
+        3. Open a command prompt, navigate to the Dork API working folder, and make sure the packages are installed by typing `npm install`
+        4. Grab the Heroku configuration file if you want to use the remote database instead of local (ref: https://devcenter.heroku.com/articles/config-vars)
+            * Open a command prompt and navigate to working directory's root folder
+            * Download the heroku config plugin by typing `heroku plugins:install git://github.com/ddollar/heroku-config.git`
+            * After the plugin is installed, grab the dev config by typing `heroku config:pull --app dork-dev`
+            * Add the `.env` file to `.gitignore`
+        5. Type `foreman start web` to start instance.
 3. Test that the server is running by going to `localhost:5000` in your browser.
 
 #Account Info
