@@ -17,6 +17,10 @@ body {
 	background-color: $background-color;
 }
 
+.container-fluid {
+	max-width: 1280px;
+}
+
 /* 
 .ranking-row,
 .ranking-rank,

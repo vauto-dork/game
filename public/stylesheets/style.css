@@ -8,6 +8,9 @@ body {
   font-size: 1.2em;
   background-color: #e4e9ef; }
 
+.container-fluid {
+  max-width: 1280px; }
+
 /* 
 .ranking-row,
 .ranking-rank,
