@@ -16,7 +16,7 @@ body {
 .ranking-rank,
 .ranking-data,
 .row {
-	border: $defaultBorder;
+	border: $default-border;
 } */
 .ranking-no-rank {
   opacity: 0.5; }
@@ -47,16 +47,41 @@ body {
     background-color: #4f6885;
     color: #e4e9ef;
     display: inline;
-    padding: 0 0.5em; }
+    padding: 0 0.5em;
+    font-weight: bold; }
   .ranking-row .ranking-label {
     display: inline-block;
     margin-right: 0.5em;
     color: #7a8394; }
-  .ranking-row .ranking-player-name {
-    font-weight: bold; }
 
 .playlist-filter {
   width: 100%; }
+
+.playlist-row {
+  line-height: 2em;
+  padding: 1em 0;
+  padding: 1em; }
+  .playlist-row:hover {
+    border-radius: 5px;
+    background-color: #e7c0ab; }
+  .playlist-row .selected {
+    border-radius: 5px;
+    background-color: #e7c0ab; }
+  .playlist-row .playlist-player-name,
+  .playlist-row .playlist-player-fullname {
+    font-size: 1.4em; }
+  .playlist-row .playlist-nickname {
+    margin-left: 0.3em;
+    padding-left: 0.5em;
+    border-left: 2px solid #e4e9ef;
+    display: inline-block;
+    white-space: nowrap; }
+  .playlist-row .playlist-player-name {
+    background-color: #4f6885;
+    color: #e4e9ef;
+    display: inline;
+    padding: 0 0.5em;
+    font-weight: bold; }
 
 .table-striped > tbody > tr:nth-child(odd) > td,
 .table-striped > tbody > tr:nth-child(odd) > th {

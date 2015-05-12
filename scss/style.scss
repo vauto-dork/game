@@ -1,8 +1,5 @@
-$background-color: #e4e9ef;
-$dark-bg: darken($background-color, 50%);
-$dark-orange: #7a8394;
-$light-orange: #e7c0ab;
-$defaultBorder: 1px solid black;
+@import "variables";
+@import "mixins";
 
 @font-face {
   font-family: 'Ubuntu';
@@ -26,7 +23,7 @@ body {
 .ranking-rank,
 .ranking-data,
 .row {
-	border: $defaultBorder;
+	border: $default-border;
 } */
 
 .ranking-no-rank {
@@ -34,8 +31,7 @@ body {
 }
 
 .ranking-row {
-	line-height: 2em;
-	padding: 1em 0;
+	@include row;
 
 	.ranking-rank {
 		float: left;
@@ -49,39 +45,56 @@ body {
 	}
 
 	.ranking-nickname {
-		margin-left: 0.3em;
-		padding-left: 0.5em;
-		border-left: 2px solid $background-color;
-		display: inline-block;
-		white-space: nowrap;
+		@include player-nickname;
 	}
 
 	.ranking-player-name,
 	.ranking-player-fullname,
 	.ranking-value {
-		font-size: 1.4em;
+		font-size: $font-large;
 	}
 
 	.ranking-player-name {
-		background-color: $dark-bg;
-		color: $background-color;
-		display: inline;
-		padding: 0 0.5em;
+		@include player-name;
 	}
 
 	.ranking-label {
 		display: inline-block;
 		margin-right: 0.5em;
-		color: $dark-orange;
-	}
-
-	.ranking-player-name {
-		font-weight: bold;
+		color: $gray;
 	}
 }
 
 .playlist-filter {
 	width: 100%;
+}
+
+.playlist-row {
+	@include row;
+	padding: 1em;
+
+	&:hover {
+		border-radius: $player-card-border-radius;
+		background-color: $light-orange;
+	}
+
+	.selected {
+		border-radius: $player-card-border-radius;
+		background-color: $light-orange;
+	}
+
+	.playlist-player-name,
+	.playlist-player-fullname {
+		font-size: $font-large;
+	}
+
+	.playlist-nickname {
+		@include player-nickname;
+	}
+
+	.playlist-player-name {
+		@include player-name;
+	}
 }
 
 .table-striped>tbody>tr:nth-child(odd)>td,
