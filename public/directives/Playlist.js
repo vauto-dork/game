@@ -11,13 +11,12 @@ var Playlist = function() {
 }
 
 var PlaylistController = function ($scope, $http, playerNameFactory) {
+	$scope.nameFilter = '';
+
 	$http.get('/players?sort=true').success(function(data, status, headers, config) {
 		// this callback will be called asynchronously
 	    // when the response is available
-	    $scope.players = data.filter(function (el) {
-                        // Removes 'New Guy' and 'New Girl'
-                        return el.firstName !== "New";
-                       });
+	    $scope.players = data;
 	}).
 		error(function(data, status, headers, config) {
 	    // called asynchronously if an error occurs
