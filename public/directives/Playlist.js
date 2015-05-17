@@ -27,6 +27,12 @@ var PlaylistController = function ($scope, $http, playerNameFactory) {
 	this.playerFullName = playerNameFactory.playerFullName;
 
 	this.playerInitials = playerNameFactory.playerInitials;
+
+	this.removeAll = function() {
+		for (var i = $scope.players.length - 1; i >= 0; i--) {
+			$scope.players[i].selected = false;
+		};
+	}
 }
 
 PlaylistController.$inject = ['$scope', '$http', 'playerNameFactory'];

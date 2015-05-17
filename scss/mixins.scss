@@ -5,18 +5,9 @@
 	padding: 1em 0;
 }
 
-@mixin player-name() {
-	background-color: $dark-bg;
-	color: $background-color;
-	display: inline;
-	padding: 0 0.5em;
-	font-weight: bold;
-}
-
-@mixin player-nickname() {
-	margin-left: 0.3em;
-	padding-left: 0.5em;
-	border-left: 2px solid $background-color;
-	display: inline-block;
-	white-space: nowrap;
+@mixin player-left() {
+	float: left;	
+	padding-right: 0.5em;
+	font-size: 3em;
+	color: $dark-orange;
 }

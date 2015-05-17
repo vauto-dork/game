@@ -3,13 +3,34 @@
   font-style: normal;
   font-weight: 400;
   src: local("Ubuntu"), url(/fonts/sDGTilo5QRsfWu6Yc11AXg.woff2) format("woff2"), url(/fonts/_xyN3apAT_yRRDeqB3sPRg.woff) format("woff"); }
+html,
 body {
   font-family: 'Ubuntu', sans-serif;
-  font-size: 1.2em;
+  font-size: 12px; }
+
+body {
   background-color: #e4e9ef; }
 
 .container-fluid {
   max-width: 1280px; }
+
+.player-card {
+  margin: 5px; }
+  .player-card .player-nickname {
+    margin-left: 0.3em;
+    padding-left: 0.5em;
+    border-left: 2px solid #e4e9ef;
+    display: inline-block;
+    white-space: nowrap; }
+  .player-card .player-name {
+    background-color: #4f6885;
+    color: #e4e9ef;
+    display: inline;
+    padding: 0 0.5em;
+    font-size: 1.4em;
+    font-weight: bold; }
+  .player-card .player-fullname {
+    font-size: 1.4em; }
 
 /* 
 .ranking-row,
@@ -26,36 +47,26 @@ body {
   padding: 1em 0; }
   .ranking-row .ranking-rank {
     float: left;
-    width: 2.5em;
     padding-right: 0.5em;
+    font-size: 3em;
+    color: #df6d2e;
+    width: 2.5em;
     text-align: right;
     line-height: 2em;
-    height: 3em;
-    font-size: 3em;
-    color: #df6d2e; }
-  .ranking-row .ranking-nickname {
-    margin-left: 0.3em;
-    padding-left: 0.5em;
-    border-left: 2px solid #e4e9ef;
-    display: inline-block;
-    white-space: nowrap; }
-  .ranking-row .ranking-player-name,
-  .ranking-row .ranking-player-fullname,
+    height: 3em; }
   .ranking-row .ranking-value {
     font-size: 1.4em; }
-  .ranking-row .ranking-player-name {
-    background-color: #4f6885;
-    color: #e4e9ef;
-    display: inline;
-    padding: 0 0.5em;
-    font-weight: bold; }
   .ranking-row .ranking-label {
     display: inline-block;
     margin-right: 0.5em;
     color: #7a8394; }
 
 .playlist-filter {
-  width: 100%; }
+  padding: 0.25em;
+  width: 100%;
+  font-size: 2em;
+  line-height: 2em;
+  height: 2em; }
 
 .playlist-row {
   line-height: 2em;
@@ -63,25 +74,34 @@ body {
   padding: 1em; }
   .playlist-row:hover {
     border-radius: 5px;
-    background-color: #e7c0ab; }
-  .playlist-row .selected {
-    border-radius: 5px;
-    background-color: #e7c0ab; }
+    background-color: #e7c0ab;
+    cursor: pointer; }
+    .playlist-row:hover .player-nickname {
+      border-color: #e7c0ab; }
+    .playlist-row:hover .player-name {
+      color: #e7c0ab; }
+  .playlist-row .playlist-checkmark {
+    float: left;
+    padding-right: 0.5em;
+    font-size: 3em;
+    color: #df6d2e;
+    width: 2em;
+    text-align: center;
+    line-height: 1.5em; }
+    .playlist-row .playlist-checkmark input {
+      position: absolute;
+      visibility: hidden; }
   .playlist-row .playlist-player-name,
   .playlist-row .playlist-player-fullname {
     font-size: 1.4em; }
-  .playlist-row .playlist-nickname {
-    margin-left: 0.3em;
-    padding-left: 0.5em;
-    border-left: 2px solid #e4e9ef;
-    display: inline-block;
-    white-space: nowrap; }
-  .playlist-row .playlist-player-name {
-    background-color: #4f6885;
-    color: #e4e9ef;
-    display: inline;
-    padding: 0 0.5em;
-    font-weight: bold; }
+
+.playlist-buttons {
+  margin: auto;
+  text-align: center; }
+  .playlist-buttons .btn {
+    width: 45%;
+    margin: 1em;
+    padding: 1em; }
 
 .table-striped > tbody > tr:nth-child(odd) > td,
 .table-striped > tbody > tr:nth-child(odd) > th {

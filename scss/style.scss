@@ -8,14 +8,43 @@
   src: local('Ubuntu'), url(/fonts/sDGTilo5QRsfWu6Yc11AXg.woff2) format('woff2'), url(/fonts/_xyN3apAT_yRRDeqB3sPRg.woff) format('woff');
 }
 
+html,
 body {
 	font-family: 'Ubuntu', sans-serif;
-	font-size: 1.2em;
+	font-size: 12px;
+}
+
+body {	
 	background-color: $background-color;
 }
 
 .container-fluid {
 	max-width: 1280px;
+}
+
+.player-card {
+	margin: 5px;
+
+	.player-nickname {
+		margin-left: 0.3em;
+		padding-left: 0.5em;
+		border-left: 2px solid $background-color;
+		display: inline-block;
+		white-space: nowrap;
+	}
+
+	.player-name {
+		background-color: $dark-bg;
+		color: $background-color;
+		display: inline;
+		padding: 0 0.5em;
+		font-size: $font-large;
+		font-weight: bold;
+	}
+
+	.player-fullname {
+		font-size: $font-large;
+	}
 }
 
 /* 
@@ -34,28 +63,15 @@ body {
 	@include row;
 
 	.ranking-rank {
-		float: left;
+		@include player-left;
 		width: 2.5em;
-		padding-right: 0.5em;
 		text-align: right;
 		line-height: 2em;
 		height: 3em;
-		font-size: 3em;
-		color: #df6d2e;
 	}
 
-	.ranking-nickname {
-		@include player-nickname;
-	}
-
-	.ranking-player-name,
-	.ranking-player-fullname,
 	.ranking-value {
 		font-size: $font-large;
-	}
-
-	.ranking-player-name {
-		@include player-name;
 	}
 
 	.ranking-label {
@@ -66,7 +82,11 @@ body {
 }
 
 .playlist-filter {
+	padding: 0.25em;
 	width: 100%;
+	font-size: 2em;
+	line-height: 2em;
+	height: 2em;
 }
 
 .playlist-row {
@@ -76,24 +96,43 @@ body {
 	&:hover {
 		border-radius: $player-card-border-radius;
 		background-color: $light-orange;
+		cursor: pointer;
+
+		.player-nickname {
+			border-color: $light-orange;
+		}
+
+		.player-name {
+			color: $light-orange;
+		}
 	}
 
-	.selected {
-		border-radius: $player-card-border-radius;
-		background-color: $light-orange;
+	.playlist-checkmark {
+		@include player-left;
+		width: 2em;
+		text-align: center;
+		line-height: 1.5em;
+
+		input {
+			position: absolute;
+			visibility: hidden;
+		}
 	}
 
 	.playlist-player-name,
 	.playlist-player-fullname {
 		font-size: $font-large;
 	}
+}
 
-	.playlist-nickname {
-		@include player-nickname;
-	}
+.playlist-buttons {
+	margin: auto;
+	text-align: center;
 
-	.playlist-player-name {
-		@include player-name;
+	.btn {
+		width: 45%;
+		margin: 1em;
+		padding: 1em;
 	}
 }
 
