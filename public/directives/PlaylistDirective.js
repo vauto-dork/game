@@ -12,12 +12,14 @@ var PlaylistDirective = function() {
 
 var PlaylistController = function ($scope, $http, playerNameFactory) {
 	$scope.nameFilter = '';
+	$scope.playersLoading = true;
 
 	$http.get('/players?sort=true').success(function(data, status, headers, config) {
 		// this callback will be called asynchronously
 	    // when the response is available
 	    $scope.players = data;
 	    $scope.originalList = angular.copy($scope.players);
+	    $scope.playersLoading = false;
 	}).
 		error(function(data, status, headers, config) {
 	    // called asynchronously if an error occurs
