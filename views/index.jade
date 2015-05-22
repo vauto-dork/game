@@ -1,7 +1,9 @@
 extends layout
 
 block content
-	div.container-fluid
+	div.container-fluid(ng-app="RankingsModule")
 		h1= title
 		div.row
 			rankings
+	script(src='/directives/RankingsDirective.js')
+	script(src='/modules/RankingsModule.js')

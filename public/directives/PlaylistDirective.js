@@ -1,4 +1,4 @@
-var Playlist = function() {
+var PlaylistDirective = function() {
 	return {
 		scope: {
 
@@ -34,15 +34,14 @@ var PlaylistController = function ($scope, $http, playerNameFactory) {
 	}
 
 	this.createPlaylist = function() {
+		$scope.orderedPlayersLoading = true;
+
 		var selectedPlayers = $scope.players.filter(function(value) { return value.selected == true; });
 		$http.post('/players/sort?sortType=2', selectedPlayers).success(function(data, status, headers, config) {
 			// this callback will be called asynchronously
 		    // when the response is available
-		    $scope.players = data;
-
-		    for (var i = $scope.players.length - 1; i >= 0; i--) {
-		    	$scope.players[i].selected = true;
-		    };
+		    $scope.orderedPlayers = data;
+		    $scope.orderedPlayersLoading = false;
 		}).
 			error(function(data, status, headers, config) {
 		    // called asynchronously if an error occurs

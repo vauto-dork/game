@@ -1,4 +1,4 @@
-var Rankings = function() {
+var RankingsDirective = function() {
 	return {
 		scope: {
 

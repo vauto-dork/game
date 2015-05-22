@@ -16,6 +16,14 @@ body {
 
 .player-card {
   margin: 5px; }
+  .player-card .player-order {
+    float: left;
+    padding-right: 0.5em;
+    font-size: 3em;
+    color: #df6d2e;
+    width: 2em;
+    text-align: center;
+    line-height: 1.5em; }
   .player-card .player-nickname {
     margin-left: 0.3em;
     padding-left: 0.5em;
@@ -43,6 +51,7 @@ body {
   opacity: 0.5; }
 
 .ranking-row {
+  display: block;
   line-height: 2em;
   padding: 1em 0; }
   .ranking-row .ranking-rank {
@@ -69,6 +78,7 @@ body {
   height: 2em; }
 
 .playlist-row {
+  display: block;
   line-height: 2em;
   padding: 1em 0;
   padding: 1em; }
@@ -80,20 +90,22 @@ body {
       border-color: #e7c0ab; }
     .playlist-row:hover .player-name {
       color: #e7c0ab; }
-  .playlist-row .playlist-checkmark {
-    float: left;
-    padding-right: 0.5em;
-    font-size: 3em;
-    color: #df6d2e;
-    width: 2em;
-    text-align: center;
-    line-height: 1.5em; }
-    .playlist-row .playlist-checkmark input {
-      position: absolute;
-      visibility: hidden; }
+  .playlist-row .player-order .checkmark {
+    border: 4px solid #df6d2e;
+    border-radius: 3px; }
+  .playlist-row .player-order input {
+    position: absolute;
+    visibility: hidden; }
   .playlist-row .playlist-player-name,
   .playlist-row .playlist-player-fullname {
     font-size: 1.4em; }
+
+.playlist-order-row {
+  display: block;
+  line-height: 2em;
+  padding: 1em 0;
+  padding: 1em;
+  width: 100%; }
 
 .playlist-buttons {
   margin: auto;
@@ -102,6 +114,13 @@ body {
     width: 45%;
     margin: 1em;
     padding: 1em; }
+
+.load-bar {
+  display: block;
+  width: 100%;
+  height: 10em;
+  line-height: 10em;
+  text-align: center; }
 
 .table-striped > tbody > tr:nth-child(odd) > td,
 .table-striped > tbody > tr:nth-child(odd) > th {

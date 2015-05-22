@@ -1,6 +1,7 @@
 @import "variables";
 
 @mixin row() {
+	display: block;
 	line-height: 2em;
 	padding: 1em 0;
 }
