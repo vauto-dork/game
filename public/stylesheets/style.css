@@ -111,9 +111,9 @@ body {
   margin: auto;
   text-align: center; }
   .playlist-buttons .btn {
-    width: 45%;
+    width: 90%;
     margin: 1em;
-    padding: 1em; }
+    padding: 1.5em; }
 
 .load-bar {
   display: block;
