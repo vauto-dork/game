@@ -1,0 +1,10 @@
+extends layout
+
+block content
+	div.container-fluid(ng-app="PlaylistModule")
+		h1= title
+		div.row
+			playlist
+	script(src='/scripts/bootstrap/modal.js')
+	script(src='/directives/PlaylistDirective.js')
+	script(src='/modules/PlaylistModule.js')

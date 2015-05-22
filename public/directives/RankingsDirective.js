@@ -1,4 +1,4 @@
-var Rankings = function() {
+var RankingsDirective = function() {
 	return {
 		scope: {
 
@@ -10,15 +10,12 @@ var Rankings = function() {
 	};
 }
 
-var RankingsController = function ($scope, $http) {
+var RankingsController = function ($scope, $http, playerNameFactory) {
 	
 	$http.get('/players/ranked').success(function(data, status, headers, config) {
     // this callback will be called asynchronously
     // when the response is available
-    $scope.players = data.filter(function (el) {
-                        // Removes 'New Guy' and 'New Girl'
-                        return el.player.firstName !== "New";
-                       });
+    $scope.players = data;
   }).
   error(function(data, status, headers, config) {
     // called asynchronously if an error occurs
@@ -26,13 +23,9 @@ var RankingsController = function ($scope, $http) {
     debugger;
   });
 
-  this.playerFullName = function(player) {
-    return player.firstName + ' ' + player.lastName;
-  }
+  this.playerFullName = playerNameFactory.playerFullName;
 
-  this.playerInitials = function(player) {
-    return player.firstName.charAt(0) + player.lastName.charAt(0);
-  }
+  this.playerInitials = playerNameFactory.playerInitials;
 
   this.playerAverage = function(points, gamesPlayed){
   	var average = 0;
@@ -49,4 +42,4 @@ var RankingsController = function ($scope, $http) {
   }
 }
 
-RankingsController.$inject = ['$scope', '$http'];
+RankingsController.$inject = ['$scope', '$http', 'playerNameFactory'];

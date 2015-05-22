@@ -1,8 +1,5 @@
-$background-color: #e4e9ef;
-$dark-bg: darken($background-color, 50%);
-$dark-orange: #7a8394;
-$light-orange: #e7c0ab;
-$defaultBorder: 1px solid black;
+@import "variables";
+@import "mixins";
 
 @font-face {
   font-family: 'Ubuntu';
@@ -11,40 +8,31 @@ $defaultBorder: 1px solid black;
   src: local('Ubuntu'), url(/fonts/sDGTilo5QRsfWu6Yc11AXg.woff2) format('woff2'), url(/fonts/_xyN3apAT_yRRDeqB3sPRg.woff) format('woff');
 }
 
+html,
 body {
 	font-family: 'Ubuntu', sans-serif;
-	font-size: 1.2em;
+	font-size: 12px;
+}
+
+body {	
 	background-color: $background-color;
 }
 
-/* 
-.ranking-row,
-.ranking-rank,
-.ranking-data,
-.row {
-	border: $defaultBorder;
-} */
-
-.ranking-no-rank {
-	opacity: 0.5;
+.container-fluid {
+	max-width: 1280px;
 }
 
-.ranking-row {
-	line-height: 2em;
-	padding: 1em 0;
+.player-card {
+	margin: 5px;
 
-	.ranking-rank {
-		float: left;
-		width: 2.5em;
-		padding-right: 0.5em;
-		text-align: right;
-		line-height: 2em;
-		height: 3em;
-		font-size: 3em;
-		color: #df6d2e;
+	.player-order {
+		@include player-left;
+		width: 2em;
+		text-align: center;
+		line-height: 1.5em;
 	}
 
-	.ranking-nickname {
+	.player-nickname {
 		margin-left: 0.3em;
 		padding-left: 0.5em;
 		border-left: 2px solid $background-color;
@@ -52,28 +40,121 @@ body {
 		white-space: nowrap;
 	}
 
-	.ranking-player-name,
-	.ranking-player-fullname,
-	.ranking-value {
-		font-size: 1.4em;
-	}
-
-	.ranking-player-name {
+	.player-name {
 		background-color: $dark-bg;
 		color: $background-color;
 		display: inline;
 		padding: 0 0.5em;
+		font-size: $font-large;
+		font-weight: bold;
+	}
+
+	.player-fullname {
+		font-size: $font-large;
+	}
+}
+
+/* 
+.ranking-row,
+.ranking-rank,
+.ranking-data,
+.row {
+	border: $default-border;
+} */
+
+.ranking-no-rank {
+	opacity: 0.5;
+}
+
+.ranking-row {
+	@include row;
+
+	.ranking-rank {
+		@include player-left;
+		width: 2.5em;
+		text-align: right;
+		line-height: 2em;
+		height: 3em;
+	}
+
+	.ranking-value {
+		font-size: $font-large;
 	}
 
 	.ranking-label {
 		display: inline-block;
 		margin-right: 0.5em;
-		color: $dark-orange;
+		color: $gray;
+	}
+}
+
+.playlist-filter {
+	padding: 0.25em;
+	width: 100%;
+	font-size: 2em;
+	line-height: 2em;
+	height: 2em;
+}
+
+.playlist-row {
+	@include row;
+	padding: 1em;
+
+	&:hover {
+		border-radius: $player-card-border-radius;
+		background-color: $light-orange;
+		cursor: pointer;
+
+		.player-nickname {
+			border-color: $light-orange;
+		}
+
+		.player-name {
+			color: $light-orange;
+		}
 	}
 
-	.ranking-player-name {
-		font-weight: bold;
+	.player-order {
+		.checkmark {
+			border: 4px solid #df6d2e;
+			border-radius: 3px;
+		}
+
+		input {
+			position: absolute;
+			visibility: hidden;
+		}
 	}
+
+	.playlist-player-name,
+	.playlist-player-fullname {
+		font-size: $font-large;
+	}
+}
+
+.playlist-order-row {
+	@include row;
+	padding: 1em;
+	width: 100%;
+}
+
+.playlist-buttons {
+	margin: auto;
+	text-align: center;
+
+	.btn {
+		width: 90%;
+		margin: 1em;
+		padding: 1.5em;
+	}
+}
+
+.load-bar {
+	display: block;
+	width: 100%;
+	height: 10em;
+	line-height: 10em;
+	text-align: center;
 }
 
 .table-striped>tbody>tr:nth-child(odd)>td,

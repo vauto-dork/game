@@ -1,0 +1,78 @@
+<div class="form-group">
+	<input type="text" class="form-control playlist-filter" ng-model="nameFilter" placeholder="Filter by name or nickname..." />
+</div>
+
+<div class="load-bar" ng-if="playersLoading">
+	<img src="/images/loader.gif" width="220" height="19" />
+</div>
+
+<div class="playlist-row col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-repeat="player in players | filter:nameFilter" ng-if="!playersLoading">
+	<div class="player-card" ng-click="player.selected = !player.selected">
+		<div class="player-order">
+			<div class="checkmark">
+				<input type="checkbox" ng-model="player.selected" ng-selected="player.selected" />
+				<span ng-show="!player.selected">&nbsp;</span>
+				<span ng-show="player.selected" class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+			</div>
+		</div>
+		<div class="player-name">
+			{{ctrl.playerInitials(player)}}
+			<span class="player-nickname" ng-if="player.nickname">{{player.nickname}}</span>
+		</div>
+		<div class="player-fullname">
+			{{ctrl.playerFullName(player)}}
+		</div>
+	</div>
+</div>
+
+<div class="clearfix"></div>
+
+<div class="row playlist-buttons">
+	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+		<button type="button" class="btn btn-danger btn-lg" ng-click="ctrl.removeAll()">
+			<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove All
+		</button>
+	</div>
+	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+		<button type="button" class="btn btn-primary btn-lg" ng-click="ctrl.createPlaylist()" data-toggle="modal" data-target="#myModal">
+			<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Create Playlist
+		</button>
+	</div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        	<span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Playlist</h4>
+      </div>
+      <div class="modal-body">
+      	<div class="load-bar" ng-if="orderedPlayersLoading">
+      		<img src="/images/loader.gif" width="220" height="19" />
+      	</div>
+      	<div class="playlist-order-row" ng-repeat="player in orderedPlayers" ng-if="!orderedPlayersLoading">
+	      	<div class="player-card">
+	      		<div class="player-order">
+	      			{{$index + 1}}
+	      		</div>
+		      	<div class="player-name">
+					{{ctrl.playerInitials(player)}}
+					<span class="player-nickname" ng-if="player.nickname">{{player.nickname}}</span>
+				</div>
+				<div class="player-fullname">
+					{{ctrl.playerFullName(player)}}
+				</div>
+			</div>
+		</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary btn-lg" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

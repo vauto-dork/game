@@ -1,0 +1,14 @@
+@import "variables";
+
+@mixin row() {
+	display: block;
+	line-height: 2em;
+	padding: 1em 0;
+}
+
+@mixin player-left() {
+	float: left;	
+	padding-right: 0.5em;
+	font-size: 3em;
+	color: $dark-orange;
+}
