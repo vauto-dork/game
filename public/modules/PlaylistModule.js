@@ -1,6 +1,6 @@
-var DorkModule = angular.module('PlaylistModule', []);
+var PlaylistModule = angular.module('PlaylistModule', []);
 
-DorkModule.factory('playerNameFactory', PlayerNameFactory);
+PlaylistModule.factory('playerNameFactory', PlayerNameFactory);
 
-DorkModule.controller('PlaylistController', PlaylistController);
-DorkModule.directive('playlist', PlaylistDirective);
+PlaylistModule.controller('PlaylistController', PlaylistController);
+PlaylistModule.directive('playlist', PlaylistDirective);
