@@ -141,6 +141,8 @@ body {
     width: 90%;
     margin: 1em;
     padding: 1.5em; }
+    .playlist-buttons .btn .glyphicon {
+      margin-right: 0.5em; }
 
 .load-bar {
   display: block;
@@ -148,9 +150,5 @@ body {
   height: 10em;
   line-height: 10em;
   text-align: center; }
-
-.table-striped > tbody > tr:nth-child(odd) > td,
-.table-striped > tbody > tr:nth-child(odd) > th {
-  background-color: #e5efe4; }
 
 /*# sourceMappingURL=style.css.map */
