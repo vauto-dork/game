@@ -8,5 +8,8 @@ html
     script(src='/scripts/jquery.min.js')
     script(src='/scripts/angular.min.js')
     script(src='/services/PlayerNameFactory.js')
-  body
+    script(src='/modules/DorkModule.js')
+  body(ng-app="DorkModule")
+    global-nav
     block content
+    script(src='/directives/GlobalNavDirective.js')

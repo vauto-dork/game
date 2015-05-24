@@ -43,3 +43,6 @@ var RankingsController = function ($scope, $http, playerNameFactory) {
 }
 
 RankingsController.$inject = ['$scope', '$http', 'playerNameFactory'];
+
+DorkModule.controller('RankingsController', RankingsController);
+DorkModule.directive('rankings', RankingsDirective);
