@@ -11,7 +11,13 @@ var GlobalNavDirective = function() {
 }
 
 var GlobalNavController = function ($scope) {
-	
+	var me = this;
+
+	this.closeSidebar = function() {
+		if(me.sidebarOpen === true){
+			me.sidebarOpen = false;
+		}
+	}
 }
 
 GlobalNavController.$inject = ['$scope'];
