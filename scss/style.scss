@@ -23,7 +23,7 @@ body {
 .global-nav {
 	@include shadow(0 2px 4px 2px rgba(0, 0, 0, 0.5));
 	margin: 0;
-	padding: 0 0.25em;
+	padding: 0 0.5em;
 	color: $global-nav-text-color;
 	background-color: $global-nav-bg;
 	position: fixed;
@@ -45,6 +45,42 @@ body {
 	.global-nav-title {
 		padding: 0.25em;
 		display: inline-block;
+	}
+}
+
+.global-nav-menu {
+	@include shadow(2px 0 4px 2px rgba(0, 0, 0, 0.5));
+	background-color: $global-nav-menu-bg-color;
+	position: fixed;
+	padding: 0;
+	margin: 0;
+	padding-top: 0.5em;
+	width: 12em;
+	height: 100%;
+	font-size: 2.2em;
+	z-index: 99;
+
+	ul {
+		list-style-type: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	a {
+		padding: 0.5em;
+		display: block;
+		text-decoration: none;
+		color: $global-nav-menu-text-color;
+		background-color: $global-nav-menu-bg-color;
+
+		.glyphicon {
+			margin-right: $icon-spacing;
+		}
+
+		&:hover {
+			color: $global-nav-menu-text-color;
+			background-color: $light-orange;
+		}
 	}
 }
 
@@ -176,11 +212,11 @@ body {
 		width: 90%;
 		margin: 1em;
 		padding: 1.5em;
-
-		.glyphicon {
-			margin-right: 0.5em;
-		}
 	}
+}
+
+.btn > .glyphicon {
+	margin-right: $icon-spacing;
 }
 
 .load-bar {

@@ -18,7 +18,7 @@ body {
   -webkit-box-shadow: 0 2px 4px 2px rgba(0, 0, 0, 0.5);
   box-shadow: 0 2px 4px 2px rgba(0, 0, 0, 0.5);
   margin: 0;
-  padding: 0 0.25em;
+  padding: 0 0.5em;
   color: #fff;
   background-color: #4f6885;
   position: fixed;
@@ -37,6 +37,35 @@ body {
   .global-nav .global-nav-title {
     padding: 0.25em;
     display: inline-block; }
+
+.global-nav-menu {
+  -moz-box-shadow: 2px 0 4px 2px rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: 2px 0 4px 2px rgba(0, 0, 0, 0.5);
+  box-shadow: 2px 0 4px 2px rgba(0, 0, 0, 0.5);
+  background-color: #fff;
+  position: fixed;
+  padding: 0;
+  margin: 0;
+  padding-top: 0.5em;
+  width: 12em;
+  height: 100%;
+  font-size: 2.2em;
+  z-index: 99; }
+  .global-nav-menu ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0; }
+  .global-nav-menu a {
+    padding: 0.5em;
+    display: block;
+    text-decoration: none;
+    color: #4f6885;
+    background-color: #fff; }
+    .global-nav-menu a .glyphicon {
+      margin-right: 0.5em; }
+    .global-nav-menu a:hover {
+      color: #4f6885;
+      background-color: #e7c0ab; }
 
 .container-fluid {
   max-width: 1280px; }
@@ -141,8 +170,9 @@ body {
     width: 90%;
     margin: 1em;
     padding: 1.5em; }
-    .playlist-buttons .btn .glyphicon {
-      margin-right: 0.5em; }
+
+.btn > .glyphicon {
+  margin-right: 0.5em; }
 
 .load-bar {
   display: block;
