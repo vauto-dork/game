@@ -1,12 +1,15 @@
 doctype html
 html
   head
-    title= title
+    title= "DORK |" + title
     |<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     link(rel='stylesheet', href='/stylesheets/bootstrap.min.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
     script(src='/scripts/jquery.min.js')
     script(src='/scripts/angular.min.js')
     script(src='/services/PlayerNameFactory.js')
-  body
+    script(src='/modules/DorkModule.js')
+  body(ng-app="DorkModule")
+    global-nav
     block content
+    script(src='/directives/GlobalNavDirective.js')

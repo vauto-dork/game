@@ -54,3 +54,6 @@ var PlaylistController = function ($scope, $http, playerNameFactory) {
 }
 
 PlaylistController.$inject = ['$scope', '$http', 'playerNameFactory'];
+
+DorkModule.controller('PlaylistController', PlaylistController);
+DorkModule.directive('playlist', PlaylistDirective);

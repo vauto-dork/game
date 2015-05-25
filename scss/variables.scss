@@ -1,10 +1,19 @@
 $font-large: 1.4em;
 
+$base-transition: all 0.3s ease-in-out;
+
 $background-color: #e4e9ef;
 $dark-bg: darken($background-color, 50%);
 $gray: #7a8394;
 $dark-orange: #df6d2e;
 $light-orange: #e7c0ab;
 
+$global-nav-height: 2em;
+$global-nav-text-color: #fff;
+$global-nav-bg: $dark-bg;
+$global-nav-menu-bg-color: #fff;
+$global-nav-menu-text-color: $dark-bg;
+
 $default-border: 1px solid black;
 $player-card-border-radius: 5px;
+$icon-spacing: 0.5em;

@@ -12,3 +12,9 @@
 	font-size: 3em;
 	color: $dark-orange;
 }
+
+@mixin shadow($var) {
+	-moz-box-shadow: $var;
+	-webkit-box-shadow: $var;
+	box-shadow: $var;
+}

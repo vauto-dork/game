@@ -11,11 +11,13 @@ var RankingsDirective = function() {
 }
 
 var RankingsController = function ($scope, $http, playerNameFactory) {
+  $scope.playersLoading = true;
 	
 	$http.get('/players/ranked').success(function(data, status, headers, config) {
     // this callback will be called asynchronously
     // when the response is available
     $scope.players = data;
+    $scope.playersLoading = false;
   }).
   error(function(data, status, headers, config) {
     // called asynchronously if an error occurs
@@ -43,3 +45,6 @@ var RankingsController = function ($scope, $http, playerNameFactory) {
 }
 
 RankingsController.$inject = ['$scope', '$http', 'playerNameFactory'];
+
+DorkModule.controller('RankingsController', RankingsController);
+DorkModule.directive('rankings', RankingsDirective);
