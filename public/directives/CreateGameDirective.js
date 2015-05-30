@@ -11,6 +11,8 @@ var CreateGameDirective = function() {
 }
 
 var CreateGameController = function ($scope, $http, playerNameFactory) {
+	var me = this;
+	
 	$scope.nameFilter = '';
 	$scope.playersLoading = true;
 
@@ -18,10 +20,7 @@ var CreateGameController = function ($scope, $http, playerNameFactory) {
 		// this callback will be called asynchronously
 	    // when the response is available
 	    $scope.players = data;
-		$scope.players.forEach(function(value){
-			value.initials = playerNameFactory.playerInitials(value);
-			value.fullname = playerNameFactory.playerFullName(value);
-		});
+		$scope.players = me.playerNameFormat($scope.players);
 	    $scope.originalList = angular.copy($scope.players);
 	    $scope.playersLoading = false;
 	}).
@@ -30,14 +29,22 @@ var CreateGameController = function ($scope, $http, playerNameFactory) {
 	    // or server returns response with an error status.
 	    debugger;
 	});
+	
+	this.playerNameFormat = function(rawPlayersList) {
+		rawPlayersList.forEach(function(value){
+			value = playerNameFactory.playerNameFormat(value);
+		});
+		
+		return rawPlayersList;
+	};
 
 	this.removeAll = function() {
 		$scope.players = angular.copy($scope.originalList);
-	}
+	};
 	
 	this.removeFilter = function() {
 		$scope.nameFilter = '';
-	}
+	};
 
 	this.createPlaylist = function() {
 		$scope.orderedPlayersLoading = true;
@@ -46,7 +53,7 @@ var CreateGameController = function ($scope, $http, playerNameFactory) {
 		$http.post('/players/sort?sortType=2', selectedPlayers).success(function(data, status, headers, config) {
 			// this callback will be called asynchronously
 		    // when the response is available
-		    $scope.orderedPlayers = data;
+		    $scope.orderedPlayers = me.playerNameFormat(data);
 		    $scope.orderedPlayersLoading = false;
 		}).
 			error(function(data, status, headers, config) {
@@ -54,8 +61,8 @@ var CreateGameController = function ($scope, $http, playerNameFactory) {
 		    // or server returns response with an error status.
 		    debugger;
 		});
-	}
-}
+	};
+};
 
 CreateGameController.$inject = ['$scope', '$http', 'playerNameFactory'];
 

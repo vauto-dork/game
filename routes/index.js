@@ -8,7 +8,7 @@ router.get('/', function(req, res, next) {
 
 /* GET playlist page. */
 router.get('/Playlist', function(req, res, next) {
-  res.render('playlist', { title: 'Playlist Maker' });
+  res.render('createGame', { title: 'Create Game' });
 });
 
 /* GET new game page. */

@@ -18,13 +18,7 @@
 				<span ng-show="player.selected" class="glyphicon glyphicon-ok" aria-hidden="true"></span>
 			</div>
 		</div>
-		<div class="player-name">
-			{{player.initials}}
-			<span class="player-nickname" ng-if="player.nickname">{{player.nickname}}</span>
-		</div>
-		<div class="player-fullname">
-			{{player.fullname}}
-		</div>
+		<player-nametag player="player"></player-nametag>
 	</div>
 </div>
 
@@ -63,13 +57,7 @@
 	      		<div class="player-order">
 	      			{{$index + 1}}
 	      		</div>
-		      	<div class="player-name">
-					{{ctrl.playerInitials(player)}}
-					<span class="player-nickname" ng-if="player.nickname">{{player.nickname}}</span>
-				</div>
-				<div class="player-fullname">
-					{{ctrl.playerFullName(player)}}
-				</div>
+		      	<player-nametag player="player"></player-nametag>
 			</div>
 		</div>
       </div>

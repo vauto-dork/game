@@ -7,13 +7,7 @@
 		<div class="ranking-rank">
 			{{playerRank.rank}}
 		</div>
-		<div class="player-name">
-			{{ctrl.playerInitials(playerRank.player)}}
-			<span class="player-nickname" ng-if="playerRank.player.nickname">{{playerRank.player.nickname}}</span>
-		</div>
-		<div class="player-fullname">
-			{{ctrl.playerFullName(playerRank.player)}}
-		</div>
+		<player-nametag player="playerRank.player"></player-nametag>
 		<div class="ranking-player-rating">
 			<span class="ranking-label">Rating</span>
 			<span class="ranking-value">
