@@ -1,0 +1,9 @@
+extends layout
+
+block content
+	div.container-fluid(ng-app="CreateGameModule")
+		h1= title
+		div.row
+			create-game
+	script(src='/scripts/bootstrap/modal.js')
+	script(src='/directives/CreateGameDirective.js')

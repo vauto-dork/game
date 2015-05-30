@@ -188,6 +188,11 @@ body {
 	height: 2em;
 }
 
+.playlist-filter-remove {
+	font-size: 2em;
+	cursor: pointer;
+}
+
 .playlist-row {
 	@include row;
 	padding: 1em;

@@ -152,6 +152,10 @@ body {
   line-height: 2em;
   height: 2em; }
 
+.playlist-filter-remove {
+  font-size: 2em;
+  cursor: pointer; }
+
 .playlist-row {
   display: block;
   line-height: 2em;
