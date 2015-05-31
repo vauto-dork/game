@@ -67,3 +67,6 @@ DorkModule.directive('createGame', CreateGameDirective);
 
 DorkModule.controller('PlaylistController', PlaylistController);
 DorkModule.directive('playlist', PlaylistDirective);
+
+DorkModule.controller('AddScoresController', AddScoresController);
+DorkModule.directive('addScores', AddScoresDirective);

@@ -10,7 +10,7 @@ var PlaylistDirective = function() {
 	};
 }
 
-var PlaylistController = function ($scope, $http, playerNameFactory) {
+var PlaylistController = function ($scope, $http) {
 	var me = this;
 	
 	this.removeFilter = function() {
@@ -18,4 +18,4 @@ var PlaylistController = function ($scope, $http, playerNameFactory) {
 	};
 };
 
-PlaylistController.$inject = ['$scope', '$http', 'playerNameFactory'];
+PlaylistController.$inject = ['$scope', '$http'];

@@ -16,4 +16,9 @@ router.get('/CreateGame', function(req, res, next) {
   res.render('createGame', { title: 'Create Game' });
 });
 
+/* GET add scorees page. */
+router.get('/AddScores', function(req, res, next) {
+  res.render('addScores', { title: 'Add Scores' });
+});
+
 module.exports = router;

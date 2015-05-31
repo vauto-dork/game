@@ -32,14 +32,15 @@
       	<div class="load-bar" ng-if="orderedPlayersLoading">
       		<img src="/images/loader.gif" width="220" height="19" />
       	</div>
-      	<div class="playlist-order-row" ng-repeat="player in orderedPlayers" ng-if="!orderedPlayersLoading">
+<!--      	<div class="playlist-order-row" ng-repeat="player in orderedPlayers" ng-if="!orderedPlayersLoading">
 	      	<div class="player-card">
 	      		<div class="player-order">
 	      			{{$index + 1}}
 	      		</div>
 		      	<player-nametag player="player"></player-nametag>
-			</div>
-		</div>
+          </div>
+		    </div>-->
+        <add-scores players="orderedPlayers"></add-scores>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-warning btn-lg" data-dismiss="modal">Add Scores</button>

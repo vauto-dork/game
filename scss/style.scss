@@ -229,6 +229,7 @@ body {
 	}
 }
 
+.playlist-scores-row,
 .playlist-order-row {
 	@include row;
 	padding: 1em;
@@ -244,6 +245,10 @@ body {
 		margin: 1em;
 		padding: 1.5em;
 	}
+}
+
+.playlist-scores-input {
+	width: 100%;
 }
 
 .btn > .glyphicon {
