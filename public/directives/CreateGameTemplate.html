@@ -1,28 +1,8 @@
-<div class="form-group">
-	<div class="input-group">
-		<input type="text" class="form-control playlist-filter" ng-model="nameFilter" placeholder="Filter by name or nickname..." />
-		<div class="input-group-addon playlist-filter-remove" ng-click="ctrl.removeFilter()"><span class="glyphicon glyphicon-remove-sign"></span></div>
-	</div>
-</div>
-
 <div class="load-bar" ng-if="playersLoading">
 	<img src="/images/loader.gif" width="220" height="19" />
 </div>
 
-<div class="playlist-row col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-repeat="player in players | filter:nameFilter" ng-if="!playersLoading">
-	<div class="player-card" ng-click="player.selected = !player.selected">
-		<div class="player-order">
-			<div class="checkmark">
-				<input type="checkbox" ng-model="player.selected" ng-selected="player.selected" />
-				<span ng-show="!player.selected">&nbsp;</span>
-				<span ng-show="player.selected" class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-			</div>
-		</div>
-		<player-nametag player="player"></player-nametag>
-	</div>
-</div>
-
-<div class="clearfix"></div>
+<playlist players="players" ng-if="!playersLoading"></playlist>
 
 <div class="row playlist-buttons">
 	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
