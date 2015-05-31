@@ -14,7 +14,7 @@ var PlaylistController = function ($scope, $http, playerNameFactory) {
 	var me = this;
 	
 	this.removeFilter = function() {
-		$scope.filter = '';
+		me.filter = '';
 	};
 };
 

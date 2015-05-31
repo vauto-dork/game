@@ -41,10 +41,6 @@ var CreateGameController = function ($scope, $http, playerNameFactory) {
 	this.removeAll = function() {
 		$scope.players = angular.copy($scope.originalList);
 	};
-	
-	this.removeFilter = function() {
-		$scope.nameFilter = '';
-	};
 
 	this.createPlaylist = function() {
 		$scope.orderedPlayersLoading = true;
