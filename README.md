@@ -9,13 +9,36 @@ Remote DB is for production use ONLY. Use a local mongodb or setup a Heroku dev 
 If updating any API make sure the documentation is up to date.  
 http://docs.dorkapi.apiary.io/
 
+#Cloning Production Database to Local
+1. Open command prompt (Windows) or Terminal (Mac/Linux) and navigate to the project's working folder (`dork_api`).
+2. Get the config vars from Heroku with `heroku config --app dork-prod`
+    * Find the `MONGOLAB_URI` value. It will be in the form of: `mongodb://<username>:<password>@<url>:<port>/<database>`
+3. Run the following command to make a copy of the production database to your local working directory.
+    * Use the values from the config file: `mongodump -h <url>:<port> -d <database> -u <username> -p <password>`
+    * `mongodump` will create the following directory to store the data: `dump/<database>/`
+4. Make sure your local instance of `mongod` is running.
+5. Drop your existing local database with the following command.
+    * `mongo dorkdb --eval "db.dropDatabase()"`
+6. Use `mongorestore` to put the prod data into your local mongodb.
+    * `mongorestore -d dorkdb dump/<database>/`
+7. Ensure data was restored
+    * Start mongo command line interface: `mongo`
+    * Show databases and ensure `dorkdb` is in the list: `> show databases`
+    * Switch to `dorkdb`: `> use dorkdb`
+    * Ensure `games` and `players` tables exist: `> show collections`
+    * If satisfied, then exit mongo command line: `> exit`
+8. Run the app and see the prod data (see "Running" section below)
+9. ???
+10. Profit!
+
 #Running
 1. First start a MongoDb instance (only required if using local mongodb; not necessary if pointing to dev or prod DB via config file)
 `> mongod`
     * **Note:** You must have database path already set up on local machine or mongo won't run.
 2. Start the Node JS server
     * on Mac: `> DEBUG=dork-api ./bin/www`
-        * **Note:** This does not guarantee that it will load on port 5000. The port it is listening on will be displayed in the console. The Linux setup instructions below will guarantee it will always be on port 5000.
+        * **Note:** This does not guarantee that it will load on port 5000. The port it is listening on will be displayed in the console.
+        * Use the Linux setup instructions below on Mac to guarantee it will always be on port 5000.
     * on Windows/Linux (steps 1 to 5 are for initial setup):
         1. Download the Heroku Toolbelt: https://devcenter.heroku.com/articles/getting-started-with-nodejs#set-up
         2. Make sure Heroku Toolbelt installed the Ruby package `foreman` by typing `foreman -v` into command prompt. If not found, then install via Ruby with `gem install foreman`.
