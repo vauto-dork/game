@@ -37,8 +37,7 @@ http://docs.dorkapi.apiary.io/
     * **Note:** You must have database path already set up on local machine or mongo won't run.
 2. Start the Node JS server
     * on Mac: `> DEBUG=dork-api ./bin/www`
-        * **Note:** This does not guarantee that it will load on port 5000. The port it is listening on will be displayed in the console.
-        * Use the Linux setup instructions below on Mac to guarantee it will always be on port 5000.
+        * **Note:** This will read from/write to the local Mongo database only. See step 5 below to read from/write to remote databases.
     * on Windows/Linux (steps 1 to 5 are for initial setup):
         1. Download the Heroku Toolbelt: https://devcenter.heroku.com/articles/getting-started-with-nodejs#set-up
         2. Make sure Heroku Toolbelt installed the Ruby package `foreman` by typing `foreman -v` into command prompt. If not found, then install via Ruby with `gem install foreman`.
