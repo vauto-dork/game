@@ -12,8 +12,10 @@ var RankingsDirective = function() {
 
 var RankingsController = function ($scope, $http, playerNameFactory) {
   $scope.playersLoading = true;
+  var currentMonth = new Date().getMonth();
+  var rankedUrl = '/players/ranked?month=' + currentMonth;
 	
-	$http.get('/players/ranked').success(function(data, status, headers, config) {
+	$http.get(rankedUrl).success(function(data, status, headers, config) {
     // this callback will be called asynchronously
     // when the response is available
     $scope.players = data;
