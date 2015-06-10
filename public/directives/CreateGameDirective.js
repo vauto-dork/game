@@ -58,6 +58,22 @@ var CreateGameController = function ($scope, $http, playerNameFactory) {
 		    debugger;
 		});
 	};
+	
+	this.startGame = function() {
+		var selectedPlayers = $scope.players.filter(function(value) { return value.selected == true; });
+		selectedPlayers = selectedPlayers.map(function(value) {return { player: { _id: value._id } }; });
+		$http.post('/activeGames/save', { players: selectedPlayers }).success(function(data, status, headers, config) {
+			// this callback will be called asynchronously
+		    // when the response is available
+		    console.log(data);
+			debugger;
+		}).
+			error(function(data, status, headers, config) {
+		    // called asynchronously if an error occurs
+		    // or server returns response with an error status.
+		    debugger;
+		});
+	}
 };
 
 CreateGameController.$inject = ['$scope', '$http', 'playerNameFactory'];

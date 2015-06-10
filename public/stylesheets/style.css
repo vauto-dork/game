@@ -89,6 +89,15 @@ body {
 .container-fluid {
   max-width: 1280px; }
 
+.admin-list {
+  font-size: 1.5em; }
+
+.add-player-module {
+  font-size: 1.4em; }
+
+.add-player-status {
+  text-align: center; }
+
 .player-card {
   margin: 5px; }
   .player-card .player-order {

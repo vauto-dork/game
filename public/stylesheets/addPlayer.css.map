@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAGA,kBAAmB;EAClB,SAAS,ECJG,KAAK;;ADOlB,kBAAmB;EAClB,UAAU,EAAE,MAAM",
+"sources": ["../../scss/addPlayer.scss","../../scss/variables.scss"],
+"names": [],
+"file": "addPlayer.css"
+}

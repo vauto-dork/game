@@ -1,0 +1,12 @@
+<div ng-show="ctrl.success" class="add-player-status bg-success">Player Added</div>
+<div ng-show="ctrl.failure" class="add-player-status bg-danger">Error Adding Player</div>
+
+<form ng-submit="ctrl.submit()">
+	<div class="form-group">
+		<input class="form-control" type="text" name="firstName" placeholder="First Name" ng-model="ctrl.firstName" />
+		<input class="form-control" type="text" name="lastName" placeholder="Last Name" ng-model="ctrl.lastName" />
+		<input class="form-control" type="text" name="nickName" placeholder="Nickname" ng-model="ctrl.nickname" />
+	</div>
+	<button type="button" class="btn btn-danger" ng-click="ctrl.reset()">Reset</button>
+	<button type="submit" class="btn btn-default">Submit</button>
+</form>
