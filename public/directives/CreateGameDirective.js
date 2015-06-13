@@ -10,7 +10,7 @@ var CreateGameDirective = function() {
 	};
 }
 
-var CreateGameController = function ($scope, $http, playerNameFactory) {
+var CreateGameController = function ($scope, $window, $http, playerNameFactory) {
 	var me = this;
 	
 	$scope.nameFilter = '';
@@ -60,13 +60,12 @@ var CreateGameController = function ($scope, $http, playerNameFactory) {
 	};
 	
 	this.startGame = function() {
-		var selectedPlayers = $scope.players.filter(function(value) { return value.selected == true; });
-		selectedPlayers = selectedPlayers.map(function(value) {return { player: { _id: value._id } }; });
+		var selectedPlayers = $scope.orderedPlayers.map(function(value) {return { player: { _id: value._id } }; });
 		$http.post('/activeGames/save', { players: selectedPlayers }).success(function(data, status, headers, config) {
 			// this callback will be called asynchronously
 		    // when the response is available
 		    console.log(data);
-			debugger;
+			$window.location.href = '/activeGames';
 		}).
 			error(function(data, status, headers, config) {
 		    // called asynchronously if an error occurs
@@ -76,7 +75,7 @@ var CreateGameController = function ($scope, $http, playerNameFactory) {
 	}
 };
 
-CreateGameController.$inject = ['$scope', '$http', 'playerNameFactory'];
+CreateGameController.$inject = ['$scope', '$window', '$http', 'playerNameFactory'];
 
 DorkModule.controller('CreateGameController', CreateGameController);
 DorkModule.directive('createGame', CreateGameDirective);
