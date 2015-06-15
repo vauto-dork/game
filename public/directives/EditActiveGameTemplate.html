@@ -1,0 +1,11 @@
+<div class="load-bar" ng-if="loading">
+	<img src="/images/loader.gif" width="220" height="19" />
+</div>
+
+<div ng-if="!loading">
+	<p>ID: {{game._id}}</p>
+	<p>Date Played: {{game.datePlayed}}</p>
+	<div ng-repeat="player in game.players">
+		{{player.player.firstName}} {{player.player.lastName}}
+	</div>
+</div>

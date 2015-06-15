@@ -4,7 +4,7 @@
 
 <div ng-if="!loading">
 	<div ng-repeat="game in games">
-		<p>ID: {{game._id}}
+		<p>ID: <a ng-href="/ActiveGames/Edit/#/{{game._id}}">{{game._id}}</a>
 		<p>Date Played: {{game.datePlayed}}</p>
 		<div ng-repeat="player in game.players">
 			{{player.player.firstName}} {{player.player.lastName}}
