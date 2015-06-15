@@ -5,7 +5,8 @@
 <div ng-if="!loading">
 	<p>ID: {{game._id}}</p>
 	<p>Date Played: {{game.datePlayed}}</p>
-	<div ng-repeat="player in game.players">
+	<add-scores players="players"></add-scores>
+	<!--<div ng-repeat="player in game.players">
 		{{player.player.firstName}} {{player.player.lastName}}
-	</div>
+	</div>-->
 </div>

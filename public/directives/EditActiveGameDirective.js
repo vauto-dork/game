@@ -9,7 +9,7 @@ var EditActiveGameDirective = function() {
 	};
 }
 
-var EditActiveGameController = function ($scope, $http, $location) {
+var EditActiveGameController = function ($scope, $http, $location, playerNameFactory) {
 	var me = this;
 	$scope.loading = true;
 	
@@ -24,6 +24,9 @@ var EditActiveGameController = function ($scope, $http, $location) {
 	    // this callback will be called asynchronously
 	    // when the response is available
 	    $scope.game = data;
+		$scope.players = data.players.map(function(value){
+			return playerNameFactory.playerNameFormat(value.player);
+		});
 		$scope.loading = false;
 	}).
 	error(function(data, status, headers, config) {
@@ -33,7 +36,10 @@ var EditActiveGameController = function ($scope, $http, $location) {
 	  });
 };
 
-EditActiveGameController.$inject = ['$scope', '$http', '$location'];
+EditActiveGameController.$inject = ['$scope', '$http', '$location', 'playerNameFactory'];
 
 DorkModule.controller('EditActiveGameController', EditActiveGameController);
 DorkModule.directive('editActiveGame', EditActiveGameDirective);
+
+DorkModule.controller('AddScoresController', AddScoresController);
+DorkModule.directive('addScores', AddScoresDirective);
