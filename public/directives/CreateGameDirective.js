@@ -65,7 +65,7 @@ var CreateGameController = function ($scope, $window, $http, playerNameFactory) 
 			// this callback will be called asynchronously
 		    // when the response is available
 		    console.log(data);
-			$window.location.href = '/activeGames';
+			$window.location.href = '/activeGames/edit/#/' + data._id;
 		}).
 			error(function(data, status, headers, config) {
 		    // called asynchronously if an error occurs
