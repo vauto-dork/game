@@ -12,6 +12,7 @@ var EditActiveGameDirective = function() {
 var EditActiveGameController = function ($scope, $http, $location, playerNameFactory) {
 	var me = this;
 	$scope.loading = true;
+	me.datePlayedJs = new Date();
 	
 	if($location.path() !== undefined || $location.path() !== ''){
 		$scope.activeGamePath = '/ActiveGames/json' + $location.path();
@@ -24,16 +25,20 @@ var EditActiveGameController = function ($scope, $http, $location, playerNameFac
 	    // this callback will be called asynchronously
 	    // when the response is available
 	    $scope.game = data;
-		$scope.players = data.players.map(function(value){
-			return playerNameFactory.playerNameFormat(value.player);
-		});
+		me.datePlayedJs = Date.parse(data.datePlayed);
+		console.log(data.datePlayed);
 		$scope.loading = false;
 	}).
 	error(function(data, status, headers, config) {
 	    // called asynchronously if an error occurs
 	    // or server returns response with an error status.
 	    debugger;
-	  });
+	});
+	
+	this.getFormattedDate = function(){
+		var formattedDate = new Date(me.datePlayedJs);
+		return formattedDate.toISOString();
+	}
 };
 
 EditActiveGameController.$inject = ['$scope', '$http', '$location', 'playerNameFactory'];
@@ -41,5 +46,5 @@ EditActiveGameController.$inject = ['$scope', '$http', '$location', 'playerNameF
 DorkModule.controller('EditActiveGameController', EditActiveGameController);
 DorkModule.directive('editActiveGame', EditActiveGameDirective);
 
-DorkModule.controller('AddScoresController', AddScoresController);
-DorkModule.directive('addScores', AddScoresDirective);
+DorkModule.controller('EditScoresController', EditScoresController);
+DorkModule.directive('editScores', EditScoresDirective);

@@ -64,7 +64,6 @@ var CreateGameController = function ($scope, $window, $http, playerNameFactory) 
 		$http.post('/activeGames/save', { players: selectedPlayers }).success(function(data, status, headers, config) {
 			// this callback will be called asynchronously
 		    // when the response is available
-		    console.log(data);
 			$window.location.href = '/activeGames/edit/#/' + data._id;
 		}).
 			error(function(data, status, headers, config) {

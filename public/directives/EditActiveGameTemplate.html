@@ -4,9 +4,8 @@
 
 <div ng-if="!loading">
 	<p>ID: {{game._id}}</p>
-	<p>Date Played: {{game.datePlayed}}</p>
-	<add-scores players="players"></add-scores>
-	<!--<div ng-repeat="player in game.players">
-		{{player.player.firstName}} {{player.player.lastName}}
-	</div>-->
+	<date-picker date="ctrl.datePlayedJs"></date-picker>
+	<edit-scores players="game.players"></edit-scores>
 </div>
+
+{{ctrl.getFormattedDate()}}

@@ -1,16 +1,16 @@
 <div class="playlist-scores-row" ng-repeat="player in ctrl.players">
 	<div class="player-card row">
 		<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-			<player-nametag player="player"></player-nametag>
+			<player-nametag player="ctrl.formatPlayer(player.player)"></player-nametag>
 		</div>
 		
 		<label class="col-xs-6 col-sm-3 col-md-3 col-lg-3">
 			Score<br />
-			<input class="form-control" type="number" ng-model="player.score" />
+			<input class="form-control" type="number" ng-model="player.points" />
 		</label>
 		<label class="col-xs-6 col-sm-3 col-md-3 col-lg-3">
 			Position<br />
-			<input class="form-control" type="number" ng-model="player.position" />
+			<input class="form-control" type="number" ng-model="player.rank" />
 		</label>
 	</div>
 </div>
