@@ -1,9 +1,16 @@
-<p class="input-group">
-	<input type="text" class="form-control" datepicker-popup="{{ctrl.format}}" ng-model="ctrl.date" is-open="ctrl.opened"
-		datepicker-options="ctrl.dateOptions" ng-required="true" close-text="Close" />
-	<span class="input-group-btn">
-		<button type="button" class="btn btn-default" ng-click="ctrl.open($event)">
-			<span class="glyphicon glyphicon-calendar"></span>
-		</button>
-	</span>
-</p>
+<div class="form-inline text-center">
+	<div class="form-group datepicker">
+		<div class="input-group">
+			<input type="text" class="form-control" datepicker-popup="{{ctrl.format}}" ng-model="ctrl.date" is-open="ctrl.opened"
+				datepicker-options="ctrl.dateOptions" ng-required="true" close-text="Close" />
+			<span class="input-group-btn">
+				<button type="button" class="btn btn-default" ng-click="ctrl.open($event)">
+					<span class="glyphicon glyphicon-calendar"></span>
+				</button>
+			</span>
+		</div>
+	</div>
+	<div class="form-group timepicker">
+		<timepicker ng-model="ctrl.date" hour-step="ctrl.hstep" minute-step="ctrl.mstep" show-meridian="true"></timepicker>
+	</div>
+</div>

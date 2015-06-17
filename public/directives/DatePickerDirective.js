@@ -15,6 +15,8 @@ var DatePickerController = function ($scope) {
 	me.date = this.date;
 	
 	me.format = 'dd-MMMM-yyyy';
+	me.hstep = 1;
+	me.mstep = 1;
 	
 	this.today = function() {
 		me.date = new Date();

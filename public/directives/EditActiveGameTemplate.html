@@ -4,8 +4,7 @@
 
 <div ng-if="!loading">
 	<p>ID: {{game._id}}</p>
+	<p>{{ctrl.getFormattedDate()}}</p>
 	<date-picker date="ctrl.datePlayedJs"></date-picker>
 	<edit-scores players="game.players"></edit-scores>
 </div>
-
-{{ctrl.getFormattedDate()}}

@@ -92,6 +92,11 @@ body {
 .admin-list {
   font-size: 1.5em; }
 
+.datepicker,
+.timepicker {
+  padding-left: 1em;
+  padding-right: 1em; }
+
 .add-player-module {
   font-size: 1.4em; }
 
