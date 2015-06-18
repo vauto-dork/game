@@ -22,6 +22,7 @@ router.get('/json', function (req, res, next) {
 		res.json(game);
 	})
 	.populate('players.player')
+	.sort({ datePlayed: -1 })
 	.exec();
 });
 
