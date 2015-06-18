@@ -13,7 +13,8 @@ var ActiveGameSchema = new Schema({
   datePlayed: { type: Date, default: Date.now, required: true },
   players: [{
     player: { type: Schema.Types.ObjectId, ref: 'Player', required: true},
-    points: { type: Number, default: 0 }
+    points: { type: Number, default: 0 },
+    rank: { type: Number, default: 0 }
   }]
 });
 
