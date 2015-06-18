@@ -69,7 +69,7 @@ var EditActiveGameController = function ($scope, $http, $location, $window, play
 	
 	this.deleteGame = function() {
 		$http.delete($scope.activeGamePath).success(function(data, status, headers, config) {
-		    me.returnToActiveGames();
+		    $window.location.href = '/GameHistory';
 		}).
 		error(function(data, status, headers, config) {
 		    debugger;

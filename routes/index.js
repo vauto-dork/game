@@ -16,4 +16,9 @@ router.get('/CreateGame', function(req, res, next) {
   res.render('createGame', { title: 'Create Game' });
 });
 
+/* GET game history page. */
+router.get('/GameHistory', function(req, res, next) {
+  res.render('gameHistory', { title: 'Game History' });
+});
+
 module.exports = router;
