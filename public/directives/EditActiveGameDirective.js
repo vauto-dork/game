@@ -38,7 +38,7 @@ var EditActiveGameController = function ($scope, $http, $location, playerNameFac
 	this.getFormattedDate = function(){
 		var formattedDate = new Date(me.datePlayedJs);
 		return formattedDate.toISOString();
-	}
+	};
 };
 
 EditActiveGameController.$inject = ['$scope', '$http', '$location', 'playerNameFactory'];

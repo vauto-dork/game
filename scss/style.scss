@@ -128,29 +128,6 @@
 	width: 100%;
 }
 
-.playlist-buttons {
-	margin: auto;
-	text-align: center;
-
-	.btn {
-		width: 90%;
-		margin: 1em;
-		padding: 1.5em;
-	}
-}
-
 .playlist-scores-input {
 	width: 100%;
-}
-
-.btn > .glyphicon {
-	margin-right: $icon-spacing;
-}
-
-.load-bar {
-	display: block;
-	width: 100%;
-	height: 10em;
-	line-height: 10em;
-	text-align: center;
 }
