@@ -8,8 +8,8 @@
 
 @mixin player-left() {
 	float: left;	
-	padding-right: 0.5em;
-	font-size: 3em;
+	padding-right: $standard-spacing;
+	font-size: $font-largest;
 	color: $dark-orange;
 }
 
@@ -17,4 +17,9 @@
 	-moz-box-shadow: $var;
 	-webkit-box-shadow: $var;
 	box-shadow: $var;
+}
+
+@mixin round-box() {
+	border: 4px solid $dark-orange;
+	border-radius: 3px;
 }

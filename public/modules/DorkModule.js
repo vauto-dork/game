@@ -1,3 +1,3 @@
-var DorkModule = angular.module('DorkModule', ['PlayerNametagModule', 'DatePickerModule']);
+var DorkModule = angular.module('DorkModule', ['PlayerNametagModule', 'PlayerScoretagModule', 'DatePickerModule']);
 
 DorkModule.factory('playerNameFactory', PlayerNameFactory);

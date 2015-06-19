@@ -1,0 +1,17 @@
+.game-date {
+  font-size: 2em;
+  font-weight: bold;
+  color: #df6d2e; }
+
+.game-time {
+  font-size: 1.4em;
+  font-weight: bold; }
+
+.game-edit-btn {
+  vertical-align: top; }
+  .game-edit-btn .btn {
+    margin-top: 0.5em; }
+    .game-edit-btn .btn .glyphicon {
+      margin-left: 0; }
+
+/*# sourceMappingURL=game.css.map */

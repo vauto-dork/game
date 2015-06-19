@@ -98,6 +98,7 @@ body {
     padding: 1.5em; }
 
 .btn > .glyphicon {
+  margin-left: 0.5em;
   margin-right: 0.5em; }
 
 .load-bar {

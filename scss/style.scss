@@ -5,38 +5,8 @@
 @import "admin";
 @import "datePicker";
 @import "addPlayer";
-
-.player-card {
-	margin: 5px;
-
-	.player-order {
-		@include player-left;
-		width: 2em;
-		text-align: center;
-		line-height: 1.5em;
-	}
-
-	.player-nickname {
-		margin-left: 0.3em;
-		padding-left: 0.5em;
-		border-left: 2px solid $background-color;
-		display: inline-block;
-		white-space: nowrap;
-	}
-
-	.player-name {
-		background-color: $dark-bg;
-		color: $background-color;
-		display: inline;
-		padding: 0 0.5em;
-		font-size: $font-large;
-		font-weight: bold;
-	}
-
-	.player-fullname {
-		font-size: $font-large;
-	}
-}
+@import "player";
+@import "game";
 
 /* 
 .ranking-row,
@@ -67,7 +37,7 @@
 
 	.ranking-label {
 		display: inline-block;
-		margin-right: 0.5em;
+		margin-right: $standard-spacing;
 		color: $gray;
 	}
 }
@@ -105,8 +75,7 @@
 
 	.player-order {
 		.checkmark {
-			border: 4px solid #df6d2e;
-			border-radius: 3px;
+			@include round-box();
 		}
 
 		input {

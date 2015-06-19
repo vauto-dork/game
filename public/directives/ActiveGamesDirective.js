@@ -9,12 +9,17 @@ var ActiveGamesDirective = function() {
 	};
 }
 
-var ActiveGamesController = function ($scope, $http) {
+var ActiveGamesController = function ($scope, $http, playerNameFactory) {
 	var me = this;
 	$scope.loading = true;
 	
 	$http.get("/ActiveGames/json").success(function(data, status, headers, config) {
-	    $scope.games = data;		
+	    $scope.games = data;
+		$scope.games.forEach(function(game){
+			game.players.forEach(function(value){
+		      value.player = playerNameFactory.playerNameFormat(value.player);
+		    });
+		});
 		$scope.loading = false;
 	}).
 	error(function(data, status, headers, config) {
@@ -22,7 +27,7 @@ var ActiveGamesController = function ($scope, $http) {
 	  });
 };
 
-ActiveGamesController.$inject = ['$scope', '$http'];
+ActiveGamesController.$inject = ['$scope', '$http', 'playerNameFactory'];
 
 DorkModule.controller('ActiveGamesController', ActiveGamesController);
 DorkModule.directive('activeGames', ActiveGamesDirective);

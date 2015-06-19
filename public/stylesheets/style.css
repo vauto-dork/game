@@ -98,6 +98,7 @@ body {
     padding: 1.5em; }
 
 .btn > .glyphicon {
+  margin-left: 0.5em;
   margin-right: 0.5em; }
 
 .load-bar {
@@ -122,7 +123,7 @@ body {
   text-align: center; }
 
 .player-card {
-  margin: 5px; }
+  margin: 0.5em; }
   .player-card .player-order {
     float: left;
     padding-right: 0.5em;
@@ -146,6 +147,51 @@ body {
     font-weight: bold; }
   .player-card .player-fullname {
     font-size: 1.4em; }
+
+.player-scores-wrapper {
+  margin-bottom: 2.5em; }
+
+.player-score-card {
+  display: inline-block;
+  margin: 0.5em;
+  margin-top: 0;
+  margin-bottom: 0.75em;
+  text-align: center;
+  font-size: 1.4em;
+  width: 5em; }
+  .player-score-card .player-name {
+    margin: 0.5em;
+    background-color: #4f6885;
+    color: #e4e9ef;
+    font-weight: bold; }
+  .player-score-card .player-score-card-outline {
+    border: 4px solid #df6d2e;
+    border-radius: 3px; }
+  .player-score-card .player-score-big {
+    font-size: 2em;
+    color: #df6d2e; }
+  .player-score-card .game-rank {
+    height: 1.5em;
+    vertical-align: middle; }
+    .player-score-card .game-rank .game-rank-dot {
+      display: inline-block;
+      margin: 0 0.5em; }
+
+.game-date {
+  font-size: 2em;
+  font-weight: bold;
+  color: #df6d2e; }
+
+.game-time {
+  font-size: 1.4em;
+  font-weight: bold; }
+
+.game-edit-btn {
+  vertical-align: top; }
+  .game-edit-btn .btn {
+    margin-top: 0.5em; }
+    .game-edit-btn .btn .glyphicon {
+      margin-left: 0; }
 
 /* 
 .ranking-row,

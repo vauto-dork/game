@@ -1,14 +1,17 @@
-<div class="load-bar" ng-if="loading">
-	<img src="/images/loader.gif" width="220" height="19" />
-</div>
-
-<div ng-if="!loading">
-	<div ng-repeat="game in games">
-		<p>Date Played: {{game.datePlayed}}</p>
-		<p>Winner: {{game.winner.firstName}} {{game.winner.lastName}} {{game.winner.nickname}}
-		<div ng-repeat="player in game.players">
-			{{player.player.firstName}} {{player.player.lastName}}
+<div class="col-xs-12">
+	<div class="load-bar" ng-if="loading">
+		<img src="/images/loader.gif" width="220" height="19" />
+	</div>
+	
+	<div ng-if="!loading">
+		<div ng-repeat="game in games">
+			
+			<div class="game-date">{{game.datePlayed | date:'MMM d, yyyy'}}</div>
+			<div class="game-time">{{game.datePlayed | date:'EEEE h:mm a'}}</div>
+			
+			<div class="player-scores-wrapper">
+				<player-scoretag player="player" ng-repeat="player in game.players"></player-scoretag>
+			</div>
 		</div>
-		<hr />
 	</div>
 </div>

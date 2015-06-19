@@ -1,0 +1,25 @@
+@import "variables";
+@import "mixins";
+
+.game-date {
+	font-size: $font-larger;
+	font-weight: bold;
+	color: $dark-orange;
+}
+
+.game-time {
+	font-size: $font-large;
+	font-weight: bold;
+}
+
+.game-edit-btn {
+	vertical-align: top;
+	
+	.btn {
+		margin-top: $standard-spacing;
+		
+		.glyphicon {
+			margin-left: 0;
+		}
+	}
+}
