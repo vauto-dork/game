@@ -14,7 +14,7 @@ var DatePickerController = function ($scope) {
 	var me = this;
 	me.date = this.date;
 	
-	me.format = 'dd-MMMM-yyyy';
+	me.format = 'MMMM dd, yyyy';
 	me.hstep = 1;
 	me.mstep = 1;
 	

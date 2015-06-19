@@ -2,7 +2,7 @@
 	<div class="form-group datepicker">
 		<div class="input-group">
 			<input type="text" class="form-control" datepicker-popup="{{ctrl.format}}" ng-model="ctrl.date" is-open="ctrl.opened"
-				datepicker-options="ctrl.dateOptions" ng-required="true" close-text="Close" />
+				datepicker-options="ctrl.dateOptions" show-button-bar="false" ng-required="true" close-text="Close" />
 			<span class="input-group-btn">
 				<button type="button" class="btn btn-default" ng-click="ctrl.open($event)">
 					<span class="glyphicon glyphicon-calendar"></span>
