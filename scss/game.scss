@@ -40,3 +40,11 @@
 	width: 3em;
 	font-size: $font-large;
 }
+
+.btn-group-lg.game-rank-group {
+	padding: 1em 0;
+	
+	& > .btn {
+		padding: $standard-spacing 1em;
+	}
+}

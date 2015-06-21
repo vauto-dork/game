@@ -220,6 +220,11 @@ input.ng-invalid {
   width: 3em;
   font-size: 1.4em; }
 
+.btn-group-lg.game-rank-group {
+  padding: 1em 0; }
+  .btn-group-lg.game-rank-group > .btn {
+    padding: 0.5em 1em; }
+
 /* 
 .ranking-row,
 .ranking-rank,
