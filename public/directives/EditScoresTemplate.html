@@ -1,13 +1,29 @@
 <div class="playlist-scores-row" ng-repeat="player in ctrl.players">
 	<div class="player-card row">
-		<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+		<div class="col-xs-12 col-sm-4 col-md-3 col-lg-3">
 			<player-nametag player="ctrl.formatPlayer(player.player)"></player-nametag>
 		</div>
 		
-		<label class="col-xs-6 col-sm-3 col-md-3 col-lg-3">
-			Score<br />
-			<input class="form-control" type="number" ng-model="player.points" />
-		</label>
+		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+			
+			<div class="game-score-modifier-icons">
+				<a class="btn btn-link" ng-click="ctrl.decrementScore(player)">
+					<span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
+				</a>
+			</div>
+			
+			<input class="form-control game-score-numeric-input" type="number" pattern="-?[0-9]*"
+				step="1" min="{{ctrl.pointsMin}}" max="{{ctrl.pointsMax}}" ng-model="player.points"
+				numeric-up-down required />
+			
+			<div class="game-score-modifier-icons">
+				<a class="btn btn-link" ng-click="ctrl.incrementScore(player)">
+					<span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+				</a>
+			</div>
+			
+		</div>
+		
 		<label class="col-xs-6 col-sm-3 col-md-3 col-lg-3">
 			Position<br />
 			<input class="form-control" type="number" ng-model="player.rank" />

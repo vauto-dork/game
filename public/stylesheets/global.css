@@ -108,4 +108,16 @@ body {
   line-height: 10em;
   text-align: center; }
 
+input[type='number'] {
+  -moz-appearance: textfield; }
+
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0; }
+
+input.ng-invalid {
+  background: #F84072;
+  border: 1px red solid; }
+
 /*# sourceMappingURL=global.css.map */

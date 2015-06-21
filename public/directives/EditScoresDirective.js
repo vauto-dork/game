@@ -13,15 +13,21 @@ var EditScoresDirective = function() {
 var EditScoresController = function ($scope, $http, playerNameFactory) {
 	var me = this;
 	me.players = this.players;
+	me.pointsMin = -4;
+	me.pointsMax = 99;
 	
 	this.formatPlayer = function(player){
 		return playerNameFactory.playerNameFormat(player);	
 	};
+		
+	this.decrementScore = function(player) {
+		var points = parseInt(player.points);
+		player.points = (points - 1 >= me.pointsMin) ? points - 1 : points;
+	};
 	
-	this.changeScore = function(player){
-		if(player.score != undefined){
-			player.score = player.score.replace(/\D/g,'');
-		}
+	this.incrementScore = function(player) {
+		var points = parseInt(player.points);
+		player.points = (points + 1 <= me.pointsMax) ? points + 1 : points;
 	};
 };
 

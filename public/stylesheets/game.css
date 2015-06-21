@@ -14,4 +14,18 @@
     .game-edit-btn .btn .glyphicon {
       margin-left: 0; }
 
+.game-score-modifier-icons,
+.game-score-numeric-input {
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle; }
+
+.game-score-modifier-icons a {
+  padding: 0.5em 0;
+  font-size: 2em; }
+
+.game-score-numeric-input {
+  width: 3em;
+  font-size: 1.4em; }
+
 /*# sourceMappingURL=game.css.map */

@@ -108,13 +108,26 @@ body {
   line-height: 10em;
   text-align: center; }
 
+input[type='number'] {
+  -moz-appearance: textfield; }
+
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0; }
+
+input.ng-invalid {
+  background: #F84072;
+  border: 1px red solid; }
+
 .admin-list {
   font-size: 1.5em; }
 
 .datepicker,
 .timepicker {
   padding-left: 1em;
-  padding-right: 1em; }
+  padding-right: 1em;
+  font-size: 1.4em; }
 
 .add-player-module {
   font-size: 1.4em; }
@@ -192,6 +205,20 @@ body {
     margin-top: 0.5em; }
     .game-edit-btn .btn .glyphicon {
       margin-left: 0; }
+
+.game-score-modifier-icons,
+.game-score-numeric-input {
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle; }
+
+.game-score-modifier-icons a {
+  padding: 0.5em 0;
+  font-size: 2em; }
+
+.game-score-numeric-input {
+  width: 3em;
+  font-size: 1.4em; }
 
 /* 
 .ranking-row,

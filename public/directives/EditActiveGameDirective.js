@@ -41,6 +41,7 @@ var EditActiveGameController = function ($scope, $http, $location, $window, play
 	
 	this.saveGame = function() {
 		$scope.game.datePlayed = this.getFormattedDate();
+		$scope.game.players.forEach(function(player) { player.points = !player.points ? 0 : player.points; });
 		$http.put($scope.activeGamePath, $scope.game).success(function(data, status, headers, config) {
 		    me.returnToActiveGames();
 		}).

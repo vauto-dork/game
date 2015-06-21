@@ -23,3 +23,20 @@
 		}
 	}
 }
+
+.game-score-modifier-icons,
+.game-score-numeric-input {
+	display: inline-block;
+	text-align: center;
+	vertical-align: middle;
+}
+
+.game-score-modifier-icons a {
+	padding: $standard-spacing 0;
+	font-size: $font-larger;
+}
+
+.game-score-numeric-input {
+	width: 3em;
+	font-size: $font-large;
+}
