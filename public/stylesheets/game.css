@@ -1,3 +1,27 @@
+.game-card {
+  display: inline-block;
+  padding: 1em;
+  border-radius: 5px;
+  background-color: #F1F5F8;
+  border: 1px solid #cfd2d8;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.15); }
+
+.game-column-player,
+.game-column-rank,
+.game-column-points {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle; }
+
+.game-column-player {
+  width: 22em; }
+
+.game-column-rank {
+  width: 15em; }
+
+.game-column-points {
+  width: 15em; }
+
 .game-date {
   font-size: 2em;
   font-weight: bold;
