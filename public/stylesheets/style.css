@@ -239,12 +239,10 @@ input.ng-invalid {
   vertical-align: middle; }
 
 .game-score-modifier-icons a {
-  padding: 0.5em 0;
-  font-size: 2em; }
+  padding: 0.5em 0; }
 
 .game-score-numeric-input {
-  width: 3em;
-  font-size: 1.4em; }
+  width: 3em; }
 
 .btn-group-lg.game-rank-group {
   padding: 1em 0; }
