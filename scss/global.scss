@@ -138,6 +138,10 @@ body {
 	text-align: center;
 }
 
+.alert {
+	font-size: $font-large;
+}
+
 input[type='number'] {
     -moz-appearance:textfield;
 }

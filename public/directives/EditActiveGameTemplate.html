@@ -1,11 +1,13 @@
+<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+
 <div class="load-bar" ng-if="loading">
 	<img src="/images/loader.gif" width="220" height="19" />
 </div>
 
-<div ng-if="!loading">
+<div ng-if="!loading && !errorLoading">
 	<date-picker date="ctrl.datePlayedJs"></date-picker>
 	<edit-scores players="game.players"></edit-scores>
-		
+	
 	<div class="row big-action-buttons">
 		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
 			<button type="button" class="btn btn-success btn-lg" ng-click="ctrl.saveGame()">
@@ -20,6 +22,16 @@
 		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
 			<button type="button" class="btn btn-danger btn-lg" ng-click="ctrl.returnToActiveGames()">
 				<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Cancel
+			</button>
+		</div>
+	</div>
+</div>
+
+<div ng-if="errorLoading">
+	<div class="row big-action-buttons">
+		<div class="col-xs-12">
+			<button type="button" class="btn btn-danger btn-lg" ng-click="ctrl.returnToActiveGames()">
+				Return to Active Games
 			</button>
 		</div>
 	</div>

@@ -108,6 +108,9 @@ body {
   line-height: 10em;
   text-align: center; }
 
+.alert {
+  font-size: 1.4em; }
+
 input[type='number'] {
   -moz-appearance: textfield; }
 
