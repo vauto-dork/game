@@ -4,7 +4,7 @@
 	</div>
 	
 	<div ng-if="!loading">
-		<div ng-repeat="game in games">
+		<section ng-repeat="game in games">
 			
 			<div class="game-date">{{game.datePlayed | date:'MMM d, yyyy'}}</div>
 			<div class="game-time">{{game.datePlayed | date:'EEEE h:mm a'}}</div>
@@ -12,6 +12,6 @@
 			<div class="player-scores-wrapper">
 				<player-scoretag player="player" ng-repeat="player in game.players"></player-scoretag>
 			</div>
-		</div>
+		</section>
 	</div>
 </div>
