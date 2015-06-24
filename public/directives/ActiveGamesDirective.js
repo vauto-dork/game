@@ -14,17 +14,21 @@ var ActiveGamesController = function ($scope, $http, playerNameFactory) {
 	$scope.loading = true;
 	
 	$http.get("/ActiveGames/json").success(function(data, status, headers, config) {
-	    $scope.games = data;
+		$scope.games = data;
 		$scope.games.forEach(function(game){
 			game.players.forEach(function(value){
-		      value.player = playerNameFactory.playerNameFormat(value.player);
-		    });
+				value.player = playerNameFactory.playerNameFormat(value.player);
+			});
 		});
 		$scope.loading = false;
-	}).
-	error(function(data, status, headers, config) {
-	    debugger;
-	  });
+	})
+	.error(function(data, status, headers, config) {
+		debugger;
+	});
+	
+	me.deleteGame = function(gameId) {
+		console.log(gameId);
+	};
 };
 
 ActiveGamesController.$inject = ['$scope', '$http', 'playerNameFactory'];

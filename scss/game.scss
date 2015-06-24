@@ -2,12 +2,8 @@
 @import "mixins";
 
 .game-card {
+	@include card;
 	display: inline-block;
-	padding: 1em;
-	border-radius: $player-card-border-radius;
-	background-color: $light-gray;
-	border: 1px solid lighten($gray, 30%);
-	box-shadow: 0 2px 2px 0 rgba(0,0,0,0.15);
 }
 
 .game-column-player,
@@ -41,11 +37,15 @@
 	font-weight: bold;
 }
 
+.game-delete-btn {
+	float: right;
+}
+
 .game-edit-btn {
 	vertical-align: top;
 	
 	.btn {
-		margin-top: $standard-spacing;
+		margin: $standard-spacing;
 		
 		.glyphicon {
 			margin-left: 0;

@@ -1,10 +1,10 @@
 .game-card {
-  display: inline-block;
   padding: 1em;
   border-radius: 5px;
   background-color: #F1F5F8;
   border: 1px solid #cfd2d8;
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.15); }
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.15);
+  display: inline-block; }
 
 .game-column-player,
 .game-column-rank,
@@ -31,10 +31,13 @@
   font-size: 1.4em;
   font-weight: bold; }
 
+.game-delete-btn {
+  float: right; }
+
 .game-edit-btn {
   vertical-align: top; }
   .game-edit-btn .btn {
-    margin-top: 0.5em; }
+    margin: 0.5em; }
     .game-edit-btn .btn .glyphicon {
       margin-left: 0; }
 
