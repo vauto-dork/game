@@ -9,10 +9,14 @@ var ActiveGamesDirective = function() {
 	};
 }
 
-var ActiveGamesController = function ($scope, $http, playerNameFactory) {
+var ActiveGamesController = function ($scope, $http, $window, playerNameFactory) {
 	var me = this;
 	me.loading = true;
 	me.activeGamePath = "/ActiveGames/json";
+	
+	me.scrollToTop = function() {
+		$window.scrollTo(0, 0);
+	};
 	
 	me.getGames = function() {
 		$http.get(me.activeGamePath)
@@ -36,6 +40,7 @@ var ActiveGamesController = function ($scope, $http, playerNameFactory) {
 		.success(function(data, status, headers, config) {
 			game.deleteWarning = false;
 		    me.getGames();
+			me.scrollToTop();
 		})
 		.error(function(data, status, headers, config) {
 			game.deleteWarning = false;
@@ -46,7 +51,7 @@ var ActiveGamesController = function ($scope, $http, playerNameFactory) {
 	me.getGames();
 };
 
-ActiveGamesController.$inject = ['$scope', '$http', 'playerNameFactory'];
+ActiveGamesController.$inject = ['$scope', '$http', '$window', 'playerNameFactory'];
 
 DorkModule.controller('ActiveGamesController', ActiveGamesController);
 DorkModule.directive('activeGames', ActiveGamesDirective);

@@ -144,10 +144,8 @@ input.ng-invalid {
   display: inline-block;
   vertical-align: middle; }
 
-.add-player-module {
-  font-size: 1.4em; }
-
 .add-player-status {
+  padding: 1em;
   text-align: center; }
 
 .player-card {

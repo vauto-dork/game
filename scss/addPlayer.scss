@@ -1,10 +1,7 @@
 @import "variables";
 @import "mixins";
 
-.add-player-module {
-	font-size: $font-large;
-}
-
 .add-player-status {
+	padding: 1em;
 	text-align: center;
 }
