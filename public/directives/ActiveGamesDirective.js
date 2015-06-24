@@ -11,24 +11,39 @@ var ActiveGamesDirective = function() {
 
 var ActiveGamesController = function ($scope, $http, playerNameFactory) {
 	var me = this;
-	$scope.loading = true;
+	me.loading = true;
+	me.activeGamePath = "/ActiveGames/json";
 	
-	$http.get("/ActiveGames/json").success(function(data, status, headers, config) {
-		$scope.games = data;
-		$scope.games.forEach(function(game){
-			game.players.forEach(function(value){
-				value.player = playerNameFactory.playerNameFormat(value.player);
+	me.getGames = function() {
+		$http.get(me.activeGamePath)
+		.success(function(data, status, headers, config) {
+			me.games = data;
+			me.games.forEach(function(game){
+				game.deleteWarning = false;
+				game.players.forEach(function(value){
+					value.player = playerNameFactory.playerNameFormat(value.player);
+				});
 			});
+			me.loading = false;
+		})
+		.error(function(data, status, headers, config) {
+			debugger;
 		});
-		$scope.loading = false;
-	})
-	.error(function(data, status, headers, config) {
-		debugger;
-	});
-	
-	me.deleteGame = function(gameId) {
-		console.log(gameId);
 	};
+	
+	me.deleteGame = function(game) {
+		$http.delete(me.activeGamePath + '/' + game._id)
+		.success(function(data, status, headers, config) {
+			game.deleteWarning = false;
+		    me.getGames();
+		})
+		.error(function(data, status, headers, config) {
+			game.deleteWarning = false;
+		    debugger;
+		});
+	};
+	
+	me.getGames();
 };
 
 ActiveGamesController.$inject = ['$scope', '$http', 'playerNameFactory'];

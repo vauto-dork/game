@@ -41,6 +41,7 @@
 	float: right;
 }
 
+.game-delete-warning-btn,
 .game-edit-btn {
 	vertical-align: top;
 	
@@ -51,6 +52,26 @@
 			margin-left: 0;
 		}
 	}
+}
+
+.game-delete-warning-overlay {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	margin: -1em;
+	z-index: 100;
+	background: rgba(0,0,0,0.6);
+	color: $global-nav-text-color;
+	text-align: center;
+	border-radius: $card-border-radius;
+	
+	h3 {
+		text-shadow: 0 0 20px #000;
+	}
+}
+
+.game-delete-blur {
+	@include blur(2px);
 }
 
 .game-score-modifier-icons,
