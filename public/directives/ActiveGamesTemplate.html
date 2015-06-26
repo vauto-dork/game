@@ -4,6 +4,9 @@
 	</div>
 	
 	<div ng-if="!ctrl.loading">
+		<div class="text-center" ng-if="ctrl.showNoGamesWarning"><h2>There are no active games.</h2></div>
+		<div class="text-center" ng-if="ctrl.showErrorMessage"><h2>An error occured.</h2></div>
+		
 		<section ng-repeat="game in ctrl.games">
 			<div class="game-delete-warning-overlay" ng-class="game.deleteWarning ? 'show' : 'hidden'">
 				<h3>Delete this game?</h3>
