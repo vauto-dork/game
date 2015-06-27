@@ -1,22 +1,25 @@
-<div class="load-bar" ng-if="playersLoading">
+<div class="load-bar" ng-if="ctrl.showLoading">
 	<img src="/images/loader.gif" width="220" height="19" />
 </div>
 
-<playlist players="players" ng-if="!playersLoading"></playlist>
+<div class="text-center" ng-if="ctrl.showErrorMessage"><h2>An error occured.</h2></div>
 
-<div class="row big-action-buttons">
-	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-		<button type="button" class="btn btn-danger btn-lg" ng-click="ctrl.removeAll()">
-			<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove All
-		</button>
-	</div>
-	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-		<button type="button" class="btn btn-primary btn-lg" ng-click="ctrl.createPlaylist()" data-toggle="modal" data-target="#myModal">
-			<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Create Playlist
-		</button>
-	</div>
+<div ng-if="ctrl.showPlayers">
+  <playlist players="players"></playlist>
+  
+  <div class="row big-action-buttons">
+  	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+  		<button type="button" class="btn btn-danger btn-lg" ng-click="ctrl.removeAll()" ng-disabled="ctrl.disableRemoveAll">
+  			<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove All
+  		</button>
+  	</div>
+  	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+  		<button type="button" class="btn btn-primary btn-lg" ng-click="ctrl.createPlaylist()" ng-disabled="ctrl.disableCreatePlaylist" data-toggle="modal" data-target="#myModal">
+  			<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Create Playlist
+  		</button>
+  	</div>
+  </div>
 </div>
-
 
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -29,10 +32,10 @@
         <h4 class="modal-title">Playlist</h4>
       </div>
       <div class="modal-body">
-      	<div class="load-bar" ng-if="orderedPlayersLoading">
+      	<div class="load-bar" ng-if="ctrl.orderedPlayersLoading">
       		<img src="/images/loader.gif" width="220" height="19" />
       	</div>
-      	<div class="playlist-order-row" ng-repeat="player in orderedPlayers" ng-if="!orderedPlayersLoading">
+      	<div class="playlist-order-row" ng-repeat="player in orderedPlayers" ng-if="ctrl.orderedPlayersLoaded">
 	      	<div class="player-card">
 	      		<div class="player-order">
 	      			{{$index + 1}}
@@ -42,8 +45,8 @@
 		    </div> 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary btn-lg" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-warning btn-lg" data-dismiss="modal" ng-click="ctrl.startGame()">Start Game</button>
+        <button type="button" class="btn btn-primary btn-lg" data-dismiss="modal" ng-disabled="ctrl.disableOrderedPlayers">Close</button>
+        <button type="button" class="btn btn-warning btn-lg" data-dismiss="modal" ng-click="ctrl.startGame()" ng-disabled="ctrl.disableOrderedPlayers">Start Game</button>
       </div>
     </div>
   </div>
