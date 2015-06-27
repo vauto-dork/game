@@ -10,17 +10,17 @@
 	
 	<div class="row big-action-buttons">
 		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-			<button type="button" class="btn btn-primary btn-lg" ng-click="ctrl.returnToActiveGames()" ng-disabled="me.disableControls" aria-label="Back to Games">
+			<button type="button" class="btn btn-primary btn-lg" ng-click="ctrl.returnToActiveGames()" ng-disabled="ctrl.disableControls" aria-label="Back to Games">
 				<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Games
 			</button>
 		</div>
 		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-			<button type="button" class="btn btn-warning btn-lg" ng-click="ctrl.finalizeGame()" ng-disabled="me.disableControls" aria-label="Finalize Game">
+			<button type="button" class="btn btn-warning btn-lg" ng-click="ctrl.finalize()" ng-disabled="ctrl.disableControls" aria-label="Finalize Game">
 				<span class="glyphicon glyphicon-saved" aria-hidden="true"></span> Finalize
 			</button>
 		</div>
 		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-			<button type="button" class="btn btn-success btn-lg" ng-click="ctrl.saveGame()" ng-disabled="me.disableControls" aria-label="Save Game">
+			<button type="button" class="btn btn-success btn-lg" ng-click="ctrl.save()" ng-disabled="ctrl.disableControls" aria-label="Save Game">
 				<span class="glyphicon glyphicon-save" aria-hidden="true"></span> Save
 			</button>
 		</div>

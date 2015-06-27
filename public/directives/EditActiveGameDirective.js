@@ -34,15 +34,19 @@ var EditActiveGameController = function ($scope, $http, $location, $window, play
 	me.changeState = function(newState) {
 		console.log(newState);
 		
-		me.showLoading = newState === me.State.Loading;
+		me.showLoading = (newState === me.State.Init) ||
+						 (newState === me.State.Loading);
+						 
 		me.showError = newState === me.State.Error;
 		
-		me.showScoreForm = (newState !== me.State.Loading) && 
+		me.showScoreForm = (newState !== me.State.Init) &&
+						   (newState !== me.State.Loading) && 
 						   (newState !== me.State.Error);
 		
 		me.disableControls = (newState === me.State.Saving) ||
+							 (newState === me.State.Finalizing) ||
 							 (newState === me.State.Deleting) ||
-							 (newState === me.State.Finalizing);
+							 (newState === me.State.Deleted);
 		
 		switch(newState) {
 			case me.State.Init:
@@ -59,7 +63,7 @@ var EditActiveGameController = function ($scope, $http, $location, $window, play
 				me.scrollToTop();
 				break;
 			case me.State.Saving:
-				me.SaveGame();
+				me.saveGame();
 				break;
 			case me.State.Saved:
 				$scope.addAlert('success', 'Game saved successfully!');
@@ -100,6 +104,14 @@ var EditActiveGameController = function ($scope, $http, $location, $window, play
 		else {
 			me.activeGamePath = '';
 		}
+	};
+	
+	me.save = function() {
+		me.changeState(me.State.Saving);	
+	};
+	
+	me.finalize = function() {
+		me.changeState(me.State.Finalizing);
 	};
 	
 	me.errorHandler = function(data, errorMessage) {
