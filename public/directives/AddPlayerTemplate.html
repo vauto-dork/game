@@ -3,19 +3,19 @@
 
 <form ng-submit="ctrl.submit()">
 	<div class="form-group">
-		<input class="form-control input-lg" type="text" name="firstName" placeholder="First Name" ng-model="ctrl.firstName" />
-		<input class="form-control input-lg" type="text" name="lastName" placeholder="Last Name" ng-model="ctrl.lastName" />
-		<input class="form-control input-lg" type="text" name="nickName" placeholder="Nickname" ng-model="ctrl.nickname" />
+		<input class="form-control input-lg" type="text" name="firstName" placeholder="First Name" ng-model="ctrl.firstName" ng-disabled="ctrl.disableControls" />
+		<input class="form-control input-lg" type="text" name="lastName" placeholder="Last Name" ng-model="ctrl.lastName" ng-disabled="ctrl.disableControls" />
+		<input class="form-control input-lg" type="text" name="nickName" placeholder="Nickname" ng-model="ctrl.nickname" ng-disabled="ctrl.disableControls" />
 	</div>
 	
 	<div class="row big-action-buttons">
 		<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-			<button type="button" class="btn btn-danger btn-lg" ng-click="ctrl.reset()" aria-label="Reset">
+			<button type="button" class="btn btn-danger btn-lg" ng-click="ctrl.reset()" ng-disabled="ctrl.disableControls" aria-label="Reset">
 				<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Reset
 			</button>
 		</div>
 		<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-			<button type="submit" class="btn btn-success btn-lg" aria-label="Add Player">
+			<button type="submit" class="btn btn-success btn-lg" ng-disabled="ctrl.disableControls" aria-label="Add Player">
 				<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add
 			</button>
 		</div>
