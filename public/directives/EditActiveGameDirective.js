@@ -32,9 +32,13 @@ var EditActiveGameController = function ($scope, $http, $location, $window, play
 	};
 	
 	me.changeState = function(newState) {
+		console.log(newState);
+		
 		me.showLoading = newState === me.State.Loading;
 		me.showError = newState === me.State.Error;
-		me.showScoreForm = newState !== me.State.Loading;
+		
+		me.showScoreForm = (newState !== me.State.Loading) && 
+						   (newState !== me.State.Error);
 		
 		me.disableControls = (newState === me.State.Saving) ||
 							 (newState === me.State.Deleting) ||
@@ -152,9 +156,8 @@ var EditActiveGameController = function ($scope, $http, $location, $window, play
 			else {
 				me.game = data;
 				me.datePlayedJs = Date.parse(data.datePlayed);
+				me.changeState(me.State.Ready);
 			}
-			
-			me.changeState(me.State.Ready);
 		})
 		.error(function(data, status, headers, config) {
 			me.errorHandler(data, 'Cannot load game.');
@@ -196,7 +199,7 @@ var EditActiveGameController = function ($scope, $http, $location, $window, play
 	me.deleteGame = function() {
 		$http.delete(me.activeGamePath)
 		.success(function(data, status, headers, config) {
-		    me.changeState(me.State.Saved);
+		    me.changeState(me.State.Deleted);
 		})
 		.error(function(data, status, headers, config) {
 			me.errorHandler(data, 'Cannot delete game!');
