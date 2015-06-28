@@ -8,26 +8,26 @@
 			
 		<div class="game-column-rank">
 			<div class="btn-group btn-group-lg game-rank-group">
-		        <button class="btn btn-default" ng-model="player.rank" ng-change="ctrl.rankHandler(player)" btn-radio="1" uncheckable>1</button>
-		        <button class="btn btn-default" ng-model="player.rank" ng-change="ctrl.rankHandler(player)" btn-radio="2" uncheckable>2</button>
-		        <button class="btn btn-default" ng-model="player.rank" ng-change="ctrl.rankHandler(player)" btn-radio="3" uncheckable>3</button>
+		        <button class="btn btn-default" ng-model="player.rank" ng-change="ctrl.rankHandler(player)" btn-radio="1" ng-disabled="ctrl.disabled" uncheckable>1</button>
+		        <button class="btn btn-default" ng-model="player.rank" ng-change="ctrl.rankHandler(player)" btn-radio="2" ng-disabled="ctrl.disabled" uncheckable>2</button>
+		        <button class="btn btn-default" ng-model="player.rank" ng-change="ctrl.rankHandler(player)" btn-radio="3" ng-disabled="ctrl.disabled" uncheckable>3</button>
 		    </div>
 		</div>
 			
 		<div class="game-column-points">
 			
 			<div class="game-score-modifier-icons">
-				<a class="btn btn-link btn-lg" ng-click="ctrl.decrementScore(player)">
+				<a class="btn btn-link btn-lg" ng-class="{ disabled: ctrl.disabled }" ng-click="ctrl.decrementScore(player)">
 					<span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
 				</a>
 			</div>
 			
 			<input class="form-control input-lg game-score-numeric-input" type="number" pattern="-?[0-9]*"
 				step="1" min="{{ctrl.pointsMin}}" max="{{ctrl.pointsMax}}" ng-model="player.points"
-				numeric-up-down required />
+				ng-disabled="ctrl.disabled" numeric-up-down required />
 			
 			<div class="game-score-modifier-icons">
-				<a class="btn btn-link btn-lg" ng-click="ctrl.incrementScore(player)">
+				<a class="btn btn-link btn-lg" ng-class="{ disabled: ctrl.disabled }" ng-click="ctrl.incrementScore(player)">
 					<span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
 				</a>
 			</div>

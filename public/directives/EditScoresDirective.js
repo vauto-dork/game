@@ -1,7 +1,8 @@
 var EditScoresDirective = function() {
 	return {
 		scope: {
-			players: '='
+			players: '=',
+			disabled: '='
 		},
 		templateUrl: '/directives/EditScoresTemplate.html',
 		controller: 'EditScoresController',
@@ -13,6 +14,7 @@ var EditScoresDirective = function() {
 var EditScoresController = function ($scope, $http, playerNameFactory) {
 	var me = this;
 	me.players = this.players;
+	me.disabled = this.disabled;
 	me.pointsMin = -4;
 	me.pointsMax = 99;
 	
@@ -33,13 +35,17 @@ var EditScoresController = function ($scope, $http, playerNameFactory) {
 	};
 		
 	me.decrementScore = function(player) {
-		var points = parseInt(player.points);
-		player.points = (points - 1 >= me.pointsMin) ? points - 1 : points;
+		if(!me.disabled) {
+			var points = parseInt(player.points);
+			player.points = (points - 1 >= me.pointsMin) ? points - 1 : points;
+		}
 	};
 	
 	me.incrementScore = function(player) {
-		var points = parseInt(player.points);
-		player.points = (points + 1 <= me.pointsMax) ? points + 1 : points;
+		if(!me.disabled) {
+			var points = parseInt(player.points);
+			player.points = (points + 1 <= me.pointsMax) ? points + 1 : points;
+		}
 	};
 };
 

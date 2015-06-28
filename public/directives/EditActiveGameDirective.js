@@ -32,7 +32,6 @@ var EditActiveGameController = function ($scope, $http, $location, $window, play
 	};
 	
 	me.changeState = function(newState) {
-		console.log(newState);
 		
 		me.showLoading = (newState === me.State.Init) ||
 						 (newState === me.State.Loading);
