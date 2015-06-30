@@ -11,78 +11,139 @@ var EditActiveGameDirective = function() {
 
 var EditActiveGameController = function ($scope, $http, $location, $window, playerNameFactory) {
 	var me = this;
-	$scope.loading = true;
-	$scope.errorLoading = false;
+	me.showLoading = false;
+	me.showError = false;
+	me.showScoreForm = false;
+	me.disableControls = false;
 	me.datePlayedJs = new Date();
 	
 	$scope.alerts = [];
 	
-	if($location.path() !== undefined || $location.path() !== ''){
-		$scope.activeGamePath = '/ActiveGames/json' + $location.path();
-	}
-	else {
-		$scope.activeGamePath = '';
-	}
+	me.State = {
+		Init: 0,
+		Loading: 1,
+		Error: 2,
+		Ready: 3,
+		Saving: 4,
+		Saved: 5,
+		Deleting: 6,
+		Deleted: 7,
+		Finalizing: 8
+	};
 	
-	$http.get($scope.activeGamePath).success(function(data, status, headers, config) {
-		if(data === null || data === undefined) {
-			me.addAlert('danger', 'Cannot find game.');
-			$scope.errorLoading = true;
-		}
-		else {
-			$scope.game = data;
-			me.datePlayedJs = Date.parse(data.datePlayed);
-		}
+	me.changeState = function(newState) {
 		
-		$scope.loading = false;
-	}).
-	error(function(data, status, headers, config) {
-		me.addAlert('danger', 'Cannot load game.');
-		me.scrollToTop();
-	    debugger;
-	});
+		me.showLoading = (newState === me.State.Init) ||
+						 (newState === me.State.Loading);
+						 
+		me.showError = newState === me.State.Error;
+		
+		me.showScoreForm = (newState !== me.State.Init) &&
+						   (newState !== me.State.Loading) && 
+						   (newState !== me.State.Error);
+		
+		me.disableControls = (newState === me.State.Saving) ||
+							 (newState === me.State.Finalizing) ||
+							 (newState === me.State.Deleting) ||
+							 (newState === me.State.Deleted);
+		
+		switch(newState) {
+			case me.State.Init:
+				me.setActivePath();
+				me.changeState(me.State.Loading);
+				break;
+			case me.State.Loading:
+				me.getActiveGames();
+				break;
+			case me.State.Error:
+				me.scrollToTop();
+				break;
+			case me.State.Ready:
+				me.scrollToTop();
+				break;
+			case me.State.Saving:
+				me.saveGame();
+				break;
+			case me.State.Saved:
+				$scope.addAlert('success', 'Game saved successfully!');
+				me.scrollToTop();
+				break;
+			case me.State.Deleting:
+				me.deleteGame();
+				break;
+			case me.State.Deleted:
+				$window.location.href = '/GameHistory';
+				break;
+			case me.State.Finalizing:
+				me.finalizeGame();
+				break;
+		}
+	};
 	
 	$scope.closeAlert = function(index) {
 		$scope.alerts.splice(index, 1);
 	};
 	
-	me.addAlert = function(messageType, message) {
+	$scope.addAlert = function(messageType, message) {
 		$scope.alerts.push({type: messageType, msg: message});		
 	};
 		
-	me.clearAlerts = function() {
+	$scope.clearAlerts = function() {
 		$scope.alerts = [];	
 	};
 	
 	me.scrollToTop = function() {
 		$window.scrollTo(0, 0);
 	};
+		
+	me.setActivePath = function() {
+		if($location.path() !== undefined || $location.path() !== ''){
+			me.activeGamePath = '/ActiveGames/json' + $location.path();
+		}
+		else {
+			me.activeGamePath = '';
+		}
+	};
 	
+	me.save = function() {
+		me.changeState(me.State.Saving);	
+	};
+	
+	me.finalize = function() {
+		me.changeState(me.State.Finalizing);
+	};
+	
+	me.errorHandler = function(data, errorMessage) {
+		$scope.addAlert('danger', errorMessage);
+	    console.error(data);
+		me.changeState(me.State.Error);
+	};
+		
 	me.savePrep = function(){
 		// Convert datetime to string.
-		$scope.game.datePlayed = me.getFormattedDate();
+		me.game.datePlayed = me.getFormattedDate();
 		
 		// Convert blank points to zeroes.
-		$scope.game.players.forEach(function(player) { player.points = !player.points ? 0 : player.points; });
+		me.game.players.forEach(function(player) { player.points = !player.points ? 0 : player.points; });
 	};
 	
 	me.finalizeCheck = function() {
-		me.clearAlerts();
+		$scope.clearAlerts();
 		
-		var rank1 = $scope.game.players.filter(function(value) {return value.rank === 1;}).length;
-		var rank2 = $scope.game.players.filter(function(value) {return value.rank === 2;}).length;
-		var rank3 = $scope.game.players.filter(function(value) {return value.rank === 3;}).length;
+		var rank1 = me.game.players.filter(function(value) {return value.rank === 1;}).length;
+		var rank2 = me.game.players.filter(function(value) {return value.rank === 2;}).length;
+		var rank3 = me.game.players.filter(function(value) {return value.rank === 3;}).length;
 		
 		if(rank1 !== 1) {
-			me.addAlert('danger', 'No winner selected.');
+			$scope.addAlert('danger', 'No winner selected.');
 		}
 		
 		if(rank2 !== 1) {
-			me.addAlert('danger', 'No second place selected.');
+			$scope.addAlert('danger', 'No second place selected.');
 		}
 		
 		if(rank3 !== 1) {
-			me.addAlert('danger', 'No third place selected.');
+			$scope.addAlert('danger', 'No third place selected.');
 		}
 		
 		return (rank1 === 1 && rank2 === 1 && rank3 === 1);
@@ -97,53 +158,66 @@ var EditActiveGameController = function ($scope, $http, $location, $window, play
 		$window.location.href = '/ActiveGames';
 	};
 	
+	me.getActiveGames = function() {
+		$http.get(me.activeGamePath)
+		.success(function(data, status, headers, config) {
+			if(data === null || data === undefined) {
+				me.errorHandler(status, 'Cannot find game.');
+			}
+			else {
+				me.game = data;
+				me.datePlayedJs = Date.parse(data.datePlayed);
+				me.changeState(me.State.Ready);
+			}
+		})
+		.error(function(data, status, headers, config) {
+			me.errorHandler(data, 'Cannot load game.');
+		});
+	};
+	
 	me.saveGame = function() {
-		me.clearAlerts();
+		$scope.clearAlerts();
 		me.savePrep();
 		
-		$http.put($scope.activeGamePath, $scope.game).success(function(data, status, headers, config) {
-		    me.addAlert('success', 'Game saved successfully!');
-			me.scrollToTop();
+		$http.put(me.activeGamePath, me.game).success(function(data, status, headers, config) {
+			me.changeState(me.State.Saved);
 		}).
 		error(function(data, status, headers, config) {
-		    me.addAlert('danger', 'Game save failure!');
-			me.scrollToTop();
-			debugger;
+			me.errorHandler(data, 'Game save failure!');
 		});
 	};
 	
 	me.finalizeGame = function() {
 		if( !me.finalizeCheck() ) {
-			me.scrollToTop();
+			me.changeState(me.State.Ready);
 			return;
 		}
 		
-		var winner = $scope.game.players.filter(function(value) {return value.rank === 1; });
+		var winner = me.game.players.filter(function(value) {return value.rank === 1; });
 		
-		$scope.game.winner = { _id: winner[0].player._id };
+		me.game.winner = { _id: winner[0].player._id };
 		
 		me.savePrep();
 		
-		$http.post('/games', $scope.game).success(function(data, status, headers, config) {
-		    me.deleteGame();
+		$http.post('/games', me.game).success(function(data, status, headers, config) {
+			me.changeState(me.State.Deleting);
 		}).
 		error(function(data, status, headers, config) {
-			me.addAlert('danger', 'Cannot finalize game!');
-			me.scrollToTop();
-		    debugger;
+			me.errorHandler(data, 'Cannot finalize game!');
 		});
 	};
 	
 	me.deleteGame = function() {
-		$http.delete($scope.activeGamePath).success(function(data, status, headers, config) {
-		    $window.location.href = '/GameHistory';
-		}).
-		error(function(data, status, headers, config) {
-			me.addAlert('danger', 'Cannot finalize game!');
-			me.scrollToTop();
-		    debugger;
+		$http.delete(me.activeGamePath)
+		.success(function(data, status, headers, config) {
+		    me.changeState(me.State.Deleted);
+		})
+		.error(function(data, status, headers, config) {
+			me.errorHandler(data, 'Cannot delete game!');
 		});
 	};
+	
+	me.changeState(me.State.Init);
 };
 
 EditActiveGameController.$inject = ['$scope', '$http', '$location', '$window', 'playerNameFactory'];
