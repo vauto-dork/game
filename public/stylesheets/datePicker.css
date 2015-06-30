@@ -1,0 +1,14 @@
+.datepicker,
+.timepicker {
+  padding-left: 1em;
+  padding-right: 1em;
+  font-size: 1.4em;
+  display: inline-block;
+  vertical-align: middle; }
+
+.staticDateTime {
+  margin: auto;
+  padding: 1em 0 2em 0;
+  max-width: 50em; }
+
+/*# sourceMappingURL=datePicker.css.map */

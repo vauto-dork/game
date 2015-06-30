@@ -19,6 +19,9 @@ var RankingsController = function ($scope, $http, playerNameFactory) {
     // this callback will be called asynchronously
     // when the response is available
     $scope.players = data;
+    $scope.players.forEach(function(value){
+      value.player = playerNameFactory.playerNameFormat(value.player);
+    });
     $scope.playersLoading = false;
   }).
   error(function(data, status, headers, config) {
@@ -26,10 +29,6 @@ var RankingsController = function ($scope, $http, playerNameFactory) {
     // or server returns response with an error status.
     debugger;
   });
-
-  this.playerFullName = playerNameFactory.playerFullName;
-
-  this.playerInitials = playerNameFactory.playerInitials;
 
   this.playerAverage = function(points, gamesPlayed){
   	var average = 0;

@@ -1,0 +1,17 @@
+<div class="col-xs-12">
+	<div class="load-bar" ng-if="loading">
+		<img src="/images/loader.gif" width="220" height="19" />
+	</div>
+	
+	<div ng-if="!loading">
+		<section ng-repeat="game in games">
+			
+			<div class="game-date">{{game.datePlayed | date:'MMM d, yyyy'}}</div>
+			<div class="game-time">{{game.datePlayed | date:'EEEE h:mm a'}}</div>
+			
+			<div class="player-scores-wrapper">
+				<player-scoretag player="player" ng-repeat="player in game.players"></player-scoretag>
+			</div>
+		</section>
+	</div>
+</div>

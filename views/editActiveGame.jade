@@ -1,0 +1,9 @@
+extends layout
+
+block content
+	div.container-fluid
+		h1= title
+		div.row
+			edit-active-game
+	script(src='/directives/EditScoresDirective.js')
+	script(src='/directives/EditActiveGameDirective.js')

@@ -1,0 +1,11 @@
+extends layout
+
+block content
+	div.container-fluid
+		h1= title
+		div.row
+			create-game
+	script(src='/scripts/bootstrap/modal.js')
+	script(src='/directives/PlaylistDirective.js')
+	script(src='/directives/CreateGameDirective.js')
+	script(src='/modules/PlaylistModule.js')

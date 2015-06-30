@@ -6,9 +6,19 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Leaderboard' });
 });
 
-/* GET home page. */
+/* GET playlist page. */
 router.get('/Playlist', function(req, res, next) {
-  res.render('playlist', { title: 'Playlist Maker' });
+  res.render('createGame', { title: 'Create Game' });
+});
+
+/* GET new game page. */
+router.get('/CreateGame', function(req, res, next) {
+  res.render('createGame', { title: 'Create Game' });
+});
+
+/* GET game history page. */
+router.get('/GameHistory', function(req, res, next) {
+  res.render('gameHistory', { title: 'Game History' });
 });
 
 module.exports = router;

@@ -1,0 +1,84 @@
+.game-card {
+  padding: 1em;
+  border-radius: 5px;
+  background-color: #F1F5F8;
+  border: 1px solid #cfd2d8;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.15);
+  display: inline-block; }
+
+.game-column-player,
+.game-column-rank,
+.game-column-points {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle; }
+
+.game-column-player {
+  width: 22em; }
+
+.game-column-rank {
+  width: 15em; }
+
+.game-column-points {
+  width: 15em; }
+
+.game-date {
+  font-size: 2em;
+  font-weight: bold;
+  color: #df6d2e; }
+
+.game-time {
+  font-size: 1.4em;
+  font-weight: bold; }
+
+.game-delete-btn {
+  float: right; }
+
+.game-delete-warning-btn,
+.game-edit-btn {
+  vertical-align: top; }
+  .game-delete-warning-btn .btn,
+  .game-edit-btn .btn {
+    margin: 0.5em; }
+    .game-delete-warning-btn .btn .glyphicon,
+    .game-edit-btn .btn .glyphicon {
+      margin-left: 0; }
+
+.game-delete-warning-overlay {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  margin: -1em;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  text-align: center;
+  border-radius: 5px; }
+  .game-delete-warning-overlay h3 {
+    text-shadow: 0 0 20px #000; }
+
+.game-delete-blur {
+  -webkit-filter: blur(2px);
+  -moz-filter: blur(2px);
+  -ms-filter: blur(2px);
+  -o-filter: blur(2px);
+  filter: blur(2px); }
+
+.game-score-modifier-icons,
+.game-score-numeric-input {
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle; }
+
+.game-score-modifier-icons a {
+  padding: 0.5em 0; }
+
+.game-score-numeric-input {
+  width: 3em; }
+
+.btn-group-lg.game-rank-group {
+  padding: 1em 0; }
+  .btn-group-lg.game-rank-group > .btn {
+    padding: 0.5em 1em; }
+
+/*# sourceMappingURL=game.css.map */

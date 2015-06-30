@@ -1,0 +1,76 @@
+@import "variables";
+@import "mixins";
+
+.player-card {
+	margin: $standard-spacing;
+
+	.player-order {
+		@include player-left;
+		width: 2em;
+		text-align: center;
+		line-height: 1.5em;
+	}
+
+	.player-nickname {
+		margin-left: 0.3em;
+		padding-left: 0.5em;
+		border-left: 2px solid $background-color;
+		display: inline-block;
+		white-space: nowrap;
+	}
+
+	.player-name {
+		background-color: $dark-bg;
+		color: $background-color;
+		display: inline;
+		padding: 0 0.5em;
+		font-size: $font-large;
+		font-weight: bold;
+	}
+
+	.player-fullname {
+		font-size: $font-large;
+	}
+}
+
+.player-scores-wrapper {
+	margin-bottom: 2.5em;
+}
+
+.player-score-card {
+	$dot-height: 1.5em;
+	
+	display: inline-block;
+	margin: $standard-spacing;
+	margin-top: 0;
+	margin-bottom: $dot-height / 2;
+	text-align: center;
+	font-size: $font-large;
+	width: 5em;
+	
+	.player-name {
+		margin: $standard-spacing;
+		background-color: $dark-bg;
+		color: $background-color;
+		font-weight: bold;
+	}
+	
+	.player-score-card-outline {
+		@include round-box();
+	}
+	
+	.player-score-big {
+		font-size: $font-larger;
+		color: $dark-orange;
+	}
+	
+	.game-rank {
+		height: $dot-height;
+		vertical-align: middle;
+		 
+		.game-rank-dot {
+			display: inline-block;
+			margin: 0 $standard-spacing;
+		}
+	}
+}

@@ -1,0 +1,56 @@
+.player-card {
+  margin: 0.5em; }
+  .player-card .player-order {
+    float: left;
+    padding-right: 0.5em;
+    font-size: 3em;
+    color: #df6d2e;
+    width: 2em;
+    text-align: center;
+    line-height: 1.5em; }
+  .player-card .player-nickname {
+    margin-left: 0.3em;
+    padding-left: 0.5em;
+    border-left: 2px solid #e4e9ef;
+    display: inline-block;
+    white-space: nowrap; }
+  .player-card .player-name {
+    background-color: #4f6885;
+    color: #e4e9ef;
+    display: inline;
+    padding: 0 0.5em;
+    font-size: 1.4em;
+    font-weight: bold; }
+  .player-card .player-fullname {
+    font-size: 1.4em; }
+
+.player-scores-wrapper {
+  margin-bottom: 2.5em; }
+
+.player-score-card {
+  display: inline-block;
+  margin: 0.5em;
+  margin-top: 0;
+  margin-bottom: 0.75em;
+  text-align: center;
+  font-size: 1.4em;
+  width: 5em; }
+  .player-score-card .player-name {
+    margin: 0.5em;
+    background-color: #4f6885;
+    color: #e4e9ef;
+    font-weight: bold; }
+  .player-score-card .player-score-card-outline {
+    border: 4px solid #df6d2e;
+    border-radius: 3px; }
+  .player-score-card .player-score-big {
+    font-size: 2em;
+    color: #df6d2e; }
+  .player-score-card .game-rank {
+    height: 1.5em;
+    vertical-align: middle; }
+    .player-score-card .game-rank .game-rank-dot {
+      display: inline-block;
+      margin: 0 0.5em; }
+
+/*# sourceMappingURL=player.css.map */

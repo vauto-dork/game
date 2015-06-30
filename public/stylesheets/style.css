@@ -13,6 +13,16 @@ body {
   padding-top: 0.5em;
   background-color: #e4e9ef; }
 
+section {
+  padding: 1em;
+  border-radius: 5px;
+  background-color: #F1F5F8;
+  border: 1px solid #cfd2d8;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.15);
+  margin-top: 1em;
+  margin-bottom: 2em;
+  position: relative; }
+
 .global-nav {
   -moz-box-shadow: 0 2px 4px 2px rgba(0, 0, 0, 0.5);
   -webkit-box-shadow: 0 2px 4px 2px rgba(0, 0, 0, 0.5);
@@ -89,8 +99,62 @@ body {
 .container-fluid {
   max-width: 1280px; }
 
+.big-action-buttons {
+  margin: auto;
+  text-align: center; }
+  .big-action-buttons .btn {
+    width: 90%;
+    margin: 1em;
+    padding: 1.5em; }
+
+.btn > .glyphicon {
+  margin-left: 0.5em;
+  margin-right: 0.5em; }
+
+.load-bar {
+  display: block;
+  width: 100%;
+  height: 10em;
+  line-height: 10em;
+  text-align: center; }
+
+.alert {
+  font-size: 1.4em; }
+
+input[type='number'] {
+  -moz-appearance: textfield; }
+
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0; }
+
+input.ng-invalid {
+  background: #F84072;
+  border: 1px red solid; }
+
+.admin-list {
+  font-size: 1.5em; }
+
+.datepicker,
+.timepicker {
+  padding-left: 1em;
+  padding-right: 1em;
+  font-size: 1.4em;
+  display: inline-block;
+  vertical-align: middle; }
+
+.staticDateTime {
+  margin: auto;
+  padding: 1em 0 2em 0;
+  max-width: 50em; }
+
+.add-player-status {
+  padding: 1em;
+  text-align: center; }
+
 .player-card {
-  margin: 5px; }
+  margin: 0.5em; }
   .player-card .player-order {
     float: left;
     padding-right: 0.5em;
@@ -114,6 +178,118 @@ body {
     font-weight: bold; }
   .player-card .player-fullname {
     font-size: 1.4em; }
+
+.player-scores-wrapper {
+  margin-bottom: 2.5em; }
+
+.player-score-card {
+  display: inline-block;
+  margin: 0.5em;
+  margin-top: 0;
+  margin-bottom: 0.75em;
+  text-align: center;
+  font-size: 1.4em;
+  width: 5em; }
+  .player-score-card .player-name {
+    margin: 0.5em;
+    background-color: #4f6885;
+    color: #e4e9ef;
+    font-weight: bold; }
+  .player-score-card .player-score-card-outline {
+    border: 4px solid #df6d2e;
+    border-radius: 3px; }
+  .player-score-card .player-score-big {
+    font-size: 2em;
+    color: #df6d2e; }
+  .player-score-card .game-rank {
+    height: 1.5em;
+    vertical-align: middle; }
+    .player-score-card .game-rank .game-rank-dot {
+      display: inline-block;
+      margin: 0 0.5em; }
+
+.game-card {
+  padding: 1em;
+  border-radius: 5px;
+  background-color: #F1F5F8;
+  border: 1px solid #cfd2d8;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.15);
+  display: inline-block; }
+
+.game-column-player,
+.game-column-rank,
+.game-column-points {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle; }
+
+.game-column-player {
+  width: 22em; }
+
+.game-column-rank {
+  width: 15em; }
+
+.game-column-points {
+  width: 15em; }
+
+.game-date {
+  font-size: 2em;
+  font-weight: bold;
+  color: #df6d2e; }
+
+.game-time {
+  font-size: 1.4em;
+  font-weight: bold; }
+
+.game-delete-btn {
+  float: right; }
+
+.game-delete-warning-btn,
+.game-edit-btn {
+  vertical-align: top; }
+  .game-delete-warning-btn .btn,
+  .game-edit-btn .btn {
+    margin: 0.5em; }
+    .game-delete-warning-btn .btn .glyphicon,
+    .game-edit-btn .btn .glyphicon {
+      margin-left: 0; }
+
+.game-delete-warning-overlay {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  margin: -1em;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  text-align: center;
+  border-radius: 5px; }
+  .game-delete-warning-overlay h3 {
+    text-shadow: 0 0 20px #000; }
+
+.game-delete-blur {
+  -webkit-filter: blur(2px);
+  -moz-filter: blur(2px);
+  -ms-filter: blur(2px);
+  -o-filter: blur(2px);
+  filter: blur(2px); }
+
+.game-score-modifier-icons,
+.game-score-numeric-input {
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle; }
+
+.game-score-modifier-icons a {
+  padding: 0.5em 0; }
+
+.game-score-numeric-input {
+  width: 3em; }
+
+.btn-group-lg.game-rank-group {
+  padding: 1em 0; }
+  .btn-group-lg.game-rank-group > .btn {
+    padding: 0.5em 1em; }
 
 /* 
 .ranking-row,
@@ -152,6 +328,10 @@ body {
   line-height: 2em;
   height: 2em; }
 
+.playlist-filter-remove {
+  font-size: 2em;
+  cursor: pointer; }
+
 .playlist-row {
   display: block;
   line-height: 2em;
@@ -175,6 +355,7 @@ body {
   .playlist-row .playlist-player-fullname {
     font-size: 1.4em; }
 
+.playlist-scores-row,
 .playlist-order-row {
   display: block;
   line-height: 2em;
@@ -182,22 +363,7 @@ body {
   padding: 1em;
   width: 100%; }
 
-.playlist-buttons {
-  margin: auto;
-  text-align: center; }
-  .playlist-buttons .btn {
-    width: 90%;
-    margin: 1em;
-    padding: 1.5em; }
-
-.btn > .glyphicon {
-  margin-right: 0.5em; }
-
-.load-bar {
-  display: block;
-  width: 100%;
-  height: 10em;
-  line-height: 10em;
-  text-align: center; }
+.playlist-scores-input {
+  width: 100%; }
 
 /*# sourceMappingURL=style.css.map */

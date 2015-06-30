@@ -13,6 +13,7 @@ router.get('/', function (req, res, next) {
 	})
 	.populate('winner')
 	.populate('players.player')
+	.sort({ datePlayed: -1 })
 	.exec();
 });
 
