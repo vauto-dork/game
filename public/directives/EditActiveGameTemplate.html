@@ -5,7 +5,7 @@
 </div>
 
 <div ng-if="ctrl.showScoreForm">
-	<date-picker date="ctrl.datePlayedJs"></date-picker>
+	<date-picker date="ctrl.datePlayedJs" disabled="ctrl.disableControls"></date-picker>
 	<edit-scores players="ctrl.game.players" disabled="ctrl.disableControls"></edit-scores>
 	
 	<div class="row big-action-buttons">
