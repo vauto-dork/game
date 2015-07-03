@@ -1,8 +1,11 @@
-<div class="load-bar" ng-if="playersLoading">
+<div ng-show="ctrl.showErrorMessage" class="status-banner bg-danger"><h4>Error getting rankings.</h4></div>
+
+<div class="load-bar" ng-if="ctrl.showLoading">
 	<img src="/images/loader.gif" width="220" height="19" />
 </div>
 
-<div class="ranking-row col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-repeat="playerRank in players" ng-class="ctrl.hasNoRank(playerRank.rank)" ng-if="!playersLoading">
+<div class="ranking-row col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-repeat="playerRank in ctrl.players"
+	ng-class="ctrl.hasNoRank(playerRank.rank)" ng-if="ctrl.showRankings">
 	<div class="player-card">
 		<div class="ranking-rank">
 			{{playerRank.rank}}
