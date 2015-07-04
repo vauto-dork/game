@@ -1,17 +1,6 @@
 <section>
-	<div class="row">		
-		<div class="col-xs-7">
-			<select class="form-control input-lg" ng-model="ctrl.selectedMonth"
-				ng-options="month.name for month in ctrl.months" ng-change="ctrl.updateParams()"></select>
-		</div>
-		
-		<div class="col-xs-5">
-			<select class="form-control input-lg" ng-model="ctrl.selectedYear"
-				ng-options="year.name for year in ctrl.years" ng-disabled="ctrl.disableYear"
-				ng-change="ctrl.updateParams()"></select>
-		</div>
-	</div>
+	<month-year-picker month="ctrl.month" year="ctrl.year"></month-year-picker>
 </section>
 
 
-<rankings month="ctrl.selectedMonth.value" year="ctrl.selectedYear.value"></rankings>
+<rankings month="ctrl.month" year="ctrl.year"></rankings>
