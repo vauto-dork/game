@@ -3,7 +3,8 @@ var MonthYearPickerDirective = function() {
 		scope: {
 			month: "=",
 			year: "=",
-			disabled: "="
+			disabled: "=",
+			change: "&"
 		},
 		templateUrl: '/directives/MonthYearPickerTemplate.html',
 		controller: 'MonthYearPickerController',
@@ -12,31 +13,15 @@ var MonthYearPickerDirective = function() {
 	};
 };
 
-var MonthYearPickerController = function ($scope, $location) {
+var MonthYearPickerController = function ($scope) {
 	var me = this;
 	me.minimumYear = 2015;
 	
 	me.disableMonth = me.disabled || false;
 	me.disableYear = me.disabled || false;
 	
-	me.currentMonth = new Date().getMonth() - 1;
-	me.currentYear = new Date().getFullYear();
-	
-	me.getQueryParams = function() {
-		var queryMonth = me.sanitizeParam($location.search().month);
-		var queryYear = me.sanitizeParam($location.search().year);
-		
-		if(queryMonth !== undefined) {
-			queryMonth--;
-			me.currentMonth = queryMonth > 11
-							? 0
-							: queryMonth < 0 ? 11 : queryMonth;
-		}
-		
-		if(queryYear !== undefined) {
-			me.currentYear = queryYear < me.minimumYear ? me.minimumYear : queryYear;
-		}
-	};
+	me.currentMonth = me.month || new Date().getMonth();
+	me.currentYear = me.year || new Date().getFullYear();
 	
 	me.init = function() {
 		me.months = [
@@ -72,22 +57,12 @@ var MonthYearPickerController = function ($scope, $location) {
 		me.month = me.selectedMonth.value;
 		me.year = me.selectedYear.value;
 		
-		$location.search('month', me.selectedMonth.value + 1);
-		$location.search('year', me.selectedYear.value);
-		$location.replace();
-	};
-	
-	me.sanitizeParam = function(value) {
-		if(value === undefined) {
-			return undefined;
+		if(me.change !== undefined) {
+			me.change();
 		}
-		
-		var parsedValue = parseInt(value, 10);
-		return isNaN(parsedValue) ? undefined : parsedValue;
 	};
 	
-	me.getQueryParams();
 	me.init();
 };
 
-MonthYearPickerController.$inject = ['$scope', '$location'];
+MonthYearPickerController.$inject = ['$scope'];

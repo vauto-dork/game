@@ -6,6 +6,6 @@
 			return player;
 		}
     };
-}
+};
 
 PlayerNameFactory.$inject = [];
