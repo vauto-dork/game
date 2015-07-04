@@ -1,0 +1,16 @@
+<section>
+	<div class="row">		
+		<div class="col-xs-7">
+			<select class="form-control input-lg" ng-model="ctrl.selectedMonth"
+				ng-options="month.name for month in ctrl.months"></select>
+		</div>
+		
+		<div class="col-xs-5">
+			<select class="form-control input-lg" ng-model="ctrl.selectedYear"
+				ng-options="year.name for year in ctrl.years" ng-disabled="ctrl.disableYear"></select>
+		</div>
+	</div>
+</section>
+
+
+<rankings month="ctrl.selectedMonth.value" year="ctrl.selectedYear.value"></rankings>

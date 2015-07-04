@@ -18,15 +18,17 @@ var RankingsController = function ($scope, $http, playerNameFactory) {
   me.players = [];
   
   me.State = {
-		Loading: 0,
-		Loaded: 1,
-		Error: 2
+    Loading: 0,
+    Loaded: 1,
+    Error: 2,
+    NoRankings: 3
 	};
 	
 	me.changeState = function(newState) {
     me.showLoading = newState === me.State.Loading;
     me.showRankings = newState === me.State.Loaded;
-		me.showErrorMessage = newState === me.State.Error;
+    me.showErrorMessage = newState === me.State.Error;
+    me.showNoRankingsMessage = newState === me.State.NoRankings;
 		
 		switch(newState){
 			case me.State.Loading:
@@ -34,6 +36,14 @@ var RankingsController = function ($scope, $http, playerNameFactory) {
 				break;
 		}
 	};
+  
+  $scope.$watch(function() { return me.month; }, function(){
+    me.changeState(me.State.Loading);
+  });
+  
+  $scope.$watch(function() { return me.year; }, function(){
+    me.changeState(me.State.Loading);
+  });
   
   me.getRankings = function(){
     var mon = me.month === undefined ? new Date().getMonth() : me.month;
@@ -47,7 +57,12 @@ var RankingsController = function ($scope, $http, playerNameFactory) {
       me.players.forEach(function(value){
         value.player = playerNameFactory.playerNameFormat(value.player);
       });
-      me.changeState(me.State.Loaded);
+      
+      if (me.players.some( function(elem) { return elem.rank > 0; } )) {
+        me.changeState(me.State.Loaded);
+      } else {
+        me.changeState(me.State.NoRankings);
+      }
     })
     .error(function(data, status, headers, config) {
       me.changeState(me.State.Error);
