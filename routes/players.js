@@ -29,6 +29,63 @@ router.get('/', function (req, res, next) {
 });
 
 /**
+ * Return a list of uberdorks and negadorks by the month's games.
+ * You must provide a month and optionally a year to get the list of uberdorks and negadorks in the given time period.
+ * Query params:
+ * 	month - integer
+ * 	(Optional) year - integer. Default value is the current year.
+ *
+ * @return A list of ranked players.
+ * <pre>
+ * 		{
+ * 			player: { <see player object> },
+ * 			totalPoints: int,
+ * 			gamesPlayed: int,
+ *	 		rank: int
+ *		}
+ * 	</pre>
+ */
+
+router.get('/dotm/', function(req, res, next) {
+	getRankedPlayers(req, next, function(rankedPlayers) {
+		rankedPlayers = rankedPlayers.filter( function(element) {
+			return element.rank !== 0;
+		});
+		
+		var uberdorks = rankedPlayers.filter( function(element) {
+			return element.rank === 1;
+		});
+		
+		var negativePoints = rankedPlayers.filter( function(element) {
+			return element.totalPoints < 0;
+		});
+		
+		var negadorks;
+		if(negativePoints.length > 1) {
+			var found = negativePoints[0];
+			
+			for(var i = 0; i < negativePoints.length; i++) {
+				if(calculateRankedPoints(negativePoints[i]) < calculateRankedPoints(found)) {
+					found = negativePoints[i];
+				}
+			}
+			
+			negadorks = negativePoints.filter( function(element) {
+				return calculateRankedPoints(element) === calculateRankedPoints(found);
+			});
+		} else {
+			negadorks = negativePoints;
+		}
+		
+		res.json({ uberdorks: uberdorks, negadorks: negadorks });
+	});
+});
+
+function calculateRankedPoints(player) {
+	return player.totalPoints / player.gamesPlayed;
+};
+
+/**
  * Get a list of players that are sorted by data from a time span.
  * This is defined as "/players/sort/" because there is already a POST for "/players/"
  * @query (Optional) month - Sort players by data from this month. Default is all year.
@@ -98,6 +155,7 @@ router.post('/ranked/sort/', function(req, res, next) {
 		res.json(rankedPlayers);
 	});
 });
+
 router.get('/ranked/', function(req, res, next) {
 	getRankedPlayers(req, next, function(rankedPlayers) {
 		res.json(rankedPlayers);
