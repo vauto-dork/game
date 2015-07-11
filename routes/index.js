@@ -21,4 +21,9 @@ router.get('/GameHistory', function(req, res, next) {
   res.render('gameHistory', { title: 'Game History' });
 });
 
+/* GET ranking history page. */
+router.get('/RankingHistory', function(req, res, next) {
+  res.render('rankingHistory', { title: 'Ranking History' });
+});
+
 module.exports = router;

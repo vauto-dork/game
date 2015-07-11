@@ -298,6 +298,10 @@ input.ng-invalid {
 .row {
 	border: $default-border;
 } */
+.status-banner {
+  padding: 1em;
+  text-align: center; }
+
 .ranking-no-rank {
   opacity: 0.5; }
 

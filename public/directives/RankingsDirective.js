@@ -1,36 +1,76 @@
 var RankingsDirective = function() {
-	return {
-		scope: {
-
-		},
-		templateUrl: '/directives/RankingsTemplate.html',
-		controller: 'RankingsController',
-		controllerAs: 'ctrl',
-		bindToController: true
-	};
-}
+  return {
+    scope: {
+      month: "=",
+      year: "="  
+    },
+    templateUrl: '/directives/RankingsTemplate.html',
+    controller: 'RankingsController',
+    controllerAs: 'ctrl',
+    bindToController: true
+  };
+};
 
 var RankingsController = function ($scope, $http, playerNameFactory) {
-  $scope.playersLoading = true;
-  var currentMonth = new Date().getMonth();
-  var rankedUrl = '/players/ranked?month=' + currentMonth;
+  var me = this;
+  me.showLoading = true;
+  me.showRankings = false;
+  me.players = [];
+  
+  me.State = {
+    Loading: 0,
+    Loaded: 1,
+    Error: 2,
+    NoRankings: 3
+	};
 	
-	$http.get(rankedUrl).success(function(data, status, headers, config) {
-    // this callback will be called asynchronously
-    // when the response is available
-    $scope.players = data;
-    $scope.players.forEach(function(value){
-      value.player = playerNameFactory.playerNameFormat(value.player);
-    });
-    $scope.playersLoading = false;
-  }).
-  error(function(data, status, headers, config) {
-    // called asynchronously if an error occurs
-    // or server returns response with an error status.
-    debugger;
+	me.changeState = function(newState) {
+    me.showLoading = newState === me.State.Loading;
+    me.showRankings = newState === me.State.Loaded;
+    me.showErrorMessage = newState === me.State.Error;
+    me.showNoRankingsMessage = newState === me.State.NoRankings;
+		
+		switch(newState){
+			case me.State.Loading:
+				me.getRankings();
+				break;
+		}
+	};
+  
+  $scope.$watch(function() { return me.month; }, function(){
+    me.changeState(me.State.Loading);
   });
-
-  this.playerAverage = function(points, gamesPlayed){
+  
+  $scope.$watch(function() { return me.year; }, function(){
+    me.changeState(me.State.Loading);
+  });
+  
+  me.getRankings = function(){
+    var mon = me.month === undefined ? new Date().getMonth() : me.month;
+    var yr = me.year === undefined ? new Date().getFullYear() : me.year;
+    
+    var rankedUrl = '/players/ranked?month=' + mon + '&year=' + yr;
+  	
+  	$http.get(rankedUrl)
+    .success(function(data, status, headers, config) {
+      me.players = data;
+      me.players.forEach(function(value){
+        value.player = playerNameFactory.playerNameFormat(value.player);
+      });
+      
+      if (me.players.some( function(elem) { return elem.rank > 0; } )) {
+        me.changeState(me.State.Loaded);
+      } else {
+        me.changeState(me.State.NoRankings);
+      }
+    })
+    .error(function(data, status, headers, config) {
+      me.changeState(me.State.Error);
+			console.error(data);
+    });
+  };
+	
+  me.playerAverage = function(points, gamesPlayed){
   	var average = 0;
   	
   	if(gamesPlayed > 0){
@@ -40,10 +80,12 @@ var RankingsController = function ($scope, $http, playerNameFactory) {
   	return average.toFixed(2);
   };
 
-  this.hasNoRank = function(rank) {
+  me.hasNoRank = function(rank) {
     return (rank <= 0) ? 'ranking-no-rank' : '';
-  }
-}
+  };
+  
+  me.changeState(me.State.Loading);
+};
 
 RankingsController.$inject = ['$scope', '$http', 'playerNameFactory'];
 
