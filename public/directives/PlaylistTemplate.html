@@ -1,14 +1,23 @@
+<div ng-if="ctrl.hasSelectedPlayers()">
+	<div class="playlist-order-row" ng-repeat="player in ctrl.players | filter:{selected:true}">
+		<div class="player-card">
+			<div class="player-order">
+				{{$index + 1}}
+			</div>
+			<player-nametag player="player"></player-nametag>
+		</div>
+	</div> 
+</div>
+
 <div class="form-group">
 	<div class="input-group">
-		{{ctrl.wtf}}
-		{{ctrl.filter}}
-		<input type="text" class="form-control playlist-filter" ng-model="ctrl.filter" placeholder="Filter by name or nickname..."
+		<input type="text" class="form-control playlist-filter"
+			placeholder="Filter by name or nickname..."
+			ng-model="ctrl.filter"
 			typeahead="player as player.fullname for player in ctrl.players | filter:$viewValue | limitTo:4"
 			typeahead-on-select="ctrl.selected($item, $model, $label)"
 			autocomplete="off" />
 		<div class="input-group-addon playlist-filter-remove" ng-click="ctrl.removeFilter()"><span class="glyphicon glyphicon-remove-sign"></span></div>
-		<!--<input type="text" class="form-control playlist-filter" ng-model="ctrl.filter" placeholder="Filter by name or nickname..." />
-		<div class="input-group-addon playlist-filter-remove" ng-click="ctrl.removeFilter()"><span class="glyphicon glyphicon-remove-sign"></span></div>-->
 	</div>
 </div>
 

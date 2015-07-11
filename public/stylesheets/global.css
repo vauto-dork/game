@@ -23,6 +23,11 @@ section {
   margin-bottom: 2em;
   position: relative; }
 
+.dropdown-menu {
+  width: 100%;
+  font-size: 2em;
+  line-height: 2em; }
+
 .global-nav {
   -moz-box-shadow: 0 2px 4px 2px rgba(0, 0, 0, 0.5);
   -webkit-box-shadow: 0 2px 4px 2px rgba(0, 0, 0, 0.5);

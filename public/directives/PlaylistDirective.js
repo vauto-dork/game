@@ -18,7 +18,14 @@ var PlaylistController = function ($scope, $http) {
 	};
 	
 	me.selected = function(item, model, label){
-		me.wtf = JSON.stringify(item, null, '  ') + ' ' + JSON.stringify(model, null, '  ') + ' ' + label;
+		item.selected = true;
+		me.removeFilter();
+	};
+	
+	me.hasSelectedPlayers = function() {
+		return me.players.some(function(element) {
+			return element.selected;
+		});
 	};
 };
 
