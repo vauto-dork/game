@@ -1,7 +1,14 @@
 <div class="form-group">
 	<div class="input-group">
-		<input type="text" class="form-control playlist-filter" ng-model="ctrl.filter" placeholder="Filter by name or nickname..." />
+		{{ctrl.wtf}}
+		{{ctrl.filter}}
+		<input type="text" class="form-control playlist-filter" ng-model="ctrl.filter" placeholder="Filter by name or nickname..."
+			typeahead="player as player.fullname for player in ctrl.players | filter:$viewValue | limitTo:4"
+			typeahead-on-select="ctrl.selected($item, $model, $label)"
+			autocomplete="off" />
 		<div class="input-group-addon playlist-filter-remove" ng-click="ctrl.removeFilter()"><span class="glyphicon glyphicon-remove-sign"></span></div>
+		<!--<input type="text" class="form-control playlist-filter" ng-model="ctrl.filter" placeholder="Filter by name or nickname..." />
+		<div class="input-group-addon playlist-filter-remove" ng-click="ctrl.removeFilter()"><span class="glyphicon glyphicon-remove-sign"></span></div>-->
 	</div>
 </div>
 

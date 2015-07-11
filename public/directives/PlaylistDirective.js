@@ -13,8 +13,12 @@ var PlaylistDirective = function() {
 var PlaylistController = function ($scope, $http) {
 	var me = this;
 	
-	this.removeFilter = function() {
+	me.removeFilter = function() {
 		me.filter = '';
+	};
+	
+	me.selected = function(item, model, label){
+		me.wtf = JSON.stringify(item, null, '  ') + ' ' + JSON.stringify(model, null, '  ') + ' ' + label;
 	};
 };
 
