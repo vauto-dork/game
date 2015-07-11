@@ -12,13 +12,27 @@ var PlaylistDirective = function() {
 
 var PlaylistController = function ($scope, $http) {
 	var me = this;
+	me.playersOriginal = angular.copy(me.players);
+	me.playerCounter = 0;
+	me.disableRemoveAll = false;
+	me.disableCreatePlaylist = false;
+	
+	me.removeAll = function() {
+		me.playerCounter = 0;
+		me.players = angular.copy(me.playersOriginal);
+	};
+	
+	me.createPlaylist = function() {
+		
+	};
 	
 	me.removeFilter = function() {
 		me.filter = '';
 	};
 	
-	me.selected = function(item, model, label){
-		item.selected = true;
+	me.toggleSelected = function(item, model, label){
+		item.selected = !item.selected;
+		item.order = item.selected ? me.playerCounter++ : undefined;
 		me.removeFilter();
 	};
 	
