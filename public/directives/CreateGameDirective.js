@@ -34,10 +34,10 @@ var CreateGameController = function ($scope, $window, $http, playerNameFactory) 
 	};
 	
 	me.changeState = function(newState) {
-		me.showLoading = newState === me.State.Loading;
-		me.showPlayers = newState !== me.State.Loading;
+		me.showLoading = (newState === me.State.Loading) ||
+						 (newState === me.State.OrderedPlayersLoading);
+		me.showPlayers = newState === me.State.Loaded;
 		me.showErrorMessage = newState === me.State.Error;
-		me.orderedPlayersLoading = newState === me.State.OrderedPlayersLoading;
 		me.orderedPlayersLoaded = (newState === me.State.OrderedPlayersLoaded) ||
 								  (newState === me.State.CreatingGame);
 		me.disableOrderedPlayers = newState === me.State.CreatingGame;
@@ -114,9 +114,18 @@ var CreateGameController = function ($scope, $window, $http, playerNameFactory) 
 			return element.selected;
 		});
 	};
+	
+	me.removePlayer = function(item){
+		item.selected = false;
+		item.order = undefined;
+	};
 
 	me.removeAll = function() {
 		me.players = angular.copy(me.originalList);
+	};
+	
+	me.backToSelectPlayers = function() {
+		me.changeState(me.State.Loaded);
 	};
 	
 	me.startGame = function() {

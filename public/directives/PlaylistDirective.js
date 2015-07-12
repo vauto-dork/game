@@ -12,16 +12,8 @@ var PlaylistDirective = function() {
 
 var PlaylistController = function ($scope, $http) {
 	var me = this;
-	me.playersOriginal = angular.copy(me.players);
 	me.playerCounter = 0;
-	me.disableRemoveAll = false;
-	me.disableCreatePlaylist = false;
-	
-	me.removeAll = function() {
-		me.playerCounter = 0;
-		me.players = angular.copy(me.playersOriginal);
-	};
-	
+		
 	me.removeFilter = function() {
 		me.filter = '';
 	};
@@ -31,6 +23,14 @@ var PlaylistController = function ($scope, $http) {
 		item.order = item.selected ? me.playerCounter++ : undefined;
 		me.removeFilter();
 	};
+	
+	$scope.$watch(function() { return me.players; }, function() {
+		if(!me.players.some(function(element) {
+			return element.selected;
+		})){
+			me.playerCounter = 0;
+		}
+	});
 };
 
 PlaylistController.$inject = ['$scope', '$http'];
