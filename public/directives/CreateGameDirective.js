@@ -136,6 +136,14 @@ var CreateGameController = function ($scope, $window, $http, playerNameFactory) 
 		me.changeState(me.State.OrderedPlayersLoading);
 	};
 	
+	me.disablePlaylistCreation = function() {
+		var numPlayers = me.players.filter(function(element) {
+			return element.selected;
+		}).length;
+		
+		return numPlayers < 3;
+	};
+	
 	me.changeState(me.State.Loading);
 };
 
