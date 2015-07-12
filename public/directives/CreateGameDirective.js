@@ -18,8 +18,6 @@ var CreateGameController = function ($scope, $window, $http, playerNameFactory) 
 	me.showLoading = false;
 	me.showErrorMessage = false;
 	me.showPlayers = false;
-	me.disableRemoveAll = false;
-	me.disableCreatePlaylist = false;
 	
 	me.orderedPlayersLoading = false;
 	me.orderedPlayersLoaded = false;
@@ -60,9 +58,9 @@ var CreateGameController = function ($scope, $window, $http, playerNameFactory) 
 	me.getPlayers = function() {
 		$http.get('/players?sort=true')
 		.success(function(data, status, headers, config) {
-		    $scope.players = data;
-			$scope.players = me.playerNameFormat($scope.players);
-		    $scope.originalList = angular.copy($scope.players);
+		    me.players = data;
+			me.players = me.playerNameFormat(me.players);
+		    me.originalList = angular.copy(me.players);
 		    
 			me.changeState(me.State.Loaded);
 		})
@@ -73,13 +71,13 @@ var CreateGameController = function ($scope, $window, $http, playerNameFactory) 
 	};
 	
 	me.getPlayersInGameOrder = function() {
-		var selectedPlayers = $scope.players.filter(function(value) {
+		var selectedPlayers = me.players.filter(function(value) {
 			return value.selected == true;
 		});
 		
 		$http.post('/players/sort?sortType=2', selectedPlayers)
 		.success(function(data, status, headers, config) {
-		    $scope.orderedPlayers = me.playerNameFormat(data);
+		    me.orderedPlayers = me.playerNameFormat(data);
 		    me.changeState(me.State.OrderedPlayersLoaded);
 		})
 		.error(function(data, status, headers, config) {
@@ -89,7 +87,7 @@ var CreateGameController = function ($scope, $window, $http, playerNameFactory) 
 	};
 	
 	me.createNewActiveGame = function() {
-		var selectedPlayers = $scope.orderedPlayers.map(function(value) {
+		var selectedPlayers = me.orderedPlayers.map(function(value) {
 			return { player: { _id: value._id } };
 		});
 			
@@ -110,9 +108,15 @@ var CreateGameController = function ($scope, $window, $http, playerNameFactory) 
 		
 		return rawPlayersList;
 	};
+	
+	me.hasSelectedPlayers = function() {
+		return me.players.some(function(element) {
+			return element.selected;
+		});
+	};
 
 	me.removeAll = function() {
-		$scope.players = angular.copy($scope.originalList);
+		me.players = angular.copy(me.originalList);
 	};
 	
 	me.startGame = function() {

@@ -5,19 +5,39 @@
 <div class="text-center" ng-if="ctrl.showErrorMessage"><h2>An error occured.</h2></div>
 
 <div ng-if="ctrl.showPlayers">
-  <playlist players="players"></playlist>
   
-  <div class="row big-action-buttons">
-  	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-  		<button type="button" class="btn btn-danger btn-lg" ng-click="ctrl.removeAll()" ng-disabled="ctrl.disableRemoveAll">
-  			<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove All
-  		</button>
+  <div class="status-banner">
+    <playlist players="ctrl.players"></playlist>
+  </div>
+  
+  <div ng-if="!ctrl.hasSelectedPlayers()">
+    <p class="playlist-instructions">
+      Select players by typing initials, full name, or nickname into textbox above.
+    </p>
+  </div>
+  
+  <div ng-if="ctrl.hasSelectedPlayers()">
+  	<div class="playlist-order-row" ng-repeat="player in ctrl.players | filter:{selected:true} | orderBy:'order'">
+  		<div class="player-card">
+  			<div class="player-order">
+  				{{$index + 1}} {{player.order}}
+  			</div>
+  			<player-nametag player="player"></player-nametag>
+  		</div>
   	</div>
-  	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-  		<button type="button" class="btn btn-primary btn-lg" ng-click="ctrl.createPlaylist()" ng-disabled="ctrl.disableCreatePlaylist" data-toggle="modal" data-target="#myModal">
-  			<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Create Playlist
-  		</button>
-  	</div>
+  	
+  	<div class="row big-action-buttons">
+  		<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+  			<button type="button" class="btn btn-danger btn-lg" ng-click="ctrl.removeAll()">
+  				<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove All
+  			</button>
+  		</div>
+  		<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+  			<button type="button" class="btn btn-primary btn-lg" ng-click="ctrl.createPlaylist()">
+  				<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Create Playlist
+  			</button>
+  		</div>
+  	</div> 
   </div>
 </div>
 
@@ -35,7 +55,7 @@
       	<div class="load-bar" ng-if="ctrl.orderedPlayersLoading">
       		<img src="/images/loader.gif" width="220" height="19" />
       	</div>
-      	<div class="playlist-order-row" ng-repeat="player in orderedPlayers" ng-if="ctrl.orderedPlayersLoaded">
+      	<div class="playlist-order-row" ng-repeat="player in ctrl.orderedPlayers" ng-if="ctrl.orderedPlayersLoaded">
 	      	<div class="player-card">
 	      		<div class="player-order">
 	      			{{$index + 1}}

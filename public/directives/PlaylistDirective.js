@@ -22,10 +22,6 @@ var PlaylistController = function ($scope, $http) {
 		me.players = angular.copy(me.playersOriginal);
 	};
 	
-	me.createPlaylist = function() {
-		
-	};
-	
 	me.removeFilter = function() {
 		me.filter = '';
 	};
@@ -34,12 +30,6 @@ var PlaylistController = function ($scope, $http) {
 		item.selected = !item.selected;
 		item.order = item.selected ? me.playerCounter++ : undefined;
 		me.removeFilter();
-	};
-	
-	me.hasSelectedPlayers = function() {
-		return me.players.some(function(element) {
-			return element.selected;
-		});
 	};
 };
 

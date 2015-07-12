@@ -330,6 +330,11 @@ input.ng-invalid {
     margin-right: 0.5em;
     color: #7a8394; }
 
+.playlist-instructions {
+  padding: 1em;
+  text-align: center;
+  font-size: 1.4em; }
+
 .playlist-filter {
   padding: 0.25em;
   width: 100%;
