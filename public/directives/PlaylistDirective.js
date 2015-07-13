@@ -1,7 +1,8 @@
 var PlaylistDirective = function() {
 	return {
 		scope: {
-			players: '='
+			players: '=',
+			playerOrder: '='
 		},
 		templateUrl: '/directives/PlaylistTemplate.html',
 		controller: 'PlaylistController',
@@ -12,7 +13,6 @@ var PlaylistDirective = function() {
 
 var PlaylistController = function ($scope, $http) {
 	var me = this;
-	me.playerCounter = 0;
 		
 	me.removeFilter = function() {
 		me.filter = '';
@@ -20,17 +20,19 @@ var PlaylistController = function ($scope, $http) {
 	
 	me.toggleSelected = function(item, model, label){
 		item.selected = !item.selected;
-		item.order = item.selected ? me.playerCounter++ : undefined;
+		
+		if(me.playerOrder !== undefined) {
+			item.order = item.selected ? me.playerOrder++ : undefined;
+		}
+		
 		me.removeFilter();
 	};
 	
-	$scope.$watch(function() { return me.players; }, function() {
-		if(!me.players.some(function(element) {
-			return element.selected;
-		})){
-			me.playerCounter = 0;
-		}
-	});
+	me.getUnselectedPlayers = function() {
+		return me.players.filter(function(element) {
+			return !element.selected;
+		});
+	};
 };
 
 PlaylistController.$inject = ['$scope', '$http'];

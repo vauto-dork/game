@@ -9,7 +9,7 @@
   <!-- Textbox -->
   
   <div class="status-banner">
-    <playlist players="ctrl.players"></playlist>
+    <playlist players="ctrl.players" player-order="ctrl.playerOrder"></playlist>
   </div>
   
   <!-- Selected players instructions -->
@@ -19,7 +19,7 @@
   </div>
      
   <div ng-if="ctrl.hasSelectedPlayers()">
-    
+        
     <!-- Selected players list -->
     
   	<div class="playlist-row" ng-repeat="player in ctrl.players | filter:{selected:true} | orderBy:'order'">
@@ -33,6 +33,10 @@
     		<player-nametag player="player"></player-nametag>
     	</div>
   	</div>
+    
+    <div ng-if="ctrl.disablePlaylistCreation()" class="playlist-instructions">
+      <b>At least three players required.</b>
+    </div>
     
     <!-- Action buttons -->
   	

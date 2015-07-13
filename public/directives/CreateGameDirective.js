@@ -14,6 +14,7 @@ var CreateGameController = function ($scope, $window, $http, playerNameFactory) 
 	var me = this;
 	
 	me.nameFilter = '';
+	me.playerOrder = 0;
 	
 	me.showLoading = false;
 	me.showErrorMessage = false;
@@ -122,6 +123,7 @@ var CreateGameController = function ($scope, $window, $http, playerNameFactory) 
 
 	me.removeAll = function() {
 		me.players = angular.copy(me.originalList);
+		me.playerOrder = 0;
 	};
 	
 	me.backToSelectPlayers = function() {

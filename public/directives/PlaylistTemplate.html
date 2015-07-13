@@ -4,9 +4,10 @@
 		<input type="text" class="form-control playlist-filter"
 			placeholder="Type name..."
 			ng-model="ctrl.filter"
-			typeahead="player as player.fullname for player in ctrl.players | filter:$viewValue | limitTo:6"
+			typeahead="player as player.fullname for player in ctrl.getUnselectedPlayers() | filter:$viewValue | limitTo:6"
 			typeahead-on-select="ctrl.toggleSelected($item, $model, $label)"
-			autocomplete="off" />
+			autocomplete="off"
+			autofocus />
 		<div class="input-group-addon playlist-filter-remove" ng-click="ctrl.removeFilter()"><span class="glyphicon glyphicon-remove-sign"></span></div>
 	</div>
 </div>
