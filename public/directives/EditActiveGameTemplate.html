@@ -8,6 +8,10 @@
 	<date-picker date="ctrl.datePlayedJs" disabled="ctrl.disableControls"></date-picker>
 	<edit-scores players="ctrl.game.players" disabled="ctrl.disableControls"></edit-scores>
 	
+	<div class="status-banner">
+		<playlist players="ctrl.allPlayers" on-selected="ctrl.onSelected(data)"></playlist>
+	</div>
+	
 	<div class="row big-action-buttons">
 		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
 			<button type="button" class="btn btn-primary btn-lg" ng-click="ctrl.returnToActiveGames()" ng-disabled="ctrl.disableControls" aria-label="Back to Games">

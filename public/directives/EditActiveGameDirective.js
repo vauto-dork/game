@@ -53,6 +53,7 @@ var EditActiveGameController = function ($scope, $http, $location, $window, play
 				me.changeState(me.State.Loading);
 				break;
 			case me.State.Loading:
+				me.getAllPlayers();
 				me.getActiveGames();
 				break;
 			case me.State.Error:
@@ -175,6 +176,30 @@ var EditActiveGameController = function ($scope, $http, $location, $window, play
 		});
 	};
 	
+	me.getAllPlayers = function() {
+		$http.get('/players?sort=true')
+		.success(function(data, status, headers, config) {
+		    me.allPlayers = data;
+			me.allPlayers = me.playerNameFormat(me.allPlayers);
+		})
+		.error(function(data, status, headers, config) {
+		    me.errorHandler(data, 'Cannot get all players.');
+		});
+	};
+	
+	me.playerNameFormat = function(rawPlayersList) {
+		rawPlayersList.forEach(function(value){
+			value = playerNameFactory.playerNameFormat(value);
+		});
+		
+		return rawPlayersList;
+	};
+	
+	me.onSelected = function(data) {
+		data.selected = !data.selected;
+		me.game.players.push({player: data, points: 0, rank: 0});
+	};
+	
 	me.saveGame = function() {
 		$scope.clearAlerts();
 		me.savePrep();
@@ -227,3 +252,6 @@ DorkModule.directive('editActiveGame', EditActiveGameDirective);
 
 DorkModule.controller('EditScoresController', EditScoresController);
 DorkModule.directive('editScores', EditScoresDirective);
+
+DorkModule.controller('PlaylistController', PlaylistController);
+DorkModule.directive('playlist', PlaylistDirective);
