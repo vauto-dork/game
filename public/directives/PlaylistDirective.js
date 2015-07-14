@@ -2,7 +2,7 @@ var PlaylistDirective = function() {
 	return {
 		scope: {
 			players: '=',
-			playerOrder: '='
+			onSelected: '&'
 		},
 		templateUrl: '/directives/PlaylistTemplate.html',
 		controller: 'PlaylistController',
@@ -19,12 +19,7 @@ var PlaylistController = function ($scope, $http) {
 	};
 	
 	me.toggleSelected = function(item, model, label){
-		item.selected = !item.selected;
-		
-		if(me.playerOrder !== undefined) {
-			item.order = item.selected ? me.playerOrder++ : undefined;
-		}
-		
+		me.onSelected({data: item});
 		me.removeFilter();
 	};
 	

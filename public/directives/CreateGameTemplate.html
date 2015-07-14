@@ -9,7 +9,7 @@
   <!-- Textbox -->
   
   <div class="status-banner">
-    <playlist players="ctrl.players" player-order="ctrl.playerOrder"></playlist>
+    <playlist players="ctrl.players" on-selected="ctrl.onSelected(data)"></playlist>
   </div>
   
   <!-- Selected players instructions -->
@@ -83,7 +83,7 @@
     
   	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
       <button type="button" class="btn btn-primary btn-lg" ng-click="ctrl.backToSelectPlayers()" ng-disabled="ctrl.disableOrderedPlayers">
-        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Back
+        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Modify
       </button>
   	</div>
     

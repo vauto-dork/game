@@ -13,14 +13,12 @@ var CreateGameDirective = function() {
 var CreateGameController = function ($scope, $window, $http, playerNameFactory) {
 	var me = this;
 	
-	me.nameFilter = '';
 	me.playerOrder = 0;
 	
 	me.showLoading = false;
 	me.showErrorMessage = false;
 	me.showPlayers = false;
 	
-	me.orderedPlayersLoading = false;
 	me.orderedPlayersLoaded = false;
 	me.disableOrderedPlayers = false;
 	
@@ -110,15 +108,20 @@ var CreateGameController = function ($scope, $window, $http, playerNameFactory) 
 		return rawPlayersList;
 	};
 	
+	me.onSelected = function(data) {
+		data.selected = !data.selected;
+		data.order = data.selected ? me.playerOrder++ : undefined;
+	};
+	
 	me.hasSelectedPlayers = function() {
 		return me.players.some(function(element) {
 			return element.selected;
 		});
 	};
 	
-	me.removePlayer = function(item){
-		item.selected = false;
-		item.order = undefined;
+	me.removePlayer = function(data){
+		data.selected = false;
+		data.order = undefined;
 	};
 
 	me.removeAll = function() {
