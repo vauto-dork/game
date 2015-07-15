@@ -41,11 +41,10 @@
   height: 100%;
   width: 100%;
   margin: -1em;
-  z-index: 100;
+  z-index: 20;
   background: rgba(0, 0, 0, 0.6);
   color: #fff;
-  text-align: center;
-  border-radius: 5px; }
+  text-align: center; }
   .game-delete-warning-overlay h3 {
     text-shadow: 0 0 20px #000; }
 

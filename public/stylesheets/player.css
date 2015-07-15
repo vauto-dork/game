@@ -1,3 +1,20 @@
+.player-delete-blur {
+  -webkit-filter: blur(2px);
+  -moz-filter: blur(2px);
+  -ms-filter: blur(2px);
+  -o-filter: blur(2px);
+  filter: blur(2px); }
+
+.player-delete-warning-overlay {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  margin: -1em;
+  z-index: 20;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  text-align: center; }
+
 .panel-title .player-nickname {
   margin-left: 0.3em;
   padding-left: 0.5em;
@@ -11,6 +28,11 @@
   padding: 0 0.5em;
   font-weight: bold;
   margin: 0.5em 0; }
+.panel-title .btn-remove-player {
+  padding-top: 0;
+  padding-right: 0; }
+  .panel-title .btn-remove-player .glyphicon {
+    margin-right: 0; }
 
 .player-card {
   margin: 0.5em; }

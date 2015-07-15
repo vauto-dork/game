@@ -33,6 +33,11 @@ section {
 	line-height: 2em;
 }
 
+.panel-body {
+	position: relative;
+	padding: 1em;
+}
+
 .global-nav {
 	@include shadow(0 2px 4px 2px rgba(0, 0, 0, 0.5));
 	margin: 0;

@@ -17,6 +17,14 @@
 	font-weight: bold;
 }
 
+.player-delete-blur {
+	@include blur(2px);
+}
+
+.player-delete-warning-overlay {
+	@include delete-overlay;
+}
+
 .panel-title {
 	.player-nickname {
 		@include player-nickname;
@@ -25,6 +33,15 @@
 	.player-name {
 		@include player-name;
 		margin: $standard-spacing 0;
+	}
+	
+	.btn-remove-player {
+		padding-top: 0;
+		padding-right: 0;
+		
+		.glyphicon {
+			margin-right: 0;
+		}
 	}
 }
 
