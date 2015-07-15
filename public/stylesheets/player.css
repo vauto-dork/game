@@ -1,3 +1,17 @@
+.panel-title .player-nickname {
+  margin-left: 0.3em;
+  padding-left: 0.5em;
+  border-left: 2px solid #e4e9ef;
+  display: inline-block;
+  white-space: nowrap; }
+.panel-title .player-name {
+  background-color: #4f6885;
+  color: #e4e9ef;
+  display: inline-block;
+  padding: 0 0.5em;
+  font-weight: bold;
+  margin: 0.5em 0; }
+
 .player-card {
   margin: 0.5em; }
   .player-card .player-order {
@@ -17,10 +31,10 @@
   .player-card .player-name {
     background-color: #4f6885;
     color: #e4e9ef;
-    display: inline;
+    display: inline-block;
     padding: 0 0.5em;
-    font-size: 1.4em;
-    font-weight: bold; }
+    font-weight: bold;
+    font-size: 1.4em; }
   .player-card .player-fullname {
     font-size: 1.4em; }
 

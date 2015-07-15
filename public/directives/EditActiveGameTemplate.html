@@ -6,10 +6,22 @@
 
 <div ng-if="ctrl.showScoreForm">
 	<date-picker date="ctrl.datePlayedJs" disabled="ctrl.disableControls"></date-picker>
+	
+	<div class="clearfix"></div>
+	
 	<edit-scores players="ctrl.game.players" disabled="ctrl.disableControls"></edit-scores>
 	
-	<div class="status-banner">
-		<playlist players="ctrl.allPlayers" on-selected="ctrl.onSelected(data)"></playlist>
+	<div class="playlist-scores-row">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">
+					Add Player
+				</h3>
+			</div>
+			<div class="panel-body">
+				<playlist players="ctrl.allPlayers" on-selected="ctrl.onSelected(data)"></playlist>
+			</div>
+		</div>
 	</div>
 	
 	<div class="row big-action-buttons">

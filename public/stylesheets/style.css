@@ -158,6 +158,20 @@ input.ng-invalid {
   padding: 1em;
   text-align: center; }
 
+.panel-title .player-nickname {
+  margin-left: 0.3em;
+  padding-left: 0.5em;
+  border-left: 2px solid #e4e9ef;
+  display: inline-block;
+  white-space: nowrap; }
+.panel-title .player-name {
+  background-color: #4f6885;
+  color: #e4e9ef;
+  display: inline-block;
+  padding: 0 0.5em;
+  font-weight: bold;
+  margin: 0.5em 0; }
+
 .player-card {
   margin: 0.5em; }
   .player-card .player-order {
@@ -177,10 +191,10 @@ input.ng-invalid {
   .player-card .player-name {
     background-color: #4f6885;
     color: #e4e9ef;
-    display: inline;
+    display: inline-block;
     padding: 0 0.5em;
-    font-size: 1.4em;
-    font-weight: bold; }
+    font-weight: bold;
+    font-size: 1.4em; }
   .player-card .player-fullname {
     font-size: 1.4em; }
 
@@ -212,14 +226,6 @@ input.ng-invalid {
     .player-score-card .game-rank .game-rank-dot {
       display: inline-block;
       margin: 0 0.5em; }
-
-.game-card {
-  padding: 1em;
-  border-radius: 5px;
-  background-color: #F1F5F8;
-  border: 1px solid #cfd2d8;
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.15);
-  display: inline-block; }
 
 .game-column-player,
 .game-column-rank,
@@ -373,9 +379,16 @@ input.ng-invalid {
 .playlist-order-row {
   display: block;
   line-height: 2em;
-  padding: 1em 0;
-  padding: 1em;
-  width: 100%; }
+  padding: 1em 0; }
+
+.playlist-order-row {
+  width: 100%;
+  padding: 1em; }
+
+.playlist-scores-row {
+  max-width: 50em;
+  padding: 0 0.5em;
+  margin: auto; }
 
 .playlist-scores-input {
   width: 100%; }

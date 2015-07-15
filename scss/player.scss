@@ -1,6 +1,33 @@
 @import "variables";
 @import "mixins";
 
+@mixin player-nickname() {
+	margin-left: 0.3em;
+	padding-left: 0.5em;
+	border-left: 2px solid $background-color;
+	display: inline-block;
+	white-space: nowrap;
+}
+
+@mixin player-name() {
+	background-color: $dark-bg;
+	color: $background-color;
+	display: inline-block;
+	padding: 0 0.5em;
+	font-weight: bold;
+}
+
+.panel-title {
+	.player-nickname {
+		@include player-nickname;
+	}
+
+	.player-name {
+		@include player-name;
+		margin: $standard-spacing 0;
+	}
+}
+
 .player-card {
 	margin: $standard-spacing;
 
@@ -12,20 +39,12 @@
 	}
 
 	.player-nickname {
-		margin-left: 0.3em;
-		padding-left: 0.5em;
-		border-left: 2px solid $background-color;
-		display: inline-block;
-		white-space: nowrap;
+		@include player-nickname;
 	}
 
 	.player-name {
-		background-color: $dark-bg;
-		color: $background-color;
-		display: inline;
-		padding: 0 0.5em;
+		@include player-name;
 		font-size: $font-large;
-		font-weight: bold;
 	}
 
 	.player-fullname {

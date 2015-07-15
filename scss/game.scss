@@ -1,11 +1,6 @@
 @import "variables";
 @import "mixins";
 
-.game-card {
-	@include card;
-	display: inline-block;
-}
-
 .game-column-player,
 .game-column-rank,
 .game-column-points {

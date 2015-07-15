@@ -104,8 +104,17 @@
 .playlist-scores-row,
 .playlist-order-row {
 	@include row;
-	padding: 1em;
+}
+
+.playlist-order-row {
 	width: 100%;
+	padding: 1em;
+}
+
+.playlist-scores-row {
+	max-width: 50em;
+	padding: 0 $standard-spacing;
+	margin: auto;
 }
 
 .playlist-scores-input {
