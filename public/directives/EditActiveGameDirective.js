@@ -9,7 +9,7 @@ var EditActiveGameDirective = function() {
 	};
 }
 
-var EditActiveGameController = function ($scope, $http, $location, $window, playerNameFactory) {
+var EditActiveGameController = function ($scope, $http, $location, $window, $q, playerNameFactory) {
 	var me = this;
 	me.showLoading = false;
 	me.showError = false;
@@ -52,9 +52,12 @@ var EditActiveGameController = function ($scope, $http, $location, $window, play
 				me.setActivePath();
 				me.changeState(me.State.Loading);
 				break;
-			case me.State.Loading:
-				me.getAllPlayers();
-				me.getActiveGames();
+			case me.State.Loading:				
+				me.getActiveGames().then(function() {
+					me.getAllPlayers();
+				}, function(){
+					// Do nothing as error is already handled.
+				});
 				break;
 			case me.State.Error:
 				me.scrollToTop();
@@ -106,12 +109,41 @@ var EditActiveGameController = function ($scope, $http, $location, $window, play
 		}
 	};
 	
-	me.save = function() {
-		me.changeState(me.State.Saving);	
+	me.getAllPlayers = function() {
+		$http.get('/players?sort=true')
+		.success(function(data, status, headers, config) {
+		    me.allPlayers = data;
+			me.allPlayers = me.playerNameFormat(me.allPlayers);
+			me.markActivePlayersAsSelected(me.allPlayers);
+		})
+		.error(function(data, status, headers, config) {
+		    me.errorHandler(data, 'Cannot get all players.');
+		});
 	};
 	
-	me.finalize = function() {
-		me.changeState(me.State.Finalizing);
+	me.playerNameFormat = function(rawPlayersList) {
+		rawPlayersList.forEach(function(value){
+			value = playerNameFactory.playerNameFormat(value);
+		});
+		
+		return rawPlayersList;
+	};
+	
+	me.markActivePlayersAsSelected = function(allPlayers) {
+		var activePlayerIds = me.game.players.map(function(element) {
+			return element.player._id;
+		});
+		
+		allPlayers.forEach(function(element) {
+			if(activePlayerIds.indexOf(element._id) !== -1){
+				element.selected = true;
+			}
+		});
+	};
+	
+	me.onSelected = function(data) {
+		data.selected = !data.selected;
+		me.game.players.push({player: data, points: 0, rank: 0});
 	};
 	
 	me.errorHandler = function(data, errorMessage) {
@@ -173,6 +205,8 @@ var EditActiveGameController = function ($scope, $http, $location, $window, play
 	};
 	
 	me.getActiveGames = function() {
+		var deferred = $q.defer();
+		
 		$http.get(me.activeGamePath)
 		.success(function(data, status, headers, config) {
 			if(data === null || data === undefined) {
@@ -183,34 +217,14 @@ var EditActiveGameController = function ($scope, $http, $location, $window, play
 				me.datePlayedJs = Date.parse(data.datePlayed);
 				me.changeState(me.State.Ready);
 			}
+			deferred.resolve();
 		})
 		.error(function(data, status, headers, config) {
 			me.errorHandler(data, 'Cannot load game.');
-		});
-	};
-	
-	me.getAllPlayers = function() {
-		$http.get('/players?sort=true')
-		.success(function(data, status, headers, config) {
-		    me.allPlayers = data;
-			me.allPlayers = me.playerNameFormat(me.allPlayers);
-		})
-		.error(function(data, status, headers, config) {
-		    me.errorHandler(data, 'Cannot get all players.');
-		});
-	};
-	
-	me.playerNameFormat = function(rawPlayersList) {
-		rawPlayersList.forEach(function(value){
-			value = playerNameFactory.playerNameFormat(value);
+			deferred.reject();
 		});
 		
-		return rawPlayersList;
-	};
-	
-	me.onSelected = function(data) {
-		data.selected = !data.selected;
-		me.game.players.push({player: data, points: 0, rank: 0});
+		return deferred.promise;
 	};
 	
 	me.saveGame = function() {
@@ -262,10 +276,18 @@ var EditActiveGameController = function ($scope, $http, $location, $window, play
 		});
 	};
 	
+	me.save = function() {
+		me.changeState(me.State.Saving);	
+	};
+	
+	me.finalize = function() {
+		me.changeState(me.State.Finalizing);
+	};
+	
 	me.changeState(me.State.Init);
 };
 
-EditActiveGameController.$inject = ['$scope', '$http', '$location', '$window', 'playerNameFactory'];
+EditActiveGameController.$inject = ['$scope', '$http', '$location', '$window', '$q', 'playerNameFactory'];
 
 DorkModule.controller('EditActiveGameController', EditActiveGameController);
 DorkModule.directive('editActiveGame', EditActiveGameDirective);
