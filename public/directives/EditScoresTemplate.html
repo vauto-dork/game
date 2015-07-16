@@ -4,7 +4,7 @@
 		<div class="panel-heading">
 			<h3 class="panel-title">
 				<div class="pull-right">
-					<a class="btn btn-link btn-lg btn-remove-player" role="button" aria-label="Remove Player" ng-click="player.removed = !player.removed">
+					<a class="btn btn-link btn-lg btn-remove-player" role="button" aria-label="Remove Player" ng-click="ctrl.toggleRemoved(player)">
 						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 					</a>
 				</div>
@@ -14,7 +14,7 @@
 		
 		<div class="panel-body text-center">
 			<div class="player-delete-warning-overlay" ng-class="player.removed ? 'show' : 'hidden'">
-				<a ng-click="player.removed = false" role="button" class="btn btn-primary btn-lg" aria-label="Undo Remove Player">
+				<a ng-click="ctrl.toggleRemoved(player)" role="button" class="btn btn-primary btn-lg" aria-label="Undo Remove Player">
 					Undo Remove Player
 				</a>
 			</div>

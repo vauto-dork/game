@@ -124,8 +124,21 @@ var EditActiveGameController = function ($scope, $http, $location, $window, play
 		// Convert datetime to string.
 		me.game.datePlayed = me.getFormattedDate();
 		
+		var remainingPlayers = me.game.players.filter(function(element) { return element.removed != true; });
+		
+		if(remainingPlayers.length < 3) {
+			$scope.addAlert('danger', 'Cannot save a game with less than three players.');
+			return false;
+		}
+		
+		me.game.players = angular.copy(remainingPlayers);
+		
 		// Convert blank points to zeroes.
-		me.game.players.forEach(function(player) { player.points = !player.points ? 0 : player.points; });
+		me.game.players.forEach(function(player) {
+			player.points = !player.points ? 0 : player.points;
+		});
+		
+		return true;
 	};
 	
 	me.finalizeCheck = function() {
@@ -202,7 +215,11 @@ var EditActiveGameController = function ($scope, $http, $location, $window, play
 	
 	me.saveGame = function() {
 		$scope.clearAlerts();
-		me.savePrep();
+		
+		if(!me.savePrep()) {
+			me.changeState(me.State.Ready);
+			return;
+		}
 		
 		$http.put(me.activeGamePath, me.game).success(function(data, status, headers, config) {
 			me.changeState(me.State.Saved);
@@ -222,7 +239,10 @@ var EditActiveGameController = function ($scope, $http, $location, $window, play
 		
 		me.game.winner = { _id: winner[0].player._id };
 		
-		me.savePrep();
+		if(!me.savePrep()) {
+			me.changeState(me.State.Ready);
+			return;
+		}
 		
 		$http.post('/games', me.game).success(function(data, status, headers, config) {
 			me.changeState(me.State.Deleting);
