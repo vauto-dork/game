@@ -15,6 +15,7 @@ var EditActiveGameController = function ($scope, $http, $location, $window, $q, 
 	me.showError = false;
 	me.showScoreForm = false;
 	me.disableControls = false;
+	me.showAddPlayer = false;
 	me.datePlayedJs = new Date();
 	
 	$scope.alerts = [];
@@ -99,6 +100,10 @@ var EditActiveGameController = function ($scope, $http, $location, $window, $q, 
 	me.scrollToTop = function() {
 		$window.scrollTo(0, 0);
 	};
+	
+	me.scrollToBottom = function() {
+		$window.scrollTo(0, 10000);
+	};
 		
 	me.setActivePath = function() {
 		if($location.path() !== undefined || $location.path() !== ''){
@@ -144,6 +149,8 @@ var EditActiveGameController = function ($scope, $http, $location, $window, $q, 
 	me.onSelected = function(data) {
 		data.selected = !data.selected;
 		me.game.players.push({player: data, points: 0, rank: 0});
+		me.toggleAddPlayer();
+		me.scrollToBottom();
 	};
 	
 	me.errorHandler = function(data, errorMessage) {
@@ -275,6 +282,10 @@ var EditActiveGameController = function ($scope, $http, $location, $window, $q, 
 			me.errorHandler(data, 'Cannot delete game!');
 		});
 	};
+	
+	me.toggleAddPlayer = function() {
+		me.showAddPlayer = !me.showAddPlayer;
+	}
 	
 	me.save = function() {
 		me.changeState(me.State.Saving);	

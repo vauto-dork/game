@@ -110,3 +110,48 @@
 		}
 	}
 }
+
+.footer-spacer {
+	width: 100%;
+	height: $global-nav-spacer + 2em;
+}
+
+.footer-bar {
+	@include shadow(0 2px 4px 2px rgba(0, 0, 0, 0.5));
+	margin: 0;
+	padding: 0 $standard-spacing;
+	color: $global-nav-text-color;
+	background-color: $global-nav-bg;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	z-index: 100;
+	width: 100%;
+	height: $global-nav-height;
+	line-height: 1.8em;
+	font-size: 2.2em;
+	font-weight: bold;
+	
+	.btn {
+		margin-left: 0.25em;
+		margin-right: 0.25em;
+	}
+}
+
+.overlay {
+	top: 0;
+	left: 0;
+	
+	&.add-player-open {
+		background-color: rgba(0, 0, 0, 0.5);
+		z-index: 24;
+		transition: $base-transition;
+	}
+}
+
+.add-player-panel {
+	position: fixed;
+	top: 6em;
+	width: 100%;
+	z-index: 25;
+}
