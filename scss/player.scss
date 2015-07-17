@@ -155,3 +155,16 @@
 	width: 100%;
 	z-index: 25;
 }
+
+.edit-active-game-btn {
+	width: 50%;
+	display: inline-block;
+	
+	&.left {
+		margin-left: -5px;
+	}
+	
+	&.right {
+		margin-right: -5px;
+	}
+}

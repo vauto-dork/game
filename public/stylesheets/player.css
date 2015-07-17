@@ -128,4 +128,12 @@
   width: 100%;
   z-index: 25; }
 
+.edit-active-game-btn {
+  width: 50%;
+  display: inline-block; }
+  .edit-active-game-btn.left {
+    margin-left: -5px; }
+  .edit-active-game-btn.right {
+    margin-right: -5px; }
+
 /*# sourceMappingURL=player.css.map */

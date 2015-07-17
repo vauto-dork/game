@@ -295,6 +295,10 @@ var EditActiveGameController = function ($scope, $http, $location, $window, $q, 
 		me.changeState(me.State.Finalizing);
 	};
 	
+	me.revert = function() {
+		me.changeState(me.State.Loading);
+	}
+	
 	me.changeState(me.State.Init);
 };
 

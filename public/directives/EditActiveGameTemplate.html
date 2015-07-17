@@ -11,19 +11,18 @@
 	
 	<edit-scores players="ctrl.game.players" disabled="ctrl.disableControls"></edit-scores>
 	
-	<p class="playlist-scores-row text-center">
-		<!--<div class="col-xs-6 col-sm-6">
-			<button type="button" class="btn btn-primary btn-lg" ng-click="ctrl.returnToActiveGames()" ng-disabled="ctrl.disableControls" aria-label="Back to Games">
-				<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Games
+	<div class="playlist-scores-row text-center">
+		<div class="edit-active-game-btn left">
+			<button type="button" class="btn btn-danger btn-lg btn-block" ng-click="ctrl.revert()" ng-disabled="ctrl.disableControls" aria-label="Revert Changes">
+				<span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span> Revert
 			</button>
 		</div>
-		&nbsp;-->
-		<!--<div class="col-xs-6 col-sm-6">-->
+		<div class="edit-active-game-btn right">
 			<button type="button" class="btn btn-warning btn-lg btn-block" ng-click="ctrl.finalize()" ng-disabled="ctrl.disableControls" aria-label="Finalize Game">
 				<span class="glyphicon glyphicon-saved" aria-hidden="true"></span> Finalize
 			</button>
-		<!--</div>-->
-	</p>
+		</div>
+	</div>
 </div>
 
 <div ng-if="ctrl.showError">
