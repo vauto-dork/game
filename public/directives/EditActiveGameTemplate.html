@@ -11,16 +11,18 @@
 	
 	<edit-scores players="ctrl.game.players" disabled="ctrl.disableControls"></edit-scores>
 	
-	<div class="playlist-scores-row text-center">
-		<div class="edit-active-game-btn left">
-			<button type="button" class="btn btn-danger btn-lg btn-block" ng-click="ctrl.revert()" ng-disabled="ctrl.disableControls" aria-label="Revert Changes">
-				<span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span> Revert
-			</button>
-		</div>
-		<div class="edit-active-game-btn right">
-			<button type="button" class="btn btn-warning btn-lg btn-block" ng-click="ctrl.finalize()" ng-disabled="ctrl.disableControls" aria-label="Finalize Game">
-				<span class="glyphicon glyphicon-saved" aria-hidden="true"></span> Finalize
-			</button>
+	<div class="playlist-scores-row">
+		<div class="btn-group btn-group-justified" role="group">
+			<div class="btn-group" role="group">
+				<button type="button" class="btn btn-danger btn-lg btn-block" ng-click="ctrl.revert()" ng-disabled="ctrl.disableControls" aria-label="Revert Changes">
+					<span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span> Revert
+				</button>
+			</div>
+			<div class="btn-group" role="group">
+				<button type="button" class="btn btn-warning btn-lg btn-block" ng-click="ctrl.finalize()" ng-disabled="ctrl.disableControls" aria-label="Finalize Game">
+					<span class="glyphicon glyphicon-saved" aria-hidden="true"></span> Finalize
+				</button>
+			</div>
 		</div>
 	</div>
 </div>
@@ -55,11 +57,13 @@
 <div class="footer-spacer"></div>
 
 <div class="footer-bar text-center">
-	<button type="button" class="btn btn-info btn-lg" ng-class="{active: ctrl.showAddPlayer}" ng-click="ctrl.toggleAddPlayer()" ng-disabled="ctrl.disableControls" aria-label="Add Player">
-		<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Player 
-	</button>
-	
-	<button type="button" class="btn btn-success btn-lg" ng-click="ctrl.save()" ng-disabled="ctrl.disableControls" aria-label="Save Game">
-		<span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Save 
-	</button>
+	<div class="btn-group" role="group">
+		<button type="button" class="btn btn-info btn-lg" ng-class="{active: ctrl.showAddPlayer}" ng-click="ctrl.toggleAddPlayer()" ng-disabled="ctrl.disableControls" aria-label="Add Player">
+			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Player 
+		</button>
+		
+		<button type="button" class="btn btn-success btn-lg" ng-click="ctrl.save()" ng-disabled="ctrl.disableControls" aria-label="Save Game">
+			<span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Save 
+		</button>
+	</div>
 </div>

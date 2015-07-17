@@ -46,7 +46,9 @@ var EditActiveGameController = function ($scope, $http, $location, $window, $q, 
 		me.disableControls = (newState === me.State.Saving) ||
 							 (newState === me.State.Finalizing) ||
 							 (newState === me.State.Deleting) ||
-							 (newState === me.State.Deleted);
+							 (newState === me.State.Deleted) ||
+							 (newState === me.State.Init) ||
+							 (newState === me.State.Loading);
 		
 		switch(newState) {
 			case me.State.Init:
