@@ -120,6 +120,12 @@ section {
   margin-left: 0.5em;
   margin-right: 0.5em; }
 
+.btn.btn-close {
+  padding-top: 0;
+  padding-right: 0; }
+  .btn.btn-close .glyphicon {
+    margin-right: 0; }
+
 .load-bar {
   display: block;
   width: 100%;
@@ -192,11 +198,6 @@ input.ng-invalid {
   padding: 0 0.5em;
   font-weight: bold;
   margin: 0.5em 0; }
-.panel-title .btn-remove-player {
-  padding-top: 0;
-  padding-right: 0; }
-  .panel-title .btn-remove-player .glyphicon {
-    margin-right: 0; }
 
 .player-card {
   margin: 0.5em; }

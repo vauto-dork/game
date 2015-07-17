@@ -55,7 +55,7 @@
 <div class="footer-spacer"></div>
 
 <div class="footer-bar text-center">
-	<button type="button" class="btn btn-primary btn-lg" ng-click="ctrl.toggleAddPlayer()" ng-disabled="ctrl.disableControls" aria-label="Add Player">
+	<button type="button" class="btn btn-info btn-lg" ng-class="{active: ctrl.showAddPlayer}" ng-click="ctrl.toggleAddPlayer()" ng-disabled="ctrl.disableControls" aria-label="Add Player">
 		<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Player 
 	</button>
 	

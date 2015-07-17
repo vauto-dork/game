@@ -34,15 +34,6 @@
 		@include player-name;
 		margin: $standard-spacing 0;
 	}
-	
-	.btn-remove-player {
-		padding-top: 0;
-		padding-right: 0;
-		
-		.glyphicon {
-			margin-right: 0;
-		}
-	}
 }
 
 .player-card {

@@ -120,6 +120,12 @@ section {
   margin-left: 0.5em;
   margin-right: 0.5em; }
 
+.btn.btn-close {
+  padding-top: 0;
+  padding-right: 0; }
+  .btn.btn-close .glyphicon {
+    margin-right: 0; }
+
 .load-bar {
   display: block;
   width: 100%;

@@ -28,11 +28,6 @@
   padding: 0 0.5em;
   font-weight: bold;
   margin: 0.5em 0; }
-.panel-title .btn-remove-player {
-  padding-top: 0;
-  padding-right: 0; }
-  .panel-title .btn-remove-player .glyphicon {
-    margin-right: 0; }
 
 .player-card {
   margin: 0.5em; }

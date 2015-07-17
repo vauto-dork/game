@@ -148,6 +148,15 @@ section {
 	margin-right: $icon-spacing;
 }
 
+.btn.btn-close {
+	padding-top: 0;
+	padding-right: 0;
+	
+	.glyphicon {
+		margin-right: 0;
+	}
+}
+
 .load-bar {
 	display: block;
 	width: 100%;
