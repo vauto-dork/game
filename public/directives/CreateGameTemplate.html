@@ -5,49 +5,93 @@
 <div class="text-center" ng-if="ctrl.showErrorMessage"><h2>An error occured.</h2></div>
 
 <div ng-if="ctrl.showPlayers">
-  <playlist players="players"></playlist>
   
-  <div class="row big-action-buttons">
-  	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-  		<button type="button" class="btn btn-danger btn-lg" ng-click="ctrl.removeAll()" ng-disabled="ctrl.disableRemoveAll">
-  			<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove All
-  		</button>
-  	</div>
-  	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-  		<button type="button" class="btn btn-primary btn-lg" ng-click="ctrl.createPlaylist()" ng-disabled="ctrl.disableCreatePlaylist" data-toggle="modal" data-target="#myModal">
-  			<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Create Playlist
-  		</button>
-  	</div>
+  <!-- Textbox -->
+  
+  <div class="status-banner">
+    <playlist players="ctrl.players" on-selected="ctrl.onSelected(data)"></playlist>
   </div>
+  
+  <!-- Selected players instructions -->
+  
+  <div ng-if="!ctrl.hasSelectedPlayers()" class="playlist-instructions">
+    Select players by typing initials, full name, or nickname into textbox.
+  </div>
+     
+  <div ng-if="ctrl.hasSelectedPlayers()">
+        
+    <!-- Selected players list -->
+    
+  	<div class="playlist-row" ng-repeat="player in ctrl.players | filter:{selected:true} | orderBy:'order'">
+  		<div class="player-card" ng-click="ctrl.removePlayer(player)">
+    		<div class="player-order">
+    			<div class="checkmark">
+    				<span ng-show="!player.selected">&nbsp;</span>
+    				<span ng-show="player.selected" class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+    			</div>
+    		</div>
+    		<player-nametag player="player"></player-nametag>
+    	</div>
+  	</div>
+    
+    <div ng-if="ctrl.disablePlaylistCreation()" class="playlist-instructions">
+      <b>At least three players required.</b>
+    </div>
+    
+    <!-- Action buttons -->
+  	
+  	<div class="row big-action-buttons">
+  		
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+  			<button type="button" class="btn btn-danger btn-lg" ng-click="ctrl.removeAll()">
+  				<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove All
+  			</button>
+  		</div>
+      
+  		<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+  			<button type="button" class="btn btn-primary btn-lg" ng-click="ctrl.createPlaylist()" ng-disabled="ctrl.disablePlaylistCreation()">
+  				<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Create Playlist
+  			</button>
+  		</div>
+      
+  	</div>
+     
+  <!-- Ende select players -->
+  </div>
+ 
+<!-- End show players -->
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        	<span aria-hidden="true">&times;</span>
-        </button>
-        <h4 class="modal-title">Playlist</h4>
-      </div>
-      <div class="modal-body">
-      	<div class="load-bar" ng-if="ctrl.orderedPlayersLoading">
-      		<img src="/images/loader.gif" width="220" height="19" />
-      	</div>
-      	<div class="playlist-order-row" ng-repeat="player in orderedPlayers" ng-if="ctrl.orderedPlayersLoaded">
-	      	<div class="player-card">
-	      		<div class="player-order">
-	      			{{$index + 1}}
-	      		</div>
-		      	<player-nametag player="player"></player-nametag>
-          </div>
-		    </div> 
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary btn-lg" data-dismiss="modal" ng-disabled="ctrl.disableOrderedPlayers">Close</button>
-        <button type="button" class="btn btn-warning btn-lg" data-dismiss="modal" ng-click="ctrl.startGame()" ng-disabled="ctrl.disableOrderedPlayers">Start Game</button>
-      </div>
+<!-- Game ordered players -->
+
+<div ng-if="ctrl.orderedPlayersLoaded">
+  
+  <div class="playlist-instructions">
+    Write players on board in this order:
+  </div>
+  
+  <div class="playlist-order-row" ng-repeat="player in ctrl.orderedPlayers" ng-if="ctrl.orderedPlayersLoaded">
+  	<div class="player-card">
+  		<div class="player-order">
+  			{{$index + 1}}
+  		</div>
+    	<player-nametag player="player"></player-nametag>
     </div>
   </div>
+  
+  <div class="row big-action-buttons">
+    
+  	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+      <button type="button" class="btn btn-primary btn-lg" ng-click="ctrl.backToSelectPlayers()" ng-disabled="ctrl.disableOrderedPlayers">
+        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Modify
+      </button>
+  	</div>
+    
+  	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+      <button type="button" class="btn btn-success btn-lg" ng-click="ctrl.startGame()" ng-disabled="ctrl.disableOrderedPlayers">
+        <span class="glyphicon glyphicon-flag" aria-hidden="true"></span> Start Game
+      </button>
+  	</div>
+  </div>
+  
 </div>

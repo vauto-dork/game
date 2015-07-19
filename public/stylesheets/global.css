@@ -23,6 +23,15 @@ section {
   margin-bottom: 2em;
   position: relative; }
 
+.dropdown-menu {
+  width: 100%;
+  font-size: 2em;
+  line-height: 2em; }
+
+.panel-body {
+  position: relative;
+  padding: 1em; }
+
 .global-nav {
   -moz-box-shadow: 0 2px 4px 2px rgba(0, 0, 0, 0.5);
   -webkit-box-shadow: 0 2px 4px 2px rgba(0, 0, 0, 0.5);
@@ -110,6 +119,12 @@ section {
 .btn > .glyphicon {
   margin-left: 0.5em;
   margin-right: 0.5em; }
+
+.btn.btn-close {
+  padding-top: 0;
+  padding-right: 0; }
+  .btn.btn-close .glyphicon {
+    margin-right: 0; }
 
 .load-bar {
   display: block;

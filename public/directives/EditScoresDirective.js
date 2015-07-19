@@ -47,6 +47,10 @@ var EditScoresController = function ($scope, $http, playerNameFactory) {
 			player.points = (points + 1 <= me.pointsMax) ? points + 1 : points;
 		}
 	};
+	
+	me.toggleRemoved = function(player) {
+		player.removed = !player.removed;
+	}
 };
 
 EditScoresController.$inject = ['$scope', '$http', 'playerNameFactory'];

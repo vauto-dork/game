@@ -23,6 +23,15 @@ section {
   margin-bottom: 2em;
   position: relative; }
 
+.dropdown-menu {
+  width: 100%;
+  font-size: 2em;
+  line-height: 2em; }
+
+.panel-body {
+  position: relative;
+  padding: 1em; }
+
 .global-nav {
   -moz-box-shadow: 0 2px 4px 2px rgba(0, 0, 0, 0.5);
   -webkit-box-shadow: 0 2px 4px 2px rgba(0, 0, 0, 0.5);
@@ -111,6 +120,12 @@ section {
   margin-left: 0.5em;
   margin-right: 0.5em; }
 
+.btn.btn-close {
+  padding-top: 0;
+  padding-right: 0; }
+  .btn.btn-close .glyphicon {
+    margin-right: 0; }
+
 .load-bar {
   display: block;
   width: 100%;
@@ -153,6 +168,37 @@ input.ng-invalid {
   padding: 1em;
   text-align: center; }
 
+.player-delete-blur {
+  -webkit-filter: blur(2px);
+  -moz-filter: blur(2px);
+  -ms-filter: blur(2px);
+  -o-filter: blur(2px);
+  filter: blur(2px); }
+
+.player-delete-warning-overlay {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  margin: -1em;
+  z-index: 20;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  text-align: center; }
+
+.panel-title .player-nickname {
+  margin-left: 0.3em;
+  padding-left: 0.5em;
+  border-left: 2px solid #e4e9ef;
+  display: inline-block;
+  white-space: nowrap; }
+.panel-title .player-name {
+  background-color: #4f6885;
+  color: #e4e9ef;
+  display: inline-block;
+  padding: 0 0.5em;
+  font-weight: bold;
+  margin: 0.5em 0; }
+
 .player-card {
   margin: 0.5em; }
   .player-card .player-order {
@@ -172,10 +218,10 @@ input.ng-invalid {
   .player-card .player-name {
     background-color: #4f6885;
     color: #e4e9ef;
-    display: inline;
+    display: inline-block;
     padding: 0 0.5em;
-    font-size: 1.4em;
-    font-weight: bold; }
+    font-weight: bold;
+    font-size: 1.4em; }
   .player-card .player-fullname {
     font-size: 1.4em; }
 
@@ -208,13 +254,44 @@ input.ng-invalid {
       display: inline-block;
       margin: 0 0.5em; }
 
-.game-card {
-  padding: 1em;
-  border-radius: 5px;
-  background-color: #F1F5F8;
-  border: 1px solid #cfd2d8;
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.15);
-  display: inline-block; }
+.footer-spacer {
+  width: 100%;
+  height: 5.5em; }
+
+.footer-bar {
+  -moz-box-shadow: 0 2px 4px 2px rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: 0 2px 4px 2px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 2px 4px 2px rgba(0, 0, 0, 0.5);
+  margin: 0;
+  padding: 0 0.5em;
+  color: #fff;
+  background-color: #4f6885;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  width: 100%;
+  height: 2em;
+  line-height: 1.8em;
+  font-size: 2.2em;
+  font-weight: bold; }
+  .footer-bar .btn {
+    margin-left: 0.25em;
+    margin-right: 0.25em; }
+
+.overlay {
+  top: 0;
+  left: 0; }
+  .overlay.add-player-open {
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 24;
+    transition: all 0.3s ease-in-out; }
+
+.add-player-panel {
+  position: fixed;
+  top: 6em;
+  width: 100%;
+  z-index: 25; }
 
 .game-column-player,
 .game-column-rank,
@@ -259,11 +336,10 @@ input.ng-invalid {
   height: 100%;
   width: 100%;
   margin: -1em;
-  z-index: 100;
+  z-index: 20;
   background: rgba(0, 0, 0, 0.6);
   color: #fff;
-  text-align: center;
-  border-radius: 5px; }
+  text-align: center; }
   .game-delete-warning-overlay h3 {
     text-shadow: 0 0 20px #000; }
 
@@ -325,6 +401,11 @@ input.ng-invalid {
     margin-right: 0.5em;
     color: #7a8394; }
 
+.playlist-instructions {
+  padding: 1em;
+  text-align: center;
+  font-size: 1.4em; }
+
 .playlist-filter {
   padding: 0.25em;
   width: 100%;
@@ -363,9 +444,16 @@ input.ng-invalid {
 .playlist-order-row {
   display: block;
   line-height: 2em;
-  padding: 1em 0;
-  padding: 1em;
-  width: 100%; }
+  padding: 1em 0; }
+
+.playlist-order-row {
+  width: 100%;
+  padding: 1em; }
+
+.playlist-scores-row {
+  max-width: 50em;
+  padding: 0 0.5em;
+  margin: auto; }
 
 .playlist-scores-input {
   width: 100%; }

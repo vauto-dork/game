@@ -1,21 +1,13 @@
+
 <div class="form-group">
 	<div class="input-group">
-		<input type="text" class="form-control playlist-filter" ng-model="ctrl.filter" placeholder="Filter by name or nickname..." />
+		<input type="text" class="form-control playlist-filter"
+			placeholder="Type name..."
+			ng-model="ctrl.filter"
+			typeahead="player as player.fullname for player in ctrl.getUnselectedPlayers() | filter:$viewValue | limitTo:6"
+			typeahead-on-select="ctrl.toggleSelected($item, $model, $label)"
+			autocomplete="off"
+			autofocus />
 		<div class="input-group-addon playlist-filter-remove" ng-click="ctrl.removeFilter()"><span class="glyphicon glyphicon-remove-sign"></span></div>
 	</div>
 </div>
-
-<div class="playlist-row col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-repeat="player in ctrl.players | filter:ctrl.filter">
-	<div class="player-card" ng-click="player.selected = !player.selected">
-		<div class="player-order">
-			<div class="checkmark">
-				<input type="checkbox" ng-model="player.selected" ng-selected="player.selected" />
-				<span ng-show="!player.selected">&nbsp;</span>
-				<span ng-show="player.selected" class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-			</div>
-		</div>
-		<player-nametag player="player"></player-nametag>
-	</div>
-</div>
-
-<div class="clearfix"></div>

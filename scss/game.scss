@@ -1,11 +1,6 @@
 @import "variables";
 @import "mixins";
 
-.game-card {
-	@include card;
-	display: inline-block;
-}
-
 .game-column-player,
 .game-column-rank,
 .game-column-points {
@@ -55,15 +50,7 @@
 }
 
 .game-delete-warning-overlay {
-	position: absolute;
-	height: 100%;
-	width: 100%;
-	margin: -1em;
-	z-index: 100;
-	background: rgba(0,0,0,0.6);
-	color: $global-nav-text-color;
-	text-align: center;
-	border-radius: $card-border-radius;
+	@include delete-overlay;
 	
 	h3 {
 		text-shadow: 0 0 20px #000;

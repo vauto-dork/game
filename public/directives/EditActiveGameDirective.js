@@ -9,12 +9,13 @@ var EditActiveGameDirective = function() {
 	};
 }
 
-var EditActiveGameController = function ($scope, $http, $location, $window, playerNameFactory) {
+var EditActiveGameController = function ($scope, $http, $location, $window, $q, playerNameFactory) {
 	var me = this;
 	me.showLoading = false;
 	me.showError = false;
 	me.showScoreForm = false;
 	me.disableControls = false;
+	me.showAddPlayer = false;
 	me.datePlayedJs = new Date();
 	
 	$scope.alerts = [];
@@ -45,15 +46,21 @@ var EditActiveGameController = function ($scope, $http, $location, $window, play
 		me.disableControls = (newState === me.State.Saving) ||
 							 (newState === me.State.Finalizing) ||
 							 (newState === me.State.Deleting) ||
-							 (newState === me.State.Deleted);
+							 (newState === me.State.Deleted) ||
+							 (newState === me.State.Init) ||
+							 (newState === me.State.Loading);
 		
 		switch(newState) {
 			case me.State.Init:
 				me.setActivePath();
 				me.changeState(me.State.Loading);
 				break;
-			case me.State.Loading:
-				me.getActiveGames();
+			case me.State.Loading:				
+				me.getActiveGames().then(function() {
+					me.getAllPlayers();
+				}, function(){
+					// Do nothing as error is already handled.
+				});
 				break;
 			case me.State.Error:
 				me.scrollToTop();
@@ -95,6 +102,10 @@ var EditActiveGameController = function ($scope, $http, $location, $window, play
 	me.scrollToTop = function() {
 		$window.scrollTo(0, 0);
 	};
+	
+	me.scrollToBottom = function() {
+		$window.scrollTo(0, 10000);
+	};
 		
 	me.setActivePath = function() {
 		if($location.path() !== undefined || $location.path() !== ''){
@@ -105,12 +116,43 @@ var EditActiveGameController = function ($scope, $http, $location, $window, play
 		}
 	};
 	
-	me.save = function() {
-		me.changeState(me.State.Saving);	
+	me.getAllPlayers = function() {
+		$http.get('/players?sort=true')
+		.success(function(data, status, headers, config) {
+		    me.allPlayers = data;
+			me.allPlayers = me.playerNameFormat(me.allPlayers);
+			me.markActivePlayersAsSelected(me.allPlayers);
+		})
+		.error(function(data, status, headers, config) {
+		    me.errorHandler(data, 'Cannot get all players.');
+		});
 	};
 	
-	me.finalize = function() {
-		me.changeState(me.State.Finalizing);
+	me.playerNameFormat = function(rawPlayersList) {
+		rawPlayersList.forEach(function(value){
+			value = playerNameFactory.playerNameFormat(value);
+		});
+		
+		return rawPlayersList;
+	};
+	
+	me.markActivePlayersAsSelected = function(allPlayers) {
+		var activePlayerIds = me.game.players.map(function(element) {
+			return element.player._id;
+		});
+		
+		allPlayers.forEach(function(element) {
+			if(activePlayerIds.indexOf(element._id) !== -1){
+				element.selected = true;
+			}
+		});
+	};
+	
+	me.onSelected = function(data) {
+		data.selected = !data.selected;
+		me.game.players.push({player: data, points: 0, rank: 0});
+		me.toggleAddPlayer();
+		me.scrollToBottom();
 	};
 	
 	me.errorHandler = function(data, errorMessage) {
@@ -123,8 +165,21 @@ var EditActiveGameController = function ($scope, $http, $location, $window, play
 		// Convert datetime to string.
 		me.game.datePlayed = me.getFormattedDate();
 		
+		var remainingPlayers = me.game.players.filter(function(element) { return element.removed != true; });
+		
+		if(remainingPlayers.length < 3) {
+			$scope.addAlert('danger', 'Cannot save a game with less than three players.');
+			return false;
+		}
+		
+		me.game.players = angular.copy(remainingPlayers);
+		
 		// Convert blank points to zeroes.
-		me.game.players.forEach(function(player) { player.points = !player.points ? 0 : player.points; });
+		me.game.players.forEach(function(player) {
+			player.points = !player.points ? 0 : player.points;
+		});
+		
+		return true;
 	};
 	
 	me.finalizeCheck = function() {
@@ -159,6 +214,8 @@ var EditActiveGameController = function ($scope, $http, $location, $window, play
 	};
 	
 	me.getActiveGames = function() {
+		var deferred = $q.defer();
+		
 		$http.get(me.activeGamePath)
 		.success(function(data, status, headers, config) {
 			if(data === null || data === undefined) {
@@ -169,15 +226,23 @@ var EditActiveGameController = function ($scope, $http, $location, $window, play
 				me.datePlayedJs = Date.parse(data.datePlayed);
 				me.changeState(me.State.Ready);
 			}
+			deferred.resolve();
 		})
 		.error(function(data, status, headers, config) {
 			me.errorHandler(data, 'Cannot load game.');
+			deferred.reject();
 		});
+		
+		return deferred.promise;
 	};
 	
 	me.saveGame = function() {
 		$scope.clearAlerts();
-		me.savePrep();
+		
+		if(!me.savePrep()) {
+			me.changeState(me.State.Ready);
+			return;
+		}
 		
 		$http.put(me.activeGamePath, me.game).success(function(data, status, headers, config) {
 			me.changeState(me.State.Saved);
@@ -197,7 +262,10 @@ var EditActiveGameController = function ($scope, $http, $location, $window, play
 		
 		me.game.winner = { _id: winner[0].player._id };
 		
-		me.savePrep();
+		if(!me.savePrep()) {
+			me.changeState(me.State.Ready);
+			return;
+		}
 		
 		$http.post('/games', me.game).success(function(data, status, headers, config) {
 			me.changeState(me.State.Deleting);
@@ -217,13 +285,32 @@ var EditActiveGameController = function ($scope, $http, $location, $window, play
 		});
 	};
 	
+	me.toggleAddPlayer = function() {
+		me.showAddPlayer = !me.showAddPlayer;
+	}
+	
+	me.save = function() {
+		me.changeState(me.State.Saving);	
+	};
+	
+	me.finalize = function() {
+		me.changeState(me.State.Finalizing);
+	};
+	
+	me.revert = function() {
+		me.changeState(me.State.Loading);
+	}
+	
 	me.changeState(me.State.Init);
 };
 
-EditActiveGameController.$inject = ['$scope', '$http', '$location', '$window', 'playerNameFactory'];
+EditActiveGameController.$inject = ['$scope', '$http', '$location', '$window', '$q', 'playerNameFactory'];
 
 DorkModule.controller('EditActiveGameController', EditActiveGameController);
 DorkModule.directive('editActiveGame', EditActiveGameDirective);
 
 DorkModule.controller('EditScoresController', EditScoresController);
 DorkModule.directive('editScores', EditScoresDirective);
+
+DorkModule.controller('PlaylistController', PlaylistController);
+DorkModule.directive('playlist', PlaylistDirective);

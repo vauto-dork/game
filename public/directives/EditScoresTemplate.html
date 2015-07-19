@@ -1,39 +1,54 @@
-<div class="playlist-scores-row text-center" ng-repeat="player in ctrl.players">
-	
-	<div class="game-card">
-	
-		<div class="player-card game-column-player">
-			<player-nametag player="ctrl.formatPlayer(player.player)"></player-nametag>
+<div class="playlist-scores-row" ng-repeat="player in ctrl.players">
+	<div class="panel panel-default">
+			
+		<div class="panel-heading">
+			<h3 class="panel-title">
+				<div class="pull-right">
+					<a class="btn btn-link btn-lg btn-close" role="button" aria-label="Remove Player" ng-click="ctrl.toggleRemoved(player)">
+						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+					</a>
+				</div>
+				<player-nametag player="ctrl.formatPlayer(player.player)"></player-nametag>
+			</h3>
 		</div>
-			
-		<div class="game-column-rank">
-			<div class="btn-group btn-group-lg game-rank-group">
-		        <button class="btn btn-default" ng-model="player.rank" ng-change="ctrl.rankHandler(player)" btn-radio="1" ng-disabled="ctrl.disabled" uncheckable>1</button>
-		        <button class="btn btn-default" ng-model="player.rank" ng-change="ctrl.rankHandler(player)" btn-radio="2" ng-disabled="ctrl.disabled" uncheckable>2</button>
-		        <button class="btn btn-default" ng-model="player.rank" ng-change="ctrl.rankHandler(player)" btn-radio="3" ng-disabled="ctrl.disabled" uncheckable>3</button>
-		    </div>
-		</div>
-			
-		<div class="game-column-points">
-			
-			<div class="game-score-modifier-icons">
-				<a class="btn btn-link btn-lg" ng-class="{ disabled: ctrl.disabled }" ng-click="ctrl.decrementScore(player)">
-					<span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
+		
+		<div class="panel-body text-center">
+			<div class="player-delete-warning-overlay" ng-class="player.removed ? 'show' : 'hidden'">
+				<a ng-click="ctrl.toggleRemoved(player)" role="button" class="btn btn-primary btn-lg" aria-label="Undo Remove Player">
+					Undo Remove Player
 				</a>
 			</div>
 			
-			<input class="form-control input-lg game-score-numeric-input" type="number" pattern="-?[0-9]*"
-				step="1" min="{{ctrl.pointsMin}}" max="{{ctrl.pointsMax}}" ng-model="player.points"
-				ng-disabled="ctrl.disabled" numeric-up-down required />
-			
-			<div class="game-score-modifier-icons">
-				<a class="btn btn-link btn-lg" ng-class="{ disabled: ctrl.disabled }" ng-click="ctrl.incrementScore(player)">
-					<span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
-				</a>
+			<div ng-class="{'player-delete-blur': player.removed}">
+				<div class="game-column-rank">
+					<div class="btn-group btn-group-lg game-rank-group">
+				        <button class="btn btn-default" ng-model="player.rank" ng-change="ctrl.rankHandler(player)" btn-radio="1" ng-disabled="ctrl.disabled" uncheckable>1</button>
+				        <button class="btn btn-default" ng-model="player.rank" ng-change="ctrl.rankHandler(player)" btn-radio="2" ng-disabled="ctrl.disabled" uncheckable>2</button>
+				        <button class="btn btn-default" ng-model="player.rank" ng-change="ctrl.rankHandler(player)" btn-radio="3" ng-disabled="ctrl.disabled" uncheckable>3</button>
+				    </div>
+				</div>
+				
+				<div class="game-column-points">
+					
+					<div class="game-score-modifier-icons">
+						<a class="btn btn-link btn-lg" ng-class="{ disabled: ctrl.disabled }" ng-click="ctrl.decrementScore(player)">
+							<span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
+						</a>
+					</div>
+					
+					<input class="form-control input-lg game-score-numeric-input" type="number" pattern="-?[0-9]*"
+						step="1" min="{{ctrl.pointsMin}}" max="{{ctrl.pointsMax}}" ng-model="player.points"
+						ng-disabled="ctrl.disabled" numeric-up-down required />
+					
+					<div class="game-score-modifier-icons">
+						<a class="btn btn-link btn-lg" ng-class="{ disabled: ctrl.disabled }" ng-click="ctrl.incrementScore(player)">
+							<span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+						</a>
+					</div>
+					
+				</div>
 			</div>
-			
-		</div>
 	
+		</div>
 	</div>
-	
 </div>

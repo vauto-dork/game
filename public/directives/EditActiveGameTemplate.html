@@ -6,23 +6,23 @@
 
 <div ng-if="ctrl.showScoreForm">
 	<date-picker date="ctrl.datePlayedJs" disabled="ctrl.disableControls"></date-picker>
+	
+	<div class="clearfix"></div>
+	
 	<edit-scores players="ctrl.game.players" disabled="ctrl.disableControls"></edit-scores>
 	
-	<div class="row big-action-buttons">
-		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-			<button type="button" class="btn btn-primary btn-lg" ng-click="ctrl.returnToActiveGames()" ng-disabled="ctrl.disableControls" aria-label="Back to Games">
-				<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Games
-			</button>
-		</div>
-		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-			<button type="button" class="btn btn-warning btn-lg" ng-click="ctrl.finalize()" ng-disabled="ctrl.disableControls" aria-label="Finalize Game">
-				<span class="glyphicon glyphicon-saved" aria-hidden="true"></span> Finalize
-			</button>
-		</div>
-		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-			<button type="button" class="btn btn-success btn-lg" ng-click="ctrl.save()" ng-disabled="ctrl.disableControls" aria-label="Save Game">
-				<span class="glyphicon glyphicon-save" aria-hidden="true"></span> Save
-			</button>
+	<div class="playlist-scores-row">
+		<div class="btn-group btn-group-justified" role="group">
+			<div class="btn-group" role="group">
+				<button type="button" class="btn btn-danger btn-lg btn-block" ng-click="ctrl.revert()" ng-disabled="ctrl.disableControls" aria-label="Revert Changes">
+					<span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span> Revert
+				</button>
+			</div>
+			<div class="btn-group" role="group">
+				<button type="button" class="btn btn-warning btn-lg btn-block" ng-click="ctrl.finalize()" ng-disabled="ctrl.disableControls" aria-label="Finalize Game">
+					<span class="glyphicon glyphicon-saved" aria-hidden="true"></span> Finalize
+				</button>
+			</div>
 		</div>
 	</div>
 </div>
@@ -34,5 +34,36 @@
 				Return to Active Games
 			</button>
 		</div>
+	</div>
+</div>
+
+<div class="overlay add-player-open" ng-show="ctrl.showAddPlayer" ng-click="ctrl.toggleAddPlayer()"></div>
+
+<div class="add-player-panel" ng-show="ctrl.showAddPlayer">
+	<div class="playlist-scores-row">
+		<div class="panel panel-default" style="box-shadow: 0 3px 3px 0 rgba(0,0,0,0.5)">
+			<div class="panel-heading">
+				<h3 class="panel-title">
+					Add Player
+				</h3>
+			</div>
+			<div class="panel-body">
+				<playlist players="ctrl.allPlayers" on-selected="ctrl.onSelected(data)"></playlist>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="footer-spacer"></div>
+
+<div class="footer-bar text-center">
+	<div class="btn-group" role="group">
+		<button type="button" class="btn btn-info btn-lg" ng-class="{active: ctrl.showAddPlayer}" ng-click="ctrl.toggleAddPlayer()" ng-disabled="ctrl.disableControls" aria-label="Add Player">
+			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Player 
+		</button>
+		
+		<button type="button" class="btn btn-success btn-lg" ng-click="ctrl.save()" ng-disabled="ctrl.disableControls" aria-label="Save Game">
+			<span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Save 
+		</button>
 	</div>
 </div>

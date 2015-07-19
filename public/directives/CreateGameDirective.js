@@ -13,15 +13,12 @@ var CreateGameDirective = function() {
 var CreateGameController = function ($scope, $window, $http, playerNameFactory) {
 	var me = this;
 	
-	me.nameFilter = '';
+	me.playerOrder = 0;
 	
 	me.showLoading = false;
 	me.showErrorMessage = false;
 	me.showPlayers = false;
-	me.disableRemoveAll = false;
-	me.disableCreatePlaylist = false;
 	
-	me.orderedPlayersLoading = false;
 	me.orderedPlayersLoaded = false;
 	me.disableOrderedPlayers = false;
 	
@@ -36,10 +33,10 @@ var CreateGameController = function ($scope, $window, $http, playerNameFactory) 
 	};
 	
 	me.changeState = function(newState) {
-		me.showLoading = newState === me.State.Loading;
-		me.showPlayers = newState !== me.State.Loading;
+		me.showLoading = (newState === me.State.Loading) ||
+						 (newState === me.State.OrderedPlayersLoading);
+		me.showPlayers = newState === me.State.Loaded;
 		me.showErrorMessage = newState === me.State.Error;
-		me.orderedPlayersLoading = newState === me.State.OrderedPlayersLoading;
 		me.orderedPlayersLoaded = (newState === me.State.OrderedPlayersLoaded) ||
 								  (newState === me.State.CreatingGame);
 		me.disableOrderedPlayers = newState === me.State.CreatingGame;
@@ -60,9 +57,9 @@ var CreateGameController = function ($scope, $window, $http, playerNameFactory) 
 	me.getPlayers = function() {
 		$http.get('/players?sort=true')
 		.success(function(data, status, headers, config) {
-		    $scope.players = data;
-			$scope.players = me.playerNameFormat($scope.players);
-		    $scope.originalList = angular.copy($scope.players);
+		    me.players = data;
+			me.players = me.playerNameFormat(me.players);
+		    me.originalList = angular.copy(me.players);
 		    
 			me.changeState(me.State.Loaded);
 		})
@@ -73,13 +70,13 @@ var CreateGameController = function ($scope, $window, $http, playerNameFactory) 
 	};
 	
 	me.getPlayersInGameOrder = function() {
-		var selectedPlayers = $scope.players.filter(function(value) {
+		var selectedPlayers = me.players.filter(function(value) {
 			return value.selected == true;
 		});
 		
 		$http.post('/players/sort?sortType=2', selectedPlayers)
 		.success(function(data, status, headers, config) {
-		    $scope.orderedPlayers = me.playerNameFormat(data);
+		    me.orderedPlayers = me.playerNameFormat(data);
 		    me.changeState(me.State.OrderedPlayersLoaded);
 		})
 		.error(function(data, status, headers, config) {
@@ -89,7 +86,7 @@ var CreateGameController = function ($scope, $window, $http, playerNameFactory) 
 	};
 	
 	me.createNewActiveGame = function() {
-		var selectedPlayers = $scope.orderedPlayers.map(function(value) {
+		var selectedPlayers = me.orderedPlayers.map(function(value) {
 			return { player: { _id: value._id } };
 		});
 			
@@ -110,9 +107,30 @@ var CreateGameController = function ($scope, $window, $http, playerNameFactory) 
 		
 		return rawPlayersList;
 	};
+	
+	me.onSelected = function(data) {
+		data.selected = !data.selected;
+		data.order = data.selected ? me.playerOrder++ : undefined;
+	};
+	
+	me.hasSelectedPlayers = function() {
+		return me.players.some(function(element) {
+			return element.selected;
+		});
+	};
+	
+	me.removePlayer = function(data){
+		data.selected = false;
+		data.order = undefined;
+	};
 
 	me.removeAll = function() {
-		$scope.players = angular.copy($scope.originalList);
+		me.players = angular.copy(me.originalList);
+		me.playerOrder = 0;
+	};
+	
+	me.backToSelectPlayers = function() {
+		me.changeState(me.State.Loaded);
 	};
 	
 	me.startGame = function() {
@@ -121,6 +139,14 @@ var CreateGameController = function ($scope, $window, $http, playerNameFactory) 
 	
 	me.createPlaylist = function() {
 		me.changeState(me.State.OrderedPlayersLoading);
+	};
+	
+	me.disablePlaylistCreation = function() {
+		var numPlayers = me.players.filter(function(element) {
+			return element.selected;
+		}).length;
+		
+		return numPlayers < 3;
 	};
 	
 	me.changeState(me.State.Loading);

@@ -1,7 +1,8 @@
 var PlaylistDirective = function() {
 	return {
 		scope: {
-			players: '='
+			players: '=',
+			onSelected: '&'
 		},
 		templateUrl: '/directives/PlaylistTemplate.html',
 		controller: 'PlaylistController',
@@ -12,9 +13,20 @@ var PlaylistDirective = function() {
 
 var PlaylistController = function ($scope, $http) {
 	var me = this;
-	
-	this.removeFilter = function() {
+		
+	me.removeFilter = function() {
 		me.filter = '';
+	};
+	
+	me.toggleSelected = function(item, model, label){
+		me.onSelected({data: item});
+		me.removeFilter();
+	};
+	
+	me.getUnselectedPlayers = function() {
+		return me.players.filter(function(element) {
+			return !element.selected;
+		});
 	};
 };
 

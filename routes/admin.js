@@ -8,7 +8,7 @@ router.get('/Admin', function(req, res, next) {
 
 /* GET add new player. */
 router.get('/AddPlayer', function(req, res, next) {
-  res.render('addPlayer', { title: 'Add Player' });
+  res.render('addPlayer', { title: 'New Player' });
 });
 
 module.exports = router;
