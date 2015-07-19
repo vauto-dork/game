@@ -17,6 +17,19 @@ router.get('/', function (req, res, next) {
 	.exec();
 });
 
+/* GET last game played. */
+router.get('/LastPlayed', function (req, res, next) {
+
+	GameModel.findOne({}, {}, { sort: ({ datePlayed: -1 }) },
+		function (err, game) {
+		if (err) return next(err);
+		res.json(game);
+	})
+	.populate('winner')
+	.populate('players.player')
+	.exec();
+});
+
 /* POST save game. */
 router.post('/', function (req, res, next) {
 	GameHelper.saveGame(null, req.body, next, function(game) {
