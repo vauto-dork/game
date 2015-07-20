@@ -11,7 +11,7 @@
 	
 	<edit-scores players="ctrl.game.players" disabled="ctrl.disableControls"></edit-scores>
 	
-	<div class="playlist-scores-row">
+	<div class="btn-row">
 		<div class="btn-group btn-group-justified" role="group">
 			<div class="btn-group" role="group">
 				<button type="button" class="btn btn-danger btn-lg btn-block" ng-click="ctrl.revert()" ng-disabled="ctrl.disableControls" aria-label="Revert Changes">
@@ -28,12 +28,10 @@
 </div>
 
 <div ng-if="ctrl.showError">
-	<div class="row big-action-buttons">
-		<div class="col-xs-12">
-			<button type="button" class="btn btn-danger btn-lg" ng-click="ctrl.returnToActiveGames()">
-				Return to Active Games
-			</button>
-		</div>
+	<div class="btn-row">
+		<button type="button" class="btn btn-danger btn-lg" ng-click="ctrl.returnToActiveGames()">
+			Return to Active Games
+		</button>
 	</div>
 </div>
 

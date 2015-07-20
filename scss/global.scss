@@ -132,17 +132,6 @@ section {
 	max-width: 1280px;
 }
 
-.big-action-buttons {
-	margin: auto;
-	text-align: center;
-	
-	.btn {
-		width: 90%;
-		margin: 1em;
-		padding: 1.5em;
-	}
-}
-
 .btn > .glyphicon {
 	margin-left: $icon-spacing;
 	margin-right: $icon-spacing;

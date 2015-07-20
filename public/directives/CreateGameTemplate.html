@@ -39,23 +39,25 @@
     </div>
     
     <!-- Action buttons -->
+    
+    <div class="btn-row">
+			<div class="btn-group btn-group-justified" role="group">
+				
+        <div class="btn-group" role="group">
+					<button type="button" class="btn btn-danger btn-lg" ng-click="ctrl.removeAll()">
+    				<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Reset
+    			</button>
+				</div>
+        
+				<div class="btn-group" role="group">
+					<button type="button" class="btn btn-primary btn-lg" ng-click="ctrl.createPlaylist()" ng-disabled="ctrl.disablePlaylistCreation()">
+    				Next <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+    			</button>
+				</div>
+        
+			</div>
+		</div>
   	
-  	<div class="row big-action-buttons">
-  		
-      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-  			<button type="button" class="btn btn-danger btn-lg" ng-click="ctrl.removeAll()">
-  				<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove All
-  			</button>
-  		</div>
-      
-  		<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-  			<button type="button" class="btn btn-primary btn-lg" ng-click="ctrl.createPlaylist()" ng-disabled="ctrl.disablePlaylistCreation()">
-  				<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Create Playlist
-  			</button>
-  		</div>
-      
-  	</div>
-     
   <!-- Ende select players -->
   </div>
  
@@ -79,19 +81,22 @@
     </div>
   </div>
   
-  <div class="row big-action-buttons">
-    
-  	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-      <button type="button" class="btn btn-primary btn-lg" ng-click="ctrl.backToSelectPlayers()" ng-disabled="ctrl.disableOrderedPlayers">
-        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Modify
-      </button>
-  	</div>
-    
-  	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-      <button type="button" class="btn btn-success btn-lg" ng-click="ctrl.startGame()" ng-disabled="ctrl.disableOrderedPlayers">
-        <span class="glyphicon glyphicon-flag" aria-hidden="true"></span> Start Game
-      </button>
-  	</div>
-  </div>
+  <div class="btn-row">
+		<div class="btn-group btn-group-justified" role="group">
+			
+      <div class="btn-group" role="group">
+				<button type="button" class="btn btn-primary btn-lg" ng-click="ctrl.backToSelectPlayers()" ng-disabled="ctrl.disableOrderedPlayers">
+          <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Modify
+        </button>
+			</div>
+      
+			<div class="btn-group" role="group">
+				<button type="button" class="btn btn-success btn-lg" ng-click="ctrl.startGame()" ng-disabled="ctrl.disableOrderedPlayers">
+          <span class="glyphicon glyphicon-flag" aria-hidden="true"></span> Start
+        </button>
+			</div>
+      
+		</div>
+	</div>
   
 </div>
