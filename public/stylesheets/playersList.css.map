@@ -1,6 +1,6 @@
 {
 "version": 3,
-"mappings": "AAGA,kBAAmB;EAClB,OAAO,EAAE,GAAG;EACZ,UAAU,EAAE,MAAM;;AAGnB,kBAAmB;EAClB,cAAc,EAAE,GAAG;;AAGpB,gBAAiB;EAChB,MAAM,EAAE,OAAmB",
+"mappings": "AAGA,kBAAmB;EAClB,OAAO,EAAE,GAAG;EACZ,UAAU,EAAE,MAAM;;AAGnB,kBAAmB;EAClB,cAAc,EAAE,GAAG;;AAGpB,gBAAiB;EAChB,MAAM,EAAE,OAAmB;EAE3B,qBAAK;IACJ,aAAa,EAAE,GAAG",
 "sources": ["../../scss/playersList.scss"],
 "names": [],
 "file": "playersList.css"

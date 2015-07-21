@@ -165,6 +165,8 @@ input.ng-invalid {
 
 .edit-player-btn {
   margin: 0.5em 0; }
+  .edit-player-btn .btn {
+    padding-right: 1em; }
 
 .player-delete-blur {
   -webkit-filter: blur(2px);

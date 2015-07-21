@@ -15,11 +15,13 @@ var PlayersListController = function ($scope, $http, playerNameFactory) {
 	me.showLoading = false;
 	me.showPlayers = false;
 	me.players = [];
+	me.filter = '';
 	
 	me.State = {
 		Loading: 0,
 		Ready: 1,
-		Error: 2
+		Error: 2,
+		EditPlayer: 3
 	};
 	
 	me.changeState = function(newState) {
@@ -31,7 +33,8 @@ var PlayersListController = function ($scope, $http, playerNameFactory) {
 			case me.State.Loading:
 				me.loadPlayers();
 				break;
-			case me.State.Ready:
+			case me.State.EditPlayer:
+				me.editPlayer();
 				break;
 		}
 	};
@@ -50,7 +53,15 @@ var PlayersListController = function ($scope, $http, playerNameFactory) {
 			console.error(data);
 	    });
 	};
-		
+	
+	me.removeFilter = function() {
+		me.filter = '';
+	};
+	
+	me.editPlayer = function(player) {
+		alert(JSON.stringify(player, null, '  '));
+	};
+	
 	me.changeState(me.State.Loading);
 };
 
