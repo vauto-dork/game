@@ -225,9 +225,6 @@ input.ng-invalid {
   .player-card .player-fullname {
     font-size: 1.4em; }
 
-.player-scores-wrapper {
-  margin-bottom: 2.5em; }
-
 .player-score-card {
   display: inline-block;
   margin: 0.5em;

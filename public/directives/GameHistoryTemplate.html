@@ -4,14 +4,14 @@
 	</div>
 	
 	<div ng-if="!loading">
-		<section ng-repeat="game in games">
-			
-			<div class="game-date">{{game.datePlayed | date:'MMM d, yyyy'}}</div>
-			<div class="game-time">{{game.datePlayed | date:'EEEE h:mm a'}}</div>
-			
-			<div class="player-scores-wrapper">
+		<div class="panel panel-default" ng-repeat="game in games">
+			<div class="panel-body">
+				<div class="game-date">{{game.datePlayed | date:'MMM d, yyyy'}}</div>
+				<div class="game-time">{{game.datePlayed | date:'EEEE h:mm a'}}</div>
+				
 				<player-scoretag player="player" ng-repeat="player in game.players"></player-scoretag>
 			</div>
-		</section>
+			<div class="panel-footer text-right">{{game.players.length}} players</div>
+		</div>
 	</div>
 </div>
