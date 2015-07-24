@@ -16,7 +16,8 @@ var ActiveGamesController = function ($scope, $http, $window, playerNameFactory)
 	me.showErrorMessage = false;
 	
 	me.activeGamePath = "/ActiveGames/json";
-	me.gameToDelete = null;
+	me.errorMessage = '';
+	me.selectedGame = null;
 	
 	me.State = {
 		Loading: 0,
@@ -36,7 +37,7 @@ var ActiveGamesController = function ($scope, $http, $window, playerNameFactory)
 		
 		switch(newState){
 			case me.State.Loading:
-				me.gameToDelete = null;
+				me.selectedGame = null;
 				me.getGames();
 				break;
 			case me.State.NoGames:
@@ -50,6 +51,12 @@ var ActiveGamesController = function ($scope, $http, $window, playerNameFactory)
 				me.delete();
 				break;
 		}
+	};
+	
+	me.errorHandler = function(data, errorMessage) {
+		me.errorMessage = errorMessage;
+	    console.error(data);
+		me.changeState(me.State.Error);
 	};
 	
 	// Dont call directly. Change state to "Loading" instead.
@@ -73,38 +80,47 @@ var ActiveGamesController = function ($scope, $http, $window, playerNameFactory)
 			me.changeState(me.State.Loaded);
 		})
 		.error(function(data, status, headers, config) {
-			me.changeState(me.State.Error);
-			console.error(data);
+			me.errorHandler(data, 'Error fetching games!');
 		});
 	};
 	
 	// Dont call directly. Change state to "Deleting" instead.
 	me.delete = function() {
-		if(!me.gameToDelete) {
+		if(!me.selectedGame) {
 			return;
 		}
 		
-		$http.delete(me.activeGamePath + '/' + me.gameToDelete._id)
+		$http.delete(me.activeGamePath + '/' + me.selectedGame._id)
 		.success(function(data, status, headers, config) {
 			me.changeState(me.State.Loading);
 		})
 		.error(function(data, status, headers, config) {
-			me.changeState(me.State.Error);
-		    console.error(data);
+			me.errorHandler(data, 'Error deleting game!');
 		});
 	};
 	
 	// Dont call directly. Change state to "Copy" instead.
 	me.copy = function() {
-		alert("copying...");
-	}
+		if(!me.selectedGame) {
+			return;
+		}
+		
+		$http.post('/activeGames/save', { players: me.selectedGame.players })
+		.success(function(data, status, headers, config) {
+			$window.location.href = '/activeGames/edit/#/' + data._id;
+		})
+		.error(function(data, status, headers, config) {
+			me.errorHandler(data, 'Error copying game!');
+		});
+	};
 	
 	me.deleteGame = function(game) {
-		me.gameToDelete = game;
+		me.selectedGame = game;
 		me.changeState(me.State.Deleting);
 	};
 	
 	me.copyGame = function(game) {
+		me.selectedGame = game;
 		me.changeState(me.State.Copy);
 	};
 	
