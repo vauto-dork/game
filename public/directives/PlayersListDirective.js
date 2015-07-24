@@ -43,6 +43,9 @@ var PlayersListController = function ($scope, $http, $window, playerNameFactory)
 			case me.State.Loading:
 				me.loadPlayers();
 				break;
+			case me.State.EditPlayer:
+				$scope.clearAlerts();
+				break;
 			case me.State.SavingPlayer:
 				me.savePlayer();
 				break;
