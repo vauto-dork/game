@@ -1,4 +1,12 @@
-<div ng-show="ctrl.showErrorMessage" class="status-banner bg-danger"><h4>Error getting players.</h4></div>
+<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+
+<div ng-if="ctrl.showError">
+	<div class="btn-row">
+		<button type="button" class="btn btn-success btn-block btn-lg" ng-click="ctrl.reload()">
+			<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Reload
+		</button>
+	</div>
+</div>
 
 <div class="load-bar" ng-if="ctrl.showLoading">
 	<img src="/images/loader.gif" width="220" height="19" />
@@ -31,7 +39,7 @@
     </div>
 </div>
 
-<form ng-submit="ctrl.savePlayer()" ng-if="ctrl.showPlayerEdit">
+<form ng-submit="ctrl.save()" ng-if="ctrl.showPlayerEdit">
 	<div class="form-group status-banner">
 		<input class="form-control input-lg" type="text" name="firstName" placeholder="First Name" ng-model="ctrl.selectedPlayer.firstName" ng-disabled="ctrl.disableControls" />
 		<input class="form-control input-lg" type="text" name="lastName" placeholder="Last Name" ng-model="ctrl.selectedPlayer.lastName" ng-disabled="ctrl.disableControls" />

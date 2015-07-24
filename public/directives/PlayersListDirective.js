@@ -9,12 +9,15 @@ var PlayersListDirective = function() {
 	};
 };
 
-var PlayersListController = function ($scope, $http, playerNameFactory) {
+var PlayersListController = function ($scope, $http, $window, playerNameFactory) {
 	var me = this;
 	me.disableControls = false;
+	me.showError = false;
 	me.showLoading = false;
 	me.showPlayers = false;
 	me.showPlayerEdit = false;
+	
+	$scope.alerts = [];
 	
 	me.players = [];
 	me.filter = '';
@@ -24,24 +27,48 @@ var PlayersListController = function ($scope, $http, playerNameFactory) {
 		Ready: 1,
 		Error: 2,
 		EditPlayer: 3,
-		SavingPlayer: 4
+		SavingPlayer: 4,
+		Saved: 5
 	};
 	
 	me.changeState = function(newState) {
 		me.showLoading = newState === me.State.Loading;
 		me.showPlayers = newState === me.State.Ready;
-		me.showPlayerEdit = newState === me.State.EditPlayer;
-		me.showErrorMessage = newState === me.State.Error;
+		me.showPlayerEdit = newState === me.State.EditPlayer ||
+							newState === me.State.SavingPlayer;
+		me.disableControls = newState === me.State.SavingPlayer;
+		me.showError = newState === me.State.Error;
 		
 		switch(newState) {
 			case me.State.Loading:
 				me.loadPlayers();
 				break;
 			case me.State.SavingPlayer:
-				alert("Saving...");
-				me.changeState(me.State.Ready);
+				me.savePlayer();
+				break;
+			case me.State.Saved:
+				$scope.addAlert('success', 'Player saved successfully!');
+				me.changeState(me.State.Loading);
 				break;
 		}
+	};
+	
+	me.errorHandler = function(data, errorMessage) {
+		$scope.addAlert('danger', errorMessage);
+	    console.error(data);
+		me.changeState(me.State.Error);
+	};
+	
+	$scope.closeAlert = function(index) {
+		$scope.alerts.splice(index, 1);
+	};
+	
+	$scope.addAlert = function(messageType, message) {
+		$scope.alerts.push({type: messageType, msg: message});		
+	};
+		
+	$scope.clearAlerts = function() {
+		$scope.alerts = [];	
 	};
 	
 	me.loadPlayers = function() {
@@ -54,13 +81,26 @@ var PlayersListController = function ($scope, $http, playerNameFactory) {
 			me.changeState(me.State.Ready);
 	    })
 	    .error(function(data, status, headers, config) {
-			me.changeState(me.State.Error);
-			console.error(data);
+			me.errorHandler(data, 'Error fetching players!');
 	    });
+	};
+	
+	me.savePlayer = function() {
+		$http.put('players/' + me.selectedPlayer._id, me.selectedPlayer)
+		.success(function(data, status, headers, config) {
+			me.changeState(me.State.Saved);
+		}).
+		error(function(data, status, headers, config) {
+			me.errorHandler(data, 'Player save failure!');
+		});
 	};
 	
 	me.removeFilter = function() {
 		me.filter = '';
+	};
+	
+	me.scrollToTop = function() {
+		$window.scrollTo(0, 0);
 	};
 	
 	me.editPlayer = function(player) {
@@ -73,14 +113,19 @@ var PlayersListController = function ($scope, $http, playerNameFactory) {
 		me.changeState(me.State.Ready);
 	}
 	
-	me.savePlayer = function() {
+	me.save = function() {
 		me.changeState(me.State.SavingPlayer);
+	}
+	
+	me.reload = function() {
+		$scope.clearAlerts();
+		me.changeState(me.State.Loading);
 	}
 	
 	me.changeState(me.State.Loading);
 };
 
-PlayersListController.$inject = ['$scope', '$http', 'playerNameFactory'];
+PlayersListController.$inject = ['$scope', '$http', '$window', 'playerNameFactory'];
 
 DorkModule.controller('PlayersListController', PlayersListController);
 DorkModule.directive('playersList', PlayersListDirective);
