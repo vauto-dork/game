@@ -1,0 +1,63 @@
+<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+
+<div ng-if="ctrl.showError">
+	<div class="btn-row">
+		<button type="button" class="btn btn-success btn-block btn-lg" ng-click="ctrl.reload()">
+			<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Reload
+		</button>
+	</div>
+</div>
+
+<div class="load-bar" ng-if="ctrl.showLoading">
+	<img src="/images/loader.gif" width="220" height="19" />
+</div>
+
+<div class="status-banner" ng-if="ctrl.showPlayers">
+	<div class="form-group">
+		<div class="input-group">
+			<input type="text" class="form-control playlist-filter"
+				placeholder="Type name..."
+				ng-model="ctrl.filter"
+				autocomplete="off"
+				autofocus />
+			<div class="input-group-addon playlist-filter-remove" ng-click="ctrl.removeFilter()">
+				<span class="glyphicon glyphicon-remove-sign"></span>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-repeat="player in ctrl.players | filter:ctrl.filter" ng-if="ctrl.showPlayers">
+	<div class="player-card players-list-card">
+    	<player-nametag player="player"></player-nametag>
+		
+		<div class="edit-player-btn">
+			<button type="button" class="btn btn-warning" ng-click="ctrl.editPlayer(player)" aria-label="Edit Game">
+				<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Edit
+			</button>
+		</div>
+    </div>
+</div>
+
+<form ng-submit="ctrl.save()" ng-if="ctrl.showPlayerEdit">
+	<div class="form-group status-banner">
+		<input class="form-control input-lg" type="text" name="firstName" placeholder="First Name" ng-model="ctrl.selectedPlayer.firstName" ng-disabled="ctrl.disableControls" autocomplete="off" />
+		<input class="form-control input-lg" type="text" name="lastName" placeholder="Last Name" ng-model="ctrl.selectedPlayer.lastName" ng-disabled="ctrl.disableControls" autocomplete="off" />
+		<input class="form-control input-lg" type="text" name="nickName" placeholder="Nickname" ng-model="ctrl.selectedPlayer.nickname" ng-disabled="ctrl.disableControls" autocomplete="off" />
+	</div>
+	
+	<div class="btn-row">
+		<div class="btn-group btn-group-justified" role="group">
+			<div class="btn-group" role="group">
+				<button type="button" class="btn btn-primary btn-lg" ng-click="ctrl.cancelEdit()" ng-disabled="ctrl.disableControls" aria-label="Cancel Edit">
+					<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Cancel
+				</button>
+			</div>
+			<div class="btn-group" role="group">
+				<button type="submit" class="btn btn-success btn-lg" ng-disabled="ctrl.disableControls" aria-label="Save Player">
+					<span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Save
+				</button>
+			</div>
+		</div>
+	</div>
+</form>
