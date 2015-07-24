@@ -23,27 +23,30 @@ var ActiveGamesController = function ($scope, $http, $window, playerNameFactory)
 		NoGames: 1,
 		Loaded: 2,
 		Deleting: 3,
-		Error: 4
+		Copy: 4,
+		Error: 5
 	};
 	
 	me.changeState = function(newState) {
+		me.loading = newState === me.State.Loading ||
+					 newState === me.State.Deleting ||
+					 newState === me.State.Copy;
 		me.showErrorMessage = newState === me.State.Error;
 		me.showNoGamesWarning = newState === me.State.NoGames;
 		
 		switch(newState){
 			case me.State.Loading:
 				me.gameToDelete = null;
-				me.loading = true;
 				me.getGames();
 				break;
 			case me.State.NoGames:
-				me.loading = false;
 				break;
 			case me.State.Loaded:
-				me.loading = false;
+				break;
+			case me.State.Copy:
+				me.copy();
 				break;
 			case me.State.Deleting:
-				me.loading = true;
 				me.delete();
 				break;
 		}
@@ -91,9 +94,18 @@ var ActiveGamesController = function ($scope, $http, $window, playerNameFactory)
 		});
 	};
 	
+	// Dont call directly. Change state to "Copy" instead.
+	me.copy = function() {
+		alert("copying...");
+	}
+	
 	me.deleteGame = function(game) {
 		me.gameToDelete = game;
 		me.changeState(me.State.Deleting);
+	};
+	
+	me.copyGame = function(game) {
+		me.changeState(me.State.Copy);
 	};
 	
 	me.changeState(me.State.Loading);
