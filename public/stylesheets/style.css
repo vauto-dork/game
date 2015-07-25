@@ -13,23 +13,15 @@ body {
   padding-top: 0.5em;
   background-color: #e4e9ef; }
 
-section {
-  padding: 1em;
-  border-radius: 5px;
-  background-color: #F1F5F8;
-  border: 1px solid #cfd2d8;
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.15);
-  margin-top: 1em;
-  margin-bottom: 2em;
-  position: relative; }
-
 .dropdown-menu {
   width: 100%;
   font-size: 2em;
   line-height: 2em; }
 
+.panel {
+  position: relative; }
+
 .panel-body {
-  position: relative;
   padding: 1em; }
 
 .global-nav {
@@ -112,12 +104,6 @@ section {
   margin-left: 0.5em;
   margin-right: 0.5em; }
 
-.btn.btn-close {
-  padding-top: 0;
-  padding-right: 0; }
-  .btn.btn-close .glyphicon {
-    margin-right: 0; }
-
 .load-bar {
   display: block;
   width: 100%;
@@ -179,7 +165,6 @@ input.ng-invalid {
   position: absolute;
   height: 100%;
   width: 100%;
-  margin: -1em;
   z-index: 20;
   background: rgba(0, 0, 0, 0.6);
   color: #fff;
@@ -224,9 +209,6 @@ input.ng-invalid {
     font-size: 1.4em; }
   .player-card .player-fullname {
     font-size: 1.4em; }
-
-.player-scores-wrapper {
-  margin-bottom: 2.5em; }
 
 .player-score-card {
   display: inline-block;
@@ -321,26 +303,25 @@ input.ng-invalid {
 .game-delete-btn {
   float: right; }
 
-.game-delete-warning-btn,
+.game-warning-btn,
 .game-edit-btn {
   vertical-align: top; }
-  .game-delete-warning-btn .btn,
+  .game-warning-btn .btn,
   .game-edit-btn .btn {
     margin: 0.5em; }
-    .game-delete-warning-btn .btn .glyphicon,
+    .game-warning-btn .btn .glyphicon,
     .game-edit-btn .btn .glyphicon {
       margin-left: 0; }
 
-.game-delete-warning-overlay {
+.game-warning-overlay {
   position: absolute;
   height: 100%;
   width: 100%;
-  margin: -1em;
   z-index: 20;
   background: rgba(0, 0, 0, 0.6);
   color: #fff;
   text-align: center; }
-  .game-delete-warning-overlay h3 {
+  .game-warning-overlay h3 {
     text-shadow: 0 0 20px #000; }
 
 .game-delete-blur {

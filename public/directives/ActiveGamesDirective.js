@@ -9,44 +9,38 @@ var ActiveGamesDirective = function() {
 	};
 };
 
-var ActiveGamesController = function ($scope, $http, $window, playerNameFactory) {
+var ActiveGamesController = function ($scope, $http, playerNameFactory) {
 	var me = this;
 	me.loading = false;
 	me.showNoGamesWarning = false;
 	me.showErrorMessage = false;
 	
 	me.activeGamePath = "/ActiveGames/json";
-	me.gameToDelete = null;
+	me.errorMessage = '';
 	
 	me.State = {
 		Loading: 0,
 		NoGames: 1,
 		Loaded: 2,
-		Deleting: 3,
-		Error: 4
+		Error: 3
 	};
 	
 	me.changeState = function(newState) {
+		me.loading = newState === me.State.Loading;
 		me.showErrorMessage = newState === me.State.Error;
 		me.showNoGamesWarning = newState === me.State.NoGames;
 		
 		switch(newState){
 			case me.State.Loading:
-				me.gameToDelete = null;
-				me.loading = true;
 				me.getGames();
 				break;
-			case me.State.NoGames:
-				me.loading = false;
-				break;
-			case me.State.Loaded:
-				me.loading = false;
-				break;
-			case me.State.Deleting:
-				me.loading = true;
-				me.delete();
-				break;
 		}
+	};
+	
+	me.errorHandler = function(data, errorMessage) {
+		me.errorMessage = errorMessage;
+	    console.error(data);
+		me.changeState(me.State.Error);
 	};
 	
 	// Dont call directly. Change state to "Loading" instead.
@@ -61,7 +55,6 @@ var ActiveGamesController = function ($scope, $http, $window, playerNameFactory)
 			
 			me.games = data;
 			me.games.forEach(function(game){
-				game.deleteWarning = false;
 				game.players.forEach(function(value){
 					value.player = playerNameFactory.playerNameFormat(value.player);
 				});
@@ -70,36 +63,18 @@ var ActiveGamesController = function ($scope, $http, $window, playerNameFactory)
 			me.changeState(me.State.Loaded);
 		})
 		.error(function(data, status, headers, config) {
-			me.changeState(me.State.Error);
-			console.error(data);
+			me.errorHandler(data, 'Error fetching games!');
 		});
 	};
 	
-	// Dont call directly. Change state to "Deleting" instead.
-	me.delete = function() {
-		if(!me.gameToDelete) {
-			return;
-		}
-		
-		$http.delete(me.activeGamePath + '/' + me.gameToDelete._id)
-		.success(function(data, status, headers, config) {
-			me.changeState(me.State.Loading);
-		})
-		.error(function(data, status, headers, config) {
-			me.changeState(me.State.Error);
-		    console.error(data);
-		});
-	};
-	
-	me.deleteGame = function(game) {
-		me.gameToDelete = game;
-		me.changeState(me.State.Deleting);
+	me.reload = function() {
+		me.changeState(me.State.Loading);
 	};
 	
 	me.changeState(me.State.Loading);
 };
 
-ActiveGamesController.$inject = ['$scope', '$http', '$window', 'playerNameFactory'];
+ActiveGamesController.$inject = ['$scope', '$http', 'playerNameFactory'];
 
 DorkModule.controller('ActiveGamesController', ActiveGamesController);
 DorkModule.directive('activeGames', ActiveGamesDirective);

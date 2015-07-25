@@ -20,21 +20,17 @@ body {
 	background-color: $background-color;
 }
 
-section {
-	@include card;
-	margin-top: 1em;
-	margin-bottom: 2em;
-	position: relative;
-}
-
 .dropdown-menu {
 	width: 100%;
 	font-size: $font-larger;
 	line-height: 2em;
 }
 
-.panel-body {
+.panel {
 	position: relative;
+}
+
+.panel-body {
 	padding: 1em;
 }
 
@@ -135,15 +131,6 @@ section {
 .btn > .glyphicon {
 	margin-left: $icon-spacing;
 	margin-right: $icon-spacing;
-}
-
-.btn.btn-close {
-	padding-top: 0;
-	padding-right: 0;
-	
-	.glyphicon {
-		margin-right: 0;
-	}
 }
 
 .load-bar {

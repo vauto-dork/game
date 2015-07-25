@@ -9,7 +9,6 @@
   position: absolute;
   height: 100%;
   width: 100%;
-  margin: -1em;
   z-index: 20;
   background: rgba(0, 0, 0, 0.6);
   color: #fff;
@@ -54,9 +53,6 @@
     font-size: 1.4em; }
   .player-card .player-fullname {
     font-size: 1.4em; }
-
-.player-scores-wrapper {
-  margin-bottom: 2.5em; }
 
 .player-score-card {
   display: inline-block;

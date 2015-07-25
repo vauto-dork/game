@@ -36,7 +36,7 @@
 	float: right;
 }
 
-.game-delete-warning-btn,
+.game-warning-btn,
 .game-edit-btn {
 	vertical-align: top;
 	
@@ -49,7 +49,7 @@
 	}
 }
 
-.game-delete-warning-overlay {
+.game-warning-overlay {
 	@include delete-overlay;
 	
 	h3 {
