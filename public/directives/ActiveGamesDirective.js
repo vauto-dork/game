@@ -40,10 +40,6 @@ var ActiveGamesController = function ($scope, $http, $window, playerNameFactory)
 				me.selectedGame = null;
 				me.getGames();
 				break;
-			case me.State.NoGames:
-				break;
-			case me.State.Loaded:
-				break;
 			case me.State.Copy:
 				me.copy();
 				break;
@@ -87,6 +83,7 @@ var ActiveGamesController = function ($scope, $http, $window, playerNameFactory)
 	// Dont call directly. Change state to "Deleting" instead.
 	me.delete = function() {
 		if(!me.selectedGame) {
+			me.errorHandler(null, 'No game selected!');
 			return;
 		}
 		
@@ -102,6 +99,7 @@ var ActiveGamesController = function ($scope, $http, $window, playerNameFactory)
 	// Dont call directly. Change state to "Copy" instead.
 	me.copy = function() {
 		if(!me.selectedGame) {
+			me.errorHandler(null, 'No game selected!');
 			return;
 		}
 		
