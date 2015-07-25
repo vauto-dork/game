@@ -26,26 +26,25 @@
 .game-delete-btn {
   float: right; }
 
-.game-delete-warning-btn,
+.game-warning-btn,
 .game-edit-btn {
   vertical-align: top; }
-  .game-delete-warning-btn .btn,
+  .game-warning-btn .btn,
   .game-edit-btn .btn {
     margin: 0.5em; }
-    .game-delete-warning-btn .btn .glyphicon,
+    .game-warning-btn .btn .glyphicon,
     .game-edit-btn .btn .glyphicon {
       margin-left: 0; }
 
-.game-delete-warning-overlay {
+.game-warning-overlay {
   position: absolute;
   height: 100%;
   width: 100%;
-  margin: -1em;
   z-index: 20;
   background: rgba(0, 0, 0, 0.6);
   color: #fff;
   text-align: center; }
-  .game-delete-warning-overlay h3 {
+  .game-warning-overlay h3 {
     text-shadow: 0 0 20px #000; }
 
 .game-delete-blur {
