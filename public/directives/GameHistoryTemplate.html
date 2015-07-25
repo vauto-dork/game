@@ -7,20 +7,6 @@
 		<div class="text-center" ng-if="ctrl.showNoGamesWarning"><h2>There are no recorded games.</h2></div>
 		<div class="status-banner bg-danger text-center" ng-if="ctrl.showErrorMessage"><h3>{{ctrl.errorMessage}}</h3></div>
 		
-		<div class="panel panel-default" ng-repeat="game in ctrl.games">
-			<div class="panel-body">
-				<div class="game-date">{{game.datePlayed | date:'MMM d, yyyy'}}</div>
-				<div class="game-time">{{game.datePlayed | date:'EEEE h:mm a'}}</div>
-				
-				<div class="game-edit-btn">
-					<button type="button" class="btn btn-primary" ng-click="ctrl.copyGame(game)" aria-label="Copy">
-						<span class="glyphicon glyphicon-copy" aria-hidden="true"></span> Copy
-					</button>
-				</div>
-				
-				<player-scoretag player="player" ng-repeat="player in game.players"></player-scoretag>
-			</div>
-			<div class="panel-footer text-right">{{game.players.length}} players</div>
-		</div>
+		<game-card ng-repeat="game in ctrl.games" game="game" game-path="ctrl.gamePath" reload="ctrl.reload()"></game-card>
 	</div>
 </div>

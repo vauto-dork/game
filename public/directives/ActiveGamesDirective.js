@@ -55,7 +55,6 @@ var ActiveGamesController = function ($scope, $http, playerNameFactory) {
 			
 			me.games = data;
 			me.games.forEach(function(game){
-				game.deleteWarning = false;
 				game.players.forEach(function(value){
 					value.player = playerNameFactory.playerNameFormat(value.player);
 				});
