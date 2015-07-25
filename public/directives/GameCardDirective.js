@@ -80,7 +80,14 @@ var GameCardController = function ($scope, $http, $window) {
 			return;
 		}
 		
-		$http.post('/activeGames/save', { players: me.selectedGame.players })
+		var removedScores = angular.copy(me.selectedGame.players)
+		
+		removedScores.forEach(function (element) {
+			element.points = 0;
+			element.rank = 0;
+		});
+		
+		$http.post('/activeGames/save', { players: removedScores })
 		.success(function(data, status, headers, config) {
 			$window.location.href = '/activeGames/edit/#/' + data._id;
 		})
