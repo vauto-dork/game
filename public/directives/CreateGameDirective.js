@@ -21,6 +21,7 @@ var CreateGameController = function ($scope, $window, $http, playerNameFactory) 
 	
 	me.orderedPlayersLoaded = false;
 	me.disableOrderedPlayers = false;
+	me.useCurrentOrder = false;
 	
 	me.State = {
 		Loading: 0,
@@ -70,11 +71,25 @@ var CreateGameController = function ($scope, $window, $http, playerNameFactory) 
 	};
 	
 	me.getPlayersInGameOrder = function() {
-		var selectedPlayers = me.players.filter(function(value) {
-			return value.selected == true;
-		});
+		var selectedPlayers = me.players
+			.filter(function(value) {
+				return value.selected == true;
+			});
+				
+		if(me.useCurrentOrder){
+			selectedPlayers.sort(function(a, b) {
+				return a.order - b.order;
+			});
+			
+			me.orderedPlayers = selectedPlayers;
+		    me.changeState(me.State.OrderedPlayersLoaded);
+			return;
+		}
 		
-		$http.post('/players/sort?sortType=2', selectedPlayers)
+		var month = new Date().getMonth();
+		var year = new Date().getFullYear();
+		
+		$http.post('/players/sort?sortType=2&month=' + month + '&year=' + year, selectedPlayers)
 		.success(function(data, status, headers, config) {
 		    me.orderedPlayers = me.playerNameFormat(data);
 		    me.changeState(me.State.OrderedPlayersLoaded);
@@ -98,7 +113,7 @@ var CreateGameController = function ($scope, $window, $http, playerNameFactory) 
 		    me.changeState(me.State.Error);
 			console.error(data);
 		});
-	};	
+	};
 	
 	me.playerNameFormat = function(rawPlayersList) {
 		rawPlayersList.forEach(function(value){
@@ -129,6 +144,11 @@ var CreateGameController = function ($scope, $window, $http, playerNameFactory) 
 		me.playerOrder = 0;
 	};
 	
+	me.useThisOrder = function() {
+		me.useCurrentOrder = true;
+		me.changeState(me.State.OrderedPlayersLoading);
+	};
+	
 	me.backToSelectPlayers = function() {
 		me.changeState(me.State.Loaded);
 	};
@@ -138,6 +158,7 @@ var CreateGameController = function ($scope, $window, $http, playerNameFactory) 
 	};
 	
 	me.createPlaylist = function() {
+		me.useCurrentOrder = false;
 		me.changeState(me.State.OrderedPlayersLoading);
 	};
 	

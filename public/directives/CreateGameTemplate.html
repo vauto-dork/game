@@ -34,8 +34,14 @@
     	</div>
   	</div>
     
-    <div ng-if="ctrl.disablePlaylistCreation()" class="playlist-instructions">
-      <b>At least three players required.</b>
+    <div class="playlist-instructions">
+      <div ng-if="ctrl.disablePlaylistCreation()">
+        <b>At least three players required.</b>
+      </div>
+      
+      <button type="button" class="btn btn-warning btn-lg" ng-click="ctrl.useThisOrder()" ng-hide="ctrl.disablePlaylistCreation()">
+        Use this order
+      </button>
     </div>
     
     <!-- Action buttons -->
