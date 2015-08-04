@@ -38,8 +38,8 @@ function sortPlayersAlphabetically(players) {
  */
 router.get('/newgame', function (req, res, next) {
 	var now = new Date();
-	var month = 6;//now.getMonth();
-	var endMonth = 7;//month + 1 > 11 ? 0 : month + 1;
+	var month = now.getMonth();
+	var endMonth = month + 1 > 11 ? 0 : month + 1;
 	var year = now.getFullYear();
 	var startDateRange = new Date(year, month, 1);
 	var endDateRange = new Date(year, endMonth, 1);
