@@ -15,18 +15,86 @@ router.get('/', function (req, res, next) {
 		if(err) return next(err);
 		//sort
 		if(req.query.sort) {
-			var stripTheRegex = /^The/;
-			if (players) {
-				players.sort(function (a, b) {
-					var aName = a.getAbbreviatedName().replace(stripTheRegex, "").trim();
-					var bName = b.getAbbreviatedName().replace(stripTheRegex, "").trim();
-					return aName.localeCompare(bName);
-				});
-			}
+			sortPlayersAlphabetically(players);
 		}
 		res.json(players);
 	});
 });
+
+function sortPlayersAlphabetically(players) {
+	var stripTheRegex = /^The/;
+	if (players) {
+		players.sort(function (a, b) {
+			var aName = a.getAbbreviatedName().replace(stripTheRegex, "").trim();
+			var bName = b.getAbbreviatedName().replace(stripTheRegex, "").trim();
+			return aName.localeCompare(bName);
+		});
+	}
+};
+
+/**
+ * GET players for new game creation.
+ * @return List of players sorted by number of games played and whether it's the first game of the month.
+ */
+router.get('/newgame', function (req, res, next) {
+	var now = new Date();
+	var month = 6;//now.getMonth();
+	var endMonth = 7;//month + 1 > 11 ? 0 : month + 1;
+	var year = now.getFullYear();
+	var startDateRange = new Date(year, month, 1);
+	var endDateRange = new Date(year, endMonth, 1);
+	
+	GameModel.find(function (err, games) {
+			if (err) return next(err);
+			getAllPlayersForNewGame(games, res, next);
+		})
+		.where('datePlayed').gte(startDateRange).lt(endDateRange)
+		.exec();
+});
+
+function getAllPlayersForNewGame(games, res, next) {
+	
+	var isFirstGameOfMonth = !games || games.length === 0;
+	var gamePlayers = games.map(function(game) {
+		return game.players.map(function(player) {
+			// convert to string
+			return player.player + '';
+		});
+	});
+	
+	// TODO Make this return only Active players. At the time of writing there is no concept of 'Active' players.
+	PlayerModel.find(function (err, players) {
+		if(err) return next(err);
+		
+		sortPlayersAlphabetically(players);
+		
+		var orderNumber = 0;
+		
+		var playersList = [];
+		for(var i = 0; i < players.length; i++) {
+			var gamesPlayed = 0;
+			
+			// find all games the player played
+			for(var j = 0; j < gamePlayers.length; j++) {
+				// must convert to string
+				var playerId = players[i]._id + '';
+				
+				if(gamePlayers[j].indexOf(playerId) > -1 ) {
+					gamesPlayed++;
+				}
+			}
+			
+			var playerOrderNumber = gamesPlayed > 0 ? -gamesPlayed : orderNumber++;
+			playersList.push({ player: players[i], /*gamesPlayed: gamesPlayed,*/ orderNumber: playerOrderNumber });
+		}
+		
+		playersList.sort(function(a, b) {
+			return a.orderNumber - b.orderNumber;
+		});
+		
+		res.json({firstGameOfMonth: isFirstGameOfMonth, players: playersList });
+	});
+};
 
 /**
  * Return a list of uberdorks and negadorks by the month's games.
