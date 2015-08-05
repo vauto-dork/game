@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 var router = express.Router();
 var PlayerModel = mongoose.model('Player');
 var GameModel = mongoose.model('Game');
+var DateHelper = require('./dateHelper');
 
 /**
  * GET players.
@@ -37,12 +38,9 @@ function sortPlayersAlphabetically(players) {
  * @return List of players sorted by number of games played and whether it's the first game of the month.
  */
 router.get('/newgame', function (req, res, next) {
-	var now = new Date();
-	var month = now.getMonth();
-	var endMonth = month + 1 > 11 ? 0 : month + 1;
-	var year = now.getFullYear();
-	var startDateRange = new Date(year, month, 1);
-	var endDateRange = new Date(year, endMonth, 1);
+	var dateRange = DateHelper.getCurrentMonthRange();
+	var startDateRange = dateRange[0];
+	var endDateRange = dateRange[1];
 	
 	GameModel.find(function (err, games) {
 			if (err) return next(err);
@@ -101,7 +99,7 @@ function getAllPlayersForNewGame(games, res, next) {
  * You must provide a month and optionally a year to get the list of uberdorks and negadorks in the given time period.
  * Query params:
  * 	month - integer
- * 	(Optional) year - integer. Default value is the current year.
+ * 	year - integer. Default value is the current year.
  *
  * @return A list of ranked players.
  * <pre>
@@ -133,13 +131,13 @@ router.get('/dotm/', function(req, res, next) {
 			var found = negativePoints[0];
 			
 			for(var i = 0; i < negativePoints.length; i++) {
-				if(calculateRankedPoints(negativePoints[i]) < calculateRankedPoints(found)) {
+				if(PlayerModel.getRankedPlayerAverage(negativePoints[i]) < PlayerModel.getRankedPlayerAverage(found)) {
 					found = negativePoints[i];
 				}
 			}
 			
 			negadorks = negativePoints.filter( function(element) {
-				return calculateRankedPoints(element) === calculateRankedPoints(found);
+				return PlayerModel.getRankedPlayerAverage(element) === PlayerModel.getRankedPlayerAverage(found);
 			});
 		} else {
 			negadorks = negativePoints;
@@ -148,10 +146,6 @@ router.get('/dotm/', function(req, res, next) {
 		res.json({ uberdorks: uberdorks, negadorks: negadorks });
 	});
 });
-
-function calculateRankedPoints(player) {
-	return player.totalPoints / player.gamesPlayed;
-};
 
 /**
  * Get a list of players that are sorted by data from a time span.
@@ -232,7 +226,7 @@ router.get('/ranked/', function(req, res, next) {
 
 function getRankedPlayers(req, next, success) {
 	// Get date ranges
-	var dateRange = getDateRange(req);
+	var dateRange = DateHelper.getDateRange(req);
 	var startDateRange = dateRange[0];
 	var endDateRange = dateRange[1];
 
@@ -326,45 +320,18 @@ function getRankedPlayers(req, next, success) {
  * @param rankedPlayers Array of ranked players.
  */
 function addRanksToPlayers(rankedPlayers) {
-	var previousRank = 1;
+	var counter = 0;
 	var previousRating = -999; //impossibru
 	for(var i=0; i<rankedPlayers.length; i++) {
-		var rankedPlayer = rankedPlayers[i];
-		var currentRating = PlayerModel.getRankedPlayerAverage(rankedPlayer);
-		var currentRank;
-		if(currentRating == previousRating) {
-			currentRank = previousRank;
-		} else {
-			currentRank = previousRank = i+1;
+		var currentRating = PlayerModel.getRankedPlayerAverage(rankedPlayers[i]);
+		
+		if(currentRating != previousRating) {
+			counter++;
 			previousRating = currentRating;
 		}
-		rankedPlayers[i].rank = currentRank;
+		
+		rankedPlayers[i].rank = counter;
 	}
-}
-
-/**
- * Get date ranges from a request object.
- * @param req Should contain a month and optionally a year. Default is current year.
- * @returns {*[]} Array containing the start date and end date.
- */
-function getDateRange(req) {
-	var now = new Date();
-	var year = req.query.year ? parseInt(req.query.year) : now.getUTCFullYear();
-	var month;
-	var endMonth;
-	if(req.query.month) {
-		month = parseInt(req.query.month);
-		endMonth = month+1;
-		if(endMonth > 11) endMonth = 0;
-	} else {
-		if(year) {
-			month = 0;
-			endMonth = 11;
-		}
-	}
-	var startDateRange = new Date(year, month, 1);
-	var endDateRange = new Date(year, endMonth, 1);
-	return [startDateRange, endDateRange];
 }
 
 function pushGamePlayerToRankedArray(rankedPlayersArr, gamePlayer) {
