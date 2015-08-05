@@ -99,7 +99,7 @@ function getAllPlayersForNewGame(games, res, next) {
  * You must provide a month and optionally a year to get the list of uberdorks and negadorks in the given time period.
  * Query params:
  * 	month - integer
- * 	(Optional) year - integer. Default value is the current year.
+ * 	year - integer. Default value is the current year.
  *
  * @return A list of ranked players.
  * <pre>
@@ -131,13 +131,13 @@ router.get('/dotm/', function(req, res, next) {
 			var found = negativePoints[0];
 			
 			for(var i = 0; i < negativePoints.length; i++) {
-				if(calculateRankedPoints(negativePoints[i]) < calculateRankedPoints(found)) {
+				if(PlayerModel.getRankedPlayerAverage(negativePoints[i]) < PlayerModel.getRankedPlayerAverage(found)) {
 					found = negativePoints[i];
 				}
 			}
 			
 			negadorks = negativePoints.filter( function(element) {
-				return calculateRankedPoints(element) === calculateRankedPoints(found);
+				return PlayerModel.getRankedPlayerAverage(element) === PlayerModel.getRankedPlayerAverage(found);
 			});
 		} else {
 			negadorks = negativePoints;
@@ -146,10 +146,6 @@ router.get('/dotm/', function(req, res, next) {
 		res.json({ uberdorks: uberdorks, negadorks: negadorks });
 	});
 });
-
-function calculateRankedPoints(player) {
-	return player.totalPoints / player.gamesPlayed;
-};
 
 /**
  * Get a list of players that are sorted by data from a time span.
