@@ -3,14 +3,23 @@ var mongoose = require('mongoose');
 var router = express.Router();
 var GameModel = mongoose.model('Game');
 var GameHelper = require('./gameHelper');
+var DateHelper = require('./dateHelper');
 
-/* GET games listing. */
+/* GET games listing.
+ * @query (Optional) month - Sort players by data from this month. Default is all year.
+ * @query (Optional) year - Sort players by data from this year. Default is current year.
+ */
 router.get('/', function (req, res, next) {
+	// Get date ranges
+	var dateRange = DateHelper.getDateRange(req);
+	var startDateRange = dateRange[0];
+	var endDateRange = dateRange[1];
 
 	GameModel.find(function (err, game) {
 		if (err) return next(err);
 		res.json(game);
 	})
+	.where('datePlayed').gte(startDateRange).lt(endDateRange)
 	.populate('winner')
 	.populate('players.player')
 	.sort({ datePlayed: -1 })

@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 var router = express.Router();
 var PlayerModel = mongoose.model('Player');
 var GameModel = mongoose.model('Game');
+var DateHelper = require('./dateHelper');
 
 /**
  * GET players.
@@ -37,12 +38,9 @@ function sortPlayersAlphabetically(players) {
  * @return List of players sorted by number of games played and whether it's the first game of the month.
  */
 router.get('/newgame', function (req, res, next) {
-	var now = new Date();
-	var month = now.getMonth();
-	var endMonth = month + 1 > 11 ? 0 : month + 1;
-	var year = now.getFullYear();
-	var startDateRange = new Date(year, month, 1);
-	var endDateRange = new Date(year, endMonth, 1);
+	var dateRange = DateHelper.getCurrentMonthRange();
+	var startDateRange = dateRange[0];
+	var endDateRange = dateRange[1];
 	
 	GameModel.find(function (err, games) {
 			if (err) return next(err);
@@ -232,7 +230,7 @@ router.get('/ranked/', function(req, res, next) {
 
 function getRankedPlayers(req, next, success) {
 	// Get date ranges
-	var dateRange = getDateRange(req);
+	var dateRange = DateHelper.getDateRange(req);
 	var startDateRange = dateRange[0];
 	var endDateRange = dateRange[1];
 
@@ -340,31 +338,6 @@ function addRanksToPlayers(rankedPlayers) {
 		}
 		rankedPlayers[i].rank = currentRank;
 	}
-}
-
-/**
- * Get date ranges from a request object.
- * @param req Should contain a month and optionally a year. Default is current year.
- * @returns {*[]} Array containing the start date and end date.
- */
-function getDateRange(req) {
-	var now = new Date();
-	var year = req.query.year ? parseInt(req.query.year) : now.getUTCFullYear();
-	var month;
-	var endMonth;
-	if(req.query.month) {
-		month = parseInt(req.query.month);
-		endMonth = month+1;
-		if(endMonth > 11) endMonth = 0;
-	} else {
-		if(year) {
-			month = 0;
-			endMonth = 11;
-		}
-	}
-	var startDateRange = new Date(year, month, 1);
-	var endDateRange = new Date(year, endMonth, 1);
-	return [startDateRange, endDateRange];
 }
 
 function pushGamePlayerToRankedArray(rankedPlayersArr, gamePlayer) {
