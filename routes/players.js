@@ -320,19 +320,17 @@ function getRankedPlayers(req, next, success) {
  * @param rankedPlayers Array of ranked players.
  */
 function addRanksToPlayers(rankedPlayers) {
-	var previousRank = 1;
+	var counter = 0;
 	var previousRating = -999; //impossibru
 	for(var i=0; i<rankedPlayers.length; i++) {
-		var rankedPlayer = rankedPlayers[i];
-		var currentRating = PlayerModel.getRankedPlayerAverage(rankedPlayer);
-		var currentRank;
-		if(currentRating == previousRating) {
-			currentRank = previousRank;
-		} else {
-			currentRank = previousRank = i+1;
+		var currentRating = PlayerModel.getRankedPlayerAverage(rankedPlayers[i]);
+		
+		if(currentRating != previousRating) {
+			counter++;
 			previousRating = currentRating;
 		}
-		rankedPlayers[i].rank = currentRank;
+		
+		rankedPlayers[i].rank = counter;
 	}
 }
 
