@@ -14,6 +14,7 @@ var CreateGameController = function ($scope, $window, $http, playerNameFactory) 
 	var me = this;
 	
 	me.playerOrder = 0;
+	me.firstGameOfMonth = false;
 	
 	me.showLoading = false;
 	me.showErrorMessage = false;
@@ -56,9 +57,12 @@ var CreateGameController = function ($scope, $window, $http, playerNameFactory) 
 	};
 	
 	me.getPlayers = function() {
-		$http.get('/players?sort=true')
+		$http.get('/players/newgame')
 		.success(function(data, status, headers, config) {
-		    me.players = data;
+			me.firstGameOfMonth = data.firstGameOfMonth;
+		    me.players = data.players.map(function(player) {
+				return player.player;
+			});
 			me.players = me.playerNameFormat(me.players);
 		    me.originalList = angular.copy(me.players);
 		    
@@ -88,6 +92,10 @@ var CreateGameController = function ($scope, $window, $http, playerNameFactory) 
 		
 		var month = new Date().getMonth();
 		var year = new Date().getFullYear();
+		
+		if(me.firstGameOfMonth) {
+			month = month - 1 < 0 ? 11 : month - 1;
+		}
 		
 		$http.post('/players/sort?sortType=2&month=' + month + '&year=' + year, selectedPlayers)
 		.success(function(data, status, headers, config) {
