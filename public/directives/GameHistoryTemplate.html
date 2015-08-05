@@ -1,4 +1,8 @@
 <div class="col-xs-12">
+	<div style="padding: 1.5em 0 2em 0">
+		<month-year-picker month="ctrl.month" year="ctrl.year" change="ctrl.updateQueryParams()"></month-year-picker>
+	</div>
+	
 	<div class="load-bar" ng-if="ctrl.loading">
 		<img src="/images/loader.gif" width="220" height="19" />
 	</div>
