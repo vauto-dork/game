@@ -213,16 +213,25 @@ router.post('/', function (req, res, next) {
  * 	</pre>
  */
 router.post('/ranked/sort/', function(req, res, next) {
-	getRankedPlayers(req, next, function(rankedPlayers) {
-		res.json(rankedPlayers);
-	});
+	getRanked(req, res, next);
 });
 
 router.get('/ranked/', function(req, res, next) {
+	getRanked(req, res, next);
+});
+
+function getRanked(req, res, next) {
 	getRankedPlayers(req, next, function(rankedPlayers) {
+		if(!!req.query.hideUnranked && req.query.hideUnranked.toLowerCase() === 'true') {
+			rankedPlayers = rankedPlayers.filter(
+				function(element) {
+					return element.rank > 0;
+				}
+			);
+		}
 		res.json(rankedPlayers);
 	});
-});
+};
 
 function getRankedPlayers(req, next, success) {
 	// Get date ranges
