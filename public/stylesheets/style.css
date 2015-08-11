@@ -429,13 +429,17 @@ input.ng-invalid {
   width: 100%;
   padding: 1em; }
 
-.playlist-scores-row, .btn-row {
+.playlist-scores-row, .dotm-row, .btn-row {
   display: block;
   line-height: 2em;
   padding: 1em 0;
   max-width: 50em;
   padding: 0 0.5em;
   margin: auto; }
+
+.dotm-row {
+  margin-top: 1em;
+  margin-bottom: 1em; }
 
 .btn-row {
   padding: 1em 0.5em; }
