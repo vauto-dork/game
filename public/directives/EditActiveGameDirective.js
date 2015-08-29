@@ -87,6 +87,31 @@ var EditActiveGameController = function ($scope, $http, $location, $window, $q, 
 		}
 	};
 	
+	$scope.$on('playerMarkedToMove', function(event, playerId) {
+		me.game.players.forEach(function(element) {
+			element.selectedToMove = element._id === playerId;
+			element.moveDropZoneActive = element._id !== playerId;
+		});
+	});
+	
+	$scope.$on('dropPlayerHere', function(event, oldPlayerId) {
+		var playerMarkedForMove = me.game.players.filter(function(element) {
+			return element.selectedToMove;
+		})[0];
+		
+		var newPositionIndex = me.game.players.map(function(element) {
+			return element._id;
+		}).indexOf(oldPlayerId);
+		
+		var newPlayerList = me.game.players.filter(function(element) {
+			return element.moveDropZoneActive;
+		});
+		
+		newPlayerList.splice(newPositionIndex, 0, playerMarkedForMove);
+		me.game.players = angular.copy(newPlayerList);
+		me.resetSelectedToMove();
+	});
+	
 	$scope.closeAlert = function(index) {
 		$scope.alerts.splice(index, 1);
 	};
@@ -151,8 +176,16 @@ var EditActiveGameController = function ($scope, $http, $location, $window, $q, 
 	me.onSelected = function(data) {
 		data.selected = !data.selected;
 		me.game.players.push({player: data, points: 0, rank: 0});
+		me.resetSelectedToMove();
 		me.toggleAddPlayer();
 		me.scrollToBottom();
+	};
+	
+	me.resetSelectedToMove = function() {
+		me.game.players.forEach(function(element){
+			element.selectedToMove = false;
+			element.moveDropZoneActive = false;
+		});
 	};
 	
 	me.errorHandler = function(data, errorMessage) {
@@ -223,6 +256,7 @@ var EditActiveGameController = function ($scope, $http, $location, $window, $q, 
 			}
 			else {
 				me.game = data;
+				me.resetSelectedToMove();
 				me.datePlayedJs = Date.parse(data.datePlayed);
 				me.changeState(me.State.Ready);
 			}

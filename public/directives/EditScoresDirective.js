@@ -51,6 +51,14 @@ var EditScoresController = function ($scope, $http, playerNameFactory) {
 	me.toggleRemoved = function(player) {
 		player.removed = !player.removed;
 	}
+	
+	me.markToMove = function(player) {
+		$scope.$emit('playerMarkedToMove', player._id);
+	}
+	
+	me.dropPlayerHere = function(player) {
+		$scope.$emit('dropPlayerHere', player._id);
+	}
 };
 
 EditScoresController.$inject = ['$scope', '$http', 'playerNameFactory'];

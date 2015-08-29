@@ -155,6 +155,9 @@ input.ng-invalid {
   .edit-player-btn .btn {
     padding-right: 1em; }
 
+.player-not-selected-to-move {
+  background-color: cyan; }
+
 .player-delete-blur {
   -webkit-filter: blur(2px);
   -moz-filter: blur(2px);

@@ -17,6 +17,10 @@
 	font-weight: bold;
 }
 
+.player-not-selected-to-move {
+	background-color: cyan;
+}
+
 .player-delete-blur {
 	@include blur(2px);
 }
