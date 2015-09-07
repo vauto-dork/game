@@ -127,6 +127,21 @@ input.ng-invalid {
   background: #F84072;
   border: 1px red solid; }
 
+.animate-appear.ng-move,
+.animate-appear.ng-enter,
+.animate-appear.ng-leave {
+  transition: all 300ms ease-in-out 300ms; }
+
+.animate-appear.ng-leave.ng-leave-active,
+.animate-appear.ng-move,
+.animate-appear.ng-enter {
+  opacity: 0; }
+
+.animate-appear.ng-enter.ng-enter-active,
+.animate-appear.ng-move.ng-move-active,
+.animate-appear.ng-leave {
+  opacity: 1; }
+
 .admin-list {
   font-size: 1.5em; }
 
@@ -155,8 +170,11 @@ input.ng-invalid {
   .edit-player-btn .btn {
     padding-right: 1em; }
 
-.player-not-selected-to-move {
-  background-color: cyan; }
+.player-move-panel-content {
+  font-size: 2em;
+  color: #7a8394;
+  height: 2em;
+  line-height: 2em; }
 
 .player-delete-blur {
   -webkit-filter: blur(2px);
@@ -264,6 +282,11 @@ input.ng-invalid {
   .footer-bar .btn {
     margin-left: 0.25em;
     margin-right: 0.25em; }
+  .footer-bar .btn-text {
+    font-size: 12px; }
+  .footer-bar button.active {
+    color: #00ff00;
+    text-shadow: 0 0 4px #ffffff; }
 
 .overlay {
   top: 0;

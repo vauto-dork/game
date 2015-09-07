@@ -4,7 +4,7 @@
 	<img src="/images/loader.gif" width="220" height="19" />
 </div>
 
-<div ng-if="ctrl.showScoreForm">
+<div ng-if="ctrl.showScoreForm" collapse="ctrl.showReorderPlayers">
 	<date-picker date="ctrl.datePlayedJs" disabled="ctrl.disableControls"></date-picker>
 	
 	<div class="clearfix"></div>
@@ -46,7 +46,11 @@
 				</button>
 			</div>
 		</div>
-	</div>
+	</div>	
+</div>
+
+<div ng-if="ctrl.showScoreForm" collapse="!ctrl.showReorderPlayers">
+	<reorder-players players="ctrl.game.players"></reorder-players>
 </div>
 
 <div ng-if="ctrl.showError">
@@ -78,12 +82,19 @@
 
 <div class="footer-bar text-center">
 	<div class="btn-group" role="group">
-		<button type="button" class="btn btn-info btn-lg" ng-class="{active: ctrl.showAddPlayer}" ng-click="ctrl.toggleAddPlayer()" ng-disabled="ctrl.disableControls" aria-label="Add Player">
-			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Player 
+		<button type="button" class="btn btn-primary btn-lg" ng-class="{active: ctrl.showAddPlayer}" ng-click="ctrl.toggleAddPlayer()" ng-disabled="ctrl.disableControls || ctrl.showReorderPlayers" aria-label="Add Player">
+			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+			<div class="btn-text">Player</div>
+		</button>
+		
+		<button type="button" class="btn btn-primary btn-lg" ng-class="{active: ctrl.showReorderPlayers}" ng-click="ctrl.toggleReorderPlayers()" ng-disabled="ctrl.disableControls || ctrl.showAddPlayer" aria-label="Reorder Players">
+			<span class="glyphicon glyphicon-sort" aria-hidden="true"></span>
+			<div class="btn-text">Reorder</div> 
 		</button>
 		
 		<button type="button" class="btn btn-success btn-lg" ng-click="ctrl.save()" ng-disabled="ctrl.disableControls" aria-label="Save Game">
-			<span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Save 
+			<span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+			<div class="btn-text">Save</div>
 		</button>
 	</div>
 </div>

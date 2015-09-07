@@ -1,4 +1,4 @@
-var DorkModule = angular.module('DorkModule', ['PlayerNametagModule', 'PlayerScoretagModule', 'DatePickerModule', 'MonthYearPickerModule']);
+var DorkModule = angular.module('DorkModule', ['ngAnimate', 'PlayerNametagModule', 'PlayerScoretagModule', 'DatePickerModule', 'MonthYearPickerModule']);
 
 DorkModule.factory('monthYearQueryFactory', MonthYearQueryFactory);
 DorkModule.factory('playerNameFactory', PlayerNameFactory);

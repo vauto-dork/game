@@ -11,7 +11,7 @@ var EditScoresDirective = function() {
 	};
 }
 
-var EditScoresController = function ($scope, $http, playerNameFactory) {
+var EditScoresController = function ($scope, playerNameFactory) {
 	var me = this;
 	me.players = this.players;
 	me.disabled = this.disabled;
@@ -51,14 +51,6 @@ var EditScoresController = function ($scope, $http, playerNameFactory) {
 	me.toggleRemoved = function(player) {
 		player.removed = !player.removed;
 	}
-	
-	me.markToMove = function(player) {
-		$scope.$emit('playerMarkedToMove', player._id);
-	}
-	
-	me.dropPlayerHere = function(player) {
-		$scope.$emit('dropPlayerHere', player._id);
-	}
 };
 
-EditScoresController.$inject = ['$scope', '$http', 'playerNameFactory'];
+EditScoresController.$inject = ['$scope', 'playerNameFactory'];

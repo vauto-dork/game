@@ -17,8 +17,11 @@
 	font-weight: bold;
 }
 
-.player-not-selected-to-move {
-	background-color: cyan;
+.player-move-panel-content {
+	font-size: $font-larger;
+	color: $gray;
+	height: 2em;
+	line-height: 2em;
 }
 
 .player-delete-blur {
@@ -126,6 +129,15 @@
 	.btn {
 		margin-left: 0.25em;
 		margin-right: 0.25em;
+	}
+	
+	.btn-text {
+		font-size: 12px;
+	}
+	
+	button.active {
+		color: #00ff00;
+		text-shadow: 0 0 4px #ffffff;
 	}
 }
 

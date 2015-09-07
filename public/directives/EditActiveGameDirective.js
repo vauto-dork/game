@@ -16,6 +16,7 @@ var EditActiveGameController = function ($scope, $http, $location, $window, $q, 
 	me.showScoreForm = false;
 	me.disableControls = false;
 	me.showAddPlayer = false;
+	me.showReorderPlayers = false;
 	me.datePlayedJs = new Date();
 	
 	$scope.alerts = [];
@@ -94,21 +95,24 @@ var EditActiveGameController = function ($scope, $http, $location, $window, $q, 
 		});
 	});
 	
+	$scope.$on('playerUnmarkedToMove', function(event) {
+		me.resetSelectedToMove();
+	});
+	
 	$scope.$on('dropPlayerHere', function(event, oldPlayerId) {
+		var playerIds = me.game.players.map(function(element) {
+			return element._id;
+		});
+		
 		var playerMarkedForMove = me.game.players.filter(function(element) {
 			return element.selectedToMove;
 		})[0];
 		
-		var newPositionIndex = me.game.players.map(function(element) {
-			return element._id;
-		}).indexOf(oldPlayerId);
+		var fromPositionIndex = playerIds.indexOf(playerMarkedForMove._id);
+		var toPositionIndex = playerIds.indexOf(oldPlayerId);
 		
-		var newPlayerList = me.game.players.filter(function(element) {
-			return element.moveDropZoneActive;
-		});
-		
-		newPlayerList.splice(newPositionIndex, 0, playerMarkedForMove);
-		me.game.players = angular.copy(newPlayerList);
+		me.game.players.splice(fromPositionIndex, 1);
+		me.game.players.splice(toPositionIndex, 0, playerMarkedForMove);;
 		me.resetSelectedToMove();
 	});
 	
@@ -319,9 +323,13 @@ var EditActiveGameController = function ($scope, $http, $location, $window, $q, 
 		});
 	};
 	
+	me.toggleReorderPlayers = function() {
+		me.showReorderPlayers = !me.showReorderPlayers;
+	};
+	
 	me.toggleAddPlayer = function() {
 		me.showAddPlayer = !me.showAddPlayer;
-	}
+	};
 	
 	me.save = function() {
 		me.changeState(me.State.Saving);	
@@ -333,7 +341,7 @@ var EditActiveGameController = function ($scope, $http, $location, $window, $q, 
 	
 	me.revert = function() {
 		me.changeState(me.State.Loading);
-	}
+	};
 	
 	me.changeState(me.State.Init);
 };
@@ -348,3 +356,6 @@ DorkModule.directive('editScores', EditScoresDirective);
 
 DorkModule.controller('PlaylistController', PlaylistController);
 DorkModule.directive('playlist', PlaylistDirective);
+
+DorkModule.controller('ReorderPlayersController', ReorderPlayersController);
+DorkModule.directive('reorderPlayers', ReorderPlayersDirective);
