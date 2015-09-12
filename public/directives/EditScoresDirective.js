@@ -11,7 +11,7 @@ var EditScoresDirective = function() {
 	};
 }
 
-var EditScoresController = function ($scope, $http, playerNameFactory) {
+var EditScoresController = function ($scope, playerNameFactory) {
 	var me = this;
 	me.players = this.players;
 	me.disabled = this.disabled;
@@ -53,4 +53,4 @@ var EditScoresController = function ($scope, $http, playerNameFactory) {
 	}
 };
 
-EditScoresController.$inject = ['$scope', '$http', 'playerNameFactory'];
+EditScoresController.$inject = ['$scope', 'playerNameFactory'];

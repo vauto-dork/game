@@ -1,3 +1,9 @@
+.player-move-panel-content {
+  font-size: 2em;
+  color: #7a8394;
+  height: 2em;
+  line-height: 2em; }
+
 .player-delete-blur {
   -webkit-filter: blur(2px);
   -moz-filter: blur(2px);
@@ -104,6 +110,11 @@
   .footer-bar .btn {
     margin-left: 0.25em;
     margin-right: 0.25em; }
+  .footer-bar .btn-text {
+    font-size: 12px; }
+  .footer-bar button.active {
+    color: #00ff00;
+    text-shadow: 0 0 4px #ffffff; }
 
 .overlay {
   top: 0;

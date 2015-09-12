@@ -1,0 +1,19 @@
+.animate-appear.ng-move,
+.animate-appear.ng-enter, 
+.animate-appear.ng-leave
+{ 
+	transition: all 300ms ease-in-out 300ms;
+} 
+
+.animate-appear.ng-leave.ng-leave-active,
+.animate-appear.ng-move,
+.animate-appear.ng-enter {
+	opacity: 0;
+}
+
+.animate-appear.ng-enter.ng-enter-active,
+.animate-appear.ng-move.ng-move-active,
+.animate-appear.ng-leave {
+	opacity: 1;
+}
+	
