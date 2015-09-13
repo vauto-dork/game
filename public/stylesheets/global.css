@@ -12,7 +12,7 @@ body {
   margin-bottom: 2em;
   background-color: #e4e9ef; }
 
-.dropdown-menu {
+.playlist-player-dropdown .dropdown-menu {
   width: 100%;
   font-size: 2em;
   line-height: 2em; }
@@ -22,6 +22,12 @@ body {
 
 .panel-body {
   padding: 1em; }
+
+.overlay {
+  background-color: transparent;
+  width: 100%;
+  height: 100%;
+  position: fixed; }
 
 .navbar {
   border: none;
