@@ -1,9 +1,7 @@
 extends layout
 
 block content
-	div.container-fluid
-		h1= title
-		div.row
-			ranking-history
+	div.row
+		ranking-history
 	script(src='/directives/RankingsDirective.js')
 	script(src='/directives/RankingHistoryDirective.js')
