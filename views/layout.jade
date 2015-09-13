@@ -23,5 +23,7 @@ html
     script(src='/modules/DorkModule.js')
   body(ng-app="DorkModule")
     global-nav
-    block content
+    div.container-fluid.max-width
+      h1= title
+      block content
     script(src='/directives/GlobalNavDirective.js')

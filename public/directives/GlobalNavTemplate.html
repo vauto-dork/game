@@ -1,18 +1,24 @@
-<div class="overlay" ng-class="{'sidebar-open':ctrl.sidebarOpen}" ng-click="ctrl.closeSidebar()"></div>
-
-<div class="global-nav">
-	<input type="checkbox" class="global-nav-checkbox" ng-model="ctrl.sidebarOpen" />
-	<div class="glyphicon glyphicon-menu-hamburger" ng-click="ctrl.sidebarOpen = !ctrl.sidebarOpen"></div>
-	<div class="global-nav-title">DORK</div>
-</div>
-
-<nav class="global-nav-menu" ng-class="{'sidebar-open':ctrl.sidebarOpen}">
-	<ul>
-		<li><a href="/"><span class="glyphicon glyphicon-align-left" aria-hidden="true"></span>Leaderboard</a></li>
-		<li><a href="/AddPlayer"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>New Player</a></li>
-		<li><a href="/CreateGame"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>Create Game</a></li>
-		<li><a href="/ActiveGames"><span class="glyphicon glyphicon-play" aria-hidden="true"></span>Active Games</a></li>
-		<li><a href="/GameHistory"><span class="glyphicon glyphicon-time" aria-hidden="true"></span>Game History</a></li>
-		<li><a href="/RankingHistory"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>Ranking History</a></li>
-	</ul>
+<nav class="navbar">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="global-nav-header">
+      <button type="button" class="navbar-toggle collapsed" ng-click="ctrl.sidebarOpen = !ctrl.sidebarOpen" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <div class="global-nav-brand">DORK</div>
+    </div>
+	
+	<div class="collapse navbar-collapse margin-override" collapse="!ctrl.sidebarOpen">
+		<ul class="nav navbar-nav">
+			<li><a href="/"><span class="glyphicon glyphicon-align-left" aria-hidden="true"></span>Leaderboard</a></li>
+			<li><a href="/AddPlayer"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>New Player</a></li>
+			<li><a href="/CreateGame"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>Create Game</a></li>
+			<li><a href="/ActiveGames"><span class="glyphicon glyphicon-play" aria-hidden="true"></span>Active Games</a></li>
+			<li><a href="/GameHistory"><span class="glyphicon glyphicon-time" aria-hidden="true"></span>Game History</a></li>
+			<li><a href="/RankingHistory"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>Ranking History</a></li>
+		</ul>
+	</div>
 </nav>

@@ -1,9 +1,7 @@
 extends layout
 
 block content
-	div.container-fluid
-		h1= title
-		div.row
-			create-game
+	div.row
+		create-game
 	script(src='/directives/PlaylistDirective.js')
 	script(src='/directives/CreateGameDirective.js')
