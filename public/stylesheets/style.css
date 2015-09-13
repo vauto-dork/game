@@ -64,7 +64,7 @@ body {
       padding-bottom: 0.5em; } }
 @media (min-width: 768px) {
   .navbar-collapse {
-    font-size: 1.5em; }
+    font-size: 1.4em; }
     .navbar-collapse li > a {
       border-radius: 4px; } }
 .navbar-collapse {
@@ -85,9 +85,11 @@ body {
     margin-left: 0;
     margin-right: 0; }
   .navbar-collapse li > a {
-    color: #4f6885; }
+    color: #4f6885;
+    padding-left: 1em;
+    padding-right: 1em; }
     .navbar-collapse li > a .glyphicon {
-      margin-right: 0.5em; }
+      margin-right: 0.75em; }
     .navbar-collapse li > a:hover {
       color: #4f6885;
       background-color: #e7c0ab; }

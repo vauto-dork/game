@@ -88,7 +88,7 @@ body {
 
 @media (min-width: 768px) {
   .navbar-collapse {
-	  font-size: 1.5em;
+	  font-size: $font-large;
 	  
 	  li > a {
 		  border-radius: 4px;
@@ -118,9 +118,11 @@ body {
 
 	li > a {
 		color: $global-nav-menu-text-color;
+		padding-left: 1em;
+		padding-right: 1em;
 
 		.glyphicon {
-			margin-right: $icon-spacing;
+			margin-right: 0.75em;
 		}
 
 		&:hover {
