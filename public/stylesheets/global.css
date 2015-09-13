@@ -86,10 +86,10 @@ body {
     margin-right: 0; }
   .navbar-collapse li > a {
     color: #4f6885;
-    padding-left: 1em;
-    padding-right: 1em; }
+    padding-left: 0.9em;
+    padding-right: 0.9em; }
     .navbar-collapse li > a .glyphicon {
-      margin-right: 0.75em; }
+      margin-right: 0.8em; }
     .navbar-collapse li > a:hover {
       color: #4f6885;
       background-color: #e7c0ab; }
