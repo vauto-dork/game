@@ -352,6 +352,10 @@ var EditActiveGameController = function ($scope, $http, $location, $window, $q, 
 		me.changeState(me.State.Loading);
 	};
 	
+	me.disableSave = function() {
+		return me.showReorderPlayers || me.showAddPlayer;
+	}
+	
 	me.changeState(me.State.Init);
 };
 
