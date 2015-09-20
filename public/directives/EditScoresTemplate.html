@@ -1,15 +1,16 @@
 <div class="playlist-scores-row" ng-repeat="player in ctrl.players">
 	<div class="panel panel-default">
 		<div class="player-delete-warning-overlay" ng-class="player.removed ? 'show' : 'hidden'">
-			<a ng-click="ctrl.toggleRemoved(player)" role="button" class="btn btn-info btn-lg" aria-label="Undo Remove Player">
-				Undo Remove Player
-			</a>
+			<div class="overlay-text-container" ng-click="ctrl.toggleRemoved(player)">
+				<h3>Undo Remove Player</h3>
+				<h3><span class="glyphicon glyphicon-repeat horizontal-flip"></span></h3>
+			</div>
 		</div>
 			
 		<div class="panel-heading" ng-class="{'player-delete-blur': player.removed}">
 			<h3 class="panel-title">
 				<div class="pull-right">
-					<button ng-click="ctrl.toggleRemoved(player)" class="btn btn-danger" aria-label="Delete Game">
+					<button ng-click="ctrl.toggleRemoved(player)" class="btn btn-danger" aria-label="Remove Player">
 						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 					</button>
 				</div>

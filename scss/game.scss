@@ -50,11 +50,7 @@
 }
 
 .game-warning-overlay {
-	@include delete-overlay;
-	
-	h3 {
-		text-shadow: 0 0 20px #000;
-	}
+	@include panel-overlay;
 }
 
 .game-delete-blur {

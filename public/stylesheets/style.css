@@ -56,6 +56,14 @@ body {
     display: inline-block;
     vertical-align: middle; }
 
+.horizontal-flip {
+  -moz-transform: scaleX(-1);
+  -o-transform: scaleX(-1);
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+  filter: FlipH;
+  -ms-filter: "FlipH"; }
+
 @media (max-width: 768px) {
   .navbar-collapse {
     font-size: 2.2em; }
@@ -187,6 +195,12 @@ input.ng-invalid {
   background: rgba(0, 0, 0, 0.6);
   color: #fff;
   text-align: center; }
+  .player-delete-warning-overlay h3 {
+    text-shadow: 0 0 20px #000; }
+  .player-delete-warning-overlay .overlay-text-container {
+    width: 100%;
+    height: 100%;
+    cursor: pointer; }
 
 .panel-title .player-nickname {
   margin-left: 0.3em;
@@ -300,7 +314,7 @@ input.ng-invalid {
 
 .add-player-panel {
   position: fixed;
-  top: 6em;
+  top: 1em;
   width: 100%;
   z-index: 25; }
 

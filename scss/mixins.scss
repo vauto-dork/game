@@ -33,7 +33,7 @@
     filter: blur($var);
 }
 
-@mixin delete-overlay {
+@mixin panel-overlay{
 	position: absolute;
 	height: 100%;
 	width: 100%;
@@ -41,6 +41,10 @@
 	background: rgba(0,0,0,0.6);
 	color: $global-nav-text-color;
 	text-align: center;
+	
+	h3 {
+		text-shadow: 0 0 20px #000;
+	}
 }
 
 @mixin round-box() {

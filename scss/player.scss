@@ -29,7 +29,13 @@
 }
 
 .player-delete-warning-overlay {
-	@include delete-overlay;
+	@include panel-overlay;
+	
+	.overlay-text-container {
+		width: 100%;
+		height: 100%;
+		cursor: pointer;
+	}
 }
 
 .panel-title {
@@ -162,7 +168,7 @@
 
 .add-player-panel {
 	position: fixed;
-	top: 6em;
+	top: 1em;
 	width: 100%;
 	z-index: 25;
 }

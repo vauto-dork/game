@@ -19,6 +19,12 @@
   background: rgba(0, 0, 0, 0.6);
   color: #fff;
   text-align: center; }
+  .player-delete-warning-overlay h3 {
+    text-shadow: 0 0 20px #000; }
+  .player-delete-warning-overlay .overlay-text-container {
+    width: 100%;
+    height: 100%;
+    cursor: pointer; }
 
 .panel-title .player-nickname {
   margin-left: 0.3em;
@@ -132,7 +138,7 @@
 
 .add-player-panel {
   position: fixed;
-  top: 6em;
+  top: 1em;
   width: 100%;
   z-index: 25; }
 
