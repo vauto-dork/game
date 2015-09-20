@@ -9,7 +9,7 @@ var EditActiveGameDirective = function() {
 	};
 }
 
-var EditActiveGameController = function ($scope, $http, $location, $window, $q, playerNameFactory) {
+var EditActiveGameController = function ($scope, $http, $location, $window, $q, $timeout, playerNameFactory) {
 	var me = this;
 	me.showLoading = false;
 	me.showError = false;
@@ -129,11 +129,15 @@ var EditActiveGameController = function ($scope, $http, $location, $window, $q, 
 	};
 	
 	me.scrollToTop = function() {
-		$window.scrollTo(0, 0);
+		$timeout(function() {
+			$window.scrollTo(0, 0);
+		});
 	};
 	
 	me.scrollToBottom = function() {
-		$window.scrollTo(0, 10000);
+		$timeout(function() {
+			$window.scrollTo(0, 100000);
+		});
 	};
 		
 	me.setActivePath = function() {
@@ -178,6 +182,7 @@ var EditActiveGameController = function ($scope, $http, $location, $window, $q, 
 	};
 	
 	me.onSelected = function(data) {
+		$scope.$broadcast('playlistBlur');
 		data.selected = !data.selected;
 		me.game.players.push({player: data, points: 0, rank: 0});
 		me.resetSelectedToMove();
@@ -329,6 +334,10 @@ var EditActiveGameController = function ($scope, $http, $location, $window, $q, 
 	
 	me.toggleAddPlayer = function() {
 		me.showAddPlayer = !me.showAddPlayer;
+		
+		if (me.showAddPlayer){
+			$scope.$broadcast('playlistFocus');
+		}
 	};
 	
 	me.save = function() {
@@ -346,7 +355,7 @@ var EditActiveGameController = function ($scope, $http, $location, $window, $q, 
 	me.changeState(me.State.Init);
 };
 
-EditActiveGameController.$inject = ['$scope', '$http', '$location', '$window', '$q', 'playerNameFactory'];
+EditActiveGameController.$inject = ['$scope', '$http', '$location', '$window', '$q', '$timeout', 'playerNameFactory'];
 
 DorkModule.controller('EditActiveGameController', EditActiveGameController);
 DorkModule.directive('editActiveGame', EditActiveGameDirective);

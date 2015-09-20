@@ -5,9 +5,12 @@
 			placeholder="Type name..."
 			ng-model="ctrl.filter"
 			typeahead="player as player.fullname for player in ctrl.getUnselectedPlayers() | filter:$viewValue | limitTo:6"
-			typeahead-on-select="ctrl.toggleSelected($item, $model, $label)"
+			typeahead-on-select="ctrl.selectPlayer($item, $model, $label)"
+			typeahead-focus-on-select="false"
 			autocomplete="off"
 			autofocus />
-		<div class="input-group-addon playlist-filter-remove" ng-click="ctrl.removeFilter()"><span class="glyphicon glyphicon-remove-sign"></span></div>
+		<div class="input-group-addon playlist-filter-remove" ng-click="ctrl.removeFilter()">
+			<span class="glyphicon glyphicon-remove-sign"></span>
+		</div>
 	</div>
 </div>
