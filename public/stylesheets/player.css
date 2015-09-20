@@ -37,13 +37,19 @@
 .player-card {
   margin: 0.5em; }
   .player-card .player-order {
-    float: left;
+    display: table-cell;
+    vertical-align: top;
     padding-right: 0.5em;
     font-size: 3em;
     color: #df6d2e;
     width: 2em;
-    text-align: center;
-    line-height: 1.5em; }
+    text-align: center; }
+    .player-card .player-order .checkmark {
+      height: 1.5em;
+      line-height: 1.3em; }
+  .player-card .player-nametag {
+    display: table-cell;
+    vertical-align: top; }
   .player-card .player-nickname {
     margin-left: 0.3em;
     padding-left: 0.5em;

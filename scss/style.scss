@@ -33,12 +33,15 @@
 		@include player-left;
 		width: 2.5em;
 		text-align: right;
-		line-height: 2em;
-		height: 3em;
 	}
-
+	
+	.ranking-player-stats {
+		@include player-right;
+	}
+	
 	.ranking-value {
 		font-size: $font-large;
+		color: $gray;
 	}
 
 	.ranking-label {

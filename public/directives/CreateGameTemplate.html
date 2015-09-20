@@ -30,7 +30,9 @@
     				<span ng-show="player.selected" class="glyphicon glyphicon-ok" aria-hidden="true"></span>
     			</div>
     		</div>
-    		<player-nametag player="player"></player-nametag>
+        <div class="player-nametag">
+    		  <player-nametag player="player"></player-nametag>
+        </div>
     	</div>
   	</div>
     
@@ -84,7 +86,9 @@
   		<div class="player-order">
   			{{$index + 1}}
   		</div>
-    	<player-nametag player="player"></player-nametag>
+      <div class="player-nametag">
+    	 <player-nametag player="player"></player-nametag>
+      </div>
     </div>
   </div>
   
@@ -99,7 +103,7 @@
       
 			<div class="btn-group" role="group">
 				<button type="button" class="btn btn-success btn-lg" ng-click="ctrl.startGame()" ng-disabled="ctrl.disableOrderedPlayers">
-          <span class="glyphicon glyphicon-flag" aria-hidden="true"></span> Start
+          <span class="glyphicon glyphicon-play" aria-hidden="true"></span> Create
         </button>
 			</div>
       

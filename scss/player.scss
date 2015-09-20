@@ -50,7 +50,15 @@
 		@include player-left;
 		width: 2em;
 		text-align: center;
-		line-height: 1.5em;
+		
+		.checkmark {
+			height: 1.5em;
+			line-height: 1.3em;
+		}
+	}
+	
+	.player-nametag {
+		@include player-right;
 	}
 
 	.player-nickname {

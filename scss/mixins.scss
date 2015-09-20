@@ -7,10 +7,16 @@
 }
 
 @mixin player-left() {
-	float: left;	
+	display: table-cell;
+	vertical-align: top;
 	padding-right: $standard-spacing;
 	font-size: $font-largest;
 	color: $dark-orange;
+}
+
+@mixin player-right() {
+	display: table-cell;	
+	vertical-align: top;
 }
 
 @mixin shadow($var) {

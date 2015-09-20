@@ -11,18 +11,32 @@
 		<div class="ranking-rank">
 			{{playerRank.rank}}
 		</div>
-		<player-nametag player="playerRank.player"></player-nametag>
-		<div class="ranking-player-rating">
-			<span class="ranking-label">Rating</span>
-			<span class="ranking-value">
-				{{ctrl.playerAverage(playerRank.totalPoints, playerRank.gamesPlayed)}}
-			</span>
-		</div>
-		<div class="ranking-player-rating">
-			<span class="ranking-label">Points / Game</span>
-			<span class="ranking-value">
-				{{playerRank.totalPoints}} / {{playerRank.gamesPlayed}}
-			</span>
+		<div class="ranking-player-stats">
+			<div class="row">
+				<div class="col-xs-12">
+					<player-nametag player="playerRank.player"></player-nametag>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-4 ranking-player-rating">
+					<div class="ranking-label">Rating</div>
+					<div class="ranking-value">
+						{{ctrl.playerAverage(playerRank.totalPoints, playerRank.gamesPlayed)}}
+					</div>
+				</div>
+				<div class="col-xs-4 ranking-player-rating">
+					<div class="ranking-label">Points</div>
+					<div class="ranking-value">
+						{{playerRank.totalPoints}}
+					</div>
+				</div>
+				<div class="col-xs-4 ranking-player-rating">
+					<div class="ranking-label">Games</div>
+					<div class="ranking-value">
+						{{playerRank.gamesPlayed}}
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>

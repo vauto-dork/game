@@ -205,13 +205,19 @@ input.ng-invalid {
 .player-card {
   margin: 0.5em; }
   .player-card .player-order {
-    float: left;
+    display: table-cell;
+    vertical-align: top;
     padding-right: 0.5em;
     font-size: 3em;
     color: #df6d2e;
     width: 2em;
-    text-align: center;
-    line-height: 1.5em; }
+    text-align: center; }
+    .player-card .player-order .checkmark {
+      height: 1.5em;
+      line-height: 1.3em; }
+  .player-card .player-nametag {
+    display: table-cell;
+    vertical-align: top; }
   .player-card .player-nickname {
     margin-left: 0.3em;
     padding-left: 0.5em;
@@ -390,16 +396,19 @@ input.ng-invalid {
   line-height: 2em;
   padding: 1em 0; }
   .ranking-row .ranking-rank {
-    float: left;
+    display: table-cell;
+    vertical-align: top;
     padding-right: 0.5em;
     font-size: 3em;
     color: #df6d2e;
     width: 2.5em;
-    text-align: right;
-    line-height: 2em;
-    height: 3em; }
+    text-align: right; }
+  .ranking-row .ranking-player-stats {
+    display: table-cell;
+    vertical-align: top; }
   .ranking-row .ranking-value {
-    font-size: 1.4em; }
+    font-size: 1.4em;
+    color: #7a8394; }
   .ranking-row .ranking-label {
     display: inline-block;
     margin-right: 0.5em;
