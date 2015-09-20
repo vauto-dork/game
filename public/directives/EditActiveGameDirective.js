@@ -330,6 +330,7 @@ var EditActiveGameController = function ($scope, $http, $location, $window, $q, 
 	
 	me.toggleReorderPlayers = function() {
 		me.showReorderPlayers = !me.showReorderPlayers;
+		me.resetSelectedToMove();
 	};
 	
 	me.toggleAddPlayer = function() {
