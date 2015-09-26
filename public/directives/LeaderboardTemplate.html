@@ -11,32 +11,5 @@
 	<rankings></rankings>
 </div>
 
-<div class="dotm-row" ng-if="ctrl.noGamesThisMonth">
-	<div class="hidden-xs col-sm-3" ng-if="!ctrl.hasNegadorks"></div>
-	
-	<div class="col-xs-12 col-sm-6">
-		<div class="panel panel-primary">
-			<div class="panel-heading">
-				<h3 class="panel-title">Uberdork ({{ctrl.lastMonthName}})</h3>
-			</div>
-			<div class="panel-body">
-				<div ng-repeat="dork in ctrl.dotm.uberdorks">
-					{{dork.player.firstName}} {{dork.player.lastName}}
-				</div>
-			</div>
-		</div>
-	</div>
-	
-	<div class="col-xs-12 col-sm-6" ng-if="ctrl.hasNegadorks">
-		<div class="panel panel-primary">
-			<div class="panel-heading">
-				<h3 class="panel-title">Negadork ({{ctrl.lastMonthName}})</h3>
-			</div>
-			<div class="panel-body">
-				<div ng-repeat="dork in ctrl.dotm.negadorks">
-					{{dork.player.firstName}} {{dork.player.lastName}}
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
+<!--<div class="dotm-row" ng-if="ctrl.noGamesThisMonth">-->
+	<dotm></dotm>

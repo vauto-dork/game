@@ -1,0 +1,12 @@
+<div class="dotm-row" ng-if="ctrl.showDorks">
+	<!-- This is padding for when there are no negadorks so the uberdorks panel is centered. -->
+	<div class="hidden-xs col-sm-3" ng-if="!ctrl.hasNegadorks"></div>
+	
+	<div class="col-xs-12 col-sm-6">
+		<dotm-panel heading="{{ctrl.uberdorkHeading}}" players="::ctrl.dotm.uberdorks"></dotm-panel>
+	</div>
+	
+	<div class="col-xs-12 col-sm-6" ng-if="ctrl.hasNegadorks">
+		<dotm-panel heading="{{ctrl.negadorkHeading}}" players="::ctrl.dotm.negadorks"></dotm-panel>
+	</div>
+</div>

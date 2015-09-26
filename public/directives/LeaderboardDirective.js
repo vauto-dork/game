@@ -16,7 +16,6 @@ var LeaderboardController = function ($scope, $http) {
 	me.currentMonth = new Date().getMonth();
 	me.currentYear = new Date().getFullYear();
 	me.noGamesThisMonth = false;
-	me.hasNegadorks = false;
 	
 	me.monthNames = ["January", "February", "March", "April", "May", "June",
 	  "July", "August", "September", "October", "November", "December"
@@ -29,22 +28,6 @@ var LeaderboardController = function ($scope, $http) {
 			if(me.noGamesThisMonth) {
 				me.getDotm();
 			}
-		}).
-		error(function(data, status, headers, config) {
-		    debugger;
-		});
-	};
-	
-	me.getDotm = function() {
-		var lastMonth = (me.currentMonth - 1 < 0) ? 11 : me.currentMonth - 1;
-		var year = (lastMonth === 11) ? me.currentYear - 1 : me.currentYear;
-		var query = '?month=' + lastMonth + '&year=' + year;
-		
-		me.lastMonthName = me.monthNames[lastMonth];
-		
-		$http.get("/Players/dotm" + query).success(function(data, status, headers, config) {
-		    me.dotm = data;
-			me.hasNegadorks = data.negadorks.length > 0;
 		}).
 		error(function(data, status, headers, config) {
 		    debugger;
