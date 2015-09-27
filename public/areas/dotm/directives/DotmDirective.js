@@ -14,6 +14,7 @@ var DotmDirective = function() {
 var DotmController = function ($scope, $http) {
 	var me = this;
 	me.showDorks = false;
+	me.hasUberdorks = false;
 	me.hasNegadorks = false;
 	me.uberdorkHeading = 'Uberdork';
 	me.negadorkHeading = 'Negadork';
@@ -31,6 +32,7 @@ var DotmController = function ($scope, $http) {
 	
 	me.loaded = function(data) {
 	    me.dotm = data;
+		me.hasUberdorks = data.uberdorks.length > 0;
 		me.hasNegadorks = data.negadorks.length > 0;
 		me.createHeadings();
 		me.showDorks = true;
