@@ -1,6 +1,8 @@
 var DotmDirective = function() {
 	return {
 		scope: {
+			month: "=",
+			year: "="
 		},
 		templateUrl: '/areas/dotm/directives/DotmTemplate.html',
 		controller: 'DotmController',
@@ -9,7 +11,7 @@ var DotmDirective = function() {
 	};
 }
 
-var DotmController = function ($scope, $http, dateTimeFactory) {
+var DotmController = function ($scope, $http) {
 	var me = this;
 	me.showDorks = false;
 	me.hasNegadorks = false;
@@ -17,9 +19,7 @@ var DotmController = function ($scope, $http, dateTimeFactory) {
 	me.negadorkHeading = 'Negadork';
 	
 	me.getDotm = function() {
-		var lastMonth = dateTimeFactory.LastMonthValue();
-		var year = dateTimeFactory.CurrentYear();
-		var query = '?month=' + lastMonth + '&year=' + year;
+		var query = '?month=' + me.month + '&year=' + me.year;
 		
 		$http.get("/Players/dotm" + query).success(function(data, status, headers, config) {
 		    me.loaded(data);
@@ -81,10 +81,14 @@ var DotmController = function ($scope, $http, dateTimeFactory) {
 		}
 	};
 	
+	$scope.$on('dotmUpdate', function(){
+		me.getDotm();
+	});
+	
 	me.getDotm();
 }
 
-DotmController.$inject = ['$scope', '$http', 'dateTimeFactory'];
+DotmController.$inject = ['$scope', '$http'];
 
 DorkModule.controller('DotmController', DotmController);
 DorkModule.directive('dotm', DotmDirective);

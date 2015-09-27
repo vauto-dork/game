@@ -9,10 +9,10 @@ var RankingHistoryDirective = function() {
 	};
 };
 
-var RankingHistoryController = function ($scope, $timeout, monthYearQueryFactory) {
+var RankingHistoryController = function ($scope, $timeout, monthYearQueryFactory, dateTimeFactory) {
 	var me = this;
-	me.month = new Date().getMonth() - 1;
-	me.year = new Date().getFullYear();
+	me.month = dateTimeFactory.LastMonthValue();
+	me.year = dateTimeFactory.LastMonthYear();
 	
 	me.State = {
 		Init: 0,
@@ -34,6 +34,7 @@ var RankingHistoryController = function ($scope, $timeout, monthYearQueryFactory
 			case me.State.Change:
 				$timeout(function() {
 					monthYearQueryFactory.SaveQueryParams(me.month, me.year);
+					$scope.$broadcast('dotmUpdate');
 				}, 0);
 				me.changeState(me.State.Ready);
 				break;
@@ -47,7 +48,7 @@ var RankingHistoryController = function ($scope, $timeout, monthYearQueryFactory
 	me.changeState(me.State.Init);
 };
 
-RankingHistoryController.$inject = ['$scope', '$timeout', 'monthYearQueryFactory'];
+RankingHistoryController.$inject = ['$scope', '$timeout', 'monthYearQueryFactory', 'dateTimeFactory'];
 
 DorkModule.controller('RankingHistoryController', RankingHistoryController);
 DorkModule.directive('rankingHistory', RankingHistoryDirective);

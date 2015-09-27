@@ -8,6 +8,7 @@ var DateTimeFactory = function() {
 	];
 	
 	me.lastMonthValue = (me.currentMonth - 1 < 0) ? 11 : me.currentMonth - 1;
+	me.lastMonthYear = (me.currentMonth - 1 < 0) ? me.currentYear - 1 : me.currentYear;
 	
 	return {
 		CurrentYear: function() {
@@ -18,6 +19,9 @@ var DateTimeFactory = function() {
 		},
 		CurrentMonthName: function() {
 			return me.monthNames[me.currentMonth];
+		},
+		LastMonthYear: function() {
+			return me.lastMonthYear;
 		},
 		LastMonthValue: function() {
 			return me.lastMonthValue;
