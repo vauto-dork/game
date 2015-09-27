@@ -31,17 +31,15 @@ var LeaderboardController = function ($scope, $http, dateTimeFactory) {
 		});
 	};
 	
-	me.noGamesThisMonth = true;
-	me.hasGames = false;
-	// me.hasGames = function() {		
-	// 	var lastGame = new Date(me.lastDatePlayed);
-	// 	var lastGameMonth = lastGame.getMonth();
-	// 	var lastGameYear = lastGame.getFullYear();
-	// 	
-	// 	return !(me.currentMonth === lastGameMonth && me.currentYear === lastGameYear);
-	// };
+	me.hasGames = function() {		
+		var lastGame = new Date(me.lastDatePlayed);
+		var lastGameMonth = lastGame.getMonth();
+		var lastGameYear = lastGame.getFullYear();
+		
+		return !(me.currentMonth === lastGameMonth && me.currentYear === lastGameYear);
+	};
 	
-	//me.getLastPlayedGame();
+	me.getLastPlayedGame();
 }
 
 LeaderboardController.$inject = ['$scope', '$http', 'dateTimeFactory'];

@@ -27,39 +27,6 @@ var DotmController = function ($scope, $http) {
 		error(function(data, status, headers, config) {
 		    debugger;
 		});
-		
-		// 
-		// var data = {
-		//   "uberdorks": [
-		//     {
-		//       "player": {
-		//         "_id": "552496daafe18e0300b2bb19",
-		//         "__v": 0,
-		//         "nickname": "",
-		//         "lastName": "Branding",
-		//         "firstName": "Steve"
-		//       },
-		//       "totalPoints": 19,
-		//       "gamesPlayed": 1,
-		//       "rank": 1
-		//     }
-		//   ],
-		//   "negadorks": [
-		//     {
-		//       "player": {
-		//         "_id": "553fecfdb6bea203005c0da6",
-		//         "__v": 0,
-		//         "nickname": "",
-		//         "lastName": "Moeller",
-		//         "firstName": "Jeff"
-		//       },
-		//       "totalPoints": -1,
-		//       "gamesPlayed": 5,
-		//       "rank": 36
-		//     }
-		//   ]
-		// };
-		// me.loaded(data);
 	};
 	
 	me.loaded = function(data) {
