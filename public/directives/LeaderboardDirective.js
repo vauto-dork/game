@@ -10,17 +10,13 @@ var LeaderboardDirective = function() {
 	};
 }
 
-var LeaderboardController = function ($scope, $http) {
+var LeaderboardController = function ($scope, $http, dateTimeFactory) {
 	var me = this;
-	me.lastMonthName = '';
-	me.currentMonth = new Date().getMonth();
-	me.currentYear = new Date().getFullYear();
+	me.currentMonth = dateTimeFactory.CurrentMonthValue();
+	me.currentYear = dateTimeFactory.CurrentYear();
+	me.lastMonth = dateTimeFactory.LastMonthValue();
+	me.lastMonthYear = dateTimeFactory.LastMonthYear();
 	me.noGamesThisMonth = false;
-	me.hasNegadorks = false;
-	
-	me.monthNames = ["January", "February", "March", "April", "May", "June",
-	  "July", "August", "September", "October", "November", "December"
-	];
 		
 	me.getLastPlayedGame = function() {
 		$http.get("/Games/LastPlayed").success(function(data, status, headers, config) {
@@ -29,22 +25,6 @@ var LeaderboardController = function ($scope, $http) {
 			if(me.noGamesThisMonth) {
 				me.getDotm();
 			}
-		}).
-		error(function(data, status, headers, config) {
-		    debugger;
-		});
-	};
-	
-	me.getDotm = function() {
-		var lastMonth = (me.currentMonth - 1 < 0) ? 11 : me.currentMonth - 1;
-		var year = (lastMonth === 11) ? me.currentYear - 1 : me.currentYear;
-		var query = '?month=' + lastMonth + '&year=' + year;
-		
-		me.lastMonthName = me.monthNames[lastMonth];
-		
-		$http.get("/Players/dotm" + query).success(function(data, status, headers, config) {
-		    me.dotm = data;
-			me.hasNegadorks = data.negadorks.length > 0;
 		}).
 		error(function(data, status, headers, config) {
 		    debugger;
@@ -62,7 +42,7 @@ var LeaderboardController = function ($scope, $http) {
 	me.getLastPlayedGame();
 }
 
-LeaderboardController.$inject = ['$scope', '$http'];
+LeaderboardController.$inject = ['$scope', '$http', 'dateTimeFactory'];
 
 DorkModule.controller('LeaderboardController', LeaderboardController);
 DorkModule.directive('leaderboard', LeaderboardDirective);
