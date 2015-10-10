@@ -3,7 +3,7 @@ var PlayerNametagDirective = function() {
 		scope: {
 			player: '='
 		},
-		templateUrl: '/directives/PlayerNametagTemplate.html',
+		templateUrl: '/shared/directives/PlayerNametagTemplate.html',
 		controller: 'PlayerNametagController',
 		controllerAs: 'ctrl',
 		bindToController: true

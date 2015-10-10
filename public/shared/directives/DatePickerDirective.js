@@ -4,7 +4,7 @@ var DatePickerDirective = function() {
 			date: "=",
 			disabled: "="
 		},
-		templateUrl: '/directives/DatePickerTemplate.html',
+		templateUrl: '/shared/directives/DatePickerTemplate.html',
 		controller: 'DatePickerController',
 		controllerAs: 'ctrl',
 		bindToController: true

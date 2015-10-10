@@ -3,7 +3,7 @@ var PlayerScoretagDirective = function() {
 		scope: {
 			player: '='
 		},
-		templateUrl: '/directives/PlayerScoretagTemplate.html',
+		templateUrl: '/shared/directives/PlayerScoretagTemplate.html',
 		controller: 'PlayerScoretagController',
 		controllerAs: 'ctrl',
 		bindToController: true

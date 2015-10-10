@@ -12,7 +12,7 @@ body {
   margin-bottom: 2em;
   background-color: #e4e9ef; }
 
-.playlist-player-dropdown .dropdown-menu {
+.player-selector .dropdown-menu {
   width: 100%;
   font-size: 2em;
   line-height: 2em; }
@@ -447,14 +447,14 @@ input.ng-invalid {
   text-align: center;
   font-size: 1.4em; }
 
-.playlist-filter {
+.player-selector-filter {
   padding: 0.25em;
   width: 100%;
   font-size: 2em;
   line-height: 2em;
   height: 2em; }
 
-.playlist-filter-remove {
+.player-selector-filter-remove {
   font-size: 2em;
   cursor: pointer; }
 

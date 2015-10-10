@@ -12,7 +12,7 @@ body {
   margin-bottom: 2em;
   background-color: #e4e9ef; }
 
-.playlist-player-dropdown .dropdown-menu {
+.player-selector .dropdown-menu {
   width: 100%;
   font-size: 2em;
   line-height: 2em; }

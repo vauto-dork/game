@@ -1,27 +1,27 @@
-var PlaylistDirective = function() {
+var PlayerSelectorDirective = function() {
 	return {
 		scope: {
 			players: '=',
 			onSelected: '&'
 		},
-		templateUrl: '/directives/PlaylistTemplate.html',
-		controller: 'PlaylistController',
+		templateUrl: '/areas/players/directives/PlayerSelectorTemplate.html',
+		controller: 'PlayerSelectorController',
 		controllerAs: 'ctrl',
 		bindToController: true
 	};
 }
 
-var PlaylistController = function ($scope, $http, $element, $timeout) {
+var PlayerSelectorController = function ($scope, $http, $element, $timeout) {
 	var me = this;
 	
-	$scope.$on('playlistFocus', function(event, data) {
+	$scope.$on('PlayerSelectorFocus', function(event, data) {
 		// Wrapped in timeout so it does this after UI is rendered.
 		$timeout(function(){
 			$element.find("input").focus();
 		});
 	});
 	
-	$scope.$on('playlistBlur', function(event, data) {
+	$scope.$on('PlayerSelectorBlur', function(event, data) {
 		// UI should be already rendered at this point so timeout is not needed.
 		$element.find("input").blur();
 	});
@@ -43,4 +43,4 @@ var PlaylistController = function ($scope, $http, $element, $timeout) {
 	};
 };
 
-PlaylistController.$inject = ['$scope', '$http', '$element', '$timeout'];
+PlayerSelectorController.$inject = ['$scope', '$http', '$element', '$timeout'];

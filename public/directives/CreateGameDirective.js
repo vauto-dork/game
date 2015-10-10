@@ -186,5 +186,5 @@ CreateGameController.$inject = ['$scope', '$window', '$http', 'playerNameFactory
 DorkModule.controller('CreateGameController', CreateGameController);
 DorkModule.directive('createGame', CreateGameDirective);
 
-DorkModule.controller('PlaylistController', PlaylistController);
-DorkModule.directive('playlist', PlaylistDirective);
+DorkModule.controller('PlayerSelectorController', PlayerSelectorController);
+DorkModule.directive('playerSelector', PlayerSelectorDirective);

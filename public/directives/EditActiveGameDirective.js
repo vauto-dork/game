@@ -182,7 +182,7 @@ var EditActiveGameController = function ($scope, $http, $location, $window, $q, 
 	};
 	
 	me.onSelected = function(data) {
-		$scope.$broadcast('playlistBlur');
+		$scope.$broadcast('playerSelectorBlur');
 		data.selected = !data.selected;
 		me.game.players.push({player: data, points: 0, rank: 0});
 		me.resetSelectedToMove();
@@ -337,7 +337,7 @@ var EditActiveGameController = function ($scope, $http, $location, $window, $q, 
 		me.showAddPlayer = !me.showAddPlayer;
 		
 		if (me.showAddPlayer){
-			$scope.$broadcast('playlistFocus');
+			$scope.$broadcast('playerSelectorFocus');
 		}
 	};
 	
@@ -368,8 +368,8 @@ DorkModule.directive('editActiveGame', EditActiveGameDirective);
 DorkModule.controller('EditScoresController', EditScoresController);
 DorkModule.directive('editScores', EditScoresDirective);
 
-DorkModule.controller('PlaylistController', PlaylistController);
-DorkModule.directive('playlist', PlaylistDirective);
+DorkModule.controller('PlayerSelectorController', PlayerSelectorController);
+DorkModule.directive('playerSelector', PlayerSelectorDirective);
 
 DorkModule.controller('ReorderPlayersController', ReorderPlayersController);
 DorkModule.directive('reorderPlayers', ReorderPlayersDirective);

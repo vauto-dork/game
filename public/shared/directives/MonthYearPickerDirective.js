@@ -6,7 +6,7 @@ var MonthYearPickerDirective = function() {
 			disabled: "=",
 			change: "&"
 		},
-		templateUrl: '/directives/MonthYearPickerTemplate.html',
+		templateUrl: '/shared/directives/MonthYearPickerTemplate.html',
 		controller: 'MonthYearPickerController',
 		controllerAs: 'ctrl',
 		bindToController: true
