@@ -1,8 +1,13 @@
 extends layout
 
-block content
-	div.row
-		players-list
+block modules
+	- var modules = ['PlayersListModule']
+
+block scripts
 	script(src='/areas/players/directives/PlayerFormDirective.js')
 	script(src='/areas/players/directives/PlayersListDirective.js')
 	script(src='/areas/players/modules/PlayersListModule.js')
+
+block content
+	div.row
+		players-list

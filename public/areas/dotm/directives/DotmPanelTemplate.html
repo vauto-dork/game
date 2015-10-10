@@ -1,10 +1,9 @@
 <div class="panel panel-dotm">
 	<div class="panel-heading">
-		<h3 class="panel-title">{{ctrl.heading}}</h3>
+		<h3 class="panel-title" ng-bind="ctrl.heading + (ctrl.players.length > 1 ? 's' : '')"></h3>
 	</div>
 	<div class="panel-body">
-		<div ng-repeat="dork in ctrl.players">
-			{{dork.player.firstName}} {{dork.player.lastName}}
+		<div ng-repeat="dork in ctrl.players" ng-bind="dork.player.firstName + ' ' + dork.player.lastName">
 		</div>
 	</div>
 </div>

@@ -22,11 +22,16 @@ html
     script(src='/directives/MonthYearPickerDirective.js')
     script(src='/modules/MonthYearPickerModule.js')
     
+    block modules
+    
+    - var modulesList = ''
+    
     if modules
-      - modules = ', ' + modules 
+      each val in modules
+        - modulesList = modulesList + ", \'" + val + "\'" 
     
     script.
-      var DorkModule = angular.module('DorkModule', ['ngAnimate', 'PlayerNametagModule', 'PlayerScoretagModule', 'DatePickerModule', 'MonthYearPickerModule'#{modules}]);
+      var DorkModule = angular.module('DorkModule', ['ngAnimate', 'PlayerNametagModule', 'PlayerScoretagModule', 'DatePickerModule', 'MonthYearPickerModule'#{modulesList}]);
       DorkModule.service('dateTimeFactory', DateTimeFactory);
       DorkModule.factory('monthYearQueryFactory', MonthYearQueryFactory);
       DorkModule.factory('playerNameFactory', PlayerNameFactory);
@@ -38,3 +43,4 @@ html
       h1= title
       block content
     script(src='/directives/GlobalNavDirective.js')
+    block scripts

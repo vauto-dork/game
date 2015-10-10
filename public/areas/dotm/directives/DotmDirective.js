@@ -33,22 +33,10 @@ var DotmController = function ($scope, $http) {
 	me.loaded = function(data) {
 	    me.dotm = data;
 		me.hasUberdorks = data.uberdorks.length > 0;
-		me.hasNegadorks = data.negadorks.length > 0;
-		me.createHeadings();
+		// Let's not show negadorks because it's not nice.
+		//me.hasNegadorks = data.negadorks.length > 0;
 		me.showDorks = true;
 	}
-	
-	me.createHeadings = function() {
-		if(me.dotm) {
-			if(me.dotm.uberdorks.length > 1) {
-				me.uberdorkHeading = 'Uberdorks';
-			}
-			
-			if(me.dotm.negadorks && me.dotm.negadorks.length > 1) {
-				me.negadorkHeading = 'Negadorks';
-			}
-		}
-	};
 	
 	$scope.$on('dotmUpdate', function(){
 		me.getDotm();
@@ -58,6 +46,3 @@ var DotmController = function ($scope, $http) {
 }
 
 DotmController.$inject = ['$scope', '$http'];
-
-DorkModule.controller('DotmController', DotmController);
-DorkModule.directive('dotm', DotmDirective);

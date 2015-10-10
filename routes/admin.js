@@ -8,12 +8,12 @@ router.get('/Admin', function(req, res, next) {
 
 /* GET add new player. */
 router.get('/AddPlayer', function(req, res, next) {
-  res.render('addPlayer', { title: 'New Player', modules: '\'AddPlayerModule\'' });
+  res.render('addPlayer', { title: 'New Player' });
 });
 
 /* GET players list page. */
 router.get('/PlayersList', function(req, res, next) {
-  res.render('playersList', { title: 'Players List', modules: '\'PlayersListModule\'' });
+  res.render('playersList', { title: 'Players List' });
 });
 
 module.exports = router;

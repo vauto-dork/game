@@ -1,9 +1,11 @@
 extends layout
 
-block content
-	div.row
-		edit-active-game
+block scripts
 	script(src='/directives/ReorderPlayersDirective.js')
 	script(src='/directives/PlaylistDirective.js')
 	script(src='/directives/EditScoresDirective.js')
 	script(src='/directives/EditActiveGameDirective.js')
+
+block content
+	div.row
+		edit-active-game

@@ -1,7 +1,9 @@
 extends layout
 
+block scripts
+	script(src='/directives/GameCardDirective.js')
+	script(src='/directives/GameHistoryDirective.js')
+
 block content
 	div.row
 		game-history
-	script(src='/directives/GameCardDirective.js')
-	script(src='/directives/GameHistoryDirective.js')

@@ -1,9 +1,15 @@
 extends layout
 
-block content
-	div.row
-		ranking-history
+block modules
+	- var modules = ['DotmModule']
+
+block scripts
 	script(src='/areas/dotm/directives/DotmPanelDirective.js')
 	script(src='/areas/dotm/directives/DotmDirective.js')
 	script(src='/directives/RankingsDirective.js')
 	script(src='/directives/RankingHistoryDirective.js')
+	script(src='/areas/dotm/modules/DotmModule.js')
+
+block content
+	div.row
+		ranking-history

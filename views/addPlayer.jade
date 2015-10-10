@@ -1,8 +1,13 @@
 extends layout
 
-block content
-	div.row
-		add-player
+block modules
+	- var modules = ['AddPlayerModule']
+
+block scripts
 	script(src='/areas/players/directives/PlayerFormDirective.js')
 	script(src='/areas/players/directives/AddPlayerDirective.js')
 	script(src='/areas/players/modules/AddPlayerModule.js')
+	
+block content
+	div.row
+		add-player

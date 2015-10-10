@@ -22,9 +22,6 @@ var LeaderboardController = function ($scope, $http, dateTimeFactory) {
 		$http.get("/Games/LastPlayed").success(function(data, status, headers, config) {
 		    me.lastDatePlayed = data.datePlayed;
 			me.noGamesThisMonth = me.hasGames();
-			if(me.noGamesThisMonth) {
-				me.getDotm();
-			}
 		}).
 		error(function(data, status, headers, config) {
 		    debugger;
