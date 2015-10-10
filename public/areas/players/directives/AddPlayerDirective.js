@@ -2,7 +2,7 @@ var AddPlayerDirective = function() {
 	return {
 		scope: {
 		},
-		templateUrl: '/directives/AddPlayerTemplate.html',
+		templateUrl: '/areas/players/directives/AddPlayerTemplate.html',
 		controller: 'AddPlayerController',
 		controllerAs: 'ctrl',
 		bindToController: true
@@ -14,6 +14,12 @@ var AddPlayerController = function ($scope, $timeout, $http) {
 	me.success = false;
 	me.failure = false;
 	me.disableControls = false;
+	
+	me.player = {
+		firstName: '',
+		lastName: '',
+		nickname: ''
+	}
 	
 	me.State = {
 		Ready: 0,
@@ -44,13 +50,13 @@ var AddPlayerController = function ($scope, $timeout, $http) {
 	};
 	
 	me.resetForm = function() {
-		me.firstName = '';
-		me.lastName = '';
-		me.nickname = '';
+		me.player.firstName = '';
+		me.player.lastName = '';
+		me.player.nickname = '';
 	};
 	
 	me.savePlayer = function() {
-		$http.post('/players', { firstName: me.firstName, lastName: me.lastName, nickname: me.nickname })
+		$http.post('/players', me.player)
 			.success(function (data, status, headers, config) {
 				me.changeState(me.State.Saved);
 			}).error(function (data, status, headers, config) {
@@ -71,6 +77,3 @@ var AddPlayerController = function ($scope, $timeout, $http) {
 };
 
 AddPlayerController.$inject = ['$scope', '$timeout', '$http'];
-
-DorkModule.controller('AddPlayerController', AddPlayerController);
-DorkModule.directive('addPlayer', AddPlayerDirective);

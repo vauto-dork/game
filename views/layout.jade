@@ -21,7 +21,17 @@ html
     script(src='/modules/DatePickerModule.js')
     script(src='/directives/MonthYearPickerDirective.js')
     script(src='/modules/MonthYearPickerModule.js')
-    script(src='/modules/DorkModule.js')
+    
+    if modules
+      - modules = ', ' + modules 
+    
+    script.
+      var DorkModule = angular.module('DorkModule', ['ngAnimate', 'PlayerNametagModule', 'PlayerScoretagModule', 'DatePickerModule', 'MonthYearPickerModule'#{modules}]);
+      DorkModule.service('dateTimeFactory', DateTimeFactory);
+      DorkModule.factory('monthYearQueryFactory', MonthYearQueryFactory);
+      DorkModule.factory('playerNameFactory', PlayerNameFactory);
+      DorkModule.directive('numericUpDown', NumericUpDownDirective);
+    
   body(ng-app="DorkModule")
     global-nav
     div.container-fluid.max-width

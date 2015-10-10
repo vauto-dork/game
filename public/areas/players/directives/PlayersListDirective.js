@@ -2,7 +2,7 @@ var PlayersListDirective = function() {
 	return {
 		scope: {
 		},
-		templateUrl: '/directives/PlayersListTemplate.html',
+		templateUrl: '/areas/players/directives/PlayersListTemplate.html',
 		controller: 'PlayersListController',
 		controllerAs: 'ctrl',
 		bindToController: true
@@ -129,6 +129,3 @@ var PlayersListController = function ($scope, $http, $window, playerNameFactory)
 };
 
 PlayersListController.$inject = ['$scope', '$http', '$window', 'playerNameFactory'];
-
-DorkModule.controller('PlayersListController', PlayersListController);
-DorkModule.directive('playersList', PlayersListDirective);

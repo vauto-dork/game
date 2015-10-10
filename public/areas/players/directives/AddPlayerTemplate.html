@@ -2,11 +2,7 @@
 <div ng-show="ctrl.failure" class="status-banner bg-danger"><h4>Error Adding Player</h4></div>
 
 <form ng-submit="ctrl.submit()">
-	<div class="form-group">
-		<input class="form-control input-lg" type="text" name="firstName" placeholder="First Name" ng-model="ctrl.firstName" ng-disabled="ctrl.disableControls" autocomplete="off" />
-		<input class="form-control input-lg" type="text" name="lastName" placeholder="Last Name" ng-model="ctrl.lastName" ng-disabled="ctrl.disableControls" autocomplete="off" />
-		<input class="form-control input-lg" type="text" name="nickName" placeholder="Nickname" ng-model="ctrl.nickname" ng-disabled="ctrl.disableControls" autocomplete="off" />
-	</div>
+	<player-form player="ctrl.player" disable-form="ctrl.disableControls"></player-form>
 	
 	<div class="btn-row">
 		<div class="btn-group btn-group-justified" role="group">
