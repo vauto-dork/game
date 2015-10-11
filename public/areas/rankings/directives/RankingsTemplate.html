@@ -8,9 +8,7 @@
 <div class="ranking-row col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-repeat="playerRank in ctrl.players"
 	ng-class="ctrl.hasNoRank(playerRank.rank)" ng-if="ctrl.showRankings">
 	<div class="player-card">
-		<div class="ranking-rank">
-			{{playerRank.rank}}
-		</div>
+		<div class="ranking-rank" ng-bind="playerRank.rank"></div>
 		<div class="ranking-player-stats">
 			<div class="row">
 				<div class="col-xs-12">
@@ -20,21 +18,15 @@
 			<div class="row">
 				<div class="col-xs-4 ranking-player-rating">
 					<div class="ranking-label">Rating</div>
-					<div class="ranking-value">
-						{{ctrl.playerAverage(playerRank.totalPoints, playerRank.gamesPlayed)}}
-					</div>
+					<div class="ranking-value" ng-bind="ctrl.playerAverage(playerRank.totalPoints, playerRank.gamesPlayed)"></div>
 				</div>
 				<div class="col-xs-4 ranking-player-rating">
 					<div class="ranking-label">Points</div>
-					<div class="ranking-value">
-						{{playerRank.totalPoints}}
-					</div>
+					<div class="ranking-value" ng-bind="playerRank.totalPoints"></div>
 				</div>
 				<div class="col-xs-4 ranking-player-rating">
 					<div class="ranking-label">Games</div>
-					<div class="ranking-value">
-						{{playerRank.gamesPlayed}}
-					</div>
+					<div class="ranking-value" ng-bind="playerRank.gamesPlayed"></div>
 				</div>
 			</div>
 		</div>
@@ -45,6 +37,6 @@
 
 <div class="btn-row" ng-if="ctrl.showUnrankBtn">
 	<button type="button" class="btn btn-primary btn-block btn-lg" ng-click="ctrl.toggleUnrankedPlayers()">
-		{{ctrl.showUnrankedPlayers ? 'Hide' : 'Show'}} {{ctrl.numberUnranked}} Unranked Players
+		<span ng-bind="(ctrl.showUnrankedPlayers ? 'Hide' : 'Show') + ' ' + ctrl.numberUnranked"></span> Unranked Players
 	</button>
 </div>

@@ -1,4 +1,4 @@
-<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)" ng-bind="alert.msg"></alert>
 
 <div class="load-bar" ng-if="ctrl.showLoading">
 	<img src="/images/loader.gif" width="220" height="19" />
@@ -22,9 +22,9 @@
 						<tr><th>Position</th><th>Additional Points</th></tr>
 					</thead>
 					<tbody>
-						<tr><th>1st</th><td>{{ctrl.game.players.length - 1}}</td></tr>
-						<tr><th>2nd</th><td>{{ctrl.game.players.length - 2}}</td></tr>
-						<tr><th>3rd</th><td>{{ctrl.game.players.length - 3}}</td></tr>
+						<tr><th>1st</th><td ng-bind="ctrl.game.players.length - 1"></td></tr>
+						<tr><th>2nd</th><td ng-bind="ctrl.game.players.length - 2"></td></tr>
+						<tr><th>3rd</th><td ng-bind="ctrl.game.players.length - 3"></td></tr>
 					</tbody>
 				</table>
 			</div>

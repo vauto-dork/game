@@ -5,7 +5,9 @@
 	
 	<div ng-if="!ctrl.loading">
 		<div class="text-center" ng-if="ctrl.showNoGamesWarning"><h2>There are no active games.</h2></div>
-		<div class="status-banner bg-danger text-center" ng-if="ctrl.showErrorMessage"><h3>{{ctrl.errorMessage}}</h3></div>
+		<div class="status-banner bg-danger text-center" ng-if="ctrl.showErrorMessage">
+			<h3 ng-bind="ctrl.errorMessage"></h3>
+		</div>
 		
 		<game-card ng-repeat="game in ctrl.games" game="game" game-path="ctrl.activeGamePath"
 			reload="ctrl.reload()" show-modify-buttons="true"></game-card>
