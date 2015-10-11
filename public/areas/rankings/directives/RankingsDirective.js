@@ -5,7 +5,7 @@ var RankingsDirective = function() {
       year: "=",
       hideUnranked: "="  
     },
-    templateUrl: '/directives/RankingsTemplate.html',
+    templateUrl: '/areas/rankings/directives/RankingsTemplate.html',
     controller: 'RankingsController',
     controllerAs: 'ctrl',
     bindToController: true
@@ -108,6 +108,3 @@ var RankingsController = function ($scope, $http, playerNameFactory) {
 };
 
 RankingsController.$inject = ['$scope', '$http', 'playerNameFactory'];
-
-DorkModule.controller('RankingsController', RankingsController);
-DorkModule.directive('rankings', RankingsDirective);

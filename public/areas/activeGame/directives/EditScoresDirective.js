@@ -4,7 +4,7 @@ var EditScoresDirective = function() {
 			players: '=',
 			disabled: '='
 		},
-		templateUrl: '/directives/EditScoresTemplate.html',
+		templateUrl: '/areas/activeGame/directives/EditScoresTemplate.html',
 		controller: 'EditScoresController',
 		controllerAs: 'ctrl',
 		bindToController: true

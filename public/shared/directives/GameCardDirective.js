@@ -6,7 +6,7 @@ var GameCardDirective = function() {
 			showModifyButtons: "=",
 			reload: "&"
 		},
-		templateUrl: '/directives/GameCardTemplate.html',
+		templateUrl: '/shared/directives/GameCardTemplate.html',
 		controller: 'GameCardController',
 		controllerAs: 'ctrl',
 		bindToController: true
@@ -118,6 +118,3 @@ var GameCardController = function ($scope, $http, $window) {
 };
 
 GameCardController.$inject = ['$scope', '$http', '$window'];
-
-DorkModule.controller('GameCardController', GameCardController);
-DorkModule.directive('gameCard', GameCardDirective);

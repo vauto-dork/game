@@ -2,7 +2,7 @@ var EditActiveGameDirective = function() {
 	return {
 		scope: {
 		},
-		templateUrl: '/directives/EditActiveGameTemplate.html',
+		templateUrl: '/areas/activeGame/directives/EditActiveGameTemplate.html',
 		controller: 'EditActiveGameController',
 		controllerAs: 'ctrl',
 		bindToController: true
@@ -361,15 +361,3 @@ var EditActiveGameController = function ($scope, $http, $location, $window, $q, 
 };
 
 EditActiveGameController.$inject = ['$scope', '$http', '$location', '$window', '$q', '$timeout', 'playerNameFactory'];
-
-DorkModule.controller('EditActiveGameController', EditActiveGameController);
-DorkModule.directive('editActiveGame', EditActiveGameDirective);
-
-DorkModule.controller('EditScoresController', EditScoresController);
-DorkModule.directive('editScores', EditScoresDirective);
-
-DorkModule.controller('PlayerSelectorController', PlayerSelectorController);
-DorkModule.directive('playerSelector', PlayerSelectorDirective);
-
-DorkModule.controller('ReorderPlayersController', ReorderPlayersController);
-DorkModule.directive('reorderPlayers', ReorderPlayersDirective);

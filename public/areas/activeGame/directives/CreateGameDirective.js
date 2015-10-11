@@ -3,7 +3,7 @@ var CreateGameDirective = function() {
 		scope: {
 
 		},
-		templateUrl: '/directives/CreateGameTemplate.html',
+		templateUrl: '/areas/activeGame/directives/CreateGameTemplate.html',
 		controller: 'CreateGameController',
 		controllerAs: 'ctrl',
 		bindToController: true
@@ -182,9 +182,3 @@ var CreateGameController = function ($scope, $window, $http, playerNameFactory) 
 };
 
 CreateGameController.$inject = ['$scope', '$window', '$http', 'playerNameFactory'];
-
-DorkModule.controller('CreateGameController', CreateGameController);
-DorkModule.directive('createGame', CreateGameDirective);
-
-DorkModule.controller('PlayerSelectorController', PlayerSelectorController);
-DorkModule.directive('playerSelector', PlayerSelectorDirective);

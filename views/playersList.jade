@@ -1,12 +1,19 @@
 extends layout
 
 block modules
-	- var modules = ['PlayersListModule']
-
-block scripts
 	script(src='/areas/players/directives/PlayerFormDirective.js')
 	script(src='/areas/players/directives/PlayersListDirective.js')
-	script(src='/areas/players/modules/PlayersListModule.js')
+	
+	script.
+		var PlayersListModule = angular.module('PlayersListModule', []);
+		
+		PlayersListModule.controller('PlayersListController', PlayersListController);
+		PlayersListModule.directive('playersList', PlayersListDirective);
+		
+		PlayersListModule.controller('PlayerFormController', PlayerFormController);
+		PlayersListModule.directive('playerForm', PlayerFormDirective);
+	
+	- var modules = ['PlayersListModule']
 
 block content
 	div.row

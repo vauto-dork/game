@@ -1,8 +1,19 @@
 extends layout
 
-block scripts
+block modules
 	script(src='/areas/players/directives/PlayerSelectorDirective.js')
-	script(src='/directives/CreateGameDirective.js')
+	script(src='/areas/activeGame/directives/CreateGameDirective.js')
+	
+	script.
+		var CreateGameModule = angular.module('CreateGameModule', []);
+		
+		CreateGameModule.controller('CreateGameController', CreateGameController);
+		CreateGameModule.directive('createGame', CreateGameDirective);
+		
+		CreateGameModule.controller('PlayerSelectorController', PlayerSelectorController);
+		CreateGameModule.directive('playerSelector', PlayerSelectorDirective);
+		
+	- var modules = ['CreateGameModule']
 
 block content
 	div.row

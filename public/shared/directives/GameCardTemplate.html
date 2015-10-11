@@ -29,7 +29,7 @@
 		</div>
 		
 		<div ng-if="ctrl.showError">
-			<h3>{{ctrl.errorMessage}}</h3>
+			<h3 ng-bind="ctrl.errorMessage"></h3>
 			
 			<div class="game-warning-btn">
 				<button ng-click="ctrl.dismissOverlay()" class="btn btn-primary btn-lg" aria-label="Back">
@@ -45,8 +45,8 @@
 				<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 			</button>
 		</div>
-		<div class="game-date">{{ctrl.game.datePlayed | date:'MMM d, yyyy'}}</div>
-		<div class="game-time">{{ctrl.game.datePlayed | date:'EEEE h:mm a'}}</div>
+		<div class="game-date" ng-bind="ctrl.game.datePlayed | date:'MMM d, yyyy'"></div>
+		<div class="game-time" ng-bind="ctrl.game.datePlayed | date:'EEEE h:mm a'"></div>
 		
 		<div class="game-edit-btn">
 			<a ng-href="/ActiveGames/Edit/#/{{ctrl.game._id}}" role="button" class="btn btn-warning" aria-label="Edit Game"
@@ -62,6 +62,6 @@
 		<player-scoretag player="player" ng-repeat="player in ctrl.game.players"></player-scoretag>
 	</div>
 	<div class="panel-footer text-right" ng-class="{'game-delete-blur': ctrl.showOverlay}">
-		{{ctrl.game.players.length}} players
+		<span ng-bind="ctrl.game.players.length"></span> players
 	</div>
 </div>

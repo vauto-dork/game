@@ -2,7 +2,7 @@ var GameHistoryDirective = function() {
 	return {
 		scope: {
 		},
-		templateUrl: '/directives/GameHistoryTemplate.html',
+		templateUrl: '/areas/history/directives/GameHistoryTemplate.html',
 		controller: 'GameHistoryController',
 		controllerAs: 'ctrl',
 		bindToController: true
@@ -102,6 +102,3 @@ var GameHistoryController = function ($scope, $http, $timeout, playerNameFactory
 };
 
 GameHistoryController.$inject = ['$scope', '$http', '$timeout', 'playerNameFactory', 'monthYearQueryFactory'];
-
-DorkModule.controller('GameHistoryController', GameHistoryController);
-DorkModule.directive('gameHistory', GameHistoryDirective);

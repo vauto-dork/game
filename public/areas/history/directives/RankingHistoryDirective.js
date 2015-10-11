@@ -2,7 +2,7 @@ var RankingHistoryDirective = function() {
 	return {
 		scope: {
 		},
-		templateUrl: '/directives/RankingHistoryTemplate.html',
+		templateUrl: '/areas/history/directives/RankingHistoryTemplate.html',
 		controller: 'RankingHistoryController',
 		controllerAs: 'ctrl',
 		bindToController: true
@@ -49,6 +49,3 @@ var RankingHistoryController = function ($scope, $timeout, monthYearQueryFactory
 };
 
 RankingHistoryController.$inject = ['$scope', '$timeout', 'monthYearQueryFactory', 'dateTimeFactory'];
-
-DorkModule.controller('RankingHistoryController', RankingHistoryController);
-DorkModule.directive('rankingHistory', RankingHistoryDirective);

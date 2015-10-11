@@ -2,7 +2,7 @@ var ActiveGamesDirective = function() {
 	return {
 		scope: {
 		},
-		templateUrl: '/directives/ActiveGamesTemplate.html',
+		templateUrl: '/areas/activeGame/directives/ActiveGamesTemplate.html',
 		controller: 'ActiveGamesController',
 		controllerAs: 'ctrl',
 		bindToController: true
@@ -75,6 +75,3 @@ var ActiveGamesController = function ($scope, $http, playerNameFactory) {
 };
 
 ActiveGamesController.$inject = ['$scope', '$http', 'playerNameFactory'];
-
-DorkModule.controller('ActiveGamesController', ActiveGamesController);
-DorkModule.directive('activeGames', ActiveGamesDirective);

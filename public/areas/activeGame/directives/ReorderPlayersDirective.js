@@ -3,7 +3,7 @@ var ReorderPlayersDirective = function() {
 		scope: {
 			players: '='
 		},
-		templateUrl: '/directives/ReorderPlayersTemplate.html',
+		templateUrl: '/areas/activeGame/directives/ReorderPlayersTemplate.html',
 		controller: 'ReorderPlayersController',
 		controllerAs: 'ctrl',
 		bindToController: true

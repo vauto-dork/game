@@ -1,14 +1,22 @@
 extends layout
 
 block modules
-	- var modules = ['DotmModule'] 
-
-block scripts
 	script(src='/areas/dotm/directives/DotmPanelDirective.js')
 	script(src='/areas/dotm/directives/DotmDirective.js')
-	script(src='/directives/LeaderboardDirective.js')
-	script(src='/directives/RankingsDirective.js')
 	script(src='/areas/dotm/modules/DotmModule.js')
+	
+	script(src='/areas/rankings/directives/RankingsDirective.js')
+	script(src='/areas/rankings/modules/RankingsModule.js')
+	
+	script(src='/areas/rankings/directives/LeaderboardDirective.js')
+	
+	script.
+		var LeaderboardModule = angular.module('LeaderboardModule', ['DotmModule', 'RankingsModule']);
+		
+		LeaderboardModule.controller('LeaderboardController', LeaderboardController);
+		LeaderboardModule.directive('leaderboard', LeaderboardDirective);
+	
+	- var modules = ['LeaderboardModule']
 
 block content
 	leaderboard

@@ -1,9 +1,9 @@
-var NumericUpDownDirective = function() {
+var NumericUpDownDirective = function($window) {
   return {
         restrict: 'A',
         link: function (scope, element, attrs) {
             element.on('click', function () {                
-                if (!window.getSelection().toString()) {
+                if (!$window.getSelection().toString()) {
                     try {
                         // Required for mobile Safari
                         this.setSelectionRange(0, this.value.length);
@@ -14,7 +14,7 @@ var NumericUpDownDirective = function() {
                 }
             });
             
-            element.on('keydown', function (event) {
+            element.on('keyup', function (event) {
                 var key = event.which || event.keyCode;
                
                 if (!event.shiftKey && !event.altKey && !event.ctrlKey &&
@@ -32,8 +32,8 @@ var NumericUpDownDirective = function() {
                     key == 38 || key == 40 ||
                     // Del and Ins
                     key == 46 || key == 45 ||
-                    // Dash
-                    key == 173)
+                    // Dash and subtract
+                    key == 173 || key == 189 || key == 109)
                     return true;
 
                 return false;

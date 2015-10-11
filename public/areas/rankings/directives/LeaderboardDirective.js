@@ -3,7 +3,7 @@ var LeaderboardDirective = function() {
 		scope: {
 
 		},
-		templateUrl: '/directives/LeaderboardTemplate.html',
+		templateUrl: '/areas/rankings/directives/LeaderboardTemplate.html',
 		controller: 'LeaderboardController',
 		controllerAs: 'ctrl',
 		bindToController: true
@@ -40,6 +40,3 @@ var LeaderboardController = function ($scope, $http, dateTimeFactory) {
 }
 
 LeaderboardController.$inject = ['$scope', '$http', 'dateTimeFactory'];
-
-DorkModule.controller('LeaderboardController', LeaderboardController);
-DorkModule.directive('leaderboard', LeaderboardDirective);
