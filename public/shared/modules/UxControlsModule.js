@@ -1,7 +1,6 @@
 var UxControlsModule = angular.module('UxControlsModule', ['ngAnimate', 'ui.bootstrap']);
 
-UxControlsModule.service('dateTimeFactory', DateTimeFactory);
-
+UxControlsModule.factory('dateTimeFactory', DateTimeFactory);
 UxControlsModule.factory('monthYearQueryFactory', MonthYearQueryFactory);
 UxControlsModule.factory('playerNameFactory', PlayerNameFactory);
 
