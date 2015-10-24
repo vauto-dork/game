@@ -34,7 +34,6 @@ var RankingHistoryController = function ($scope, $timeout, monthYearQueryFactory
 			case me.State.Change:
 				$timeout(function() {
 					monthYearQueryFactory.SaveQueryParams(me.month, me.year);
-					$scope.$broadcast('dotmUpdate');
 				}, 0);
 				me.changeState(me.State.Ready);
 				break;

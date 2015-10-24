@@ -5,6 +5,8 @@ block modules
 	script(src='/areas/dotm/directives/DotmDirective.js')
 	script(src='/areas/dotm/modules/DotmModule.js')
 	
+	script(src='/areas/rankings/services/RankingsFactory.js')
+	script(src='/areas/rankings/directives/RankingsCardDirective.js')
 	script(src='/areas/rankings/directives/RankingsDirective.js')
 	script(src='/areas/rankings/modules/RankingsModule.js')
 	
@@ -19,5 +21,4 @@ block modules
 	- var modules = ['RankingHistoryModule']
 
 block content
-	div.row
-		ranking-history
+	ranking-history

@@ -38,8 +38,10 @@ var DotmController = function ($scope, $http) {
 		me.showDorks = true;
 	}
 	
-	$scope.$on('dotmUpdate', function(){
-		me.getDotm();
+	$scope.$watchGroup([function(){ return me.month; }, function(){ return me.year; }], function(newValue, oldValue){
+		if(newValue != oldValue) {
+			me.getDotm();
+		}
 	});
 	
 	me.getDotm();

@@ -12,7 +12,7 @@ var RankingsDirective = function() {
   };
 };
 
-var RankingsController = function ($scope, $http, playerNameFactory) {
+var RankingsController = function ($scope, rankingsFactory) {
   var me = this;
   me.showLoading = true;
   me.showRankings = false;
@@ -20,6 +20,7 @@ var RankingsController = function ($scope, $http, playerNameFactory) {
   me.showUnrankBtn = false;
   
   me.players = [];
+  me.playersUnderTen = [];
   me.numberUnranked = 0;
   
   me.State = {
@@ -43,51 +44,33 @@ var RankingsController = function ($scope, $http, playerNameFactory) {
 		}
 	};
   
-  $scope.$watch(function() { return me.month; }, function(){
-    me.changeState(me.State.Loading);
-  });
-  
-  $scope.$watch(function() { return me.year; }, function(){
-    me.changeState(me.State.Loading);
+  $scope.$watchGroup([function(){ return me.month; }, function(){ return me.year; }],
+    function(newValue, oldValue){
+      if((newValue !== oldValue)) {
+        me.changeState(me.State.Loading);
+      }
   });
   
   me.getRankings = function(){
-    var mon = me.month === undefined ? new Date().getMonth() : me.month;
-    var yr = me.year === undefined ? new Date().getFullYear() : me.year;
-    var unrankedParam = me.hideUnranked ? '&hideUnranked=true' : '';
-    
-    var rankedUrl = '/players/ranked?month=' + mon + '&year=' + yr + unrankedParam;
-  	
-  	$http.get(rankedUrl)
-    .success(function(data, status, headers, config) {
-      me.players = data;
-      me.players.forEach(function(value){
-        value.player = playerNameFactory.playerNameFormat(value.player);
-      });
-      
-      if (me.players.some( function(elem) { return elem.rank > 0; } )) {
-        me.numberUnranked = me.players.filter(function(element) { return element.rank <= 0; }).length;
-        me.changeState(me.State.Loaded);
-      } else {
-        me.changeState(me.State.NoRankings);
-      }
-    })
-    .error(function(data, status, headers, config) {
+    var rankingsPromise = rankingsFactory.GetRankings(me.month, me.year, me.hideUnranked);
+    rankingsPromise.then( me.loadingSuccess.bind(me), function(data) {
       me.changeState(me.State.Error);
-			console.error(data);
+      console.error(data);
     });
   };
+  
+  me.loadingSuccess = function(){
+    me.players = rankingsFactory.GetPlayersOverTenGames();
+    me.playersUnderTen = rankingsFactory.GetPlayersUnderTenGames();
+    
+    if (me.playersUnderTen.some( function(elem) { return elem.rank > 0; } )) {
+      me.numberUnranked = me.playersUnderTen.filter(function(element) { return element.rank <= 0; }).length;
+      me.changeState(me.State.Loaded);
+    } else {
+      me.changeState(me.State.NoRankings);
+    }
+  }
 	
-  me.playerAverage = function(points, gamesPlayed){
-  	var average = 0;
-  	
-  	if(gamesPlayed > 0){
-  		average = points/gamesPlayed;
-  	}
-
-  	return average.toFixed(2);
-  };
-
   me.hasNoRank = function(rank) {
     if(rank > 0) {
       return '';
@@ -107,4 +90,4 @@ var RankingsController = function ($scope, $http, playerNameFactory) {
   me.changeState(me.State.Loading);
 };
 
-RankingsController.$inject = ['$scope', '$http', 'playerNameFactory'];
+RankingsController.$inject = ['$scope', 'rankingsFactory'];

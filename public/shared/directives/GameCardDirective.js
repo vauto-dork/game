@@ -53,7 +53,7 @@ var GameCardController = function ($scope, $http, $window) {
 	
 	me.errorHandler = function(data, errorMessage) {
 		me.errorMessage = errorMessage;
-		console.log(data);
+		console.error(data);
 		me.changeState(me.State.Error);
 	};
 	

@@ -72,7 +72,7 @@ PlayerSchema.static({
       player: player ? player : {},
       totalPoints: 0,
       gamesPlayed: 0,
-      rank: 0
+      rating: 0
     };
   },
 
