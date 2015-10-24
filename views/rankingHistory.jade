@@ -1,9 +1,24 @@
 extends layout
 
-block content
-	div.row
-		ranking-history
+block modules
 	script(src='/areas/dotm/directives/DotmPanelDirective.js')
 	script(src='/areas/dotm/directives/DotmDirective.js')
-	script(src='/directives/RankingsDirective.js')
-	script(src='/directives/RankingHistoryDirective.js')
+	script(src='/areas/dotm/modules/DotmModule.js')
+	
+	script(src='/areas/rankings/services/RankingsFactory.js')
+	script(src='/areas/rankings/directives/RankingsCardDirective.js')
+	script(src='/areas/rankings/directives/RankingsDirective.js')
+	script(src='/areas/rankings/modules/RankingsModule.js')
+	
+	script(src='/areas/history/directives/RankingHistoryDirective.js')
+
+	script.
+		var RankingHistoryModule = angular.module('RankingHistoryModule', ['DotmModule', 'RankingsModule']);
+		
+		RankingHistoryModule.controller('RankingHistoryController', RankingHistoryController);
+		RankingHistoryModule.directive('rankingHistory', RankingHistoryDirective);
+
+	- var modules = ['RankingHistoryModule']
+
+block content
+	ranking-history

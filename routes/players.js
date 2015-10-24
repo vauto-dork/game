@@ -115,11 +115,11 @@ function getAllPlayersForNewGame(games, res, next) {
 router.get('/dotm/', function(req, res, next) {
 	getRankedPlayers(req, next, function(rankedPlayers) {
 		rankedPlayers = rankedPlayers.filter( function(element) {
-			return element.rank !== 0;
+			return element.gamesPlayed >= 10;
 		});
 		
 		var uberdorks = rankedPlayers.filter( function(element) {
-			return element.rank === 1;
+			return element.rating === rankedPlayers[0].rating;
 		});
 		
 		var negativePoints = rankedPlayers.filter( function(element) {
@@ -225,7 +225,7 @@ function getRanked(req, res, next) {
 		if(!!req.query.hideUnranked && req.query.hideUnranked.toLowerCase() === 'true') {
 			rankedPlayers = rankedPlayers.filter(
 				function(element) {
-					return element.rank > 0;
+					return element.rating > 0;
 				}
 			);
 		}
@@ -288,8 +288,11 @@ function getRankedPlayers(req, next, success) {
 
 				// sort array by rank (points per games played)
 				PlayerModel.rankedPlayerSort(rankedPlayers, PlayerModel.SortTypes.Rating);
-				// add rank value to each player so it is explicit
-				addRanksToPlayers(rankedPlayers);
+				
+				// assign the player's rating
+				rankedPlayers.forEach(function(player) {
+					player.rating = PlayerModel.getRankedPlayerAverage(player);
+				});
 			}
 
 			// Get array of all requested player ids
@@ -322,25 +325,6 @@ function getRankedPlayers(req, next, success) {
 				success(rankedPlayers);
 			});
 		});
-}
-
-/**
- * Add ranks to ranked player objects. Ranks are assigned based on rating.
- * @param rankedPlayers Array of ranked players.
- */
-function addRanksToPlayers(rankedPlayers) {
-	var counter = 0;
-	var previousRating = -999; //impossibru
-	for(var i=0; i<rankedPlayers.length; i++) {
-		var currentRating = PlayerModel.getRankedPlayerAverage(rankedPlayers[i]);
-		
-		if(currentRating != previousRating) {
-			counter++;
-			previousRating = currentRating;
-		}
-		
-		rankedPlayers[i].rank = counter;
-	}
 }
 
 function pushGamePlayerToRankedArray(rankedPlayersArr, gamePlayer) {

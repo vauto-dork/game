@@ -1,7 +1,7 @@
 var DotmPanelDirective = function() {
 	return {
 		scope: {
-			heading: "@",
+			heading: "=",
 			players: "="
 		},
 		templateUrl: '/areas/dotm/directives/DotmPanelTemplate.html',
@@ -18,6 +18,3 @@ var DotmPanelController = function ($scope) {
 }
 
 DotmPanelController.$inject = ['$scope'];
-
-DorkModule.controller('DotmPanelController', DotmPanelController);
-DorkModule.directive('dotmPanel', DotmPanelDirective);

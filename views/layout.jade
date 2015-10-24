@@ -9,22 +9,30 @@ html
     script(src='/scripts/angular.min.js')
     script(src='/scripts/angular-animate.js')
     script(src='/scripts/ui-bootstrap-tpls-0.13.0.min.js')
-    script(src='/services/DateTimeFactory.js')
-    script(src='/services/MonthYearQueryFactory.js')
-    script(src='/services/PlayerNameFactory.js')
-    script(src='/directives/NumericUpDownDirective.js')
-    script(src='/directives/PlayerNametagDirective.js')
-    script(src='/modules/PlayerNametagModule.js')
-    script(src='/directives/PlayerScoretagDirective.js')
-    script(src='/modules/PlayerScoretagModule.js')
-    script(src='/directives/DatePickerDirective.js')
-    script(src='/modules/DatePickerModule.js')
-    script(src='/directives/MonthYearPickerDirective.js')
-    script(src='/modules/MonthYearPickerModule.js')
-    script(src='/modules/DorkModule.js')
+    script(src='/shared/services/DateTimeFactory.js')
+    script(src='/shared/services/MonthYearQueryFactory.js')
+    script(src='/shared/services/PlayerNameFactory.js')
+    script(src='/shared/directives/NumericUpDownDirective.js')
+    script(src='/shared/directives/PlayerNametagDirective.js')
+    script(src='/shared/directives/PlayerScoretagDirective.js')
+    script(src='/shared/directives/DatePickerDirective.js')
+    script(src='/shared/directives/MonthYearPickerDirective.js')
+    script(src='/shared/directives/GlobalNavDirective.js')
+    script(src='/shared/modules/UxControlsModule.js')
+    
+    block modules
+    
+    - var modulesList = ''
+    
+    if modules
+      each val in modules
+        - modulesList = modulesList + ", \'" + val + "\'" 
+    
+    script.
+      var DorkModule = angular.module('DorkModule', ['UxControlsModule'#{modulesList}]);
+    
   body(ng-app="DorkModule")
     global-nav
     div.container-fluid.max-width
       h1= title
       block content
-    script(src='/directives/GlobalNavDirective.js')

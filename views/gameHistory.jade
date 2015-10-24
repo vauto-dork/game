@@ -1,7 +1,19 @@
 extends layout
 
+block modules
+	script(src='/shared/directives/GameCardDirective.js')
+	script(src='/shared/modules/GameCardModule.js')
+	
+	script(src='/areas/history/directives/GameHistoryDirective.js')
+
+	script.
+		var GameHistoryModule = angular.module('GameHistoryModule', ['GameCardModule']);
+		
+		GameHistoryModule.controller('GameHistoryController', GameHistoryController);
+		GameHistoryModule.directive('gameHistory', GameHistoryDirective);
+		
+	- var modules = ['GameHistoryModule']
+
 block content
 	div.row
 		game-history
-	script(src='/directives/GameCardDirective.js')
-	script(src='/directives/GameHistoryDirective.js')

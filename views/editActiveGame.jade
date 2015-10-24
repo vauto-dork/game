@@ -1,9 +1,28 @@
 extends layout
 
+block modules
+	script(src='/areas/players/directives/PlayerSelectorDirective.js')
+	script(src='/areas/activeGame/directives/ReorderPlayersDirective.js')
+	script(src='/areas/activeGame/directives/EditScoresDirective.js')
+	script(src='/areas/activeGame/directives/EditActiveGameDirective.js')
+	
+	script.
+		var EditActiveGameModule = angular.module('EditActiveGameModule', []);
+		
+		EditActiveGameModule.controller('EditActiveGameController', EditActiveGameController);
+		EditActiveGameModule.directive('editActiveGame', EditActiveGameDirective);
+		
+		EditActiveGameModule.controller('EditScoresController', EditScoresController);
+		EditActiveGameModule.directive('editScores', EditScoresDirective);
+		
+		EditActiveGameModule.controller('PlayerSelectorController', PlayerSelectorController);
+		EditActiveGameModule.directive('playerSelector', PlayerSelectorDirective);
+		
+		EditActiveGameModule.controller('ReorderPlayersController', ReorderPlayersController);
+		EditActiveGameModule.directive('reorderPlayers', ReorderPlayersDirective);
+		
+	- var modules = ['EditActiveGameModule']
+		
 block content
 	div.row
 		edit-active-game
-	script(src='/directives/ReorderPlayersDirective.js')
-	script(src='/directives/PlaylistDirective.js')
-	script(src='/directives/EditScoresDirective.js')
-	script(src='/directives/EditActiveGameDirective.js')

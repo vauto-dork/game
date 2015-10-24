@@ -3,12 +3,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Leaderboard' });
-});
-
-/* GET players list page. */
-router.get('/PlayersList', function(req, res, next) {
-  res.render('playersList', { title: 'Players List' });
+  res.render('index', { title: 'Leaderboard'});
 });
 
 /* GET new game page. */
