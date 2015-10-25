@@ -1,6 +1,8 @@
 var EditActiveGameFactory = function($http, $location, $q, playerNameFactory) {
 	var me = this;
 	me.activeGamePath = '';
+	me.cachedGame = [];
+	me.cachedAllPlayers = [];
 	
 	me.setActivePath = function() {
 		if($location.path() !== undefined || $location.path() !== ''){
@@ -20,7 +22,14 @@ var EditActiveGameFactory = function($http, $location, $q, playerNameFactory) {
 				def.reject(status);
 			}
 			else {
-				def.resolve(data);
+				me.cachedGame = data;
+				
+				var promise = me.getAllPlayers();
+				promise.then(function(){
+					def.resolve();
+				}, function(data) {
+					def.reject(data);
+				});
 			}
 		})
 		.error(function(data, status, headers, config) {
@@ -37,13 +46,27 @@ var EditActiveGameFactory = function($http, $location, $q, playerNameFactory) {
 		.success(function(data, status, headers, config) {
 		    var allPlayers = data;
 			allPlayers = me.playerNameFormat(allPlayers);
-			def.resolve(allPlayers);
+			me.markActivePlayersAsSelected(allPlayers);
+			me.cachedAllPlayers = allPlayers;
+			def.resolve();
 		})
 		.error(function(data, status, headers, config) {
 		    def.reject(data);
 		});
 		
 		return def.promise;
+	};
+	
+	me.markActivePlayersAsSelected = function(allPlayers) {
+		var activePlayerIds = me.cachedGame.players.map(function(element) {
+			return element.player._id;
+		});
+		
+		allPlayers.forEach(function(element) {
+			if(activePlayerIds.indexOf(element._id) !== -1){
+				element.selected = true;
+			}
+		});
 	};
 	
 	me.playerNameFormat = function(rawPlayersList) {
@@ -103,9 +126,14 @@ var EditActiveGameFactory = function($http, $location, $q, playerNameFactory) {
 	
 	return {
 		GetActiveGame: me.getActiveGame,
-		GetAllPlayers: me.getAllPlayers,
 		SaveGame: me.saveGame,
-		FinalizeGame: me.finalizeGame
+		FinalizeGame: me.finalizeGame,
+		Game: function() {
+			return me.cachedGame;
+			},
+		AllPlayers: function() {
+			return me.cachedAllPlayers;
+		}
 	};
 };
 

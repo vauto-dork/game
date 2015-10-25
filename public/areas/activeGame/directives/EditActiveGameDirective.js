@@ -120,28 +120,6 @@ var EditActiveGameController = function ($scope, $window, $timeout, editActiveGa
 		});
 	};
 	
-	me.getAllPlayers = function() {
-		var promise = editActiveGameFactory.GetAllPlayers();
-		promise.then(function(allPlayers) {
-			me.allPlayers = allPlayers;
-			me.markActivePlayersAsSelected(me.allPlayers);
-		}, function(data){
-			me.errorHandler(data, 'Cannot get all players.');
-		});
-	};
-	
-	me.markActivePlayersAsSelected = function(allPlayers) {
-		var activePlayerIds = me.game.players.map(function(element) {
-			return element.player._id;
-		});
-		
-		allPlayers.forEach(function(element) {
-			if(activePlayerIds.indexOf(element._id) !== -1){
-				element.selected = true;
-			}
-		});
-	};
-	
 	me.onSelected = function(data) {
 		$scope.$broadcast('playerSelectorBlur');
 		data.selected = !data.selected;
@@ -218,12 +196,12 @@ var EditActiveGameController = function ($scope, $window, $timeout, editActiveGa
 	
 	me.getActiveGame = function() {
 		var promise = editActiveGameFactory.GetActiveGame();
-		promise.then(function(data) {
-			me.game = data;
+		promise.then(function() {
+			me.game = editActiveGameFactory.Game();
+			me.allPlayers = editActiveGameFactory.AllPlayers();
 			me.resetSelectedToMove();
-			me.datePlayedJs = Date.parse(data.datePlayed);
+			me.datePlayedJs = Date.parse(me.game.datePlayed);
 			me.changeState(me.State.Ready);
-			me.getAllPlayers();
 		}, function(data) {
 			me.errorHandler(data, 'Cannot load game.');
 		});
