@@ -9,7 +9,7 @@ var EditActiveGameDirective = function() {
 	};
 }
 
-var EditActiveGameController = function ($scope, $http, $location, $window, $q, $timeout, playerNameFactory) {
+var EditActiveGameController = function ($scope, $window, $timeout, editActiveGameFactory) {
 	var me = this;
 	me.showLoading = false;
 	me.showError = false;
@@ -27,9 +27,6 @@ var EditActiveGameController = function ($scope, $http, $location, $window, $q, 
 		Error: 2,
 		Ready: 3,
 		Saving: 4,
-		Saved: 5,
-		Deleting: 6,
-		Deleted: 7,
 		Finalizing: 8
 	};
 	
@@ -46,22 +43,15 @@ var EditActiveGameController = function ($scope, $http, $location, $window, $q, 
 		
 		me.disableControls = (newState === me.State.Saving) ||
 							 (newState === me.State.Finalizing) ||
-							 (newState === me.State.Deleting) ||
-							 (newState === me.State.Deleted) ||
 							 (newState === me.State.Init) ||
 							 (newState === me.State.Loading);
 		
 		switch(newState) {
 			case me.State.Init:
-				me.setActivePath();
 				me.changeState(me.State.Loading);
 				break;
 			case me.State.Loading:				
-				me.getActiveGames().then(function() {
-					me.getAllPlayers();
-				}, function(){
-					// Do nothing as error is already handled.
-				});
+				me.getActiveGame();
 				break;
 			case me.State.Error:
 				me.scrollToTop();
@@ -71,16 +61,6 @@ var EditActiveGameController = function ($scope, $http, $location, $window, $q, 
 				break;
 			case me.State.Saving:
 				me.saveGame();
-				break;
-			case me.State.Saved:
-				$scope.addAlert('success', 'Game saved successfully!');
-				me.scrollToTop();
-				break;
-			case me.State.Deleting:
-				me.deleteGame();
-				break;
-			case me.State.Deleted:
-				$window.location.href = '/GameHistory';
 				break;
 			case me.State.Finalizing:
 				me.finalizeGame();
@@ -139,34 +119,15 @@ var EditActiveGameController = function ($scope, $http, $location, $window, $q, 
 			$window.scrollTo(0, 100000);
 		});
 	};
-		
-	me.setActivePath = function() {
-		if($location.path() !== undefined || $location.path() !== ''){
-			me.activeGamePath = '/ActiveGames/json' + $location.path();
-		}
-		else {
-			me.activeGamePath = '';
-		}
-	};
 	
 	me.getAllPlayers = function() {
-		$http.get('/players?sort=true')
-		.success(function(data, status, headers, config) {
-		    me.allPlayers = data;
-			me.allPlayers = me.playerNameFormat(me.allPlayers);
+		var promise = editActiveGameFactory.GetAllPlayers();
+		promise.then(function(allPlayers) {
+			me.allPlayers = allPlayers;
 			me.markActivePlayersAsSelected(me.allPlayers);
-		})
-		.error(function(data, status, headers, config) {
-		    me.errorHandler(data, 'Cannot get all players.');
+		}, function(data){
+			me.errorHandler(data, 'Cannot get all players.');
 		});
-	};
-	
-	me.playerNameFormat = function(rawPlayersList) {
-		rawPlayersList.forEach(function(value){
-			value = playerNameFactory.playerNameFormat(value);
-		});
-		
-		return rawPlayersList;
 	};
 	
 	me.markActivePlayersAsSelected = function(allPlayers) {
@@ -255,28 +216,17 @@ var EditActiveGameController = function ($scope, $http, $location, $window, $q, 
 		$window.location.href = '/ActiveGames';
 	};
 	
-	me.getActiveGames = function() {
-		var deferred = $q.defer();
-		
-		$http.get(me.activeGamePath)
-		.success(function(data, status, headers, config) {
-			if(data === null || data === undefined) {
-				me.errorHandler(status, 'Cannot find game.');
-			}
-			else {
-				me.game = data;
-				me.resetSelectedToMove();
-				me.datePlayedJs = Date.parse(data.datePlayed);
-				me.changeState(me.State.Ready);
-			}
-			deferred.resolve();
-		})
-		.error(function(data, status, headers, config) {
+	me.getActiveGame = function() {
+		var promise = editActiveGameFactory.GetActiveGame();
+		promise.then(function(data) {
+			me.game = data;
+			me.resetSelectedToMove();
+			me.datePlayedJs = Date.parse(data.datePlayed);
+			me.changeState(me.State.Ready);
+			me.getAllPlayers();
+		}, function(data) {
 			me.errorHandler(data, 'Cannot load game.');
-			deferred.reject();
 		});
-		
-		return deferred.promise;
 	};
 	
 	me.saveGame = function() {
@@ -287,10 +237,11 @@ var EditActiveGameController = function ($scope, $http, $location, $window, $q, 
 			return;
 		}
 		
-		$http.put(me.activeGamePath, me.game).success(function(data, status, headers, config) {
-			me.changeState(me.State.Saved);
-		}).
-		error(function(data, status, headers, config) {
+		var promise = editActiveGameFactory.SaveGame(me.game);
+		promise.then(function(){
+			$scope.addAlert('success', 'Game saved successfully!');
+			me.changeState(me.State.Ready);
+		}, function(data){
 			me.errorHandler(data, 'Game save failure!');
 		});
 	};
@@ -310,21 +261,11 @@ var EditActiveGameController = function ($scope, $http, $location, $window, $q, 
 			return;
 		}
 		
-		$http.post('/games', me.game).success(function(data, status, headers, config) {
-			me.changeState(me.State.Deleting);
-		}).
-		error(function(data, status, headers, config) {
+		var promise = editActiveGameFactory.FinalizeGame(me.game);
+		promise.then(function(){
+			$window.location.href = '/GameHistory';
+		}, function(data){
 			me.errorHandler(data, 'Cannot finalize game!');
-		});
-	};
-	
-	me.deleteGame = function() {
-		$http.delete(me.activeGamePath)
-		.success(function(data, status, headers, config) {
-		    me.changeState(me.State.Deleted);
-		})
-		.error(function(data, status, headers, config) {
-			me.errorHandler(data, 'Cannot delete game!');
 		});
 	};
 	
@@ -360,4 +301,4 @@ var EditActiveGameController = function ($scope, $http, $location, $window, $q, 
 	me.changeState(me.State.Init);
 };
 
-EditActiveGameController.$inject = ['$scope', '$http', '$location', '$window', '$q', '$timeout', 'playerNameFactory'];
+EditActiveGameController.$inject = ['$scope', '$window', '$timeout', 'editActiveGameFactory'];

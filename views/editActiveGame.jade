@@ -2,12 +2,15 @@ extends layout
 
 block modules
 	script(src='/areas/players/directives/PlayerSelectorDirective.js')
+	script(src='/areas/activeGame/services/EditActiveGameFactory.js')
 	script(src='/areas/activeGame/directives/ReorderPlayersDirective.js')
 	script(src='/areas/activeGame/directives/EditScoresDirective.js')
 	script(src='/areas/activeGame/directives/EditActiveGameDirective.js')
 	
 	script.
 		var EditActiveGameModule = angular.module('EditActiveGameModule', []);
+		
+		EditActiveGameModule.factory('editActiveGameFactory', EditActiveGameFactory);
 		
 		EditActiveGameModule.controller('EditActiveGameController', EditActiveGameController);
 		EditActiveGameModule.directive('editActiveGame', EditActiveGameDirective);
