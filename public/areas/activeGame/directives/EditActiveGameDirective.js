@@ -215,7 +215,7 @@ var EditActiveGameController = function ($scope, $window, $timeout, editActiveGa
 			return;
 		}
 		
-		var promise = editActiveGameFactory.SaveGame(me.game);
+		var promise = editActiveGameFactory.Save(me.game);
 		promise.then(function(){
 			$scope.addAlert('success', 'Game saved successfully!');
 			me.changeState(me.State.Ready);
@@ -239,7 +239,7 @@ var EditActiveGameController = function ($scope, $window, $timeout, editActiveGa
 			return;
 		}
 		
-		var promise = editActiveGameFactory.FinalizeGame(me.game);
+		var promise = editActiveGameFactory.Finalize(me.game);
 		promise.then(function(){
 			$window.location.href = '/GameHistory';
 		}, function(data){

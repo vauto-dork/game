@@ -3,6 +3,7 @@ var UxControlsModule = angular.module('UxControlsModule', ['ngAnimate', 'ui.boot
 UxControlsModule.factory('dateTimeFactory', DateTimeFactory);
 UxControlsModule.factory('monthYearQueryFactory', MonthYearQueryFactory);
 UxControlsModule.factory('playerNameFactory', PlayerNameFactory);
+UxControlsModule.factory('apiFactory', ApiFactory);
 
 UxControlsModule.controller('DatePickerController', DatePickerController);
 UxControlsModule.directive('datePicker', DatePickerDirective);

@@ -1,57 +1,33 @@
-var EditActiveGameFactory = function($http, $location, $q, playerNameFactory) {
+var EditActiveGameFactory = function($location, $q, apiFactory, playerNameFactory) {
 	var me = this;
-	me.activeGamePath = '';
+	me.gameIdPath = '';
 	me.cachedGame = [];
 	me.cachedAllPlayers = [];
 	
 	me.setActivePath = function() {
 		if($location.path() !== undefined || $location.path() !== ''){
-			me.activeGamePath = '/ActiveGames/json' + $location.path();
-		}
-		else {
-			me.activeGamePath = '';
+			me.gameIdPath = $location.path();
 		}
 	};
 	
 	me.getActiveGame = function() {
 		var def = $q.defer();
 		
-		$http.get(me.activeGamePath)
-		.success(function(data, status, headers, config) {
-			if(data === null || data === undefined) {
-				def.reject(status);
-			}
-			else {
-				me.cachedGame = data;
-				
-				var promise = me.getAllPlayers();
-				promise.then(function(){
-					def.resolve();
-				}, function(data) {
-					def.reject(data);
-				});
-			}
-		})
-		.error(function(data, status, headers, config) {
+		var promise = apiFactory.GetActiveGame(me.gameIdPath);
+		promise.then(function(data) {
+			me.cachedGame = data;
+			
+			var hasPlayers = apiFactory.GetAllPlayers();
+			hasPlayers.then(function(data){
+				var allPlayers = data;
+				me.markActivePlayersAsSelected(allPlayers);
+				me.cachedAllPlayers = allPlayers;
+				def.resolve();
+			}, function(data) {
+				def.reject(data);
+			});
+		}, function(data) {
 			def.reject(data);
-		});
-		
-		return def.promise;
-	};	
-	
-	me.getAllPlayers = function() {
-		var def = $q.defer();
-		
-		$http.get('/players?sort=true')
-		.success(function(data, status, headers, config) {
-		    var allPlayers = data;
-			allPlayers = me.playerNameFormat(allPlayers);
-			me.markActivePlayersAsSelected(allPlayers);
-			me.cachedAllPlayers = allPlayers;
-			def.resolve();
-		})
-		.error(function(data, status, headers, config) {
-		    def.reject(data);
 		});
 		
 		return def.promise;
@@ -69,54 +45,39 @@ var EditActiveGameFactory = function($http, $location, $q, playerNameFactory) {
 		});
 	};
 	
-	me.playerNameFormat = function(rawPlayersList) {
-		rawPlayersList.forEach(function(value){
-			value = playerNameFactory.playerNameFormat(value);
-		});
-		
-		return rawPlayersList;
-	};
-	
-	me.saveGame = function(game) {
-		var def = $q.defer();
-		
-		$http.put(me.activeGamePath, game).success(function(data, status, headers, config) {
-			def.resolve();
-		}).
-		error(function(data, status, headers, config) {
-			def.reject(data);
-		});
-		
-		return def.promise;
+	me.save = function(game) {
+		return apiFactory.SaveActiveGame(me.gameIdPath, game);
 	};
 	
 	me.finalizeGame = function(game) {
 		var def = $q.defer();
 		
-		$http.post('/games', game).success(function(data, status, headers, config) {
-			var promise = me.deleteGame();
-			promise.then(function(){
+		var promise = apiFactory.FinalizeGame(game);
+		promise.then(function(){
+			var deletePromise = apiFactory.DeleteActiveGame(me.gameIdPath);
+			deletePromise.then(function(){
 				def.resolve();
 			}, function(data) {
 				def.reject(data);
 			});
-		}).
-		error(function(data, status, headers, config) {
+		}, function(data){
 			def.reject(data);
 		});
 		
 		return def.promise;
 	};
 	
-	me.deleteGame = function() {
+	me.finalize = function(game) {
 		var def = $q.defer();
 		
-		$http.delete(me.activeGamePath)
-		.success(function(data, status, headers, config) {
-		    def.resolve();
-		})
-		.error(function(data, status, headers, config) {
-			def.reject(data);
+		var savePromise = me.save(game);
+		savePromise.then(function() {
+			var finalizePromise = me.finalizeGame(game);
+			finalizePromise.then(function(){
+				def.resolve();
+			}, function(data) {
+				def.reject(data);
+			});
 		});
 		
 		return def.promise;
@@ -126,8 +87,8 @@ var EditActiveGameFactory = function($http, $location, $q, playerNameFactory) {
 	
 	return {
 		GetActiveGame: me.getActiveGame,
-		SaveGame: me.saveGame,
-		FinalizeGame: me.finalizeGame,
+		Save: me.save,
+		Finalize: me.finalize,
 		Game: function() {
 			return me.cachedGame;
 			},
@@ -137,4 +98,4 @@ var EditActiveGameFactory = function($http, $location, $q, playerNameFactory) {
 	};
 };
 
-EditActiveGameFactory.$inject = ['$http', '$location', '$q', 'playerNameFactory'];
+EditActiveGameFactory.$inject = ['$location', '$q', 'apiFactory', 'playerNameFactory'];
