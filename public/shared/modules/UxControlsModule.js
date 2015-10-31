@@ -20,4 +20,4 @@ UxControlsModule.directive('playerScoretag', PlayerScoretagDirective);
 UxControlsModule.controller('GlobalNavController', GlobalNavController);
 UxControlsModule.directive('globalNav', GlobalNavDirective);
 
-UxControlsModule.directive('numericUpDown', NumericUpDownDirective);
+UxControlsModule.directive('numericUpDown', Shared.NumericUpDownDirective);
