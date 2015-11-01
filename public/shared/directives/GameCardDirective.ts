@@ -32,7 +32,7 @@ module Shared {
 		private showDeleted: boolean = false;
 		private showError: boolean = false;
 		
-		private selectedGame: any;
+		private selectedGame: IGameViewModel;
 		private errorMessage: string;
 		private gamePath: string;
 		
@@ -42,8 +42,7 @@ module Shared {
 
 		private changeState(newState: State): void {
 			this.showOverlay = newState !== State.Ready;
-			this.showLoadBar = newState === State.Deleting ||
-			newState === State.Copy;
+			this.showLoadBar = newState === State.Deleting || newState === State.Copy;
 			this.showDeleteWarning = newState === State.DeleteWarning;
 			this.showError = newState === State.Error;
 			this.showDeleted = newState === State.Deleted;
@@ -98,7 +97,7 @@ module Shared {
 			});
 
 			this.$http.post('/activeGames/save', { players: removedScores })
-				.success(function(data: any, status, headers, config) {
+				.success(function(data: IGameViewModel, status, headers, config) {
 					this.$window.location.href = '/activeGames/edit/#/' + data._id;
 				})
 				.error(function(data, status, headers, config) {
@@ -114,12 +113,12 @@ module Shared {
 			this.changeState(State.Ready);
 		}
 
-		private deleteGame(game): void {
+		private deleteGame(game: IGameViewModel): void {
 			this.selectedGame = game;
 			this.changeState(State.Deleting);
 		}
 
-		private copyGame(game): void {
+		private copyGame(game: IGameViewModel): void {
 			this.selectedGame = game;
 			this.changeState(State.Copy);
 		}

@@ -1,13 +1,13 @@
 <div class="row">		
 	<div class="col-xs-7">
 		<select class="form-control input-lg" ng-model="ctrl.selectedMonth"
-			ng-options="month.name for month in ctrl.months" ng-disabled="ctrl.disableMonth"
+			ng-options="month.name for month in ctrl.months" ng-disabled="ctrl.disabled"
 			ng-change="ctrl.updateParams()"></select>
 	</div>
 	
 	<div class="col-xs-5">
 		<select class="form-control input-lg" ng-model="ctrl.selectedYear"
-			ng-options="year.name for year in ctrl.years" ng-disabled="ctrl.disableYear"
+			ng-options="year.name for year in ctrl.years" ng-disabled="ctrl.disabled || ctrl.disableYear"
 			ng-change="ctrl.updateParams()"></select>
 	</div>
 </div>

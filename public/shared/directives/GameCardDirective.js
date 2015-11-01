@@ -38,8 +38,7 @@ var Shared;
         }
         GameCardController.prototype.changeState = function (newState) {
             this.showOverlay = newState !== State.Ready;
-            this.showLoadBar = newState === State.Deleting ||
-                newState === State.Copy;
+            this.showLoadBar = newState === State.Deleting || newState === State.Copy;
             this.showDeleteWarning = newState === State.DeleteWarning;
             this.showError = newState === State.Error;
             this.showDeleted = newState === State.Deleted;
