@@ -1,8 +1,8 @@
 var UxControlsModule = angular.module('UxControlsModule', ['ngAnimate', 'ui.bootstrap']);
 UxControlsModule.factory('dateTimeFactory', Shared.DateTimeFactory);
-UxControlsModule.factory('monthYearQueryFactory', MonthYearQueryFactory);
+UxControlsModule.factory('monthYearQueryFactory', Shared.MonthYearQueryFactory);
 UxControlsModule.factory('playerNameFactory', Shared.PlayerNameFactory);
-UxControlsModule.factory('apiFactory', ApiFactory);
+UxControlsModule.factory('apiFactory', Shared.ApiFactory);
 UxControlsModule.controller('DatePickerController', Shared.DatePickerController);
 UxControlsModule.directive('datePicker', Shared.DatePickerDirective);
 UxControlsModule.controller('MonthYearPickerController', Shared.MonthYearPickerController);

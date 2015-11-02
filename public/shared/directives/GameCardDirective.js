@@ -25,10 +25,11 @@ var Shared;
         State[State["Error"] = 5] = "Error";
     })(State || (State = {}));
     var GameCardController = (function () {
-        function GameCardController($scope, $http, $window) {
+        function GameCardController($scope, $http, $window, apiFactory) {
             this.$scope = $scope;
             this.$http = $http;
             this.$window = $window;
+            this.apiFactory = apiFactory;
             this.showOverlay = false;
             this.showLoadBar = false;
             this.showDeleteWarning = false;
@@ -61,24 +62,41 @@ var Shared;
         };
         // Dont call directly. Change state to "Deleting" instead.
         GameCardController.prototype.delete = function () {
+            var _this = this;
             if (!this.selectedGame) {
                 this.errorHandler(null, 'No game selected!');
                 return;
             }
             this.$http.delete(this.gamePath + '/' + this.selectedGame._id)
                 .success(function (data, status, headers, config) {
-                this.changeState(State.Deleted);
+                _this.changeState(State.Deleted);
             })
                 .error(function (data, status, headers, config) {
-                this.errorHandler(data, 'Error deleting game!');
+                _this.errorHandler(data, 'Error deleting game!');
             });
         };
         // Dont call directly. Change state to "Copy" instead.
         GameCardController.prototype.copy = function () {
+            var _this = this;
             if (!this.selectedGame) {
                 this.errorHandler(null, 'No game selected!');
                 return;
             }
+            // var playersList: IGamePlayerViewModel[] = this.selectedGame.players.map((value: IGamePlayerViewModel) => {
+            // 	var player: IGamePlayerViewModel = {
+            // 		_id: value._id,
+            // 		player: value.player
+            // 	}
+            // 	
+            // 	return player;
+            // });
+            // 
+            // var createGamePromise = this.apiFactory.CreateActiveGame({players: playersList});
+            // createGamePromise.then((data: IGameViewModel) => {
+            // 	this.$window.location.href = '/activeGames/edit/#/' + data._id;
+            // }, (data: string) => {
+            // 	this.errorHandler(data, 'Error copying game!');
+            // });
             var removedScores = angular.copy(this.selectedGame.players);
             removedScores.forEach(function (element) {
                 element.points = 0;
@@ -86,10 +104,10 @@ var Shared;
             });
             this.$http.post('/activeGames/save', { players: removedScores })
                 .success(function (data, status, headers, config) {
-                this.$window.location.href = '/activeGames/edit/#/' + data._id;
+                _this.$window.location.href = '/activeGames/edit/#/' + data._id;
             })
                 .error(function (data, status, headers, config) {
-                this.errorHandler(data, 'Error copying game!');
+                _this.errorHandler(data, 'Error copying game!');
             });
         };
         GameCardController.prototype.warnDelete = function () {
@@ -106,7 +124,7 @@ var Shared;
             this.selectedGame = game;
             this.changeState(State.Copy);
         };
-        GameCardController.$inject = ['$scope', '$http', '$window'];
+        GameCardController.$inject = ['$scope', '$http', '$window', 'apiFactory'];
         return GameCardController;
     })();
     Shared.GameCardController = GameCardController;

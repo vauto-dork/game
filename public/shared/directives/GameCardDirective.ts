@@ -24,7 +24,7 @@ module Shared {
 	}
 
 	export class GameCardController {
-		public static $inject: string[] = ['$scope', '$http', '$window'];
+		public static $inject: string[] = ['$scope', '$http', '$window', 'apiFactory'];
 
 		private showOverlay: boolean = false;
 		private showLoadBar: boolean = false;
@@ -36,7 +36,7 @@ module Shared {
 		private errorMessage: string;
 		private gamePath: string;
 		
-		constructor(private $scope: ng.IScope, private $http: ng.IHttpService, private $window: ng.IWindowService) {
+		constructor(private $scope: ng.IScope, private $http: ng.IHttpService, private $window: ng.IWindowService, private apiFactory: IApiFactory) {
 			this.changeState(State.Ready);
 		}
 
@@ -74,10 +74,10 @@ module Shared {
 			}
 
 			this.$http.delete(this.gamePath + '/' + this.selectedGame._id)
-				.success(function(data, status, headers, config) {
+				.success((data, status, headers, config) => {
 					this.changeState(State.Deleted);
 				})
-				.error(function(data, status, headers, config) {
+				.error((data, status, headers, config) => {
 					this.errorHandler(data, 'Error deleting game!');
 				});
 		}
@@ -88,19 +88,35 @@ module Shared {
 				this.errorHandler(null, 'No game selected!');
 				return;
 			}
+			
+			// var playersList: IGamePlayerViewModel[] = this.selectedGame.players.map((value: IGamePlayerViewModel) => {
+			// 	var player: IGamePlayerViewModel = {
+			// 		_id: value._id,
+			// 		player: value.player
+			// 	}
+			// 	
+			// 	return player;
+			// });
+			// 
+			// var createGamePromise = this.apiFactory.CreateActiveGame({players: playersList});
+			// createGamePromise.then((data: IGameViewModel) => {
+			// 	this.$window.location.href = '/activeGames/edit/#/' + data._id;
+			// }, (data: string) => {
+			// 	this.errorHandler(data, 'Error copying game!');
+			// });
 
-			var removedScores = angular.copy(this.selectedGame.players)
+			var removedScores: IGamePlayerViewModel[] = angular.copy(this.selectedGame.players)
 
-			removedScores.forEach(function(element) {
+			removedScores.forEach((element: IGamePlayerViewModel) => {
 				element.points = 0;
 				element.rank = 0;
 			});
-
+			
 			this.$http.post('/activeGames/save', { players: removedScores })
-				.success(function(data: IGameViewModel, status, headers, config) {
+				.success((data: IGameViewModel, status, headers, config) => {
 					this.$window.location.href = '/activeGames/edit/#/' + data._id;
 				})
-				.error(function(data, status, headers, config) {
+				.error((data, status, headers, config) => {
 					this.errorHandler(data, 'Error copying game!');
 				});
 		}
