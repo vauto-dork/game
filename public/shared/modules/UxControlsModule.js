@@ -1,7 +1,6 @@
 var UxControlsModule = angular.module('UxControlsModule', ['ngAnimate', 'ui.bootstrap']);
 UxControlsModule.service('dateTimeService', Shared.DateTimeService);
 UxControlsModule.service('monthYearQueryService', Shared.MonthYearQueryService);
-UxControlsModule.service('playerNameService', Shared.PlayerNameService);
 UxControlsModule.service('apiService', Shared.ApiService);
 UxControlsModule.controller('DatePickerController', Shared.DatePickerController);
 UxControlsModule.directive('datePicker', Shared.DatePickerDirective);

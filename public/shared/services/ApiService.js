@@ -1,10 +1,9 @@
 var Shared;
 (function (Shared) {
     var ApiService = (function () {
-        function ApiService($http, $q, playerNameService) {
+        function ApiService($http, $q) {
             this.$http = $http;
             this.$q = $q;
-            this.playerNameService = playerNameService;
         }
         // --------------------------------------------------------------
         // Active Games
@@ -76,8 +75,8 @@ var Shared;
             this.$http.get('/players?sort=true')
                 .success(function (data, status, headers, config) {
                 var allPlayers = data;
-                allPlayers = _this.PlayerNameFormat(allPlayers);
-                def.resolve(data);
+                var formattedPlayers = _this.PlayerNameFormat(allPlayers);
+                def.resolve(formattedPlayers);
             })
                 .error(function (data, status, headers, config) {
                 console.error('Cannot get all players.');
@@ -87,11 +86,10 @@ var Shared;
         };
         ;
         ApiService.prototype.PlayerNameFormat = function (rawPlayersList) {
-            var _this = this;
-            rawPlayersList.forEach(function (value) {
-                value = _this.playerNameService.PlayerNameFormat(value);
+            var playersList = rawPlayersList.map(function (value) {
+                return new Shared.Player(value);
             });
-            return rawPlayersList;
+            return playersList;
         };
         ;
         // --------------------------------------------------------------
@@ -121,7 +119,7 @@ var Shared;
             return def.promise;
         };
         ;
-        ApiService.$inject = ['$http', '$q', 'playerNameService'];
+        ApiService.$inject = ['$http', '$q'];
         return ApiService;
     })();
     Shared.ApiService = ApiService;

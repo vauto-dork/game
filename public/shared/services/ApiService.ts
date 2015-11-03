@@ -10,9 +10,9 @@ module Shared {
 	}
 
 	export class ApiService implements IApiService {
-		public static $inject: string[] = ['$http', '$q', 'playerNameService'];
+		public static $inject: string[] = ['$http', '$q'];
 		
-		constructor(private $http: ng.IHttpService, private $q: ng.IQService, private playerNameService: IPlayerNameService) {
+		constructor(private $http: ng.IHttpService, private $q: ng.IQService) {
 			
 		}
 		
@@ -97,8 +97,8 @@ module Shared {
 			this.$http.get('/players?sort=true')
 				.success((data: IPlayerViewModel[], status, headers, config) => {
 					var allPlayers: IPlayerViewModel[] = data;
-					allPlayers = this.PlayerNameFormat(allPlayers);
-					def.resolve(data);
+					var formattedPlayers: IPlayer[] = this.PlayerNameFormat(allPlayers);
+					def.resolve(formattedPlayers);
 				})
 				.error((data, status, headers, config) => {
 					console.error('Cannot get all players.');
@@ -109,11 +109,11 @@ module Shared {
 		};
 
 		private PlayerNameFormat(rawPlayersList: IPlayerViewModel[]) {
-			rawPlayersList.forEach((value: IPlayerViewModel) => {
-				value = this.playerNameService.PlayerNameFormat(value);
+			var playersList: IPlayer[] = rawPlayersList.map((value: IPlayerViewModel) => {
+				return new Player(value);
 			});
 
-			return rawPlayersList;
+			return playersList;
 		};
 	
 		// --------------------------------------------------------------
