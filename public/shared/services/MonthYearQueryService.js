@@ -1,11 +1,11 @@
 var Shared;
 (function (Shared) {
-    var MonthYearQueryFactory = (function () {
-        function MonthYearQueryFactory($location) {
+    var MonthYearQueryService = (function () {
+        function MonthYearQueryService($location) {
             this.$location = $location;
             this.minimumYear = 2015;
         }
-        MonthYearQueryFactory.prototype.sanitizeParam = function (value) {
+        MonthYearQueryService.prototype.SanitizeParam = function (value) {
             if (value === undefined) {
                 return undefined;
             }
@@ -13,8 +13,8 @@ var Shared;
             return isNaN(parsedValue) ? undefined : parsedValue;
         };
         ;
-        MonthYearQueryFactory.prototype.GetMonthQueryParam = function (month) {
-            var queryMonth = this.sanitizeParam(this.$location.search().month);
+        MonthYearQueryService.prototype.GetMonthQueryParam = function (month) {
+            var queryMonth = this.SanitizeParam(this.$location.search().month);
             if (queryMonth !== undefined) {
                 queryMonth--;
                 month = queryMonth > 11
@@ -23,21 +23,21 @@ var Shared;
             }
             return month;
         };
-        MonthYearQueryFactory.prototype.GetYearQueryParam = function (year) {
-            var queryYear = this.sanitizeParam(this.$location.search().year);
+        MonthYearQueryService.prototype.GetYearQueryParam = function (year) {
+            var queryYear = this.SanitizeParam(this.$location.search().year);
             if (queryYear !== undefined) {
                 year = queryYear < this.minimumYear ? this.minimumYear : queryYear;
             }
             return year;
         };
-        MonthYearQueryFactory.prototype.SaveQueryParams = function (month, year) {
+        MonthYearQueryService.prototype.SaveQueryParams = function (month, year) {
             this.$location.search('month', month + 1);
             this.$location.search('year', year);
             this.$location.replace();
         };
-        MonthYearQueryFactory.$inject = ['$location'];
-        return MonthYearQueryFactory;
+        MonthYearQueryService.$inject = ['$location'];
+        return MonthYearQueryService;
     })();
-    Shared.MonthYearQueryFactory = MonthYearQueryFactory;
+    Shared.MonthYearQueryService = MonthYearQueryService;
 })(Shared || (Shared = {}));
-//# sourceMappingURL=MonthYearQueryFactory.js.map
+//# sourceMappingURL=MonthYearQueryService.js.map

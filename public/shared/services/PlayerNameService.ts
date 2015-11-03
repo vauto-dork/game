@@ -1,9 +1,9 @@
 ﻿module Shared {
-	export interface IPlayerNameFactory {
+	export interface IPlayerNameService {
 		PlayerNameFormat(player: IPlayerViewModel): IPlayer;
 	}
 	
-	export class PlayerNameFactory implements IPlayerNameFactory {
+	export class PlayerNameService implements IPlayerNameService {
 		public PlayerNameFormat(player: IPlayerViewModel): IPlayer {
 			var newPlayer: IPlayer = {
 				_id: player._id,

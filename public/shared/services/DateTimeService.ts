@@ -1,5 +1,5 @@
 module Shared {
-	export interface IDateTimeFactory {
+	export interface IDateTimeService {
 		CurrentYear(): number;
 		CurrentMonthValue(): number;
 		CurrentMonthName(): string;
@@ -9,7 +9,7 @@ module Shared {
 		MonthName(monthValue: number): string;
 	}
 	
-	export class DateTimeFactory implements IDateTimeFactory {
+	export class DateTimeService implements IDateTimeService {
 		
 		private monthNames = ["January", "February", "March", "April", "May", "June",
 			"July", "August", "September", "October", "November", "December"

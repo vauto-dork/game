@@ -1,9 +1,9 @@
 var Shared;
 (function (Shared) {
-    var PlayerNameFactory = (function () {
-        function PlayerNameFactory() {
+    var PlayerNameService = (function () {
+        function PlayerNameService() {
         }
-        PlayerNameFactory.prototype.PlayerNameFormat = function (player) {
+        PlayerNameService.prototype.PlayerNameFormat = function (player) {
             var newPlayer = {
                 _id: player._id,
                 __v: player.__v,
@@ -15,8 +15,8 @@ var Shared;
             };
             return newPlayer;
         };
-        return PlayerNameFactory;
+        return PlayerNameService;
     })();
-    Shared.PlayerNameFactory = PlayerNameFactory;
+    Shared.PlayerNameService = PlayerNameService;
 })(Shared || (Shared = {}));
-//# sourceMappingURL=PlayerNameFactory.js.map
+//# sourceMappingURL=PlayerNameService.js.map

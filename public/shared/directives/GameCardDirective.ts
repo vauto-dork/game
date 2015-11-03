@@ -24,7 +24,7 @@ module Shared {
 	}
 
 	export class GameCardController {
-		public static $inject: string[] = ['$scope', '$http', '$window', 'apiFactory'];
+		public static $inject: string[] = ['$scope', '$http', '$window', 'apiService'];
 
 		private showOverlay: boolean = false;
 		private showLoadBar: boolean = false;
@@ -36,7 +36,7 @@ module Shared {
 		private errorMessage: string;
 		private gamePath: string;
 		
-		constructor(private $scope: ng.IScope, private $http: ng.IHttpService, private $window: ng.IWindowService, private apiFactory: IApiFactory) {
+		constructor(private $scope: ng.IScope, private $http: ng.IHttpService, private $window: ng.IWindowService, private apiService: IApiService) {
 			this.changeState(State.Ready);
 		}
 
@@ -98,7 +98,7 @@ module Shared {
 			// 	return player;
 			// });
 			// 
-			// var createGamePromise = this.apiFactory.CreateActiveGame({players: playersList});
+			// var createGamePromise = this.apiService.CreateActiveGame({players: playersList});
 			// createGamePromise.then((data: IGameViewModel) => {
 			// 	this.$window.location.href = '/activeGames/edit/#/' + data._id;
 			// }, (data: string) => {

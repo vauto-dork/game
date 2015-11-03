@@ -25,11 +25,11 @@ var Shared;
         State[State["Error"] = 5] = "Error";
     })(State || (State = {}));
     var GameCardController = (function () {
-        function GameCardController($scope, $http, $window, apiFactory) {
+        function GameCardController($scope, $http, $window, apiService) {
             this.$scope = $scope;
             this.$http = $http;
             this.$window = $window;
-            this.apiFactory = apiFactory;
+            this.apiService = apiService;
             this.showOverlay = false;
             this.showLoadBar = false;
             this.showDeleteWarning = false;
@@ -91,7 +91,7 @@ var Shared;
             // 	return player;
             // });
             // 
-            // var createGamePromise = this.apiFactory.CreateActiveGame({players: playersList});
+            // var createGamePromise = this.apiService.CreateActiveGame({players: playersList});
             // createGamePromise.then((data: IGameViewModel) => {
             // 	this.$window.location.href = '/activeGames/edit/#/' + data._id;
             // }, (data: string) => {
@@ -124,7 +124,7 @@ var Shared;
             this.selectedGame = game;
             this.changeState(State.Copy);
         };
-        GameCardController.$inject = ['$scope', '$http', '$window', 'apiFactory'];
+        GameCardController.$inject = ['$scope', '$http', '$window', 'apiService'];
         return GameCardController;
     })();
     Shared.GameCardController = GameCardController;

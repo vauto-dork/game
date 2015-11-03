@@ -1,5 +1,5 @@
 module Shared {
-	export interface IApiFactory {
+	export interface IApiService {
 		GetActiveGame(gameIdPath: string): ng.IPromise<any>;
 		CreateActiveGame(game: IActiveGameViewModel): ng.IPromise<any>;
 		SaveActiveGame(gameIdPath: string, game: IGameViewModel): ng.IPromise<any>;
@@ -9,10 +9,10 @@ module Shared {
 		DeleteGame(gameIdPath: string): ng.IPromise<any>;
 	}
 
-	export class ApiFactory implements IApiFactory {
-		public static $inject: string[] = ['$http', '$q', 'playerNameFactory'];
+	export class ApiService implements IApiService {
+		public static $inject: string[] = ['$http', '$q', 'playerNameService'];
 		
-		constructor(private $http: ng.IHttpService, private $q: ng.IQService, private playerNameFactory: IPlayerNameFactory) {
+		constructor(private $http: ng.IHttpService, private $q: ng.IQService, private playerNameService: IPlayerNameService) {
 			
 		}
 		
@@ -110,7 +110,7 @@ module Shared {
 
 		private PlayerNameFormat(rawPlayersList: IPlayerViewModel[]) {
 			rawPlayersList.forEach((value: IPlayerViewModel) => {
-				value = this.playerNameFactory.PlayerNameFormat(value);
+				value = this.playerNameService.PlayerNameFormat(value);
 			});
 
 			return rawPlayersList;
