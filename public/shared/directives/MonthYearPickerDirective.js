@@ -5,7 +5,7 @@ var Shared;
             scope: {
                 month: "=",
                 year: "=",
-                disabled: "=",
+                disabled: "=?",
                 change: "&"
             },
             templateUrl: '/shared/directives/MonthYearPickerTemplate.html',

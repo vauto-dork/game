@@ -4,7 +4,7 @@ module Shared {
 			scope: {
 				month: "=",
 				year: "=",
-				disabled: "=",
+				disabled: "=?",
 				change: "&"
 			},
 			templateUrl: '/shared/directives/MonthYearPickerTemplate.html',
@@ -13,7 +13,7 @@ module Shared {
 			bindToController: true
 		};
     }
-	
+
 	interface INameValuePair {
 		name: string,
 		value: number
@@ -21,19 +21,19 @@ module Shared {
 
     export class MonthYearPickerController {
         public static $inject: string[] = ['$scope'];
-		
+
 		private change: Function;
 		private isDisabled: boolean = false;
-		
+
 		private minimumYear: number = 2015;
 		private disableYear: boolean = false;
-		
+
 		private selectedMonth: INameValuePair;
 		private selectedYear: INameValuePair;
-		
+
 		private currentMonth: number;
 		private currentYear: number;
-		
+
 		private years: INameValuePair[] = [];
 		private months: INameValuePair[] = [
 			{ name: 'January', value: 0 },
@@ -49,27 +49,27 @@ module Shared {
 			{ name: 'November', value: 10 },
 			{ name: 'December', value: 11 }
 		];
-		
+
 		public get disabled(): boolean {
 			return this.isDisabled;
 		}
-		
+
 		public set disabled(value: boolean) {
 			this.isDisabled = value;
 		}
-		
+
 		public get month(): number {
 			return this.currentMonth === undefined ? new Date().getMonth() : this.currentMonth;
 		}
-		
+
 		public set month(value: number) {
 			this.currentMonth = value;
 		}
-		
+
 		public get year(): number {
 			return this.currentYear === undefined ? new Date().getFullYear() : this.currentYear;
 		}
-		
+
 		public set year(value: number) {
 			this.currentYear = value;
 		}
@@ -77,27 +77,27 @@ module Shared {
         constructor(private $scope: ng.IScope) {
 			this.init();
         }
-		
+
 		private init(): void {
 			this.selectedMonth = this.months[this.currentMonth === 0 ? 11 : this.currentMonth];
-				
-			for(var i = this.minimumYear; i <= this.currentYear; i++){
+
+			for (var i = this.minimumYear; i <= this.currentYear; i++) {
 				var tempYear: INameValuePair = { name: i.toString(), value: i };
 				this.years.push(tempYear);
-				
-				if(i === this.currentYear){
+
+				if (i === this.currentYear) {
 					this.selectedYear = tempYear;
 				}
 			}
-			
+
 			this.disableYear = this.disableYear || this.years.length <= 1;
 		};
-		
+
 		private updateParams(): void {
 			this.month = this.selectedMonth.value;
 			this.year = this.selectedYear.value;
-			
-			if(this.change !== undefined) {
+
+			if (this.change !== undefined) {
 				this.change();
 			}
 		};

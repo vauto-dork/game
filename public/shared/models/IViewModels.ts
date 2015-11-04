@@ -3,7 +3,7 @@ module Shared {
 		_id?: string;
 		winner: IPlayerViewModel;
 		players: IGamePlayerViewModel[];
-		datePlayed: Date;
+		datePlayed: string;
 	}
 	
 	export interface IGamePlayerViewModel {
@@ -11,6 +11,14 @@ module Shared {
 		player: IPlayerViewModel;
 		rank?: number;
 		points?: number;
+	}
+	
+	export interface IRankedPlayerViewModel {
+		_id?: string;
+		player: IPlayerViewModel;
+		totalPoints?: number;
+		gamesPlayed?: number;
+		rating?: number;
 	}
 	
 	export interface IActiveGameViewModel {
