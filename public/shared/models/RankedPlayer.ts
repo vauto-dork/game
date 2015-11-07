@@ -6,7 +6,7 @@ module Shared {
 		gamesPlayed?: number;
 		rating?: number;
 		rank?: number;
-		ToRankedPlayerViewModel(): IRankedPlayerViewModel;
+		toRankedPlayerViewModel(): IRankedPlayerViewModel;
 	}
 	
 	export class RankedPlayer implements IRankedPlayer {
@@ -26,10 +26,10 @@ module Shared {
 			this.rank = 0;
 		}
 		
-		public ToRankedPlayerViewModel(): IRankedPlayerViewModel {
+		public toRankedPlayerViewModel(): IRankedPlayerViewModel {
 			var player: IRankedPlayerViewModel = {
 				_id: this._id,
-				player: this.player.ToPlayerViewModel(),
+				player: this.player.toPlayerViewModel(),
 				totalPoints: player.totalPoints,
 				gamesPlayed: player.gamesPlayed,
 				rating: player.rating

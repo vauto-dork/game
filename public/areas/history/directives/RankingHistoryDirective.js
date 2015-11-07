@@ -23,8 +23,8 @@ var DorkHistory;
             this.$timeout = $timeout;
             this.monthYearQueryService = monthYearQueryService;
             this.dateTimeService = dateTimeService;
-            this.month = dateTimeService.LastMonthValue();
-            this.year = dateTimeService.LastMonthYear();
+            this.month = dateTimeService.lastMonthValue();
+            this.year = dateTimeService.lastMonthYear();
             this.changeState(State.Init);
         }
         RankingHistoryController.prototype.changeState = function (newState) {
@@ -34,14 +34,14 @@ var DorkHistory;
             switch (newState) {
                 case State.Init:
                     this.$timeout(function () {
-                        _this.month = _this.monthYearQueryService.GetMonthQueryParam(_this.month);
-                        _this.year = _this.monthYearQueryService.GetYearQueryParam(_this.year);
+                        _this.month = _this.monthYearQueryService.getMonthQueryParam(_this.month);
+                        _this.year = _this.monthYearQueryService.getYearQueryParam(_this.year);
                     }, 0);
                     this.changeState(State.Ready);
                     break;
                 case State.Change:
                     this.$timeout(function () {
-                        _this.monthYearQueryService.SaveQueryParams(_this.month, _this.year);
+                        _this.monthYearQueryService.saveQueryParams(_this.month, _this.year);
                     }, 0);
                     this.changeState(State.Ready);
                     break;

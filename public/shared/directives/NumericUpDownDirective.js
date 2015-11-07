@@ -1,6 +1,7 @@
 var Shared;
 (function (Shared) {
     function NumericUpDownDirective($window) {
+        var _this = this;
         return {
             restrict: 'A',
             link: function (scope, element, attrs) {
@@ -8,7 +9,7 @@ var Shared;
                     if (!$window.getSelection().toString()) {
                         try {
                             // Required for mobile Safari
-                            this.setSelectionRange(0, this.value.length);
+                            _this.setSelectionRange(0, _this.value.length);
                         }
                         catch (ex) {
                         }

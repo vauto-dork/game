@@ -7,10 +7,10 @@ var Shared;
             this.rank = player.rank || 0;
             this.points = player.points || 0;
         }
-        GamePlayer.prototype.ToGamePlayerViewModel = function () {
+        GamePlayer.prototype.toGamePlayerViewModel = function () {
             var player = {
                 _id: this._id,
-                player: this.player.ToPlayerViewModel(),
+                player: this.player.toPlayerViewModel(),
                 rank: this.rank,
                 points: this.points
             };

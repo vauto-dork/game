@@ -11,25 +11,23 @@ var Rankings;
     }
     Rankings.LeaderboardDirective = LeaderboardDirective;
     var LeaderboardController = (function () {
-        function LeaderboardController($scope, $http, dateTimeService) {
+        function LeaderboardController($scope, dateTimeService, apiService) {
             this.$scope = $scope;
-            this.$http = $http;
             this.dateTimeService = dateTimeService;
+            this.apiService = apiService;
             this.noGamesThisMonth = false;
-            this.currentMonth = dateTimeService.CurrentMonthValue();
-            this.currentYear = dateTimeService.CurrentYear();
-            this.lastMonth = dateTimeService.LastMonthValue();
-            this.lastMonthYear = dateTimeService.LastMonthYear();
+            this.currentMonth = dateTimeService.currentMonthValue();
+            this.currentYear = dateTimeService.currentYear();
+            this.lastMonth = dateTimeService.lastMonthValue();
+            this.lastMonthYear = dateTimeService.lastMonthYear();
             this.getLastPlayedGame();
         }
         LeaderboardController.prototype.getLastPlayedGame = function () {
             var _this = this;
-            this.$http.get("/Games/LastPlayed")
-                .success(function (data, status, headers, config) {
+            this.apiService.getLastPlayedGame().then(function (data) {
                 _this.lastDatePlayed = data.datePlayed;
                 _this.noGamesThisMonth = _this.hasGames();
-            })
-                .error(function (data, status, headers, config) {
+            }, function () {
                 debugger;
             });
         };
@@ -39,7 +37,7 @@ var Rankings;
             var lastGameYear = lastGame.getFullYear();
             return !(this.currentMonth === lastGameMonth && this.currentYear === lastGameYear);
         };
-        LeaderboardController.$inject = ['$scope', '$http', 'dateTimeService'];
+        LeaderboardController.$inject = ['$scope', 'dateTimeService', 'apiService'];
         return LeaderboardController;
     })();
     Rankings.LeaderboardController = LeaderboardController;

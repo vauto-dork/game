@@ -13,7 +13,7 @@ var Shared;
             return isNaN(parsedValue) ? undefined : parsedValue;
         };
         ;
-        MonthYearQueryService.prototype.GetMonthQueryParam = function (month) {
+        MonthYearQueryService.prototype.getMonthQueryParam = function (month) {
             var queryMonth = this.SanitizeParam(this.$location.search().month);
             if (queryMonth !== undefined) {
                 queryMonth--;
@@ -23,14 +23,14 @@ var Shared;
             }
             return month;
         };
-        MonthYearQueryService.prototype.GetYearQueryParam = function (year) {
+        MonthYearQueryService.prototype.getYearQueryParam = function (year) {
             var queryYear = this.SanitizeParam(this.$location.search().year);
             if (queryYear !== undefined) {
                 year = queryYear < this.minimumYear ? this.minimumYear : queryYear;
             }
             return year;
         };
-        MonthYearQueryService.prototype.SaveQueryParams = function (month, year) {
+        MonthYearQueryService.prototype.saveQueryParams = function (month, year) {
             this.$location.search('month', month + 1);
             this.$location.search('year', year);
             this.$location.replace();

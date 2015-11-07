@@ -13,18 +13,14 @@ module Dotm {
     }
 
     export class DotmController {
-        public static $inject: string[] = ['$scope', '$http'];
+        public static $inject: string[] = ['$scope', 'apiService'];
 		private month: number;
 		private year: number;
 
-		private dotm: any;
-		private showDorks: boolean = false;
+		private dotm: Shared.IDotmViewModel;
 		private hasUberdorks: boolean = false;
-		private hasNegadorks: boolean = false;
-		private uberdorkHeading: string = 'Uberdork';
-		private negadorkHeading: string = 'Negadork';
 
-        constructor(private $scope: ng.IScope, private $http: ng.IHttpService) {
+        constructor(private $scope: ng.IScope, private apiService: Shared.IApiService) {
 			this.getDotm();
 
 			$scope.$watchGroup([() => this.month, () => this.year], (newValue, oldValue) => {
@@ -35,23 +31,13 @@ module Dotm {
         }
 
 		private getDotm() {
-			var query: string = '?month=' + this.month + '&year=' + this.year;
-
-			this.$http.get("/Players/dotm" + query)
-				.success((data, status, headers, config) => {
-					this.loaded(data);
-				}).
-				error((data, status, headers, config) => {
-					debugger;
-				});
-		}
-
-		private loaded(data) {
-			this.dotm = data;
-			this.hasUberdorks = data.uberdorks.length > 0;
-			// Let's not show negadorks because it's not nice.
-			//me.hasNegadorks = data.negadorks.length > 0;
-			this.showDorks = true;
+			this.hasUberdorks = false;
+			this.apiService.getDotm(this.month, this.year).then((data: Shared.IDotmViewModel) => {
+				this.dotm = data;
+				this.hasUberdorks = data.uberdorks.length > 0;
+			}, ()=>{
+				debugger;
+			});
 		}
     }
 }

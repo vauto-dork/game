@@ -1,12 +1,12 @@
 module Shared {
 	export interface IDateTimeService {
-		CurrentYear(): number;
-		CurrentMonthValue(): number;
-		CurrentMonthName(): string;
-		LastMonthYear(): number;
-		LastMonthValue(): number;
-		LastMonthName(): string;
-		MonthName(monthValue: number): string;
+		currentYear(): number;
+		currentMonthValue(): number;
+		currentMonthName(): string;
+		lastMonthYear(): number;
+		lastMonthValue(): number;
+		lastMonthName(): string;
+		monthName(monthValue: number): string;
 	}
 	
 	export class DateTimeService implements IDateTimeService {
@@ -18,31 +18,31 @@ module Shared {
 		constructor() {
 		}
 
-		public CurrentYear() {
+		public currentYear() {
 			return new Date().getFullYear();
 		}
 		
-		public CurrentMonthValue() {
+		public currentMonthValue() {
 			return new Date().getMonth();
 		}
 		
-		public CurrentMonthName() {
-			return this.monthNames[this.CurrentMonthValue()];
+		public currentMonthName() {
+			return this.monthNames[this.currentMonthValue()];
 		}
 		
-		public LastMonthYear() {
-			return (this.CurrentMonthValue() - 1 < 0) ? this.CurrentYear() - 1 : this.CurrentYear();
+		public lastMonthYear() {
+			return (this.currentMonthValue() - 1 < 0) ? this.currentYear() - 1 : this.currentYear();
 		}
 		
-		public LastMonthValue() {
-			return (this.CurrentMonthValue() - 1 < 0) ? 11 : this.CurrentMonthValue() - 1;
+		public lastMonthValue() {
+			return (this.currentMonthValue() - 1 < 0) ? 11 : this.currentMonthValue() - 1;
 		}
 		
-		public LastMonthName() {
-			return this.monthNames[this.LastMonthValue()];
+		public lastMonthName() {
+			return this.monthNames[this.lastMonthValue()];
 		}
 		
-		public MonthName(monthValue: number) {
+		public monthName(monthValue: number) {
 			if (monthValue >= 0 && monthValue <= 11) {
 				return this.monthNames[monthValue];
 			}

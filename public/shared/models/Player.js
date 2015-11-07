@@ -9,7 +9,7 @@ var Shared;
             this.fullname = player.firstName + " " + player.lastName;
             this.initials = player.firstName.charAt(0) + player.lastName.charAt(0);
         }
-        Player.prototype.ToPlayerViewModel = function () {
+        Player.prototype.toPlayerViewModel = function () {
             var player = {
                 _id: this._id,
                 firstName: this.firstName,

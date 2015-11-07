@@ -6,25 +6,25 @@ var Shared;
                 "July", "August", "September", "October", "November", "December"
             ];
         }
-        DateTimeService.prototype.CurrentYear = function () {
+        DateTimeService.prototype.currentYear = function () {
             return new Date().getFullYear();
         };
-        DateTimeService.prototype.CurrentMonthValue = function () {
+        DateTimeService.prototype.currentMonthValue = function () {
             return new Date().getMonth();
         };
-        DateTimeService.prototype.CurrentMonthName = function () {
-            return this.monthNames[this.CurrentMonthValue()];
+        DateTimeService.prototype.currentMonthName = function () {
+            return this.monthNames[this.currentMonthValue()];
         };
-        DateTimeService.prototype.LastMonthYear = function () {
-            return (this.CurrentMonthValue() - 1 < 0) ? this.CurrentYear() - 1 : this.CurrentYear();
+        DateTimeService.prototype.lastMonthYear = function () {
+            return (this.currentMonthValue() - 1 < 0) ? this.currentYear() - 1 : this.currentYear();
         };
-        DateTimeService.prototype.LastMonthValue = function () {
-            return (this.CurrentMonthValue() - 1 < 0) ? 11 : this.CurrentMonthValue() - 1;
+        DateTimeService.prototype.lastMonthValue = function () {
+            return (this.currentMonthValue() - 1 < 0) ? 11 : this.currentMonthValue() - 1;
         };
-        DateTimeService.prototype.LastMonthName = function () {
-            return this.monthNames[this.LastMonthValue()];
+        DateTimeService.prototype.lastMonthName = function () {
+            return this.monthNames[this.lastMonthValue()];
         };
-        DateTimeService.prototype.MonthName = function (monthValue) {
+        DateTimeService.prototype.monthName = function (monthValue) {
             if (monthValue >= 0 && monthValue <= 11) {
                 return this.monthNames[monthValue];
             }

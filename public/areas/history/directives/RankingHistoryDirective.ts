@@ -27,8 +27,8 @@ module DorkHistory {
 			private monthYearQueryService: Shared.IMonthYearQueryService,
 			private dateTimeService: Shared.IDateTimeService) {
 
-			this.month = dateTimeService.LastMonthValue();
-			this.year = dateTimeService.LastMonthYear();
+			this.month = dateTimeService.lastMonthValue();
+			this.year = dateTimeService.lastMonthYear();
 
 			this.changeState(State.Init);
         }
@@ -39,14 +39,14 @@ module DorkHistory {
 			switch (newState) {
 				case State.Init:
 					this.$timeout(() => {
-						this.month = this.monthYearQueryService.GetMonthQueryParam(this.month);
-						this.year = this.monthYearQueryService.GetYearQueryParam(this.year);
+						this.month = this.monthYearQueryService.getMonthQueryParam(this.month);
+						this.year = this.monthYearQueryService.getYearQueryParam(this.year);
 					}, 0);
 					this.changeState(State.Ready);
 					break;
 				case State.Change:
 					this.$timeout(() => {
-						this.monthYearQueryService.SaveQueryParams(this.month, this.year);
+						this.monthYearQueryService.saveQueryParams(this.month, this.year);
 					}, 0);
 					this.changeState(State.Ready);
 					break;

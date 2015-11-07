@@ -63,16 +63,16 @@ module Rankings {
         }
 
         private getRankings() {
-            var rankingsPromise = this.rankingsService.GetRankings(this.month, this.year, this.hideUnranked);
-            rankingsPromise.then(this.loadingSuccess.bind(this), (data) => {
-                this.changeState(State.Error);
-                console.error(data);
-            });
+            this.rankingsService.getRankings(this.month, this.year, this.hideUnranked)
+                .then(this.loadingSuccess.bind(this), (data) => {
+                    this.changeState(State.Error);
+                    console.error(data);
+                });
         }
 
         private loadingSuccess() {
-            this.players = this.rankingsService.GetPlayersOverTenGames();
-            this.playersUnderTen = this.rankingsService.GetPlayersUnderTenGames();
+            this.players = this.rankingsService.getPlayersOverTenGames();
+            this.playersUnderTen = this.rankingsService.getPlayersUnderTenGames();
 
             if (this.playersUnderTen.some((elem: Shared.IRankedPlayer) => { return elem.rank > 0; })) {
                 this.numberUnranked = this.playersUnderTen.filter((element: Shared.IRankedPlayer) => { return element.rank <= 0; }).length;

@@ -12,7 +12,7 @@ module Rankings {
     }
 
     export class LeaderboardController {
-        public static $inject: string[] = ['$scope', '$http', 'dateTimeService'];
+        public static $inject: string[] = ['$scope', 'dateTimeService', 'apiService'];
 
 		private lastDatePlayed: string;
 		private currentMonth: number;
@@ -21,24 +21,22 @@ module Rankings {
 		private lastMonthYear: number;
 		private noGamesThisMonth: boolean = false;
 
-        constructor(private $scope: ng.IScope, private $http: ng.IHttpService, private dateTimeService: Shared.IDateTimeService) {
-			this.currentMonth = dateTimeService.CurrentMonthValue();
-			this.currentYear = dateTimeService.CurrentYear();
-			this.lastMonth = dateTimeService.LastMonthValue();
-			this.lastMonthYear = dateTimeService.LastMonthYear();
+        constructor(private $scope: ng.IScope, private dateTimeService: Shared.IDateTimeService, private apiService: Shared.IApiService) {
+			this.currentMonth = dateTimeService.currentMonthValue();
+			this.currentYear = dateTimeService.currentYear();
+			this.lastMonth = dateTimeService.lastMonthValue();
+			this.lastMonthYear = dateTimeService.lastMonthYear();
 
 			this.getLastPlayedGame();
         }
 
 		private getLastPlayedGame() {
-			this.$http.get("/Games/LastPlayed")
-			.success((data: Shared.IGameViewModel, status, headers, config) => {
+			this.apiService.getLastPlayedGame().then((data: Shared.IGameViewModel)=>{
 				this.lastDatePlayed = data.datePlayed;
 				this.noGamesThisMonth = this.hasGames();
-			})
-			.error((data, status, headers, config) => {
-					debugger;
-				});
+			}, ()=>{
+				debugger;
+			});
 		}
 
 		private hasGames() {

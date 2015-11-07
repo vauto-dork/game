@@ -16,8 +16,9 @@ var Shared;
     }
     Shared.MonthYearPickerDirective = MonthYearPickerDirective;
     var MonthYearPickerController = (function () {
-        function MonthYearPickerController($scope) {
+        function MonthYearPickerController($scope, dateTimeService) {
             this.$scope = $scope;
+            this.dateTimeService = dateTimeService;
             this.isDisabled = false;
             this.minimumYear = 2015;
             this.disableYear = false;
@@ -50,7 +51,7 @@ var Shared;
         });
         Object.defineProperty(MonthYearPickerController.prototype, "month", {
             get: function () {
-                return this.currentMonth === undefined ? new Date().getMonth() : this.currentMonth;
+                return this.currentMonth || this.dateTimeService.currentMonthValue();
             },
             set: function (value) {
                 this.currentMonth = value;
@@ -60,7 +61,7 @@ var Shared;
         });
         Object.defineProperty(MonthYearPickerController.prototype, "year", {
             get: function () {
-                return this.currentYear === undefined ? new Date().getFullYear() : this.currentYear;
+                return this.currentYear || this.dateTimeService.currentYear();
             },
             set: function (value) {
                 this.currentYear = value;
@@ -88,7 +89,7 @@ var Shared;
             }
         };
         ;
-        MonthYearPickerController.$inject = ['$scope'];
+        MonthYearPickerController.$inject = ['$scope', 'dateTimeService'];
         return MonthYearPickerController;
     })();
     Shared.MonthYearPickerController = MonthYearPickerController;

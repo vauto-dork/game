@@ -1,9 +1,13 @@
 module Shared {
-	export interface IGameViewModel {
+	
+	export interface IActiveGameViewModel {
 		_id?: string;
-		winner: IPlayerViewModel;
 		players: IGamePlayerViewModel[];
-		datePlayed: string;
+		datePlayed?: string;
+	}
+	
+	export interface IGameViewModel extends IActiveGameViewModel {
+		winner: IPlayerViewModel;
 	}
 	
 	export interface IGamePlayerViewModel {
@@ -21,15 +25,15 @@ module Shared {
 		rating?: number;
 	}
 	
-	export interface IActiveGameViewModel {
-		players: IGamePlayerViewModel[];
-		datePlayed?: string;
-	}
-	
 	export interface IPlayerViewModel {
 		_id?: string;
 		nickname?: string;
 		lastName: string;
 		firstName: string;
+	}
+	
+	export interface IDotmViewModel {
+		uberdorks: IRankedPlayerViewModel[],
+		negadorks: IRankedPlayerViewModel[]
 	}
 }

@@ -1,33 +1,36 @@
 module Shared {
 	export interface IApiService {
-		GetActiveGame(gameIdPath: string): ng.IPromise<any>;
-		CreateActiveGame(game: IActiveGameViewModel): ng.IPromise<any>;
-		SaveActiveGame(gameIdPath: string, game: IGameViewModel): ng.IPromise<any>;
-		DeleteActiveGame(gameIdPath: string): ng.IPromise<any>;
-		GetAllPlayers(): ng.IPromise<any>;
-		FinalizeGame(game: IGameViewModel): ng.IPromise<any>;
-		DeleteGame(gameIdPath: string): ng.IPromise<any>;
+		getActiveGame(gameIdPath: string): ng.IPromise<IActiveGameViewModel>;
+		createActiveGame(game: IActiveGameViewModel): ng.IPromise<IGameViewModel>;
+		saveActiveGame(gameIdPath: string, game: IGameViewModel): ng.IPromise<void>;
+		deleteActiveGame(gameIdPath: string): ng.IPromise<void>;
+		getAllPlayers(): ng.IPromise<IPlayer[]>;
+		getRankedPlayers(month: number, year: number, hideUnranked: boolean): ng.IPromise<IRankedPlayer[]>;
+		getDotm(month: number, year: number): ng.IPromise<IDotmViewModel>;
+		getLastPlayedGame(): ng.IPromise<IGameViewModel>;
+		finalizeGame(game: IGameViewModel): ng.IPromise<void>;
+		deleteGame(gameIdPath: string): ng.IPromise<void>;
 	}
 
 	export class ApiService implements IApiService {
 		public static $inject: string[] = ['$http', '$q'];
-		
+
 		constructor(private $http: ng.IHttpService, private $q: ng.IQService) {
-			
+
 		}
 		
 		// --------------------------------------------------------------
 		// Active Games
 	
-		private GetActiveGamePath(gameIdPath: string): string {
+		private getActiveGamePath(gameIdPath: string): string {
 			return '/ActiveGames/json' + gameIdPath;
 		};
 
-		public GetActiveGame(gameIdPath: string): ng.IPromise<any> {
-			var def = this.$q.defer();
+		public getActiveGame(gameIdPath: string): ng.IPromise<IActiveGameViewModel> {
+			var def = this.$q.defer<IActiveGameViewModel>();
 
-			this.$http.get(this.GetActiveGamePath(gameIdPath))
-				.success((data, status, headers, config) => {
+			this.$http.get(this.getActiveGamePath(gameIdPath))
+				.success((data: IActiveGameViewModel, status, headers, config) => {
 					if (data === null || data === undefined) {
 						def.reject(status);
 					}
@@ -41,11 +44,11 @@ module Shared {
 				});
 
 			return def.promise;
-		};
-		
-		public CreateActiveGame(game: IActiveGameViewModel): ng.IPromise<any> {
-			var def = this.$q.defer();
-			
+		}
+
+		public createActiveGame(game: IActiveGameViewModel): ng.IPromise<IGameViewModel> {
+			var def = this.$q.defer<IGameViewModel>();
+
 			this.$http.post('/activeGames/save', game)
 				.success((data: IGameViewModel, status, headers, config) => {
 					def.resolve(data);
@@ -58,10 +61,10 @@ module Shared {
 			return def.promise;
 		}
 
-		public SaveActiveGame(gameIdPath: string, game: IGameViewModel): ng.IPromise<any> {
-			var def = this.$q.defer();
+		public saveActiveGame(gameIdPath: string, game: IGameViewModel): ng.IPromise<void> {
+			var def = this.$q.defer<void>();
 
-			this.$http.put(this.GetActiveGamePath(gameIdPath), game)
+			this.$http.put(this.getActiveGamePath(gameIdPath), game)
 				.success((data, status, headers, config) => {
 					def.resolve();
 				}).
@@ -71,12 +74,12 @@ module Shared {
 				});
 
 			return def.promise;
-		};
+		}
 
-		public DeleteActiveGame(gameIdPath: string): ng.IPromise<any> {
-			var def = this.$q.defer();
+		public deleteActiveGame(gameIdPath: string): ng.IPromise<void> {
+			var def = this.$q.defer<void>();
 
-			this.$http.delete(this.GetActiveGamePath(gameIdPath))
+			this.$http.delete(this.getActiveGamePath(gameIdPath))
 				.success((data, status, headers, config) => {
 					def.resolve();
 				})
@@ -86,18 +89,18 @@ module Shared {
 				});
 
 			return def.promise;
-		};
+		}
 	
 		// --------------------------------------------------------------
 		// Get Players
 	
-		public GetAllPlayers(): ng.IPromise<any> {
-			var def = this.$q.defer();
+		public getAllPlayers(): ng.IPromise<IPlayer[]> {
+			var def = this.$q.defer<IPlayer[]>();
 
 			this.$http.get('/players?sort=true')
 				.success((data: IPlayerViewModel[], status, headers, config) => {
 					var allPlayers: IPlayerViewModel[] = data;
-					var formattedPlayers: IPlayer[] = this.PlayerNameFormat(allPlayers);
+					var formattedPlayers: IPlayer[] = this.playerNameFormat(allPlayers);
 					def.resolve(formattedPlayers);
 				})
 				.error((data, status, headers, config) => {
@@ -106,35 +109,95 @@ module Shared {
 				});
 
 			return def.promise;
-		};
+		}
+		
+		public getRankedPlayers(month: number, year: number, hideUnranked: boolean): ng.IPromise<IRankedPlayer[]> {
+			var def = this.$q.defer<IRankedPlayer[]>();
 
-		private PlayerNameFormat(rawPlayersList: IPlayerViewModel[]) {
+			month = (month === undefined || month === null) ? new Date().getMonth() : month;
+			year = year || new Date().getFullYear();
+
+			var unrankedParam = hideUnranked ? '&hideUnranked=true' : '';
+			var rankedUrl = '/players/ranked?month=' + month + '&year=' + year + unrankedParam;
+
+			this.$http.get(rankedUrl)
+				.success((data: IRankedPlayerViewModel[], status, headers, config) => {
+					var players: IRankedPlayer[] = data.map((value: IRankedPlayerViewModel) => {
+						return new RankedPlayer(value); 
+					});
+					
+					def.resolve(players);
+				})
+				.error((data, status, headers, config) => {
+					console.error('Cannot get ranked players.');
+					def.reject(data);
+				});
+
+			return def.promise;
+		}
+
+		private playerNameFormat(rawPlayersList: IPlayerViewModel[]) {
 			var playersList: IPlayer[] = rawPlayersList.map((value: IPlayerViewModel) => {
 				return new Player(value);
 			});
 
 			return playersList;
-		};
+		}
+		
+		// --------------------------------------------------------------
+		// Dork of the Month
+		
+		public getDotm(month: number, year: number): ng.IPromise<IDotmViewModel> {
+			var def = this.$q.defer<IDotmViewModel>();
+
+			var query: string = '?month=' + month + '&year=' + year;
+
+			this.$http.get("/Players/dotm" + query)
+				.success((data: IDotmViewModel, status, headers, config) => {
+					def.resolve(data);
+				}).
+				error((data, status, headers, config) => {
+					console.error('Cannot get dorks of the month.');
+					def.reject(data);
+				});
+
+			return def.promise;
+		}
 	
 		// --------------------------------------------------------------
-		// Games 
-	
-		public FinalizeGame(game: IGameViewModel): ng.IPromise<any> {
-			var def = this.$q.defer();
+		// Games
+		
+		public getLastPlayedGame(): ng.IPromise<IGameViewModel> {
+			var def = this.$q.defer<IGameViewModel>();
+
+			this.$http.get("/Games/LastPlayed")
+				.success((data: IGameViewModel, status, headers, config) => {
+					def.resolve(data);
+				})
+				.error((data, status, headers, config) => {
+					console.error('Cannot get last game played.');
+					def.reject(data);
+				});
+
+			return def.promise;
+		}
+
+		public finalizeGame(game: IGameViewModel): ng.IPromise<void> {
+			var def = this.$q.defer<void>();
 
 			this.$http.post('/games', game).success((data, status, headers, config) => {
 				def.resolve();
-			}).
-				error((data, status, headers, config) => {
+			})
+				.error((data, status, headers, config) => {
 					console.error(`Cannot finalize game. Status code: ${status}.`);
 					def.reject(data);
 				});
 
 			return def.promise;
-		};
+		}
 
-		public DeleteGame(gameIdPath: string): ng.IPromise<any> {
-			var def = this.$q.defer();
+		public deleteGame(gameIdPath: string): ng.IPromise<void> {
+			var def = this.$q.defer<void>();
 
 			this.$http.delete(`/games${gameIdPath}`)
 				.success((data, status, headers, config) => {
@@ -146,6 +209,6 @@ module Shared {
 				});
 
 			return def.promise;
-		};
+		}
 	}
 }

@@ -1,8 +1,8 @@
 ﻿module Shared {
 	export interface IMonthYearQueryService {
-		GetMonthQueryParam(month: number): number;
-		GetYearQueryParam(year: number): number;
-		SaveQueryParams(month: number, year: number): void;
+		getMonthQueryParam(month: number): number;
+		getYearQueryParam(year: number): number;
+		saveQueryParams(month: number, year: number): void;
 	}
 
 	export class MonthYearQueryService implements IMonthYearQueryService {
@@ -23,7 +23,7 @@
 			return isNaN(parsedValue) ? undefined : parsedValue;
 		};
 		
-		public GetMonthQueryParam(month: number): number {
+		public getMonthQueryParam(month: number): number {
 			var queryMonth = this.SanitizeParam(this.$location.search().month);
 
 			if (queryMonth !== undefined) {
@@ -36,7 +36,7 @@
 			return month;
 		}
 		
-		public GetYearQueryParam(year: number): number {
+		public getYearQueryParam(year: number): number {
 			var queryYear = this.SanitizeParam(this.$location.search().year);
 
 			if (queryYear !== undefined) {
@@ -46,7 +46,7 @@
 			return year;
 		}
 		
-		public SaveQueryParams(month: number, year: number): void {
+		public saveQueryParams(month: number, year: number): void {
 			this.$location.search('month', month + 1);
 			this.$location.search('year', year);
 			this.$location.replace();

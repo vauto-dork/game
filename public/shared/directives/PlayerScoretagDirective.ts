@@ -20,10 +20,10 @@ module Shared {
         public static $inject: string[] = ['$scope'];
 		
 		private player: IPlayerScoretag;
-		private rank: any[];
+		private rank: any[]; // This is a number array for looping to print the dots above player name.
 
         constructor(private $scope: ng.IScope) {
-			var rankArray = !this.player.rank || this.player.rank === undefined ? 0 : this.player.rank;
+			var rankArray = !this.player.rank ? 0 : this.player.rank;
 			this.rank = new Array(rankArray);
         }
     }

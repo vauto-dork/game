@@ -2,8 +2,8 @@ module Shared {
     export function NumericUpDownDirective($window: ng.IWindowService): ng.IDirective {
         return {
             restrict: 'A',
-            link: function(scope, element, attrs) {
-                element.on('click', function() {
+            link: (scope: ng.IScope, element: ng.IAugmentedJQuery, attrs: ng.IAttributes) => {
+                element.on('click', () => {
                     if (!$window.getSelection().toString()) {
                         try {
                             // Required for mobile Safari
@@ -15,7 +15,7 @@ module Shared {
                     }
                 });
 
-                element.on('keyup', function(event) {
+                element.on('keyup', (event: JQueryEventObject) => {
                     var key = event.which || event.keyCode;
 
                     if (!event.shiftKey && !event.altKey && !event.ctrlKey &&

@@ -1,9 +1,9 @@
 module Rankings {
 	export interface IRankingsService {
-		GetRankings(mon, yr, hideUnranked): ng.IPromise<any>;
-		GetAllPlayers(): Shared.IRankedPlayer[];
-		GetPlayersOverTenGames(): Shared.IRankedPlayer[];
-		GetPlayersUnderTenGames(): Shared.IRankedPlayer[];
+		getRankings(mon, yr, hideUnranked): ng.IPromise<void>;
+		getAllPlayers(): Shared.IRankedPlayer[];
+		getPlayersOverTenGames(): Shared.IRankedPlayer[];
+		getPlayersUnderTenGames(): Shared.IRankedPlayer[];
 	}
 
 	enum PlayerSelection {
@@ -13,47 +13,36 @@ module Rankings {
 	};
 
 	export class RankingsService implements IRankingsService {
-		public static $inject: string[] = ['$http', '$q'];
+		public static $inject: string[] = ['$q', 'apiService'];
 
 		private cachedPlayers: Shared.IRankedPlayer[] = [];
 
-		constructor(private $http: ng.IHttpService, private $q: ng.IQService) {
+		constructor(private $q: ng.IQService, private apiService: Shared.IApiService) {
 
 		}
 
-		public GetRankings(month: number, year: number, hideUnranked: boolean) {
-			var def = this.$q.defer();
-
-			month = !month ? new Date().getMonth() : month;
-			year = !year ? new Date().getFullYear() : year;
-
-			var unrankedParam = hideUnranked ? '&hideUnranked=true' : '';
-			var rankedUrl = '/players/ranked?month=' + month + '&year=' + year + unrankedParam;
-
-			this.$http.get(rankedUrl)
-				.success((data: Shared.IRankedPlayerViewModel[], status, headers, config) => {
-					this.cachedPlayers = data.map((value: Shared.IRankedPlayerViewModel) => {
-						return new Shared.RankedPlayer(value); 
-					});
-					
-					def.resolve();
-				})
-				.error((data, status, headers, config) => {
-					def.reject(data);
-				});
-
+		public getRankings(month: number, year: number, hideUnranked: boolean): ng.IPromise<void> {
+			var def = this.$q.defer<void>();
+			
+			this.apiService.getRankedPlayers(month, year, hideUnranked).then((data: Shared.IRankedPlayer[]) => {
+				this.cachedPlayers = data;
+				def.resolve();
+			}, () => {
+				def.reject();
+			});
+			
 			return def.promise;
 		}
 		
-		public GetAllPlayers(): Shared.IRankedPlayer[] {
+		public getAllPlayers(): Shared.IRankedPlayer[] {
 			return this.getPlayers(PlayerSelection.All);
 		}
 		
-		public GetPlayersOverTenGames(): Shared.IRankedPlayer[] {
+		public getPlayersOverTenGames(): Shared.IRankedPlayer[] {
 			return this.getPlayers(PlayerSelection.OverTen);
 		}
 		
-		public GetPlayersUnderTenGames(): Shared.IRankedPlayer[] {
+		public getPlayersUnderTenGames(): Shared.IRankedPlayer[] {
 			return this.getPlayers(PlayerSelection.UnderTen);
 		}
 		
@@ -64,21 +53,21 @@ module Rankings {
 						return player.gamesPlayed < 10;
 					});
 					
-					return this.rankPlayers(underTen);
+					return this.assignRankValue(underTen);
 					
 				case PlayerSelection.OverTen:
 					var overTen = this.cachedPlayers.filter((player) => {
 						return player.gamesPlayed >= 10;
 					});
 					
-					return this.rankPlayers(overTen);
+					return this.assignRankValue(overTen);
 				
 				default:
-					return this.rankPlayers(this.cachedPlayers);
+					return this.assignRankValue(this.cachedPlayers);
 			}
 		};
 		
-		private rankPlayers(selectedPlayers: Shared.IRankedPlayer[]): Shared.IRankedPlayer[] {
+		private assignRankValue(selectedPlayers: Shared.IRankedPlayer[]): Shared.IRankedPlayer[] {
 			var counter = 0;
 
 			selectedPlayers.forEach((player: Shared.IRankedPlayer, index: number) => {

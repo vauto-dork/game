@@ -4,7 +4,7 @@ module Shared {
 		player: IPlayer;
 		rank?: number;
 		points?: number;
-		ToGamePlayerViewModel(): IGamePlayerViewModel;
+		toGamePlayerViewModel(): IGamePlayerViewModel;
 	}
 	
 	export class GamePlayer implements IGamePlayer {
@@ -20,10 +20,10 @@ module Shared {
 			this.points = player.points || 0;
 		}
 		
-		public ToGamePlayerViewModel(): IGamePlayerViewModel {
+		public toGamePlayerViewModel(): IGamePlayerViewModel {
 			var player: IGamePlayerViewModel = {
 				_id: this._id,
-				player: this.player.ToPlayerViewModel(),
+				player: this.player.toPlayerViewModel(),
 				rank: this.rank,
 				points: this.points
 			}

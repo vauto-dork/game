@@ -57,15 +57,15 @@ var Rankings;
         };
         RankingsController.prototype.getRankings = function () {
             var _this = this;
-            var rankingsPromise = this.rankingsService.GetRankings(this.month, this.year, this.hideUnranked);
-            rankingsPromise.then(this.loadingSuccess.bind(this), function (data) {
+            this.rankingsService.getRankings(this.month, this.year, this.hideUnranked)
+                .then(this.loadingSuccess.bind(this), function (data) {
                 _this.changeState(State.Error);
                 console.error(data);
             });
         };
         RankingsController.prototype.loadingSuccess = function () {
-            this.players = this.rankingsService.GetPlayersOverTenGames();
-            this.playersUnderTen = this.rankingsService.GetPlayersUnderTenGames();
+            this.players = this.rankingsService.getPlayersOverTenGames();
+            this.playersUnderTen = this.rankingsService.getPlayersUnderTenGames();
             if (this.playersUnderTen.some(function (elem) { return elem.rank > 0; })) {
                 this.numberUnranked = this.playersUnderTen.filter(function (element) { return element.rank <= 0; }).length;
                 this.changeState(State.Loaded);

@@ -15,7 +15,7 @@ var Shared;
     var PlayerScoretagController = (function () {
         function PlayerScoretagController($scope) {
             this.$scope = $scope;
-            var rankArray = !this.player.rank || this.player.rank === undefined ? 0 : this.player.rank;
+            var rankArray = !this.player.rank ? 0 : this.player.rank;
             this.rank = new Array(rankArray);
         }
         PlayerScoretagController.$inject = ['$scope'];

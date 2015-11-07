@@ -20,7 +20,7 @@ module Shared {
 	}
 
     export class MonthYearPickerController {
-        public static $inject: string[] = ['$scope'];
+        public static $inject: string[] = ['$scope', 'dateTimeService'];
 
 		private change: Function;
 		private isDisabled: boolean = false;
@@ -59,7 +59,7 @@ module Shared {
 		}
 
 		public get month(): number {
-			return this.currentMonth === undefined ? new Date().getMonth() : this.currentMonth;
+			return this.currentMonth || this.dateTimeService.currentMonthValue();
 		}
 
 		public set month(value: number) {
@@ -67,14 +67,14 @@ module Shared {
 		}
 
 		public get year(): number {
-			return this.currentYear === undefined ? new Date().getFullYear() : this.currentYear;
+			return this.currentYear || this.dateTimeService.currentYear();
 		}
 
 		public set year(value: number) {
 			this.currentYear = value;
 		}
 
-        constructor(private $scope: ng.IScope) {
+        constructor(private $scope: ng.IScope, private dateTimeService: Shared.IDateTimeService) {
 			this.init();
         }
 

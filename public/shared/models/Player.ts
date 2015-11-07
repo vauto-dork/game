@@ -2,7 +2,7 @@ module Shared {
 	export interface IPlayer extends IPlayerViewModel {
 		initials: string;
 		fullname: string;
-		ToPlayerViewModel(): IPlayerViewModel;
+		toPlayerViewModel(): IPlayerViewModel;
 	}
 	
 	export class Player implements IPlayer {
@@ -22,7 +22,7 @@ module Shared {
 			this.initials = player.firstName.charAt(0) + player.lastName.charAt(0);
 		}
 		
-		public ToPlayerViewModel(): IPlayerViewModel {
+		public toPlayerViewModel(): IPlayerViewModel {
 			var player: IPlayerViewModel = {
 				_id: this._id,
 				firstName: this.firstName,
