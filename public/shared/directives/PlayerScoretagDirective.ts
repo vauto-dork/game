@@ -10,17 +10,16 @@ module Shared {
 			bindToController: true
 		};
     }
-	
-	interface IPlayerScoretag extends IPlayerViewModel {
-		points: number;
-		rank: number;
-	}
 
     export class PlayerScoretagController {
         public static $inject: string[] = ['$scope'];
 		
-		private player: IPlayerScoretag;
+		private player: IGamePlayer;
 		private rank: any[]; // This is a number array for looping to print the dots above player name.
+		
+		private get playerName(): IPlayer {
+			return this.player.player;
+		}
 
         constructor(private $scope: ng.IScope) {
 			var rankArray = !this.player.rank ? 0 : this.player.rank;

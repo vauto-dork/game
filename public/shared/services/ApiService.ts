@@ -1,13 +1,14 @@
 module Shared {
 	export interface IApiService {
-		getActiveGame(gameIdPath: string): ng.IPromise<IActiveGameViewModel>;
-		createActiveGame(game: IActiveGameViewModel): ng.IPromise<IGameViewModel>;
+		getActiveGame(gameIdPath: string): ng.IPromise<IGameViewModel>;
+		createActiveGame(game: IGameViewModel): ng.IPromise<IGameViewModel>;
 		saveActiveGame(gameIdPath: string, game: IGameViewModel): ng.IPromise<void>;
 		deleteActiveGame(gameIdPath: string): ng.IPromise<void>;
 		getAllPlayers(): ng.IPromise<IPlayer[]>;
 		getRankedPlayers(month: number, year: number, hideUnranked: boolean): ng.IPromise<IRankedPlayer[]>;
 		getDotm(month: number, year: number): ng.IPromise<IDotmViewModel>;
 		getLastPlayedGame(): ng.IPromise<IGameViewModel>;
+		getGames(month: number, year: number): ng.IPromise<IGame[]>;
 		finalizeGame(game: IGameViewModel): ng.IPromise<void>;
 		deleteGame(gameIdPath: string): ng.IPromise<void>;
 	}
@@ -26,11 +27,11 @@ module Shared {
 			return '/ActiveGames/json' + gameIdPath;
 		};
 
-		public getActiveGame(gameIdPath: string): ng.IPromise<IActiveGameViewModel> {
-			var def = this.$q.defer<IActiveGameViewModel>();
+		public getActiveGame(gameIdPath: string): ng.IPromise<IGameViewModel> {
+			var def = this.$q.defer<IGameViewModel>();
 
 			this.$http.get(this.getActiveGamePath(gameIdPath))
-				.success((data: IActiveGameViewModel, status, headers, config) => {
+				.success((data: IGameViewModel, status, headers, config) => {
 					if (data === null || data === undefined) {
 						def.reject(status);
 					}
@@ -46,7 +47,7 @@ module Shared {
 			return def.promise;
 		}
 
-		public createActiveGame(game: IActiveGameViewModel): ng.IPromise<IGameViewModel> {
+		public createActiveGame(game: IGameViewModel): ng.IPromise<IGameViewModel> {
 			var def = this.$q.defer<IGameViewModel>();
 
 			this.$http.post('/activeGames/save', game)
@@ -136,7 +137,7 @@ module Shared {
 			return def.promise;
 		}
 
-		private playerNameFormat(rawPlayersList: IPlayerViewModel[]) {
+		private playerNameFormat(rawPlayersList: IPlayerViewModel[]): IPlayer[] {
 			var playersList: IPlayer[] = rawPlayersList.map((value: IPlayerViewModel) => {
 				return new Player(value);
 			});
@@ -179,6 +180,25 @@ module Shared {
 					def.reject(data);
 				});
 
+			return def.promise;
+		}
+		
+		public getGames(month: number, year: number): ng.IPromise<IGame[]> {
+			var def = this.$q.defer<IGame[]>();
+			var path = '/Games?month=' + month + '&year=' + year;
+			
+			this.$http.get(path).success((data: IGameViewModel[], status, headers, config) => {
+				var game: IGame[] = data.map((value: IGameViewModel) => {
+					return new Game(value);
+				});
+				
+				def.resolve(game);
+			})
+			.error(function(data, status, headers, config) {
+					console.error('Cannot get games played.');
+					def.reject(data);
+				});
+				
 			return def.promise;
 		}
 

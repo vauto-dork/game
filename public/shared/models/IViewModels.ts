@@ -1,13 +1,9 @@
 module Shared {
-	
-	export interface IActiveGameViewModel {
+	export interface IGameViewModel {
 		_id?: string;
 		players: IGamePlayerViewModel[];
 		datePlayed?: string;
-	}
-	
-	export interface IGameViewModel extends IActiveGameViewModel {
-		winner: IPlayerViewModel;
+		winner?: IPlayerViewModel;
 	}
 	
 	export interface IGamePlayerViewModel {

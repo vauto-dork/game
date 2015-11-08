@@ -18,6 +18,13 @@ var Shared;
             var rankArray = !this.player.rank ? 0 : this.player.rank;
             this.rank = new Array(rankArray);
         }
+        Object.defineProperty(PlayerScoretagController.prototype, "playerName", {
+            get: function () {
+                return this.player.player;
+            },
+            enumerable: true,
+            configurable: true
+        });
         PlayerScoretagController.$inject = ['$scope'];
         return PlayerScoretagController;
     })();

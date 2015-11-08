@@ -135,6 +135,21 @@ var Shared;
             });
             return def.promise;
         };
+        ApiService.prototype.getGames = function (month, year) {
+            var def = this.$q.defer();
+            var path = '/Games?month=' + month + '&year=' + year;
+            this.$http.get(path).success(function (data, status, headers, config) {
+                var game = data.map(function (value) {
+                    return new Shared.Game(value);
+                });
+                def.resolve(game);
+            })
+                .error(function (data, status, headers, config) {
+                console.error('Cannot get games played.');
+                def.reject(data);
+            });
+            return def.promise;
+        };
         ApiService.prototype.finalizeGame = function (game) {
             var def = this.$q.defer();
             this.$http.post('/games', game).success(function (data, status, headers, config) {
