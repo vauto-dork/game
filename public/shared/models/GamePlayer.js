@@ -2,6 +2,10 @@ var Shared;
 (function (Shared) {
     var GamePlayer = (function () {
         function GamePlayer(player) {
+            if (!player) {
+                this.player = new Shared.Player();
+                return;
+            }
             this._id = player._id;
             this.player = new Shared.Player(player.player);
             this.rank = player.rank || 0;

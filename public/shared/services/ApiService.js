@@ -65,7 +65,18 @@ var Shared;
             return def.promise;
         };
         // --------------------------------------------------------------
-        // Get Players
+        // Players
+        ApiService.prototype.savePlayer = function (player) {
+            var def = this.$q.defer();
+            this.$http.post('/players', player)
+                .success(function (data, status, headers, config) {
+                def.resolve();
+            }).error(function (data, status, headers, config) {
+                console.error('Cannot save player.');
+                def.reject(data);
+            });
+            return def.promise;
+        };
         ApiService.prototype.getAllPlayers = function () {
             var _this = this;
             var def = this.$q.defer();

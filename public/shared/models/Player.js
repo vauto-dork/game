@@ -2,6 +2,14 @@ var Shared;
 (function (Shared) {
     var Player = (function () {
         function Player(player) {
+            if (!player) {
+                this.firstName = '';
+                this.lastName = '';
+                this.nickname = '';
+                this.initials = '';
+                this.fullname = '';
+                return;
+            }
             this._id = player._id;
             this.firstName = player.firstName;
             this.lastName = player.lastName;

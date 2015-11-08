@@ -13,13 +13,18 @@ module Shared {
 		public datePlayed: string;
 		public winner: IPlayer;
 		
-		constructor(game: IGameViewModel) {
+		constructor(game?: IGameViewModel) {
+			if(!game) {
+				this.players = [];
+				return;
+			}
+			
 			this._id = game._id;
 			this.players = game.players.map((value: IGamePlayerViewModel) => {
 				return new GamePlayer(value);
 			});
 			this.datePlayed = game.datePlayed;
-			this.winner = game.winner;
+			this.winner = new Player(game.winner);
 		}
 		
 		public toGameViewModel(): IGameViewModel {

@@ -127,8 +127,9 @@ input[type='number']::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0; }
 
-input.ng-invalid {
-  background: #F84072;
+.ng-submitted input.ng-invalid-required,
+input.ng-touched.ng-invalid {
+  background: #F2DEDE;
   border: 1px red solid; }
 
 .animate-appear.ng-move,

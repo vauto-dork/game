@@ -13,7 +13,12 @@ module Shared {
 		public rank: number;
 		public points: number;
 		
-		constructor(player: IGamePlayerViewModel) {
+		constructor(player?: IGamePlayerViewModel) {
+			if(!player) {
+				this.player = new Player();
+				return;
+			}
+			
 			this._id = player._id;
 			this.player = new Player(player.player);
 			this.rank = player.rank || 0;

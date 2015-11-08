@@ -4,6 +4,7 @@ module Shared {
 		createActiveGame(game: IGameViewModel): ng.IPromise<IGameViewModel>;
 		saveActiveGame(gameIdPath: string, game: IGameViewModel): ng.IPromise<void>;
 		deleteActiveGame(gameIdPath: string): ng.IPromise<void>;
+		savePlayer(player: IPlayer): ng.IPromise<void>;
 		getAllPlayers(): ng.IPromise<IPlayer[]>;
 		getRankedPlayers(month: number, year: number, hideUnranked: boolean): ng.IPromise<IRankedPlayer[]>;
 		getDotm(month: number, year: number): ng.IPromise<IDotmViewModel>;
@@ -93,7 +94,20 @@ module Shared {
 		}
 	
 		// --------------------------------------------------------------
-		// Get Players
+		// Players
+		
+		public savePlayer(player: IPlayer): ng.IPromise<void> {
+			var def = this.$q.defer<void>();
+			this.$http.post('/players', player)
+				.success((data, status, headers, config) => {
+					def.resolve();
+				}).error((data, status, headers, config) => {
+					console.error('Cannot save player.');
+					def.reject(data);
+				});
+				
+			return def.promise;
+		}
 	
 		public getAllPlayers(): ng.IPromise<IPlayer[]> {
 			var def = this.$q.defer<IPlayer[]>();

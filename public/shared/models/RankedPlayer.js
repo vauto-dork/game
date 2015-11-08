@@ -2,6 +2,14 @@ var Shared;
 (function (Shared) {
     var RankedPlayer = (function () {
         function RankedPlayer(player) {
+            if (!player) {
+                this.player = new Shared.Player();
+                this.totalPoints = 0;
+                this.gamesPlayed = 0;
+                this.rating = 0;
+                this.rank = 0;
+                return;
+            }
             this._id = player._id;
             this.player = new Shared.Player(player.player);
             this.totalPoints = player.totalPoints || 0;

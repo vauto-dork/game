@@ -2,12 +2,16 @@ var Shared;
 (function (Shared) {
     var Game = (function () {
         function Game(game) {
+            if (!game) {
+                this.players = [];
+                return;
+            }
             this._id = game._id;
             this.players = game.players.map(function (value) {
                 return new Shared.GamePlayer(value);
             });
             this.datePlayed = game.datePlayed;
-            this.winner = game.winner;
+            this.winner = new Shared.Player(game.winner);
         }
         Game.prototype.toGameViewModel = function () {
             var game = {
