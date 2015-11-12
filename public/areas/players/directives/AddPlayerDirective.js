@@ -49,7 +49,7 @@ var Players;
         };
         AddPlayerController.prototype.savePlayer = function () {
             var _this = this;
-            this.apiService.savePlayer(this.player).then(function () {
+            this.apiService.saveNewPlayer(this.player).then(function () {
                 _this.changeState(State.Saved);
             }, function (data) {
                 _this.changeState(State.Fail);

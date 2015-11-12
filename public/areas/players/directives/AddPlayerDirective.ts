@@ -53,7 +53,7 @@ module Players {
 		}
 
 		private savePlayer(): void {
-			this.apiService.savePlayer(this.player).then(() => {
+			this.apiService.saveNewPlayer(this.player).then(() => {
 				this.changeState(State.Saved);
 			}, (data: string) => {
 				this.changeState(State.Fail);

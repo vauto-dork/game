@@ -163,6 +163,10 @@ input.ng-touched.ng-invalid {
   padding: 1em 0 2em 0;
   max-width: 50em; }
 
+.player-selector-container {
+  padding-top: 1em;
+  padding-bottom: 1em; }
+
 .add-player-status {
   padding: 1em;
   text-align: center; }

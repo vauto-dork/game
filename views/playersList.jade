@@ -7,8 +7,8 @@ block modules
 	script.
 		var PlayersListModule = angular.module('PlayersListModule', []);
 		
-		PlayersListModule.controller('PlayersListController', PlayersListController);
-		PlayersListModule.directive('playersList', PlayersListDirective);
+		PlayersListModule.controller('PlayersListController', Players.PlayersListController);
+		PlayersListModule.directive('playersList', Players.PlayersListDirective);
 		
 		PlayersListModule.controller('PlayerFormController', Players.PlayerFormController);
 		PlayersListModule.directive('playerForm', Players.PlayerFormDirective);

@@ -66,9 +66,20 @@ var Shared;
         };
         // --------------------------------------------------------------
         // Players
-        ApiService.prototype.savePlayer = function (player) {
+        ApiService.prototype.saveNewPlayer = function (player) {
             var def = this.$q.defer();
             this.$http.post('/players', player)
+                .success(function (data, status, headers, config) {
+                def.resolve();
+            }).error(function (data, status, headers, config) {
+                console.error('Cannot save player.');
+                def.reject(data);
+            });
+            return def.promise;
+        };
+        ApiService.prototype.saveExistingPlayer = function (player) {
+            var def = this.$q.defer();
+            this.$http.put('players/' + player._id, player)
                 .success(function (data, status, headers, config) {
                 def.resolve();
             }).error(function (data, status, headers, config) {
