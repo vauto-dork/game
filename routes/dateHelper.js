@@ -10,20 +10,27 @@ module.exports =
 	 */
 	getDateRange: function (req) {
 		var now = new Date();
-		var year = req.query.year ? parseInt(req.query.year) : now.getUTCFullYear();
-		var month;
-		var endMonth;
-		if(req.query.month) {
-			month = parseInt(req.query.month);
-			endMonth = month + 1 > 11 ? 0 : month + 1;
-		} else {
-			if(year) {
-				month = 0;
-				endMonth = 11;
-			}
+		
+		// Use these checks since using bang will cause zero to be not defined.
+		var monthDefined = req.query.month !== undefined && req.query.month !== null;
+		var yearDefined = req.query.year !== undefined && req.query.year !== null;
+		
+		var month = monthDefined ? parseInt(req.query.month) : now.getMonth();
+		var year = yearDefined ? parseInt(req.query.year) : now.getFullYear();	
+		
+		var isDecember = month + 1 > 11;
+		var endMonth = isDecember ? 0 : month + 1;
+		var endYear = isDecember ? year + 1 : year;
+		
+		// If no month requested, then show all for the year.
+		if(!monthDefined) {
+			month = 0;
+			endMonth = 0;
+			endYear = year + 1;
 		}
+		
 		var startDateRange = new Date(year, month, 1);
-		var endDateRange = new Date(year, endMonth, 1);
+		var endDateRange = new Date(endYear, endMonth, 1);
 		return [startDateRange, endDateRange];
 	},
 	
