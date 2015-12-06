@@ -37,11 +37,16 @@ module.exports =
 	/* Gets the month range representing the current month. */
 	getCurrentMonthRange: function () {
 		var now = new Date();
+		
 		var month = now.getMonth();
-		var endMonth = month + 1 > 11 ? 0 : month + 1;
-		var year = month + 1 > 11 ? now.getFullYear() + 1 : now.getFullYear();
+		var year = now.getFullYear();
+		
+		var isDecember = month + 1 > 11;
+		var endMonth = isDecember ? 0 : month + 1;
+		var endYear = isDecember ? year + 1 : year;
+		
 		var startDateRange = new Date(year, month, 1);
-		var endDateRange = new Date(year, endMonth, 1);
+		var endDateRange = new Date(endYear, endMonth, 1);
 		return [startDateRange, endDateRange];
 	}
 }
