@@ -59,7 +59,7 @@ module Shared {
 		}
 
 		public get month(): number {
-			return this.currentMonth || this.dateTimeService.currentMonthValue();
+			return this.currentMonth === undefined ? this.dateTimeService.currentMonthValue() : this.currentMonth;
 		}
 
 		public set month(value: number) {
@@ -67,7 +67,7 @@ module Shared {
 		}
 
 		public get year(): number {
-			return this.currentYear || this.dateTimeService.currentYear();
+			return this.currentYear === undefined ? this.dateTimeService.currentYear() : this.currentYear;
 		}
 
 		public set year(value: number) {

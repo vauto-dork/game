@@ -106,7 +106,7 @@ var Shared;
         ApiService.prototype.getRankedPlayers = function (month, year, hideUnranked) {
             var def = this.$q.defer();
             month = (month === undefined || month === null) ? new Date().getMonth() : month;
-            year = year || new Date().getFullYear();
+            year = (year === undefined || year === null) ? new Date().getFullYear() : year;
             var unrankedParam = hideUnranked ? '&hideUnranked=true' : '';
             var rankedUrl = '/players/ranked?month=' + month + '&year=' + year + unrankedParam;
             this.$http.get(rankedUrl)

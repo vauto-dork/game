@@ -51,7 +51,7 @@ var Shared;
         });
         Object.defineProperty(MonthYearPickerController.prototype, "month", {
             get: function () {
-                return this.currentMonth || this.dateTimeService.currentMonthValue();
+                return this.currentMonth === undefined ? this.dateTimeService.currentMonthValue() : this.currentMonth;
             },
             set: function (value) {
                 this.currentMonth = value;
@@ -61,7 +61,7 @@ var Shared;
         });
         Object.defineProperty(MonthYearPickerController.prototype, "year", {
             get: function () {
-                return this.currentYear || this.dateTimeService.currentYear();
+                return this.currentYear === undefined ? this.dateTimeService.currentYear() : this.currentYear;
             },
             set: function (value) {
                 this.currentYear = value;
