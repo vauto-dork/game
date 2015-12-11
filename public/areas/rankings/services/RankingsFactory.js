@@ -11,8 +11,8 @@ var RankingsFactory = function($http, $q, playerNameFactory) {
 	me.getRankings = function(month, year, hideUnranked){
 		var def = $q.defer();
 		
-		month = !month ? new Date().getMonth() : month;
-    	year = !year ? new Date().getFullYear() : year;
+		month = month === undefined ? new Date().getMonth() : month;
+    	year = year === undefined ? new Date().getFullYear() : year;
 		
 		var unrankedParam = hideUnranked ? '&hideUnranked=true' : '';
 		var rankedUrl = '/players/ranked?month=' + month + '&year=' + year + unrankedParam;
