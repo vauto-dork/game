@@ -8,7 +8,7 @@ module CreateGame {
 		getUnselectedPlayers(): Shared.INewGamePlayer[];
 		selectPlayer(player: Shared.INewGamePlayer): void;
 		deselectPlayer(player: Shared.INewGamePlayer): void;
-		resetSelected(): void;
+		reset(): void;
 		numberSelectedPlayers(): number;
 		createNewActiveGame(): ng.IPromise<Shared.IGameViewModel>;
 	}
@@ -48,7 +48,7 @@ module CreateGame {
 					var temp = new Shared.NewGamePlayer(value);
 					return temp;
 				});
-				this.resetSelected();
+				this.reset();
 				def.resolve();
 			}, () => {
 				this.firstGameOfMonth = true;
@@ -118,8 +118,9 @@ module CreateGame {
 			}
 		}
 
-		public resetSelected(): void {
+		public reset(): void {
 			this.selected = [];
+			this.playerSort = NewGameSort.Selected;
 		}
 		
 		public numberSelectedPlayers(): number {

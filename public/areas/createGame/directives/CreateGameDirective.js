@@ -83,7 +83,7 @@ var CreateGame;
             this.unselectedPlayers = this.createGameService.getUnselectedPlayers();
         };
         CreateGameController.prototype.removeAll = function () {
-            this.createGameService.resetSelected();
+            this.createGameService.reset();
         };
         ;
         CreateGameController.prototype.startGame = function () {

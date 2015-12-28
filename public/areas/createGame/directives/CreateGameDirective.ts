@@ -2,7 +2,6 @@ module CreateGame {
     export function CreateGameDirective(): ng.IDirective {
         return {
 			scope: {
-
 			},
 			templateUrl: '/areas/createGame/directives/CreateGameTemplate.html',
 			controller: 'CreateGameController',
@@ -81,7 +80,7 @@ module CreateGame {
 		}
 		
 		private removeAll(): void {
-			this.createGameService.resetSelected();
+			this.createGameService.reset();
 		};
 
 		private startGame(): void {

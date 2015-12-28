@@ -34,7 +34,7 @@ var CreateGame;
                     var temp = new Shared.NewGamePlayer(value);
                     return temp;
                 });
-                _this.resetSelected();
+                _this.reset();
                 def.resolve();
             }, function () {
                 _this.firstGameOfMonth = true;
@@ -92,8 +92,9 @@ var CreateGame;
                 this.selected.splice(index, 1);
             }
         };
-        CreateGameService.prototype.resetSelected = function () {
+        CreateGameService.prototype.reset = function () {
             this.selected = [];
+            this.playerSort = NewGameSort.Selected;
         };
         CreateGameService.prototype.numberSelectedPlayers = function () {
             if (!this.selected) {
