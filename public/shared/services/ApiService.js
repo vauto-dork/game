@@ -28,6 +28,18 @@ var Shared;
             });
             return def.promise;
         };
+        ApiService.prototype.getPlayersForNewGame = function () {
+            var def = this.$q.defer();
+            this.$http.get('/players/newgame')
+                .success(function (data, status, headers, config) {
+                def.resolve(data);
+            })
+                .error(function (data, status, headers, config) {
+                console.error('Cannot get players for new game');
+                def.reject(data);
+            });
+            return def.promise;
+        };
         ApiService.prototype.createActiveGame = function (game) {
             var def = this.$q.defer();
             this.$http.post('/activeGames/save', game)

@@ -2,16 +2,23 @@ extends layout
 
 block modules
 	script(src='/areas/players/directives/PlayerSelectorDirective.js')
-	script(src='/areas/activeGame/directives/CreateGameDirective.js')
+	script(src='/areas/createGame/services/CreateGameService.js')
+	script(src='/areas/createGame/directives/SelectedPlayersDirective.js')
+	script(src='/areas/createGame/directives/CreateGameDirective.js')
 	
 	script.
 		var CreateGameModule = angular.module('CreateGameModule', []);
 		
-		CreateGameModule.controller('CreateGameController', CreateGameController);
-		CreateGameModule.directive('createGame', CreateGameDirective);
+		CreateGameModule.service('createGameService', CreateGame.CreateGameService);
 		
-		CreateGameModule.controller('PlayerSelectorController', PlayerSelectorController);
-		CreateGameModule.directive('playerSelector', PlayerSelectorDirective);
+		CreateGameModule.controller('SelectedPlayersController', CreateGame.SelectedPlayersController);
+		CreateGameModule.directive('selectedPlayers', CreateGame.SelectedPlayersDirective);
+		
+		CreateGameModule.controller('CreateGameController', CreateGame.CreateGameController);
+		CreateGameModule.directive('createGame', CreateGame.CreateGameDirective);
+		
+		CreateGameModule.controller('PlayerSelectorController', Players.PlayerSelectorController);
+		CreateGameModule.directive('playerSelector', Players.PlayerSelectorDirective);
 		
 	- var modules = ['CreateGameModule']
 

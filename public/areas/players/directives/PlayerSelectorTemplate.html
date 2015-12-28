@@ -4,7 +4,7 @@
 		<input type="text" class="form-control player-selector-filter"
 			placeholder="Type name..."
 			ng-model="ctrl.filter"
-			typeahead="player as player.fullname for player in ctrl.getUnselectedPlayers() | filter:$viewValue | limitTo:6"
+			typeahead="p as p.player.fullname for p in ctrl.players | filter:$viewValue | limitTo:6"
 			typeahead-on-select="ctrl.selectPlayer($item, $model, $label)"
 			typeahead-focus-on-select="false"
 			autocomplete="off"

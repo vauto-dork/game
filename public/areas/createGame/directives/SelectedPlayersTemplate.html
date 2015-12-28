@@ -1,0 +1,30 @@
+<!-- Sort Buttons -->
+
+<div class="btn-row">
+
+	<div class="btn-group btn-group-justified" role="group">
+		
+		<label class="btn btn-info" ng-model="ctrl.orderModel" btn-radio="'Selected'" ng-click="ctrl.useThisOrder()">Use this order</label>
+        <label class="btn btn-info" ng-model="ctrl.orderModel" btn-radio="'Rating'" ng-click="ctrl.useGameOrder()">Use game order</label>
+
+	</div>
+</div>
+
+<!-- Player list -->
+
+<div class="playlist-row" ng-repeat="player in ctrl.selectedPlayers">
+	<div class="player-card" ng-click="ctrl.removePlayer(player)">
+		<div class="player-order">
+			<div class="checkmark">
+				<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+			</div>
+		</div>
+		<div class="player-nametag">
+			<player-nametag player="player.player"></player-nametag>
+		</div>
+	</div>
+</div>
+
+<div ng-if="ctrl.disablePlaylistCreation()" class="playlist-instructions">
+	<b>At least three players required.</b>
+</div>

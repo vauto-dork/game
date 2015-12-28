@@ -32,4 +32,15 @@ module Shared {
 		uberdorks: IRankedPlayerViewModel[],
 		negadorks: IRankedPlayerViewModel[]
 	}
+	
+	export interface ICreateGameViewModel {
+		firstGameOfMonth: boolean;
+		players: ICreateGamePlayerViewModel[];
+	}
+	
+	export interface ICreateGamePlayerViewModel {
+		player: IPlayerViewModel;
+		orderNumber: number;
+		rating: number;
+	}
 }

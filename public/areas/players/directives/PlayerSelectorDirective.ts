@@ -13,15 +13,14 @@ module Players {
     }
 
     export class PlayerSelectorController {
-        public static $inject: string[] = ['$scope', '$element', '$timeout'];
+        public static $inject: string[] = ['$scope', '$element', '$timeout', 'apiService'];
 
-		// TODO: Possibly IPlayer, but missing data until conversion of Active Games.
-		private players: any[];
+		private players: Shared.INewGamePlayer[];
 		private onSelected: Function;
 		
 		private filter: string = '';
 		
-        constructor(private $scope: ng.IScope, private $element: ng.IAugmentedJQuery, private $timeout: ng.ITimeoutService) {
+        constructor(private $scope: ng.IScope, private $element: ng.IAugmentedJQuery, private $timeout: ng.ITimeoutService, private apiService: Shared.ApiService) {
 			$scope.$on('PlayerSelectorFocus', (event, data) => {
 				// Wrapped in timeout so it does this after UI is rendered.
 				$timeout(() => {
@@ -34,21 +33,15 @@ module Players {
 				$element.find("input").blur();
 			});
         }
-
+		
 		private removeFilter(): void {
 			this.filter = '';
 		}
 
-		private selectPlayer(item, model, label): void {
+		private selectPlayer(item: Shared.IPlayer, model, label): void {
 			this.$element.find("input").focus();
 			this.onSelected({ data: item });
 			this.removeFilter();
 		}
-
-		private getUnselectedPlayers(): any[] {
-			return this.players.filter((element) => {
-				return !element.selected;
-			});
-		};
     }
 }

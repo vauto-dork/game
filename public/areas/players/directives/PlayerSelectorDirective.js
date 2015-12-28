@@ -14,10 +14,11 @@ var Players;
     }
     Players.PlayerSelectorDirective = PlayerSelectorDirective;
     var PlayerSelectorController = (function () {
-        function PlayerSelectorController($scope, $element, $timeout) {
+        function PlayerSelectorController($scope, $element, $timeout, apiService) {
             this.$scope = $scope;
             this.$element = $element;
             this.$timeout = $timeout;
+            this.apiService = apiService;
             this.filter = '';
             $scope.$on('PlayerSelectorFocus', function (event, data) {
                 // Wrapped in timeout so it does this after UI is rendered.
@@ -38,13 +39,7 @@ var Players;
             this.onSelected({ data: item });
             this.removeFilter();
         };
-        PlayerSelectorController.prototype.getUnselectedPlayers = function () {
-            return this.players.filter(function (element) {
-                return !element.selected;
-            });
-        };
-        ;
-        PlayerSelectorController.$inject = ['$scope', '$element', '$timeout'];
+        PlayerSelectorController.$inject = ['$scope', '$element', '$timeout', 'apiService'];
         return PlayerSelectorController;
     })();
     Players.PlayerSelectorController = PlayerSelectorController;

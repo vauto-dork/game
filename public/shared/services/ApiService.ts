@@ -1,6 +1,7 @@
 module Shared {
 	export interface IApiService {
 		getActiveGame(gameIdPath: string): ng.IPromise<IGameViewModel>;
+		getPlayersForNewGame(): ng.IPromise<ICreateGameViewModel>;
 		createActiveGame(game: IGameViewModel): ng.IPromise<IGameViewModel>;
 		saveActiveGame(gameIdPath: string, game: IGameViewModel): ng.IPromise<void>;
 		deleteActiveGame(gameIdPath: string): ng.IPromise<void>;
@@ -46,6 +47,21 @@ module Shared {
 					def.reject(data);
 				});
 
+			return def.promise;
+		}
+		
+		public getPlayersForNewGame(): ng.IPromise<ICreateGameViewModel> {
+			var def = this.$q.defer<ICreateGameViewModel>();
+			
+			this.$http.get('/players/newgame')
+				.success(function(data: ICreateGameViewModel, status, headers, config) {
+					def.resolve(data);
+				})
+				.error(function(data, status, headers, config) {
+					console.error('Cannot get players for new game');
+					def.reject(data);
+				});
+			
 			return def.promise;
 		}
 
