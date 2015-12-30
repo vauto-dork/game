@@ -1,18 +1,19 @@
 module Shared {
 	export interface IApiService {
-		getActiveGame(gameIdPath: string): ng.IPromise<IGameViewModel>;
-		getPlayersForNewGame(): ng.IPromise<ICreateGameViewModel>;
-		createActiveGame(game: IGameViewModel): ng.IPromise<IGameViewModel>;
-		saveActiveGame(gameIdPath: string, game: IGameViewModel): ng.IPromise<void>;
+		getAllActiveGames(): ng.IPromise<IGame[]>;
+		getActiveGame(gameIdPath: string): ng.IPromise<IGame>;
+		getPlayersForNewGame(): ng.IPromise<INewGame>;
+		createActiveGame(game: IGame): ng.IPromise<string>;
+		saveActiveGame(gameIdPath: string, game: IGame): ng.IPromise<void>;
 		deleteActiveGame(gameIdPath: string): ng.IPromise<void>;
 		saveNewPlayer(player: IPlayer): ng.IPromise<void>;
 		saveExistingPlayer(player: IPlayer): ng.IPromise<void>;
 		getAllPlayers(): ng.IPromise<IPlayer[]>;
 		getRankedPlayers(month: number, year: number, hideUnranked: boolean): ng.IPromise<IRankedPlayer[]>;
 		getDotm(month: number, year: number): ng.IPromise<IDotmViewModel>;
-		getLastPlayedGame(): ng.IPromise<IGameViewModel>;
+		getLastPlayedGame(): ng.IPromise<IGame>;
 		getGames(month: number, year: number): ng.IPromise<IGame[]>;
-		finalizeGame(game: IGameViewModel): ng.IPromise<void>;
+		finalizeGame(game: IGame): ng.IPromise<void>;
 		deleteGame(gameIdPath: string): ng.IPromise<void>;
 	}
 
@@ -29,9 +30,37 @@ module Shared {
 		private getActiveGamePath(gameIdPath: string): string {
 			return '/ActiveGames/json' + gameIdPath;
 		};
+		
+		private getEditActiveGamePath(gameId: string): string {
+			return '/activeGames/edit/#/' + gameId;
+		}
+		
+		public getAllActiveGames(): ng.IPromise<IGame[]> {
+			var def = this.$q.defer<IGame[]>();
 
-		public getActiveGame(gameIdPath: string): ng.IPromise<IGameViewModel> {
-			var def = this.$q.defer<IGameViewModel>();
+			this.$http.get(this.getActiveGamePath(''))
+				.success((data: IGameViewModel[], status, headers, config) => {
+					if (data === null || data === undefined) {
+						def.reject(status);
+					}
+					else {
+						var game: IGame[] = data.map((value: IGameViewModel) => {
+							return new Game(value);
+						});
+						
+						def.resolve(game);
+					}
+				})
+				.error((data, status, headers, config) => {
+					console.error(`Cannot get active games`);
+					def.reject(data);
+				});
+
+			return def.promise;
+		}
+
+		public getActiveGame(gameIdPath: string): ng.IPromise<IGame> {
+			var def = this.$q.defer<IGame>();
 
 			this.$http.get(this.getActiveGamePath(gameIdPath))
 				.success((data: IGameViewModel, status, headers, config) => {
@@ -39,7 +68,7 @@ module Shared {
 						def.reject(status);
 					}
 					else {
-						def.resolve(data);
+						def.resolve(new Game(data));
 					}
 				})
 				.error((data, status, headers, config) => {
@@ -50,12 +79,12 @@ module Shared {
 			return def.promise;
 		}
 		
-		public getPlayersForNewGame(): ng.IPromise<ICreateGameViewModel> {
-			var def = this.$q.defer<ICreateGameViewModel>();
+		public getPlayersForNewGame(): ng.IPromise<INewGame> {
+			var def = this.$q.defer<INewGame>();
 			
 			this.$http.get('/players/newgame')
 				.success(function(data: ICreateGameViewModel, status, headers, config) {
-					def.resolve(data);
+					def.resolve(new NewGame(data));
 				})
 				.error(function(data, status, headers, config) {
 					console.error('Cannot get players for new game');
@@ -65,12 +94,14 @@ module Shared {
 			return def.promise;
 		}
 
-		public createActiveGame(game: IGameViewModel): ng.IPromise<IGameViewModel> {
-			var def = this.$q.defer<IGameViewModel>();
+		public createActiveGame(game: IGame): ng.IPromise<string> {
+			var def = this.$q.defer<string>();
+			
+			var gameViewModel = game.toGameViewModel();
 
-			this.$http.post('/activeGames/save', game)
+			this.$http.post('/activeGames/save', gameViewModel)
 				.success((data: IGameViewModel, status, headers, config) => {
-					def.resolve(data);
+					def.resolve(this.getEditActiveGamePath(data._id));
 				})
 				.error((data, status, headers, config) => {
 					console.error('Cannot create active game');
@@ -80,7 +111,7 @@ module Shared {
 			return def.promise;
 		}
 
-		public saveActiveGame(gameIdPath: string, game: IGameViewModel): ng.IPromise<void> {
+		public saveActiveGame(gameIdPath: string, game: IGame): ng.IPromise<void> {
 			var def = this.$q.defer<void>();
 
 			this.$http.put(this.getActiveGamePath(gameIdPath), game)
@@ -214,12 +245,12 @@ module Shared {
 		// --------------------------------------------------------------
 		// Games
 		
-		public getLastPlayedGame(): ng.IPromise<IGameViewModel> {
-			var def = this.$q.defer<IGameViewModel>();
+		public getLastPlayedGame(): ng.IPromise<IGame> {
+			var def = this.$q.defer<IGame>();
 
 			this.$http.get("/Games/LastPlayed")
 				.success((data: IGameViewModel, status, headers, config) => {
-					def.resolve(data);
+					def.resolve(new Game(data));
 				})
 				.error((data, status, headers, config) => {
 					console.error('Cannot get last game played.');
@@ -248,10 +279,10 @@ module Shared {
 			return def.promise;
 		}
 
-		public finalizeGame(game: IGameViewModel): ng.IPromise<void> {
+		public finalizeGame(game: IGame): ng.IPromise<void> {
 			var def = this.$q.defer<void>();
 
-			this.$http.post('/games', game).success((data, status, headers, config) => {
+			this.$http.post('/games', game.toGameViewModel()).success((data, status, headers, config) => {
 				def.resolve();
 			})
 				.error((data, status, headers, config) => {

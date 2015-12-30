@@ -92,8 +92,8 @@ var CreateGame;
         ;
         CreateGameController.prototype.createNewActiveGame = function () {
             var _this = this;
-            this.createGameService.createNewActiveGame().then(function (data) {
-                _this.$window.location.href = '/activeGames/edit/#/' + data._id;
+            this.createGameService.createNewActiveGame().then(function (editUrl) {
+                _this.$window.location.href = editUrl;
             }, function () {
                 _this.changeState(State.Error);
             });

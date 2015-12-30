@@ -31,20 +31,18 @@ module Rankings {
         }
 
 		private getLastPlayedGame() {
-			this.apiService.getLastPlayedGame().then((data: Shared.IGameViewModel)=>{
-				this.lastDatePlayed = data.datePlayed;
-				this.noGamesThisMonth = this.hasGames();
+			this.apiService.getLastPlayedGame().then(game => {
+				this.lastDatePlayed = game.datePlayed;
+				
+				var lastGame = new Date(this.lastDatePlayed);
+				var lastGameMonth = lastGame.getMonth();
+				var lastGameYear = lastGame.getFullYear();
+				
+				// If the last played game is in the current month and year, then there is at least one game this month.
+				this.noGamesThisMonth = !(this.currentMonth === lastGameMonth && this.currentYear === lastGameYear);
 			}, ()=>{
 				debugger;
 			});
-		}
-
-		private hasGames() {
-			var lastGame = new Date(this.lastDatePlayed);
-			var lastGameMonth = lastGame.getMonth();
-			var lastGameYear = lastGame.getFullYear();
-
-			return !(this.currentMonth === lastGameMonth && this.currentYear === lastGameYear);
 		}
     }
 }

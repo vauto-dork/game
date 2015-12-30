@@ -9,8 +9,8 @@ block modules
 	script.
 		var ActiveGamesModule = angular.module('ActiveGamesModule', ['GameCardModule']);
 		
-		ActiveGamesModule.controller('ActiveGamesController', ActiveGamesController);
-		ActiveGamesModule.directive('activeGames', ActiveGamesDirective);
+		ActiveGamesModule.controller('ActiveGamesController', ActiveGame.ActiveGamesController);
+		ActiveGamesModule.directive('activeGames', ActiveGame.ActiveGamesDirective);
 	
 	- var modules = ['ActiveGamesModule']
 	

@@ -9,8 +9,10 @@
 			<h3 ng-bind="ctrl.errorMessage"></h3>
 		</div>
 		
-		<game-card ng-repeat="game in ctrl.games" game="game" game-path="ctrl.activeGamePath"
-			reload="ctrl.reload()" show-modify-buttons="true"></game-card>
+		<game-card ng-repeat="game in ctrl.games"
+			game="game"
+			reload="ctrl.reload()"
+			show-modify-buttons="true"></game-card>
 		
 	</div>
 </div>

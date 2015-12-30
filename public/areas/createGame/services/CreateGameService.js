@@ -30,16 +30,13 @@ var CreateGame;
             var def = this.$q.defer();
             this.apiService.getPlayersForNewGame().then(function (data) {
                 _this.firstGameOfMonth = data.firstGameOfMonth;
-                _this.players = data.players.map(function (value) {
-                    var temp = new Shared.NewGamePlayer(value);
-                    return temp;
-                });
+                _this.players = data.players;
                 _this.reset();
                 def.resolve();
             }, function () {
                 _this.firstGameOfMonth = true;
                 _this.players = [];
-                _this.selected = [];
+                _this.reset();
                 def.resolve();
             });
             this.playerLoadPromise = def.promise;
@@ -103,15 +100,14 @@ var CreateGame;
             return this.selected.length;
         };
         CreateGameService.prototype.createNewActiveGame = function () {
-            var players = this.getSelectedPlayers().map(function (player) {
-                return player.toGamePlayerViewModel();
+            var game = new Shared.Game();
+            game.players = this.getSelectedPlayers().map(function (player) {
+                var gamePlayer = new Shared.GamePlayer();
+                gamePlayer.player = player.player;
+                return gamePlayer;
             });
-            var game = {
-                players: players
-            };
             return this.apiService.createActiveGame(game);
         };
-        ;
         CreateGameService.$inject = ['$q', 'apiService'];
         return CreateGameService;
     })();

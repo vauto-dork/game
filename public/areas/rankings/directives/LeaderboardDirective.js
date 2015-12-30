@@ -24,18 +24,16 @@ var Rankings;
         }
         LeaderboardController.prototype.getLastPlayedGame = function () {
             var _this = this;
-            this.apiService.getLastPlayedGame().then(function (data) {
-                _this.lastDatePlayed = data.datePlayed;
-                _this.noGamesThisMonth = _this.hasGames();
+            this.apiService.getLastPlayedGame().then(function (game) {
+                _this.lastDatePlayed = game.datePlayed;
+                var lastGame = new Date(_this.lastDatePlayed);
+                var lastGameMonth = lastGame.getMonth();
+                var lastGameYear = lastGame.getFullYear();
+                // If the last played game is in the current month and year, then there is at least one game this month.
+                _this.noGamesThisMonth = !(_this.currentMonth === lastGameMonth && _this.currentYear === lastGameYear);
             }, function () {
                 debugger;
             });
-        };
-        LeaderboardController.prototype.hasGames = function () {
-            var lastGame = new Date(this.lastDatePlayed);
-            var lastGameMonth = lastGame.getMonth();
-            var lastGameYear = lastGame.getFullYear();
-            return !(this.currentMonth === lastGameMonth && this.currentYear === lastGameYear);
         };
         LeaderboardController.$inject = ['$scope', 'dateTimeService', 'apiService'];
         return LeaderboardController;

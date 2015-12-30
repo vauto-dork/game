@@ -11,6 +11,29 @@ var Shared;
             return '/ActiveGames/json' + gameIdPath;
         };
         ;
+        ApiService.prototype.getEditActiveGamePath = function (gameId) {
+            return '/activeGames/edit/#/' + gameId;
+        };
+        ApiService.prototype.getAllActiveGames = function () {
+            var def = this.$q.defer();
+            this.$http.get(this.getActiveGamePath(''))
+                .success(function (data, status, headers, config) {
+                if (data === null || data === undefined) {
+                    def.reject(status);
+                }
+                else {
+                    var game = data.map(function (value) {
+                        return new Shared.Game(value);
+                    });
+                    def.resolve(game);
+                }
+            })
+                .error(function (data, status, headers, config) {
+                console.error("Cannot get active games");
+                def.reject(data);
+            });
+            return def.promise;
+        };
         ApiService.prototype.getActiveGame = function (gameIdPath) {
             var def = this.$q.defer();
             this.$http.get(this.getActiveGamePath(gameIdPath))
@@ -19,7 +42,7 @@ var Shared;
                     def.reject(status);
                 }
                 else {
-                    def.resolve(data);
+                    def.resolve(new Shared.Game(data));
                 }
             })
                 .error(function (data, status, headers, config) {
@@ -32,7 +55,7 @@ var Shared;
             var def = this.$q.defer();
             this.$http.get('/players/newgame')
                 .success(function (data, status, headers, config) {
-                def.resolve(data);
+                def.resolve(new Shared.NewGame(data));
             })
                 .error(function (data, status, headers, config) {
                 console.error('Cannot get players for new game');
@@ -41,10 +64,12 @@ var Shared;
             return def.promise;
         };
         ApiService.prototype.createActiveGame = function (game) {
+            var _this = this;
             var def = this.$q.defer();
-            this.$http.post('/activeGames/save', game)
+            var gameViewModel = game.toGameViewModel();
+            this.$http.post('/activeGames/save', gameViewModel)
                 .success(function (data, status, headers, config) {
-                def.resolve(data);
+                def.resolve(_this.getEditActiveGamePath(data._id));
             })
                 .error(function (data, status, headers, config) {
                 console.error('Cannot create active game');
@@ -161,7 +186,7 @@ var Shared;
             var def = this.$q.defer();
             this.$http.get("/Games/LastPlayed")
                 .success(function (data, status, headers, config) {
-                def.resolve(data);
+                def.resolve(new Shared.Game(data));
             })
                 .error(function (data, status, headers, config) {
                 console.error('Cannot get last game played.');
@@ -186,7 +211,7 @@ var Shared;
         };
         ApiService.prototype.finalizeGame = function (game) {
             var def = this.$q.defer();
-            this.$http.post('/games', game).success(function (data, status, headers, config) {
+            this.$http.post('/games', game.toGameViewModel()).success(function (data, status, headers, config) {
                 def.resolve();
             })
                 .error(function (data, status, headers, config) {

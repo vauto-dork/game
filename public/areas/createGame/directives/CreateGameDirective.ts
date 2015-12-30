@@ -88,8 +88,8 @@ module CreateGame {
 		};
 
 		private createNewActiveGame() {
-			this.createGameService.createNewActiveGame().then(data => {
-				this.$window.location.href = '/activeGames/edit/#/' + data._id;
+			this.createGameService.createNewActiveGame().then(editUrl => {
+				this.$window.location.href = editUrl;
 			}, () => {
 				this.changeState(State.Error);
 			});

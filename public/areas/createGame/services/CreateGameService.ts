@@ -10,7 +10,7 @@ module CreateGame {
 		deselectPlayer(player: Shared.INewGamePlayer): void;
 		reset(): void;
 		numberSelectedPlayers(): number;
-		createNewActiveGame(): ng.IPromise<Shared.IGameViewModel>;
+		createNewActiveGame(): ng.IPromise<string>;
 	}
 
 	export enum NewGameSort {
@@ -42,18 +42,15 @@ module CreateGame {
 		private getPlayers(): void {
 			var def = this.$q.defer<void>();
 			
-			this.apiService.getPlayersForNewGame().then((data) => {
+			this.apiService.getPlayersForNewGame().then(data => {
 				this.firstGameOfMonth = data.firstGameOfMonth;
-				this.players = data.players.map((value) => {
-					var temp = new Shared.NewGamePlayer(value);
-					return temp;
-				});
+				this.players = data.players;
 				this.reset();
 				def.resolve();
 			}, () => {
 				this.firstGameOfMonth = true;
 				this.players = [];
-				this.selected = [];
+				this.reset();
 				def.resolve();
 			});
 			
@@ -131,16 +128,15 @@ module CreateGame {
 			return this.selected.length;
 		}
 
-		public createNewActiveGame(): ng.IPromise<Shared.IGameViewModel> {
-			var players: Shared.IGamePlayerViewModel[] = this.getSelectedPlayers().map((player) => {
-				return player.toGamePlayerViewModel();
+		public createNewActiveGame(): ng.IPromise<string> {			
+			var game = new Shared.Game();
+			game.players = this.getSelectedPlayers().map((player) => {
+				var gamePlayer = new Shared.GamePlayer();
+				gamePlayer.player = player.player;
+				return gamePlayer;
 			});
-			
-			var game: Shared.IGameViewModel = {
-				players: players
-			};
 
 			return this.apiService.createActiveGame(game);
-		};
+		}
     }
 }

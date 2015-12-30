@@ -13,6 +13,9 @@ var Shared;
             this.datePlayed = game.datePlayed;
             this.winner = new Shared.Player(game.winner);
         }
+        Game.prototype.getIdAsPath = function () {
+            return "/" + this._id;
+        };
         Game.prototype.toGameViewModel = function () {
             var game = {
                 _id: this._id,
@@ -20,7 +23,7 @@ var Shared;
                     return value.toGamePlayerViewModel();
                 }),
                 datePlayed: this.datePlayed,
-                winner: this.winner.toPlayerViewModel()
+                winner: !this.winner ? null : this.winner.toPlayerViewModel()
             };
             return game;
         };

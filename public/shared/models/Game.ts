@@ -4,6 +4,7 @@ module Shared {
 		players: IGamePlayer[];
 		datePlayed?: string;
 		winner?: IPlayer;
+		getIdAsPath(): string;
 		toGameViewModel(): IGameViewModel;
 	}
 	
@@ -27,6 +28,10 @@ module Shared {
 			this.winner = new Player(game.winner);
 		}
 		
+		public getIdAsPath(): string {
+			return `/${this._id}`;
+		}
+		
 		public toGameViewModel(): IGameViewModel {
 			var game: IGameViewModel = {
 				_id: this._id,
@@ -34,7 +39,7 @@ module Shared {
 					return value.toGamePlayerViewModel();
 				}),
 				datePlayed: this.datePlayed,
-				winner: this.winner.toPlayerViewModel()
+				winner: !this.winner ? null : this.winner.toPlayerViewModel()
 			}
 			
 			return game;

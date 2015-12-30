@@ -3,7 +3,6 @@ module Shared {
 		return {
 			scope: {
 				game: "=",
-				gamePath: "=",
 				showModifyButtons: "=",
 				reload: "&"
 			},
@@ -32,9 +31,8 @@ module Shared {
 		private showDeleted: boolean = false;
 		private showError: boolean = false;
 		
-		private selectedGame: IGameViewModel;
+		private game: IGame;
 		private errorMessage: string;
-		private gamePath: string;
 		
 		constructor(private $scope: ng.IScope, private $http: ng.IHttpService, private $window: ng.IWindowService, private apiService: IApiService) {
 			this.changeState(State.Ready);
@@ -49,7 +47,6 @@ module Shared {
 
 			switch (newState) {
 				case State.Ready:
-					this.selectedGame = null;
 					break;
 				case State.Copy:
 					this.copy();
@@ -68,57 +65,28 @@ module Shared {
 	
 		// Dont call directly. Change state to "Deleting" instead.
 		private delete(): void {
-			if (!this.selectedGame) {
-				this.errorHandler(null, 'No game selected!');
-				return;
-			}
-
-			this.$http.delete(this.gamePath + '/' + this.selectedGame._id)
-				.success((data, status, headers, config) => {
-					this.changeState(State.Deleted);
-				})
-				.error((data, status, headers, config) => {
-					this.errorHandler(data, 'Error deleting game!');
-				});
+			this.apiService.deleteActiveGame(this.game.getIdAsPath()).then(() => {
+				this.changeState(State.Deleted);
+			}, (data) => {
+				this.errorHandler(data, 'Error deleting game!');
+			});
 		}
 	
 		// Dont call directly. Change state to "Copy" instead.
 		private copy(): void {
-			if (!this.selectedGame) {
-				this.errorHandler(null, 'No game selected!');
-				return;
-			}
+			var newGame: IGame = new Game();
 			
-			// var playersList: IGamePlayerViewModel[] = this.selectedGame.players.map((value: IGamePlayerViewModel) => {
-			// 	var player: IGamePlayerViewModel = {
-			// 		_id: value._id,
-			// 		player: value.player
-			// 	}
-			// 	
-			// 	return player;
-			// });
-			// 
-			// var createGamePromise = this.apiService.CreateActiveGame({players: playersList});
-			// createGamePromise.then((data: IGameViewModel) => {
-			// 	this.$window.location.href = '/activeGames/edit/#/' + data._id;
-			// }, (data: string) => {
-			// 	this.errorHandler(data, 'Error copying game!');
-			// });
-
-			var removedScores: IGamePlayerViewModel[] = angular.copy(this.selectedGame.players)
-
-			removedScores.forEach((element: IGamePlayerViewModel) => {
-				element.points = 0;
-				element.rank = 0;
+			newGame.players = this.game.players.map((player) => {
+				var gamePlayer = new GamePlayer();
+				gamePlayer.player = player.player;
+				return gamePlayer;
 			});
 			
-			this.$http.post('/activeGames/save', { players: removedScores })
-				.success((data: IGameViewModel, status, headers, config) => {
-					this.$window.location.href = '/activeGames/edit/#/' + data._id;
-				})
-				.error((data, status, headers, config) => {
-					this.errorHandler(data, 'Error copying game!');
-				});
+			this.apiService.createActiveGame(newGame).then(editUrl => {
+				this.$window.location.href = editUrl;
+			}, (data) => {
+				this.errorHandler(data, 'Error copying game!');
+			});
 		}
 
 		private warnDelete(): void {
@@ -130,12 +98,10 @@ module Shared {
 		}
 
 		private deleteGame(game: IGameViewModel): void {
-			this.selectedGame = game;
 			this.changeState(State.Deleting);
 		}
 
 		private copyGame(game: IGameViewModel): void {
-			this.selectedGame = game;
 			this.changeState(State.Copy);
 		}
 	}
