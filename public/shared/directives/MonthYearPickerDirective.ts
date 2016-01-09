@@ -59,7 +59,9 @@ module Shared {
 		}
 
 		public get month(): number {
-			return this.currentMonth === undefined ? this.dateTimeService.currentMonthValue() : this.currentMonth;
+			return this.currentMonth === undefined || this.currentMonth === null
+                ? this.dateTimeService.currentMonthValue()
+                : this.currentMonth;
 		}
 
 		public set month(value: number) {
@@ -67,7 +69,9 @@ module Shared {
 		}
 
 		public get year(): number {
-			return this.currentYear === undefined ? this.dateTimeService.currentYear() : this.currentYear;
+			return this.currentYear === undefined || this.currentYear === null
+                ? this.dateTimeService.currentYear()
+                : this.currentYear;
 		}
 
 		public set year(value: number) {
@@ -79,7 +83,7 @@ module Shared {
         }
 
 		private init(): void {
-			this.selectedMonth = this.months[this.currentMonth === 0 ? 11 : this.currentMonth];
+			this.selectedMonth = this.months[this.currentMonth];
 
 			for (var i = this.minimumYear; i <= this.currentYear; i++) {
 				var tempYear: INameValuePair = { name: i.toString(), value: i };

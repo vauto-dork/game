@@ -51,7 +51,9 @@ var Shared;
         });
         Object.defineProperty(MonthYearPickerController.prototype, "month", {
             get: function () {
-                return this.currentMonth === undefined ? this.dateTimeService.currentMonthValue() : this.currentMonth;
+                return this.currentMonth === undefined || this.currentMonth === null
+                    ? this.dateTimeService.currentMonthValue()
+                    : this.currentMonth;
             },
             set: function (value) {
                 this.currentMonth = value;
@@ -61,7 +63,9 @@ var Shared;
         });
         Object.defineProperty(MonthYearPickerController.prototype, "year", {
             get: function () {
-                return this.currentYear === undefined ? this.dateTimeService.currentYear() : this.currentYear;
+                return this.currentYear === undefined || this.currentYear === null
+                    ? this.dateTimeService.currentYear()
+                    : this.currentYear;
             },
             set: function (value) {
                 this.currentYear = value;
@@ -70,7 +74,7 @@ var Shared;
             configurable: true
         });
         MonthYearPickerController.prototype.init = function () {
-            this.selectedMonth = this.months[this.currentMonth === 0 ? 11 : this.currentMonth];
+            this.selectedMonth = this.months[this.currentMonth];
             for (var i = this.minimumYear; i <= this.currentYear; i++) {
                 var tempYear = { name: i.toString(), value: i };
                 this.years.push(tempYear);
