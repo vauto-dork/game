@@ -20,8 +20,8 @@ var MonthYearPickerController = function ($scope) {
 	me.disableMonth = me.disabled || false;
 	me.disableYear = me.disabled || false;
 	
-	me.currentMonth = me.month || new Date().getMonth();
-	me.currentYear = me.year || new Date().getFullYear();
+	me.currentMonth = me.month !== undefined && me.month !== null ? me.month : new Date().getMonth();
+	me.currentYear = me.year !== undefined && me.year !== null ? me.year : new Date().getFullYear();
 	
 	me.init = function() {
 		me.months = [
@@ -38,7 +38,7 @@ var MonthYearPickerController = function ($scope) {
 			{name: 'November', value: 10},
 			{name: 'December', value: 11}
 			];
-		me.selectedMonth = me.months[me.currentMonth === 0 ? 11 : me.currentMonth];
+		me.selectedMonth = me.months[me.currentMonth];
 		
 		me.years = [];	
 		for(var i = me.minimumYear; i <= me.currentYear; i++){
