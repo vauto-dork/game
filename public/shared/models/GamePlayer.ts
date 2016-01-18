@@ -1,10 +1,15 @@
 module Shared {
 	export interface IGamePlayer {
+        // From/To ViewModel
 		_id?: string;
 		player: IPlayer;
 		rank?: number;
 		points?: number;
-		toGamePlayerViewModel(): IGamePlayerViewModel;
+        toGamePlayerViewModel(): IGamePlayerViewModel;
+        
+        // For UI only
+        selected?: boolean;
+        removed?: boolean;
 	}
 	
 	export class GamePlayer implements IGamePlayer {
@@ -12,8 +17,13 @@ module Shared {
 		public player: IPlayer;
 		public rank: number;
 		public points: number;
+        public selected: boolean;
+        public removed: boolean;
 		
 		constructor(player?: IGamePlayerViewModel) {
+            this.selected = false;
+            this.removed = false;
+            
 			if(!player) {
 				this.player = new Player();
 				return;
