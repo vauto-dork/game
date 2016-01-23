@@ -90,13 +90,15 @@ var EditActiveGame;
             this.$window.location.href = '/ActiveGames';
         };
         EditActiveGameController.prototype.scrollToTop = function () {
+            var _this = this;
             this.$timeout(function () {
-                this.$window.scrollTo(0, 0);
+                _this.$window.scrollTo(0, 0);
             });
         };
         EditActiveGameController.prototype.scrollToBottom = function () {
+            var _this = this;
             this.$timeout(function () {
-                this.$window.scrollTo(0, 100000);
+                _this.$window.scrollTo(0, 100000);
             });
         };
         EditActiveGameController.prototype.getActiveGame = function () {

@@ -40,6 +40,9 @@ var EditActiveGame;
             });
             return def.promise;
         };
+        EditActiveGameService.prototype.getGamePlayers = function () {
+            return this.activeGame.players;
+        };
         EditActiveGameService.prototype.save = function () {
             var _this = this;
             var def = this.$q.defer();
@@ -123,7 +126,7 @@ var EditActiveGame;
             }
             return hasRanks;
         };
-        EditActiveGameService.$inject = ['$location', '$q'];
+        EditActiveGameService.$inject = ['$location', '$q', 'apiService'];
         return EditActiveGameService;
     })();
     EditActiveGame.EditActiveGameService = EditActiveGameService;

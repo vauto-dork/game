@@ -1,31 +1,23 @@
 extends layout
 
 block modules
-	script(src='/areas/players/directives/PlayerSelectorDirective.js')
-	script(src='/areas/activeGame/services/EditActiveGameFactory.js')
-	script(src='/areas/activeGame/directives/ReorderPlayersDirective.js')
-	script(src='/areas/activeGame/directives/EditScoresDirective.js')
-	script(src='/areas/activeGame/directives/EditActiveGameDirective.js')
-	
-	script.
-		var EditActiveGameModule = angular.module('EditActiveGameModule', []);
+    script(src='/areas/editActiveGame/services/EditActiveGameService.js')
+    script(src='/areas/editActiveGame/directives/EditScoresDirective.js')
+    script(src='/areas/editActiveGame/directives/EditActiveGameDirective.js')
+    
+    script.
+        var EditActiveGameModule = angular.module('EditActiveGameModule', []);
 		
-		EditActiveGameModule.factory('editActiveGameFactory', EditActiveGameFactory);
+        EditActiveGameModule.service('editActiveGameService', EditActiveGame.EditActiveGameService);
 		
-		EditActiveGameModule.controller('EditActiveGameController', EditActiveGameController);
-		EditActiveGameModule.directive('editActiveGame', EditActiveGameDirective);
-		
-		EditActiveGameModule.controller('EditScoresController', EditScoresController);
-		EditActiveGameModule.directive('editScores', EditScoresDirective);
-		
-		EditActiveGameModule.controller('PlayerSelectorController', PlayerSelectorController);
-		EditActiveGameModule.directive('playerSelector', PlayerSelectorDirective);
-		
-		EditActiveGameModule.controller('ReorderPlayersController', ReorderPlayersController);
-		EditActiveGameModule.directive('reorderPlayers', ReorderPlayersDirective);
-		
-	- var modules = ['EditActiveGameModule']
-		
+        EditActiveGameModule.controller('EditActiveGameController', EditActiveGame.EditActiveGameController);
+        EditActiveGameModule.directive('editActiveGame', EditActiveGame.EditActiveGameDirective);
+        
+        EditActiveGameModule.controller('EditScoresController', EditActiveGame.EditScoresController);
+        EditActiveGameModule.directive('editScores', EditActiveGame.EditScoresDirective);
+        
+    - var modules = ['EditActiveGameModule']
+    
 block content
-	div.row
-		edit-active-game
+    div.row
+        edit-active-game

@@ -3,12 +3,13 @@ module EditActiveGame {
         datePlayed: Date;
         getErrorMessages(): string[];
         getActiveGame(): ng.IPromise<void>;
+        getGamePlayers(): Shared.IGamePlayer[];
         save(): ng.IPromise<void>;
         finalize(): ng.IPromise<void>;
     }
 
     export class EditActiveGameService implements IEditActiveGameService {
-        public static $inject: string[] = ['$location', '$q'];
+        public static $inject: string[] = ['$location', '$q', 'apiService'];
         private imLoading: ng.IPromise<void>;
         private gameIdPath: string;
         private activeGame: Shared.IGame;
@@ -53,6 +54,10 @@ module EditActiveGame {
             });
 
             return def.promise;
+        }
+        
+        public getGamePlayers(): Shared.IGamePlayer[] {
+            return this.activeGame.players;
         }
 
         public save(): ng.IPromise<void> {

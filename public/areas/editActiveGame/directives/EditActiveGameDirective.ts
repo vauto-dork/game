@@ -102,19 +102,20 @@ module EditActiveGame {
         }
         
         private scrollToTop(): void {
-            this.$timeout(function() {
+            this.$timeout(() => {
                 this.$window.scrollTo(0, 0);
             });
         }
         
         private scrollToBottom(): void {
-            this.$timeout(function() {
+            this.$timeout(() => {
                 this.$window.scrollTo(0, 100000);
             });
         }
                
         private getActiveGame(): void {
             this.editActiveGameService.getActiveGame().then(() => {
+                
                 this.changeState(State.Ready);
             }, () => {
                 this.errorHandler('Cannot get active game.', 'Cannot load game');
