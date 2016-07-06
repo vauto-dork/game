@@ -53,7 +53,7 @@ var CreateGame;
         ;
         SelectedPlayersController.$inject = ['$scope', 'createGameService'];
         return SelectedPlayersController;
-    })();
+    }());
     CreateGame.SelectedPlayersController = SelectedPlayersController;
 })(CreateGame || (CreateGame = {}));
 //# sourceMappingURL=SelectedPlayersDirective.js.map

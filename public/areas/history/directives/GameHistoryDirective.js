@@ -95,7 +95,7 @@ var DorkHistory;
         ;
         GameHistoryController.$inject = ['$scope', '$timeout', 'dateTimeService', 'monthYearQueryService', 'apiService'];
         return GameHistoryController;
-    })();
+    }());
     DorkHistory.GameHistoryController = GameHistoryController;
 })(DorkHistory || (DorkHistory = {}));
 //# sourceMappingURL=GameHistoryDirective.js.map

@@ -90,7 +90,7 @@ var Rankings;
         ;
         RankingsController.$inject = ['$scope', 'rankingsService'];
         return RankingsController;
-    })();
+    }());
     Rankings.RankingsController = RankingsController;
 })(Rankings || (Rankings = {}));
 //# sourceMappingURL=RankingsDirective.js.map

@@ -38,7 +38,7 @@ module ActiveGame {
 			
 			switch(newState){
 				case State.Loading:
-					this.getGames();
+                    this.getGames();
 					break;
 			}
 		}

@@ -28,7 +28,7 @@ var Shared;
             return game;
         };
         return Game;
-    })();
+    }());
     Shared.Game = Game;
 })(Shared || (Shared = {}));
 //# sourceMappingURL=Game.js.map

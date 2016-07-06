@@ -41,7 +41,7 @@ var Players;
         };
         PlayerSelectorController.$inject = ['$scope', '$element', '$timeout', 'apiService'];
         return PlayerSelectorController;
-    })();
+    }());
     Players.PlayerSelectorController = PlayerSelectorController;
 })(Players || (Players = {}));
 //# sourceMappingURL=PlayerSelectorDirective.js.map

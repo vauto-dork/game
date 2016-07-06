@@ -37,7 +37,7 @@ var Rankings;
         };
         LeaderboardController.$inject = ['$scope', 'dateTimeService', 'apiService'];
         return LeaderboardController;
-    })();
+    }());
     Rankings.LeaderboardController = LeaderboardController;
 })(Rankings || (Rankings = {}));
 //# sourceMappingURL=LeaderboardDirective.js.map

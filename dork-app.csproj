@@ -1,0 +1,235 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <ProjectGuid>{3529A458-6D93-46C2-BAAA-7CD7D4979427}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <OutputPath>bin</OutputPath>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <TypeScriptToolsVersion>1.8</TypeScriptToolsVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+  </PropertyGroup>
+  <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app.js" />
+    <Content Include="config.js" />
+    <Content Include="models\activeGame.js" />
+    <Content Include="models\game.js" />
+    <Content Include="models\index.js" />
+    <Content Include="models\player.js" />
+    <Content Include="public\areas\activeGame\directives\ActiveGamesTemplate.html" />
+    <Content Include="public\areas\activeGame\directives\EditActiveGameDirective.js" />
+    <Content Include="public\areas\activeGame\directives\EditActiveGameTemplate.html" />
+    <Content Include="public\areas\activeGame\directives\EditScoresDirective.js" />
+    <Content Include="public\areas\activeGame\directives\EditScoresTemplate.html" />
+    <Content Include="public\areas\activeGame\directives\ReorderPlayersDirective.js" />
+    <Content Include="public\areas\activeGame\directives\ReorderPlayersTemplate.html" />
+    <Content Include="public\areas\activeGame\services\EditActiveGameFactory.js" />
+    <Content Include="public\areas\createGame\directives\CreateGameTemplate.html" />
+    <Content Include="public\areas\createGame\directives\SelectedPlayersTemplate.html" />
+    <Content Include="public\areas\createGame\services\CreateGameService.js" />
+    <Content Include="public\areas\dotm\directives\DotmTemplate.html" />
+    <Content Include="public\areas\dotm\modules\DotmModule.js" />
+    <Content Include="public\areas\editActiveGame\directives\EditActiveGameTemplate.html" />
+    <Content Include="public\areas\editActiveGame\directives\EditScoresTemplate.html" />
+    <Content Include="public\areas\editActiveGame\services\EditActiveGameService.js" />
+    <Content Include="public\areas\history\directives\GameHistoryTemplate.html" />
+    <Content Include="public\areas\history\directives\RankingHistoryTemplate.html" />
+    <Content Include="public\areas\players\directives\AddPlayerTemplate.html" />
+    <Content Include="public\areas\players\directives\PlayerFormTemplate.html" />
+    <Content Include="public\areas\players\directives\PlayerSelectorTemplate.html" />
+    <Content Include="public\areas\players\directives\PlayersListTemplate.html" />
+    <Content Include="public\areas\rankings\directives\LeaderboardTemplate.html" />
+    <Content Include="public\areas\rankings\directives\RankingsCardTemplate.html" />
+    <Content Include="public\areas\rankings\directives\RankingsTemplate.html" />
+    <Content Include="public\areas\rankings\modules\RankingsModule.js" />
+    <Content Include="public\areas\rankings\services\RankingsService.js" />
+    <Content Include="public\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="public\images\loader.gif" />
+    <Content Include="public\scripts\angular-animate.js" />
+    <Content Include="public\scripts\angular.min.js" />
+    <Content Include="public\scripts\bootstrap\modal.js" />
+    <Content Include="public\scripts\jquery.js" />
+    <Content Include="public\scripts\jquery.min.js" />
+    <Content Include="public\scripts\ui-bootstrap-tpls-0.13.0.min.js" />
+    <Content Include="public\shared\directives\DatePickerTemplate.html" />
+    <Content Include="public\shared\directives\GameCardTemplate.html" />
+    <Content Include="public\shared\directives\GlobalNavTemplate.html" />
+    <Content Include="public\shared\directives\MonthYearPickerTemplate.html" />
+    <Content Include="public\shared\directives\PlayerNametagTemplate.html" />
+    <Content Include="public\shared\directives\PlayerScoretagTemplate.html" />
+    <Content Include="public\shared\models\Game.js" />
+    <Content Include="public\shared\models\GamePlayer.js" />
+    <Content Include="public\shared\models\IViewModels.js" />
+    <Content Include="public\shared\models\NewGame.js" />
+    <Content Include="public\shared\models\NewGamePlayer.js" />
+    <Content Include="public\shared\models\Player.js" />
+    <Content Include="public\shared\models\RankedPlayer.js" />
+    <Content Include="public\shared\modules\GameCardModule.js" />
+    <Content Include="public\shared\modules\UxControlsModule.js" />
+    <Content Include="public\shared\services\ApiService.js" />
+    <Content Include="public\shared\services\DateTimeService.js" />
+    <Content Include="public\shared\services\MonthYearQueryService.js" />
+    <Content Include="public\stylesheets\admin.css" />
+    <Content Include="public\stylesheets\animation.css" />
+    <Content Include="public\stylesheets\bootstrap.min.css" />
+    <Content Include="public\stylesheets\datePicker.css" />
+    <Content Include="public\stylesheets\game.css" />
+    <Content Include="public\stylesheets\global.css" />
+    <Content Include="public\stylesheets\mixins.css" />
+    <Content Include="public\stylesheets\player.css" />
+    <Content Include="public\stylesheets\playersList.css" />
+    <Content Include="public\stylesheets\style.css" />
+    <Content Include="public\stylesheets\variables.css" />
+    <Content Include="routes\activeGameHelper.js" />
+    <Content Include="routes\activeGames.js" />
+    <Content Include="routes\admin.js" />
+    <Content Include="routes\dateHelper.js" />
+    <Content Include="routes\gameHelper.js" />
+    <Content Include="routes\games.js" />
+    <Content Include="routes\index.js" />
+    <Content Include="routes\players.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="scss\admin.scss" />
+    <Content Include="scss\animation.scss" />
+    <Content Include="scss\datePicker.scss" />
+    <Content Include="scss\game.scss" />
+    <Content Include="scss\global.scss" />
+    <Content Include="scss\mixins.scss" />
+    <Content Include="scss\player.scss" />
+    <Content Include="scss\playersList.scss" />
+    <Content Include="scss\style.scss" />
+    <Content Include="scss\variables.scss" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="views\activeGames.jade" />
+    <Content Include="views\addPlayer.jade" />
+    <Content Include="views\admin.jade" />
+    <Content Include="views\createGame.jade" />
+    <Content Include="views\editActiveGame.jade" />
+    <Content Include="views\error.jade" />
+    <Content Include="views\gameHistory.jade" />
+    <Content Include="views\index.jade" />
+    <Content Include="views\layout.jade" />
+    <Content Include="views\playersList.jade" />
+    <Content Include="views\rankingHistory.jade" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="public\areas\activeGame\directives\ActiveGamesDirective.ts" />
+    <TypeScriptCompile Include="public\areas\createGame\directives\CreateGameDirective.ts" />
+    <TypeScriptCompile Include="public\areas\createGame\directives\SelectedPlayersDirective.ts" />
+    <TypeScriptCompile Include="public\areas\createGame\services\CreateGameService.ts" />
+    <TypeScriptCompile Include="public\areas\dotm\directives\DotmDirective.ts" />
+    <TypeScriptCompile Include="public\areas\dotm\modules\DotmModule.ts" />
+    <TypeScriptCompile Include="public\areas\editActiveGame\directives\EditActiveGameDirective.ts" />
+    <TypeScriptCompile Include="public\areas\editActiveGame\directives\EditScoresDirective.ts" />
+    <TypeScriptCompile Include="public\areas\editActiveGame\services\EditActiveGameService.ts" />
+    <TypeScriptCompile Include="public\areas\history\directives\GameHistoryDirective.ts" />
+    <TypeScriptCompile Include="public\areas\history\directives\RankingHistoryDirective.ts" />
+    <TypeScriptCompile Include="public\areas\players\directives\AddPlayerDirective.ts" />
+    <TypeScriptCompile Include="public\areas\players\directives\PlayerFormDirective.ts" />
+    <TypeScriptCompile Include="public\areas\players\directives\PlayerSelectorDirective.ts" />
+    <TypeScriptCompile Include="public\areas\players\directives\PlayersListDirective.ts" />
+    <TypeScriptCompile Include="public\areas\rankings\directives\LeaderboardDirective.ts" />
+    <TypeScriptCompile Include="public\areas\rankings\directives\RankingsCardDirective.ts" />
+    <TypeScriptCompile Include="public\areas\rankings\directives\RankingsDirective.ts" />
+    <TypeScriptCompile Include="public\areas\rankings\modules\RankingsModule.ts" />
+    <TypeScriptCompile Include="public\areas\rankings\services\RankingsService.ts" />
+    <TypeScriptCompile Include="public\shared\directives\DatePickerDirective.ts" />
+    <TypeScriptCompile Include="public\shared\directives\GameCardDirective.ts" />
+    <TypeScriptCompile Include="public\shared\directives\GlobalNavDirective.ts" />
+    <TypeScriptCompile Include="public\shared\directives\MonthYearPickerDirective.ts" />
+    <TypeScriptCompile Include="public\shared\directives\NumericUpDownDirective.ts" />
+    <TypeScriptCompile Include="public\shared\directives\PlayerNametagDirective.ts" />
+    <TypeScriptCompile Include="public\shared\directives\PlayerScoretagDirective.ts" />
+    <TypeScriptCompile Include="public\shared\models\Game.ts" />
+    <TypeScriptCompile Include="public\shared\models\GamePlayer.ts" />
+    <TypeScriptCompile Include="public\shared\models\IViewModels.ts" />
+    <TypeScriptCompile Include="public\shared\models\NewGame.ts" />
+    <TypeScriptCompile Include="public\shared\models\NewGamePlayer.ts" />
+    <TypeScriptCompile Include="public\shared\models\Player.ts" />
+    <TypeScriptCompile Include="public\shared\models\RankedPlayer.ts" />
+    <TypeScriptCompile Include="public\shared\modules\GameCardModule.ts" />
+    <TypeScriptCompile Include="public\shared\modules\UxControlsModule.ts" />
+    <TypeScriptCompile Include="public\shared\services\ApiService.ts" />
+    <TypeScriptCompile Include="public\shared\services\DateTimeService.ts" />
+    <TypeScriptCompile Include="public\shared\services\MonthYearQueryService.ts" />
+    <TypeScriptCompile Include="Scripts\typings\angular-ui-bootstrap\angular-ui-bootstrap.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\angularjs\angular-animate.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\angularjs\angular-component-router.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\angularjs\angular-cookies.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\angularjs\angular-mocks.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\angularjs\angular-resource.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\angularjs\angular-route.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\angularjs\angular-sanitize.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\angularjs\angular.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="public\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="public\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="public\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="public\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="public\fonts\sDGTilo5QRsfWu6Yc11AXg.woff2" />
+    <Content Include="public\fonts\_xyN3apAT_yRRDeqB3sPRg.woff" />
+    <Content Include="public\scripts\angular.min.js.map" />
+    <Content Include="public\scripts\jquery.min.map" />
+    <Content Include="public\shared\models\IPlayerViewModel.js.map" />
+    <Content Include="public\shared\modules\GameCardModule.js.map" />
+    <Content Include="public\shared\modules\NumericUpDownModule.js.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="compilerconfig.json" />
+    <None Include="compilerconfig.json.defaults">
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </None>
+    <Content Include="packages.config" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">12.0</VisualStudioVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace>dork_app</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\WebApplications\Microsoft.WebApplication.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\WebApplications\Microsoft.WebApplication.targets')" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>49991</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:49991/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <TypeScriptRemoveComments>false</TypeScriptRemoveComments>
+    <TypeScriptSourceMap>true</TypeScriptSourceMap>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <TypeScriptRemoveComments>true</TypeScriptRemoveComments>
+    <TypeScriptSourceMap>false</TypeScriptSourceMap>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
+</Project>

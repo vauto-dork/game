@@ -20,7 +20,7 @@ var Players;
         }
         PlayerFormController.$inject = ['$scope'];
         return PlayerFormController;
-    })();
+    }());
     Players.PlayerFormController = PlayerFormController;
 })(Players || (Players = {}));
 //# sourceMappingURL=PlayerFormDirective.js.map

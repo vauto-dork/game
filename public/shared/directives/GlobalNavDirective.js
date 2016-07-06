@@ -22,7 +22,7 @@ var Shared;
         };
         GlobalNavController.$inject = ['$scope'];
         return GlobalNavController;
-    })();
+    }());
     Shared.GlobalNavController = GlobalNavController;
 })(Shared || (Shared = {}));
 //# sourceMappingURL=GlobalNavDirective.js.map

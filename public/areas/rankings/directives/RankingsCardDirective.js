@@ -18,7 +18,7 @@ var Rankings;
         }
         RankingsCardController.$inject = ['$scope'];
         return RankingsCardController;
-    })();
+    }());
     Rankings.RankingsCardController = RankingsCardController;
 })(Rankings || (Rankings = {}));
 //# sourceMappingURL=RankingsCardDirective.js.map

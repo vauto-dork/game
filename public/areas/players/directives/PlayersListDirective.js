@@ -110,7 +110,7 @@ var Players;
         };
         PlayersListController.$inject = ['$scope', '$window', 'apiService'];
         return PlayersListController;
-    })();
+    }());
     Players.PlayersListController = PlayersListController;
 })(Players || (Players = {}));
 //# sourceMappingURL=PlayersListDirective.js.map

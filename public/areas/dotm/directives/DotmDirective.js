@@ -38,7 +38,7 @@ var Dotm;
         };
         DotmController.$inject = ['$scope', 'apiService'];
         return DotmController;
-    })();
+    }());
     Dotm.DotmController = DotmController;
 })(Dotm || (Dotm = {}));
 //# sourceMappingURL=DotmDirective.js.map

@@ -234,7 +234,7 @@ var Shared;
         };
         ApiService.$inject = ['$http', '$q'];
         return ApiService;
-    })();
+    }());
     Shared.ApiService = ApiService;
 })(Shared || (Shared = {}));
 //# sourceMappingURL=ApiService.js.map

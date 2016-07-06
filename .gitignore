@@ -6,3 +6,10 @@ node_modules
 /.env
 *.iml
 **/*.js.map
+**/*.css.map
+obj/
+.vscode/settings.json
+.vs/
+bin/
+packages/
+dork-app.csproj.user

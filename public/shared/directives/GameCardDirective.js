@@ -96,7 +96,7 @@ var Shared;
         };
         GameCardController.$inject = ['$scope', '$http', '$window', 'apiService'];
         return GameCardController;
-    })();
+    }());
     Shared.GameCardController = GameCardController;
 })(Shared || (Shared = {}));
 //# sourceMappingURL=GameCardDirective.js.map
