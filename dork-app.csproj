@@ -31,19 +31,14 @@
     <Content Include="public\areas\activeGame\directives\ActiveGamesTemplate.html" />
     <Content Include="public\areas\activeGame\directives\EditActiveGameDirective.js" />
     <Content Include="public\areas\activeGame\directives\EditActiveGameTemplate.html" />
-    <Content Include="public\areas\activeGame\directives\EditScoresDirective.js" />
-    <Content Include="public\areas\activeGame\directives\EditScoresTemplate.html" />
     <Content Include="public\areas\activeGame\directives\ReorderPlayersDirective.js" />
     <Content Include="public\areas\activeGame\directives\ReorderPlayersTemplate.html" />
-    <Content Include="public\areas\activeGame\services\EditActiveGameFactory.js" />
     <Content Include="public\areas\createGame\directives\CreateGameTemplate.html" />
     <Content Include="public\areas\createGame\directives\SelectedPlayersTemplate.html" />
-    <Content Include="public\areas\createGame\services\CreateGameService.js" />
     <Content Include="public\areas\dotm\directives\DotmTemplate.html" />
-    <Content Include="public\areas\dotm\modules\DotmModule.js" />
     <Content Include="public\areas\editActiveGame\directives\EditActiveGameTemplate.html" />
     <Content Include="public\areas\editActiveGame\directives\EditScoresTemplate.html" />
-    <Content Include="public\areas\editActiveGame\services\EditActiveGameService.js" />
+    <Content Include="public\areas\editActiveGame\directives\ReorderPlayersTemplate.html" />
     <Content Include="public\areas\history\directives\GameHistoryTemplate.html" />
     <Content Include="public\areas\history\directives\RankingHistoryTemplate.html" />
     <Content Include="public\areas\players\directives\AddPlayerTemplate.html" />
@@ -53,8 +48,6 @@
     <Content Include="public\areas\rankings\directives\LeaderboardTemplate.html" />
     <Content Include="public\areas\rankings\directives\RankingsCardTemplate.html" />
     <Content Include="public\areas\rankings\directives\RankingsTemplate.html" />
-    <Content Include="public\areas\rankings\modules\RankingsModule.js" />
-    <Content Include="public\areas\rankings\services\RankingsService.js" />
     <Content Include="public\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="public\images\loader.gif" />
     <Content Include="public\scripts\angular-animate.js" />
@@ -69,18 +62,8 @@
     <Content Include="public\shared\directives\MonthYearPickerTemplate.html" />
     <Content Include="public\shared\directives\PlayerNametagTemplate.html" />
     <Content Include="public\shared\directives\PlayerScoretagTemplate.html" />
-    <Content Include="public\shared\models\Game.js" />
-    <Content Include="public\shared\models\GamePlayer.js" />
-    <Content Include="public\shared\models\IViewModels.js" />
-    <Content Include="public\shared\models\NewGame.js" />
-    <Content Include="public\shared\models\NewGamePlayer.js" />
-    <Content Include="public\shared\models\Player.js" />
-    <Content Include="public\shared\models\RankedPlayer.js" />
     <Content Include="public\shared\modules\GameCardModule.js" />
     <Content Include="public\shared\modules\UxControlsModule.js" />
-    <Content Include="public\shared\services\ApiService.js" />
-    <Content Include="public\shared\services\DateTimeService.js" />
-    <Content Include="public\shared\services\MonthYearQueryService.js" />
     <Content Include="public\stylesheets\admin.css" />
     <Content Include="public\stylesheets\animation.css" />
     <Content Include="public\stylesheets\bootstrap.min.css" />
@@ -135,6 +118,7 @@
     <TypeScriptCompile Include="public\areas\dotm\modules\DotmModule.ts" />
     <TypeScriptCompile Include="public\areas\editActiveGame\directives\EditActiveGameDirective.ts" />
     <TypeScriptCompile Include="public\areas\editActiveGame\directives\EditScoresDirective.ts" />
+    <TypeScriptCompile Include="public\areas\editActiveGame\directives\ReorderPlayersDirective.ts" />
     <TypeScriptCompile Include="public\areas\editActiveGame\services\EditActiveGameService.ts" />
     <TypeScriptCompile Include="public\areas\history\directives\GameHistoryDirective.ts" />
     <TypeScriptCompile Include="public\areas\history\directives\RankingHistoryDirective.ts" />
@@ -186,7 +170,6 @@
     <Content Include="public\fonts\_xyN3apAT_yRRDeqB3sPRg.woff" />
     <Content Include="public\scripts\angular.min.js.map" />
     <Content Include="public\scripts\jquery.min.map" />
-    <Content Include="public\shared\models\IPlayerViewModel.js.map" />
     <Content Include="public\shared\modules\GameCardModule.js.map" />
     <Content Include="public\shared\modules\NumericUpDownModule.js.map" />
   </ItemGroup>

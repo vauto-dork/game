@@ -49,6 +49,10 @@
 	</div>	
 </div>
 
+<div ng-if="ctrl.showScoreForm" collapse="!ctrl.showReorderPlayers">
+    <reorder-players></reorder-players>
+</div>
+
 <div ng-if="ctrl.showError">
 	<div class="btn-row">
 		<button type="button" class="btn btn-danger btn-block btn-lg" ng-click="ctrl.returnToActiveGames()">

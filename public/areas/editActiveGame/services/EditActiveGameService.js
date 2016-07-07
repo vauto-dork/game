@@ -25,6 +25,16 @@ var EditActiveGame;
         EditActiveGameService.prototype.getErrorMessages = function () {
             return this.errorMessages;
         };
+        Object.defineProperty(EditActiveGameService.prototype, "players", {
+            get: function () {
+                return this.activeGame.players;
+            },
+            set: function (value) {
+                this.activeGame.players = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
         EditActiveGameService.prototype.getActiveGame = function () {
             var _this = this;
             var def = this.$q.defer();
@@ -39,9 +49,6 @@ var EditActiveGame;
                 def.reject();
             });
             return def.promise;
-        };
-        EditActiveGameService.prototype.getGamePlayers = function () {
-            return this.activeGame.players;
         };
         EditActiveGameService.prototype.save = function () {
             var _this = this;

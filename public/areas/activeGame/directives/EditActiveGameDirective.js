@@ -129,12 +129,12 @@ var EditActiveGameController = function ($scope, $window, $timeout, editActiveGa
 		me.scrollToBottom();
 	};
 	
-	me.resetSelectedToMove = function() {
-		me.game.players.forEach(function(element){
-			element.selectedToMove = false;
-			element.moveDropZoneActive = false;
-		});
-	};
+	//me.resetSelectedToMove = function() {
+	//	me.game.players.forEach(function(element){
+	//		element.selectedToMove = false;
+	//		element.moveDropZoneActive = false;
+	//	});
+	//};
 	
 	// me.errorHandler = function(data, errorMessage) {
 	// 	$scope.addAlert('danger', errorMessage);
@@ -247,10 +247,10 @@ var EditActiveGameController = function ($scope, $window, $timeout, editActiveGa
 	// 	});
 	// };
 	// 
-	me.toggleReorderPlayers = function() {
-		me.showReorderPlayers = !me.showReorderPlayers;
-		me.resetSelectedToMove();
-	};
+	//me.toggleReorderPlayers = function() {
+	//	me.showReorderPlayers = !me.showReorderPlayers;
+	//	me.resetSelectedToMove();
+	//};
 	
 	me.toggleAddPlayer = function() {
 		me.showAddPlayer = !me.showAddPlayer;

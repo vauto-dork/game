@@ -20,7 +20,7 @@ module EditActiveGame {
         private pointsMax: number = 99;
         
         private get players(): Shared.IGamePlayer[] {
-            return this.editActiveGameService.getGamePlayers();
+            return this.editActiveGameService.players;
         }
 
         constructor(private $scope: ng.IScope, private editActiveGameService: IEditActiveGameService) {

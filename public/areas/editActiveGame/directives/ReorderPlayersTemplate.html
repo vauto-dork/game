@@ -1,0 +1,28 @@
+﻿<div class="playlist-scores-row" ng-repeat="player in ctrl.players">
+    <div class="panel panel-default">
+
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                <player-nametag player="player.player"></player-nametag>
+            </h3>
+        </div>
+
+        <div class="panel-body text-center" style="cursor: pointer;" ng-click="ctrl.clickHandler(player)">
+
+            <div class="player-move-panel-content">
+                <span ng-if="!ctrl.dropZoneActive && !ctrl.isPlayerSelected(player)">
+                    Tap to select
+                </span>
+
+                <span ng-if="ctrl.dropZoneActive && ctrl.isPlayerSelected(player)">
+                    Tap to unselect
+                </span>
+
+                <span ng-if="ctrl.dropZoneActive && !ctrl.isPlayerSelected(player)">
+                    <span class="glyphicon glyphicon-download-alt"></span>
+                </span>
+            </div>
+
+        </div>
+    </div>
+</div>

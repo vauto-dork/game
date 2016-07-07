@@ -152,6 +152,9 @@ var EditActiveGame;
         EditActiveGameController.prototype.disableSave = function () {
             return this.showReorderPlayers || this.showAddPlayer;
         };
+        EditActiveGameController.prototype.toggleReorderPlayers = function () {
+            this.showReorderPlayers = !this.showReorderPlayers;
+        };
         EditActiveGameController.$inject = ['$scope', '$timeout', '$window', 'editActiveGameService'];
         return EditActiveGameController;
     }());

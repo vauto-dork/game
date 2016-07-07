@@ -3,6 +3,7 @@ extends layout
 block modules
     script(src='/areas/editActiveGame/services/EditActiveGameService.js')
     script(src='/areas/editActiveGame/directives/EditScoresDirective.js')
+    script(src='/areas/editActiveGame/directives/ReorderPlayersDirective.js')
     script(src='/areas/editActiveGame/directives/EditActiveGameDirective.js')
     
     script.
@@ -15,6 +16,9 @@ block modules
         
         EditActiveGameModule.controller('EditScoresController', EditActiveGame.EditScoresController);
         EditActiveGameModule.directive('editScores', EditActiveGame.EditScoresDirective);
+
+        EditActiveGameModule.controller('ReorderPlayersController', EditActiveGame.ReorderPlayersController);
+        EditActiveGameModule.directive('reorderPlayers', EditActiveGame.ReorderPlayersDirective);
         
     - var modules = ['EditActiveGameModule']
     

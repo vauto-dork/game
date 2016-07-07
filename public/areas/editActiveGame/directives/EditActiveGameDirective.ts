@@ -112,7 +112,7 @@ module EditActiveGame {
                 this.$window.scrollTo(0, 100000);
             });
         }
-               
+        
         private getActiveGame(): void {
             this.editActiveGameService.getActiveGame().then(() => {
                 
@@ -169,6 +169,10 @@ module EditActiveGame {
 	
         private disableSave(): boolean {
             return this.showReorderPlayers || this.showAddPlayer;
+        }
+
+        private toggleReorderPlayers() {
+            this.showReorderPlayers = !this.showReorderPlayers;
         }
     }
 }

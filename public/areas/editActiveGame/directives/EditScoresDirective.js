@@ -21,7 +21,7 @@ var EditActiveGame;
         }
         Object.defineProperty(EditScoresController.prototype, "players", {
             get: function () {
-                return this.editActiveGameService.getGamePlayers();
+                return this.editActiveGameService.players;
             },
             enumerable: true,
             configurable: true
