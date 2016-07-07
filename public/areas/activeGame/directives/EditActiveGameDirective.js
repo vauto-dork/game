@@ -252,13 +252,13 @@ var EditActiveGameController = function ($scope, $window, $timeout, editActiveGa
 	//	me.resetSelectedToMove();
 	//};
 	
-	me.toggleAddPlayer = function() {
-		me.showAddPlayer = !me.showAddPlayer;
+	//me.toggleAddPlayer = function() {
+	//	me.showAddPlayer = !me.showAddPlayer;
 		
-		if (me.showAddPlayer){
-			$scope.$broadcast('playerSelectorFocus');
-		}
-	};
+	//	if (me.showAddPlayer){
+	//		$scope.$broadcast('playerSelectorFocus');
+	//	}
+	//};
 	
 	// me.save = function() {
 	// 	me.changeState(me.State.Saving);	

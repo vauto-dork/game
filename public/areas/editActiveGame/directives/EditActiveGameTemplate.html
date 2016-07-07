@@ -1,34 +1,16 @@
-<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)" ng-bind="alert.msg"></alert>
+<uib-alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)" ng-bind="alert.msg"></uib-alert>
 
 <div class="load-bar" ng-if="ctrl.showLoading">
 	<img src="/images/loader.gif" width="220" height="19" />
 </div>
-
-<div ng-if="ctrl.showScoreForm" collapse="ctrl.showReorderPlayers">
-	<date-picker date="ctrl.datePlayedJs" disabled="ctrl.disableControls"></date-picker>
+	
+<div ng-if="ctrl.showScoreForm" uib-collapse="ctrl.showReorderPlayers">
+    <date-picker date="ctrl.datePlayed" disabled="ctrl.disableControls"></date-picker>	
 	
 	<div class="clearfix"></div>
 	
 	<div class="playlist-scores-row">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<h3 class="panel-title">
-					Bonus Points
-				</h3>
-			</div>
-			<div class="panel-body">
-				<table class="table table-condensed">
-					<thead>
-						<tr><th>Position</th><th>Additional Points</th></tr>
-					</thead>
-					<tbody>
-						<tr><th>1st</th><td ng-bind="ctrl.game.players.length - 1"></td></tr>
-						<tr><th>2nd</th><td ng-bind="ctrl.game.players.length - 2"></td></tr>
-						<tr><th>3rd</th><td ng-bind="ctrl.game.players.length - 3"></td></tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
+	    <player-bonus-panel num-players="ctrl.numPlayers"></player-bonus-panel>
 	</div>
 	
 	<edit-scores disabled="ctrl.disableControls"></edit-scores>
@@ -49,7 +31,7 @@
 	</div>	
 </div>
 
-<div ng-if="ctrl.showScoreForm" collapse="!ctrl.showReorderPlayers">
+<div ng-if="ctrl.showScoreForm" uib-collapse="!ctrl.showReorderPlayers">
     <reorder-players></reorder-players>
 </div>
 
@@ -59,6 +41,23 @@
 			Return to Active Games
 		</button>
 	</div>
+</div>
+
+<div class="overlay add-player-open" ng-show="ctrl.showAddPlayer" ng-click="ctrl.toggleAddPlayer()"></div>
+
+<div class="add-player-panel" ng-show="ctrl.showAddPlayer">
+    <div class="playlist-scores-row">
+        <div class="panel panel-default" style="box-shadow: 0 3px 3px 0 rgba(0,0,0,0.5)">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Add Player
+                </h3>
+            </div>
+            <div class="panel-body">
+                <player-selector players="ctrl.allPlayers" on-selected="ctrl.onSelected(data)"></player-selector>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="footer-spacer"></div>

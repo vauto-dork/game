@@ -34,13 +34,9 @@ var EditActiveGame;
             this.showReorderPlayers = false;
             this.changeState(State.Init);
         }
-        Object.defineProperty(EditActiveGameController.prototype, "datePlayed", {
-            //private datePlayedJs: Date = new Date();
+        Object.defineProperty(EditActiveGameController.prototype, "numPlayers", {
             get: function () {
-                return this.editActiveGameService.datePlayed;
-            },
-            set: function (value) {
-                this.editActiveGameService.datePlayed = value;
+                return this.editActiveGameService.players.length;
             },
             enumerable: true,
             configurable: true
@@ -83,9 +79,6 @@ var EditActiveGame;
             this.changeState(State.Error);
         };
         ;
-        // private getFormattedDate(){
-        //     return this.datePlayedJs.toISOString();
-        // }
         EditActiveGameController.prototype.returnToActiveGames = function () {
             this.$window.location.href = '/ActiveGames';
         };
@@ -105,6 +98,7 @@ var EditActiveGame;
             var _this = this;
             this.editActiveGameService.getActiveGame().then(function () {
                 _this.changeState(State.Ready);
+                _this.datePlayed = _this.editActiveGameService.datePlayed;
             }, function () {
                 _this.errorHandler('Cannot get active game.', 'Cannot load game');
             });
@@ -120,8 +114,9 @@ var EditActiveGame;
             // });
         };
         EditActiveGameController.prototype.saveGame = function () {
-            //$scope.clearAlerts();
             var _this = this;
+            //$scope.clearAlerts();
+            this.editActiveGameService.datePlayed = this.datePlayed;
             this.editActiveGameService.save().then(function () {
                 //$scope.addAlert('success', 'Game saved successfully!');
                 _this.changeState(State.Ready);
@@ -154,6 +149,12 @@ var EditActiveGame;
         };
         EditActiveGameController.prototype.toggleReorderPlayers = function () {
             this.showReorderPlayers = !this.showReorderPlayers;
+        };
+        EditActiveGameController.prototype.toggleAddPlayer = function () {
+            this.showAddPlayer = !this.showAddPlayer;
+            if (this.showAddPlayer) {
+                this.$scope.$broadcast('playerSelectorFocus');
+            }
         };
         EditActiveGameController.$inject = ['$scope', '$timeout', '$window', 'editActiveGameService'];
         return EditActiveGameController;

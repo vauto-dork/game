@@ -23,7 +23,6 @@ module EditActiveGame {
         public static $inject: string[] = ['$scope', '$timeout', '$window', 'editActiveGameService'];
 
         // These need to be moved to a service.
-        private game: Shared.IGame;
         private allPlayers: Shared.INewGamePlayer[];
 
         private showLoading: boolean = false;
@@ -32,14 +31,10 @@ module EditActiveGame {
         private disableControls: boolean = false;
         private showAddPlayer: boolean = false;
         private showReorderPlayers: boolean = false;
-        //private datePlayedJs: Date = new Date();
+        private datePlayed: Date;
         
-        private get datePlayed(): Date {
-            return this.editActiveGameService.datePlayed;
-        }
-        
-        private set datePlayed(value: Date) {
-            this.editActiveGameService.datePlayed = value;
+        private get numPlayers(): number {
+            return this.editActiveGameService.players.length;
         }
 
         constructor(private $scope: ng.IScope,
@@ -93,10 +88,6 @@ module EditActiveGame {
             this.changeState(State.Error);
         };
         
-        // private getFormattedDate(){
-        //     return this.datePlayedJs.toISOString();
-        // }
-	
         private returnToActiveGames(): void{
             this.$window.location.href = '/ActiveGames';
         }
@@ -115,8 +106,8 @@ module EditActiveGame {
         
         private getActiveGame(): void {
             this.editActiveGameService.getActiveGame().then(() => {
-                
                 this.changeState(State.Ready);
+                this.datePlayed = this.editActiveGameService.datePlayed;
             }, () => {
                 this.errorHandler('Cannot get active game.', 'Cannot load game');
             });
@@ -134,7 +125,8 @@ module EditActiveGame {
 
         public saveGame(): void {
             //$scope.clearAlerts();
-            
+            this.editActiveGameService.datePlayed = this.datePlayed;
+
             this.editActiveGameService.save().then(() => {
                 //$scope.addAlert('success', 'Game saved successfully!');
                 this.changeState(State.Ready);
@@ -171,8 +163,16 @@ module EditActiveGame {
             return this.showReorderPlayers || this.showAddPlayer;
         }
 
-        private toggleReorderPlayers() {
+        private toggleReorderPlayers(): void {
             this.showReorderPlayers = !this.showReorderPlayers;
+        }
+
+        private toggleAddPlayer(): void {
+            this.showAddPlayer = !this.showAddPlayer;
+
+            if (this.showAddPlayer) {
+                this.$scope.$broadcast('playerSelectorFocus');
+            }
         }
     }
 }

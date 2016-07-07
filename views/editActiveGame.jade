@@ -4,6 +4,7 @@ block modules
     script(src='/areas/editActiveGame/services/EditActiveGameService.js')
     script(src='/areas/editActiveGame/directives/EditScoresDirective.js')
     script(src='/areas/editActiveGame/directives/ReorderPlayersDirective.js')
+    script(src='/shared/directives/PlayerBonusPanelDirective.js')
     script(src='/areas/editActiveGame/directives/EditActiveGameDirective.js')
     
     script.
@@ -19,6 +20,9 @@ block modules
 
         EditActiveGameModule.controller('ReorderPlayersController', EditActiveGame.ReorderPlayersController);
         EditActiveGameModule.directive('reorderPlayers', EditActiveGame.ReorderPlayersDirective);
+
+        EditActiveGameModule.controller('PlayerBonusPanelController', Shared.PlayerBonusPanelController);
+        EditActiveGameModule.directive('playerBonusPanel', Shared.PlayerBonusPanelDirective);
         
     - var modules = ['EditActiveGameModule']
     

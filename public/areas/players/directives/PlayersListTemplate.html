@@ -1,5 +1,5 @@
 <div class="col-xs-12">
-	<alert ng-repeat="alert in ctrl.alerts" type="{{alert.type}}" close="ctrl.closeAlert($index)">{{alert.msg}}</alert>
+	<uib-alert ng-repeat="alert in ctrl.alerts" type="{{alert.type}}" close="ctrl.closeAlert($index)">{{alert.msg}}</uib-alert>
 
 	<div ng-show="ctrl.showError">
 		<div class="btn-row">

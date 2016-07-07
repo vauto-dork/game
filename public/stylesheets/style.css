@@ -161,10 +161,8 @@ input.ng-touched.ng-invalid {
   display: inline-block;
   vertical-align: middle; }
 
-.staticDateTime {
-  margin: auto;
-  padding: 1em 0 2em 0;
-  max-width: 50em; }
+.datepicker {
+  max-width: 20em; }
 
 .player-selector-container {
   padding-top: 1em;
