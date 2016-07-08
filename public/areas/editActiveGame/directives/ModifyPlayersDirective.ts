@@ -2,7 +2,6 @@
     export function ModifyPlayersDirective(): ng.IDirective {
         return {
             scope: {
-            
             },
             templateUrl: '/areas/editActiveGame/directives/ModifyPlayersTemplate.html',
             controller: 'ModifyPlayersController',
@@ -15,7 +14,7 @@
         public static $inject: string[] = ['$scope', 'editActiveGameService'];
         private allPlayers: Shared.INewGamePlayer[];
         private curatedPlayersList: Shared.INewGamePlayer[];
-
+        
         private get currentPlayers(): Shared.IGamePlayer[] {
             return this.editActiveGameService.players;
         }
@@ -49,7 +48,7 @@
             this.curateNewPlayerList();
         }
 
-        private toggleModifyPlayers(): void {
+        private back(): void {
             this.editActiveGameService.toggleModifyPlayers();
         }
     }

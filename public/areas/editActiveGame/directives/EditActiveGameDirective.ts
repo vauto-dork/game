@@ -21,16 +21,15 @@ module EditActiveGame {
 
     export class EditActiveGameController {
         public static $inject: string[] = ['$scope', '$timeout', '$window', 'editActiveGameService'];
-
-        // These need to be moved to a service.
-        private allPlayers: Shared.INewGamePlayer[];
-
+        
         private showLoading: boolean = false;
         private showError: boolean = false;
         private showScoreForm: boolean = false;
         private disableControls: boolean = false;
         private showAddPlayer: boolean = false;
         private datePlayed: Date;
+
+        private alerts = [];
         
         private get numPlayers(): number {
             return this.editActiveGameService.players.length;
@@ -74,6 +73,9 @@ module EditActiveGame {
                     this.scrollToTop();
                     break;
                 case State.Ready:
+                    if (this.showModifyPlayers) {
+                        this.editActiveGameService.toggleModifyPlayers();
+                    }
                     this.scrollToTop();
                     break;
                 case State.Saving:
@@ -86,10 +88,22 @@ module EditActiveGame {
         }
         
         private errorHandler(data: string, errorMessage: string) {
-            //$scope.addAlert('danger', errorMessage);
+            this.addAlert('danger', errorMessage);
             console.error(data);
             this.changeState(State.Error);
-        };
+        }
+
+        private closeAlert(index: number): void {
+            this.alerts.splice(index, 1);
+        }
+
+        private addAlert(messageType: string, message: string): void {
+            this.alerts.push({ type: messageType, msg: message });
+        }
+
+        private clearAlerts(): void {
+            this.alerts = [];
+        }
         
         private returnToActiveGames(): void{
             this.$window.location.href = '/ActiveGames';
@@ -114,24 +128,14 @@ module EditActiveGame {
             }, () => {
                 this.errorHandler('Cannot get active game.', 'Cannot load game');
             });
-            // var promise = editActiveGameFactory.GetActiveGame();
-            // promise.then(function() {
-            //     me.game = editActiveGameFactory.Game();
-            //     me.allPlayers = editActiveGameFactory.AllPlayers();
-            //     me.resetSelectedToMove();
-            //     me.datePlayedJs = Date.parse(me.game.datePlayed);
-            //     me.changeState(me.State.Ready);
-            // }, function(data) {
-            //     me.errorHandler(data, 'Cannot load game.');
-            // });
         }
 
         public saveGame(): void {
-            //$scope.clearAlerts();
+            this.clearAlerts();
             this.editActiveGameService.datePlayed = this.datePlayed;
 
             this.editActiveGameService.save().then(() => {
-                //$scope.addAlert('success', 'Game saved successfully!');
+                this.addAlert('success', 'Game saved successfully!');
                 this.changeState(State.Ready);
             }, () => {
                 // get error messages and display alerts

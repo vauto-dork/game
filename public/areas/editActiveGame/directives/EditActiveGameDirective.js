@@ -31,6 +31,7 @@ var EditActiveGame;
             this.showScoreForm = false;
             this.disableControls = false;
             this.showAddPlayer = false;
+            this.alerts = [];
             this.changeState(State.Init);
         }
         Object.defineProperty(EditActiveGameController.prototype, "numPlayers", {
@@ -69,6 +70,9 @@ var EditActiveGame;
                     this.scrollToTop();
                     break;
                 case State.Ready:
+                    if (this.showModifyPlayers) {
+                        this.editActiveGameService.toggleModifyPlayers();
+                    }
                     this.scrollToTop();
                     break;
                 case State.Saving:
@@ -80,11 +84,19 @@ var EditActiveGame;
             }
         };
         EditActiveGameController.prototype.errorHandler = function (data, errorMessage) {
-            //$scope.addAlert('danger', errorMessage);
+            this.addAlert('danger', errorMessage);
             console.error(data);
             this.changeState(State.Error);
         };
-        ;
+        EditActiveGameController.prototype.closeAlert = function (index) {
+            this.alerts.splice(index, 1);
+        };
+        EditActiveGameController.prototype.addAlert = function (messageType, message) {
+            this.alerts.push({ type: messageType, msg: message });
+        };
+        EditActiveGameController.prototype.clearAlerts = function () {
+            this.alerts = [];
+        };
         EditActiveGameController.prototype.returnToActiveGames = function () {
             this.$window.location.href = '/ActiveGames';
         };
@@ -108,23 +120,13 @@ var EditActiveGame;
             }, function () {
                 _this.errorHandler('Cannot get active game.', 'Cannot load game');
             });
-            // var promise = editActiveGameFactory.GetActiveGame();
-            // promise.then(function() {
-            //     me.game = editActiveGameFactory.Game();
-            //     me.allPlayers = editActiveGameFactory.AllPlayers();
-            //     me.resetSelectedToMove();
-            //     me.datePlayedJs = Date.parse(me.game.datePlayed);
-            //     me.changeState(me.State.Ready);
-            // }, function(data) {
-            //     me.errorHandler(data, 'Cannot load game.');
-            // });
         };
         EditActiveGameController.prototype.saveGame = function () {
             var _this = this;
-            //$scope.clearAlerts();
+            this.clearAlerts();
             this.editActiveGameService.datePlayed = this.datePlayed;
             this.editActiveGameService.save().then(function () {
-                //$scope.addAlert('success', 'Game saved successfully!');
+                _this.addAlert('success', 'Game saved successfully!');
                 _this.changeState(State.Ready);
             }, function () {
                 // get error messages and display alerts

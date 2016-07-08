@@ -481,3 +481,6 @@ input.ng-touched.ng-invalid {
 .btn-row {
   padding: 1em 0.5em; }
 
+.edit-active-game {
+  padding-top: 2em; }
+

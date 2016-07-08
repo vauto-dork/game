@@ -1,56 +1,58 @@
-<uib-alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)" ng-bind="alert.msg"></uib-alert>
+<div class="edit-active-game">
+    <uib-alert ng-repeat="alert in ctrl.alerts" type="{{alert.type}}" close="ctrl.closeAlert($index)">{{alert.msg}}</uib-alert>
 
-<div class="load-bar" ng-if="ctrl.showLoading">
-	<img src="/images/loader.gif" width="220" height="19" />
-</div>
+    <div class="load-bar" ng-if="ctrl.showLoading">
+        <img src="/images/loader.gif" width="220" height="19" />
+    </div>
 
-<div ng-if="ctrl.showScoreForm">
-    <div class="container" uib-collapse="ctrl.showModifyPlayers">
-        <div class="row">
+    <div ng-if="ctrl.showScoreForm">
+        <div class="container" uib-collapse="ctrl.showModifyPlayers">
+            <div class="row">
 
-            <div class="col-xs-12 col-md-6 col-lg-5">
-                <date-picker date="ctrl.datePlayed" disabled="ctrl.disableControls"></date-picker>
+                <div class="col-xs-12 col-md-6 col-lg-5">
+                    <date-picker date="ctrl.datePlayed" disabled="ctrl.disableControls"></date-picker>
 
-                <player-bonus-panel class="playlist-scores-row"
-                                    num-players="ctrl.numPlayers">
-                </player-bonus-panel>
+                    <player-bonus-panel class="playlist-scores-row"
+                                        num-players="ctrl.numPlayers">
+                    </player-bonus-panel>
 
-                <revert-finalize class="visible-md-block visible-lg-block"
-                                 save="ctrl.save()"
-                                 revert="ctrl.revert()"
-                                 finalize="ctrl.finalize()"
-                                 disabled="ctrl.disableControls">
-                </revert-finalize>
+                    <revert-finalize class="visible-md-block visible-lg-block"
+                                     save="ctrl.save()"
+                                     revert="ctrl.revert()"
+                                     finalize="ctrl.finalize()"
+                                     disabled="ctrl.disableControls">
+                    </revert-finalize>
+                </div>
+
+                <div class="col-xs-12 col-md-6 col-lg-7">
+                    <p>
+                        <button type="button" class="btn btn-primary btn-lg btn-block" ng-click="ctrl.toggleModifyPlayers()" ng-disabled="ctrl.disabled" aria-label="Modify Players">
+                            <span class="glyphicon glyphicon-sort" aria-hidden="true"></span> Modify Players
+                        </button>
+                    </p>
+
+                    <edit-scores disabled="ctrl.disableControls"></edit-scores>
+
+                    <revert-finalize class="visible-xs-block visible-sm-block"
+                                     save="ctrl.save()"
+                                     revert="ctrl.revert()"
+                                     finalize="ctrl.finalize()"
+                                     disabled="ctrl.disableControls">
+                    </revert-finalize>
+                </div>
             </div>
+        </div>
 
-            <div class="col-xs-12 col-md-6 col-lg-7">
-                <p>
-                    <button type="button" class="btn btn-primary btn-lg btn-block" ng-click="ctrl.toggleModifyPlayers()" ng-disabled="ctrl.disabled" aria-label="Modify Players">
-                        <span class="glyphicon glyphicon-sort" aria-hidden="true"></span> Modify Players
-                    </button>
-                </p>
-
-                <edit-scores disabled="ctrl.disableControls"></edit-scores>
-
-                <revert-finalize class="visible-xs-block visible-sm-block"
-                                 save="ctrl.save()"
-                                 revert="ctrl.revert()"
-                                 finalize="ctrl.finalize()"
-                                 disabled="ctrl.disableControls">
-                </revert-finalize>
-            </div>
+        <div uib-collapse="!ctrl.showModifyPlayers">
+            <modify-players save="ctrl.save()"></modify-players>
         </div>
     </div>
 
-    <div uib-collapse="!ctrl.showModifyPlayers">
-        <modify-players></modify-players>
+    <div ng-if="ctrl.showError">
+        <div class="btn-row">
+            <button type="button" class="btn btn-danger btn-block btn-lg" ng-click="ctrl.returnToActiveGames()">
+                Return to Active Games
+            </button>
+        </div>
     </div>
-</div>
-
-<div ng-if="ctrl.showError">
-	<div class="btn-row">
-		<button type="button" class="btn btn-danger btn-block btn-lg" ng-click="ctrl.returnToActiveGames()">
-			Return to Active Games
-		</button>
-	</div>
 </div>

@@ -44,7 +44,7 @@ var EditActiveGame;
             this.currentPlayers.push(player);
             this.curateNewPlayerList();
         };
-        ModifyPlayersController.prototype.toggleModifyPlayers = function () {
+        ModifyPlayersController.prototype.back = function () {
             this.editActiveGameService.toggleModifyPlayers();
         };
         ModifyPlayersController.$inject = ['$scope', 'editActiveGameService'];
