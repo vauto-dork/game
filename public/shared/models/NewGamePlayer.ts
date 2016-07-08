@@ -1,6 +1,7 @@
 module Shared {
 	export interface INewGamePlayer {
-		player: IPlayer;
+        player: IPlayer;
+        playerId: string;
 		rating: number;
 		orderNumber?: number;
 		toGamePlayerViewModel(): IGamePlayerViewModel;
@@ -20,7 +21,11 @@ module Shared {
 			this.player = new Player(player.player);
 			this.rating = player.rating;
 			this.orderNumber = player.orderNumber;
-		}
+        }
+
+        public get playerId(): string {
+            return this.player._id;
+        }
 		
 		public toGamePlayerViewModel(): IGamePlayerViewModel {
 			var player: IGamePlayerViewModel = {

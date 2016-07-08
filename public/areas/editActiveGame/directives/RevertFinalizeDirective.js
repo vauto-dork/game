@@ -3,6 +3,7 @@ var EditActiveGame;
     function RevertFinalizeDirective() {
         return {
             scope: {
+                save: "&",
                 revert: "&",
                 finalize: "&",
                 disabled: "="

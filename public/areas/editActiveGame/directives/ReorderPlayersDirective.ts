@@ -33,7 +33,7 @@
                 this.markToMove(player);
             } else if (this.dropZoneActive && this.selectedPlayerId) {
                 if (this.isPlayerSelected(player)) {
-                    this.unselectMove();
+                    this.unselect();
                 } else {
                     this.dropPlayerHere(player);
                 }
@@ -41,15 +41,15 @@
         }
 
         private isPlayerSelected(player: Shared.IGamePlayer): boolean {
-            return this.selectedPlayerId === player._id;
+            return this.selectedPlayerId === player.playerId;
         }
 
         private markToMove(player: Shared.IGamePlayer): void {
             this.dropZoneActive = true;
-            this.selectedPlayerId = player._id;
+            this.selectedPlayerId = player.playerId;
         }
 
-        private unselectMove(): void {
+        private unselect(): void {
             this.dropZoneActive = false;
             this.selectedPlayerId = null;
         }
@@ -57,19 +57,19 @@
         private dropPlayerHere(player: Shared.IGamePlayer): void {
             if (!!this.selectedPlayerId) {
                 var selectedPlayer = this.players.filter(p => {
-                    return p._id === this.selectedPlayerId;
+                    return p.playerId === this.selectedPlayerId;
                 });
 
                 if (selectedPlayer.length === 1) {
-                    var selectedPlayerIndex = this.players.map(p => { return p._id; }).indexOf(this.selectedPlayerId);
+                    var selectedPlayerIndex = this.players.map(p => { return p.playerId; }).indexOf(this.selectedPlayerId);
                     this.players.splice(selectedPlayerIndex, 1);
 
-                    var dropIndex = this.players.map(p => { return p._id; }).indexOf(player._id);
+                    var dropIndex = this.players.map(p => { return p.playerId; }).indexOf(player.playerId);
                     this.players.splice(dropIndex, 0, selectedPlayer[0]);
                 }
             }
 
-            this.unselectMove();
+            this.unselect();
         };
     }
 }

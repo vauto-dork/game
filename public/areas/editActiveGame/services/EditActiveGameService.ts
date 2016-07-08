@@ -2,18 +2,25 @@ module EditActiveGame {
     export interface IEditActiveGameService {
         datePlayed: Date;
         players: Shared.IGamePlayer[];
+        showModifyPlayers: boolean;
+
+        toggleModifyPlayers(): void;
         getErrorMessages(): string[];
         getActiveGame(): ng.IPromise<void>;
+        getAllPlayers(): ng.IPromise<Shared.INewGamePlayer[]>;
         save(): ng.IPromise<void>;
         finalize(): ng.IPromise<void>;
     }
 
-    export class EditActiveGameService implements IEditActiveGameService {
-        public static $inject: string[] = ['$location', '$q', 'apiService'];
+    export class EditActiveGameService extends Shared.PubSubServiceBase implements IEditActiveGameService {
+        public static $inject: string[] = ['$location', '$q', '$timeout', 'apiService'];
         private imLoading: ng.IPromise<void>;
         private gameIdPath: string;
         private activeGame: Shared.IGame;
-        
+        private allPlayers: Shared.INewGamePlayer[];
+        private showModifyPlayersScreen: boolean;
+
+        private eventPlaylistUpdate: string = "eventPlaylistUpdate";
         private errorMessages: string[] = [];
 
         public get datePlayed(): Date {
@@ -29,6 +36,10 @@ module EditActiveGame {
                 this.activeGame.datePlayed = value.toISOString();
             }
         }
+
+        public get showModifyPlayers(): boolean {
+            return this.showModifyPlayersScreen;
+        }
         
         public getErrorMessages(): string[] {
             return this.errorMessages;
@@ -42,8 +53,15 @@ module EditActiveGame {
             this.activeGame.players = value;
         }
 
-        constructor(private $location: ng.ILocationService, private $q: ng.IQService, private apiService: Shared.IApiService) {
-            
+        constructor(private $location: ng.ILocationService,
+            private $q: ng.IQService,
+            $timeout: ng.ITimeoutService,
+            private apiService: Shared.IApiService) {
+            super($timeout);
+        }
+
+        public toggleModifyPlayers(): void {
+            this.showModifyPlayersScreen = !this.showModifyPlayersScreen;
         }
         
         public getActiveGame(): ng.IPromise<void> {
@@ -64,6 +82,18 @@ module EditActiveGame {
             return def.promise;
         }
 
+        public getAllPlayers(): ng.IPromise<Shared.INewGamePlayer[]> {
+            var def = this.$q.defer<Shared.INewGamePlayer[]>();
+
+            this.apiService.getPlayersForNewGame().then(data => {
+                def.resolve(data.players);
+            }, () => {
+                def.reject();
+            });
+
+            return def.promise;
+        }
+        
         public save(): ng.IPromise<void> {
             var def = this.$q.defer<void>();
 

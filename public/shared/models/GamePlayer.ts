@@ -1,8 +1,8 @@
 module Shared {
 	export interface IGamePlayer {
         // From/To ViewModel
-		_id?: string;
-		player: IPlayer;
+        player: IPlayer;
+        playerId: string;
 		rank?: number;
 		points?: number;
         toGamePlayerViewModel(): IGamePlayerViewModel;
@@ -33,7 +33,11 @@ module Shared {
 			this.player = new Player(player.player);
 			this.rank = player.rank || 0;
 			this.points = player.points || 0;
-		}
+        }
+
+        public get playerId(): string {
+            return this.player._id;
+        }
 		
 		public toGamePlayerViewModel(): IGamePlayerViewModel {
 			var player: IGamePlayerViewModel = {

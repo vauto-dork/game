@@ -10,6 +10,13 @@ var Shared;
             this.rating = player.rating;
             this.orderNumber = player.orderNumber;
         }
+        Object.defineProperty(NewGamePlayer.prototype, "playerId", {
+            get: function () {
+                return this.player._id;
+            },
+            enumerable: true,
+            configurable: true
+        });
         NewGamePlayer.prototype.toGamePlayerViewModel = function () {
             var player = {
                 player: this.player.toPlayerViewModel()

@@ -1,10 +1,18 @@
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var EditActiveGame;
 (function (EditActiveGame) {
-    var EditActiveGameService = (function () {
-        function EditActiveGameService($location, $q, apiService) {
+    var EditActiveGameService = (function (_super) {
+        __extends(EditActiveGameService, _super);
+        function EditActiveGameService($location, $q, $timeout, apiService) {
+            _super.call(this, $timeout);
             this.$location = $location;
             this.$q = $q;
             this.apiService = apiService;
+            this.eventPlaylistUpdate = "eventPlaylistUpdate";
             this.errorMessages = [];
         }
         Object.defineProperty(EditActiveGameService.prototype, "datePlayed", {
@@ -22,6 +30,13 @@ var EditActiveGame;
             enumerable: true,
             configurable: true
         });
+        Object.defineProperty(EditActiveGameService.prototype, "showModifyPlayers", {
+            get: function () {
+                return this.showModifyPlayersScreen;
+            },
+            enumerable: true,
+            configurable: true
+        });
         EditActiveGameService.prototype.getErrorMessages = function () {
             return this.errorMessages;
         };
@@ -35,6 +50,9 @@ var EditActiveGame;
             enumerable: true,
             configurable: true
         });
+        EditActiveGameService.prototype.toggleModifyPlayers = function () {
+            this.showModifyPlayersScreen = !this.showModifyPlayersScreen;
+        };
         EditActiveGameService.prototype.getActiveGame = function () {
             var _this = this;
             var def = this.$q.defer();
@@ -46,6 +64,15 @@ var EditActiveGame;
                 def.resolve();
             }, function () {
                 _this.addErrorMessage('Cannot get active game.');
+                def.reject();
+            });
+            return def.promise;
+        };
+        EditActiveGameService.prototype.getAllPlayers = function () {
+            var def = this.$q.defer();
+            this.apiService.getPlayersForNewGame().then(function (data) {
+                def.resolve(data.players);
+            }, function () {
                 def.reject();
             });
             return def.promise;
@@ -133,9 +160,9 @@ var EditActiveGame;
             }
             return hasRanks;
         };
-        EditActiveGameService.$inject = ['$location', '$q', 'apiService'];
+        EditActiveGameService.$inject = ['$location', '$q', '$timeout', 'apiService'];
         return EditActiveGameService;
-    }());
+    }(Shared.PubSubServiceBase));
     EditActiveGame.EditActiveGameService = EditActiveGameService;
 })(EditActiveGame || (EditActiveGame = {}));
 //# sourceMappingURL=EditActiveGameService.js.map

@@ -31,12 +31,18 @@ var EditActiveGame;
             this.showScoreForm = false;
             this.disableControls = false;
             this.showAddPlayer = false;
-            this.showReorderPlayers = false;
             this.changeState(State.Init);
         }
         Object.defineProperty(EditActiveGameController.prototype, "numPlayers", {
             get: function () {
                 return this.editActiveGameService.players.length;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(EditActiveGameController.prototype, "showModifyPlayers", {
+            get: function () {
+                return this.editActiveGameService.showModifyPlayers;
             },
             enumerable: true,
             configurable: true
@@ -144,17 +150,8 @@ var EditActiveGame;
         EditActiveGameController.prototype.revert = function () {
             this.changeState(State.Loading);
         };
-        EditActiveGameController.prototype.disableSave = function () {
-            return this.showReorderPlayers || this.showAddPlayer;
-        };
-        EditActiveGameController.prototype.toggleReorderPlayers = function () {
-            this.showReorderPlayers = !this.showReorderPlayers;
-        };
-        EditActiveGameController.prototype.toggleAddPlayer = function () {
-            this.showAddPlayer = !this.showAddPlayer;
-            if (this.showAddPlayer) {
-                this.$scope.$broadcast('playerSelectorFocus');
-            }
+        EditActiveGameController.prototype.toggleModifyPlayers = function () {
+            this.editActiveGameService.toggleModifyPlayers();
         };
         EditActiveGameController.$inject = ['$scope', '$timeout', '$window', 'editActiveGameService'];
         return EditActiveGameController;

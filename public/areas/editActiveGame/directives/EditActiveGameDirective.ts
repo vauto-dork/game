@@ -30,11 +30,14 @@ module EditActiveGame {
         private showScoreForm: boolean = false;
         private disableControls: boolean = false;
         private showAddPlayer: boolean = false;
-        private showReorderPlayers: boolean = false;
         private datePlayed: Date;
         
         private get numPlayers(): number {
             return this.editActiveGameService.players.length;
+        }
+
+        private get showModifyPlayers(): boolean {
+            return this.editActiveGameService.showModifyPlayers;
         }
 
         constructor(private $scope: ng.IScope,
@@ -158,21 +161,9 @@ module EditActiveGame {
         private revert(): void {
             this.changeState(State.Loading);
         }
-	
-        private disableSave(): boolean {
-            return this.showReorderPlayers || this.showAddPlayer;
-        }
 
-        private toggleReorderPlayers(): void {
-            this.showReorderPlayers = !this.showReorderPlayers;
-        }
-
-        private toggleAddPlayer(): void {
-            this.showAddPlayer = !this.showAddPlayer;
-
-            if (this.showAddPlayer) {
-                this.$scope.$broadcast('playerSelectorFocus');
-            }
+        private toggleModifyPlayers(): void {
+            this.editActiveGameService.toggleModifyPlayers();
         }
     }
 }

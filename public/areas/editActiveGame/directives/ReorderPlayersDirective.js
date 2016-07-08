@@ -31,7 +31,7 @@ var EditActiveGame;
             }
             else if (this.dropZoneActive && this.selectedPlayerId) {
                 if (this.isPlayerSelected(player)) {
-                    this.unselectMove();
+                    this.unselect();
                 }
                 else {
                     this.dropPlayerHere(player);
@@ -39,13 +39,13 @@ var EditActiveGame;
             }
         };
         ReorderPlayersController.prototype.isPlayerSelected = function (player) {
-            return this.selectedPlayerId === player._id;
+            return this.selectedPlayerId === player.playerId;
         };
         ReorderPlayersController.prototype.markToMove = function (player) {
             this.dropZoneActive = true;
-            this.selectedPlayerId = player._id;
+            this.selectedPlayerId = player.playerId;
         };
-        ReorderPlayersController.prototype.unselectMove = function () {
+        ReorderPlayersController.prototype.unselect = function () {
             this.dropZoneActive = false;
             this.selectedPlayerId = null;
         };
@@ -53,16 +53,16 @@ var EditActiveGame;
             var _this = this;
             if (!!this.selectedPlayerId) {
                 var selectedPlayer = this.players.filter(function (p) {
-                    return p._id === _this.selectedPlayerId;
+                    return p.playerId === _this.selectedPlayerId;
                 });
                 if (selectedPlayer.length === 1) {
-                    var selectedPlayerIndex = this.players.map(function (p) { return p._id; }).indexOf(this.selectedPlayerId);
+                    var selectedPlayerIndex = this.players.map(function (p) { return p.playerId; }).indexOf(this.selectedPlayerId);
                     this.players.splice(selectedPlayerIndex, 1);
-                    var dropIndex = this.players.map(function (p) { return p._id; }).indexOf(player._id);
+                    var dropIndex = this.players.map(function (p) { return p.playerId; }).indexOf(player.playerId);
                     this.players.splice(dropIndex, 0, selectedPlayer[0]);
                 }
             }
-            this.unselectMove();
+            this.unselect();
         };
         ;
         ReorderPlayersController.$inject = ['$scope', 'editActiveGameService'];

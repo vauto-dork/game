@@ -3,81 +3,54 @@
 <div class="load-bar" ng-if="ctrl.showLoading">
 	<img src="/images/loader.gif" width="220" height="19" />
 </div>
-	
-<div class="container">
-    <div ng-if="ctrl.showScoreForm" class="row" uib-collapse="ctrl.showReorderPlayers">
-        
-        <div class="col-xs-12 col-md-6 col-lg-5">
-            <date-picker date="ctrl.datePlayed" disabled="ctrl.disableControls"></date-picker>
 
-            <player-bonus-panel class="playlist-scores-row"
-                                num-players="ctrl.numPlayers">
-            </player-bonus-panel>
+<div ng-if="ctrl.showScoreForm">
+    <div class="container" uib-collapse="ctrl.showModifyPlayers">
+        <div class="row">
 
-            <revert-finalize class="visible-md-block visible-lg-block"
-                             revert="ctrl.revert()"
-                             finalize="ctrl.finalize()"
-                             disabled="ctrl.disableControls">
-            </revert-finalize>
-        </div>
+            <div class="col-xs-12 col-md-6 col-lg-5">
+                <date-picker date="ctrl.datePlayed" disabled="ctrl.disableControls"></date-picker>
 
-        <div class="col-xs-12 col-md-6 col-lg-7">
-            <edit-scores disabled="ctrl.disableControls"></edit-scores>
-            
-            <revert-finalize class="visible-xs-block visible-sm-block"
-                             revert="ctrl.revert()"
-                             finalize="ctrl.finalize()"
-                             disabled="ctrl.disableControls"></revert-finalize>
+                <player-bonus-panel class="playlist-scores-row"
+                                    num-players="ctrl.numPlayers">
+                </player-bonus-panel>
+
+                <revert-finalize class="visible-md-block visible-lg-block"
+                                 save="ctrl.save()"
+                                 revert="ctrl.revert()"
+                                 finalize="ctrl.finalize()"
+                                 disabled="ctrl.disableControls">
+                </revert-finalize>
+            </div>
+
+            <div class="col-xs-12 col-md-6 col-lg-7">
+                <p>
+                    <button type="button" class="btn btn-primary btn-lg btn-block" ng-click="ctrl.toggleModifyPlayers()" ng-disabled="ctrl.disabled" aria-label="Modify Players">
+                        <span class="glyphicon glyphicon-sort" aria-hidden="true"></span> Modify Players
+                    </button>
+                </p>
+
+                <edit-scores disabled="ctrl.disableControls"></edit-scores>
+
+                <revert-finalize class="visible-xs-block visible-sm-block"
+                                 save="ctrl.save()"
+                                 revert="ctrl.revert()"
+                                 finalize="ctrl.finalize()"
+                                 disabled="ctrl.disableControls">
+                </revert-finalize>
+            </div>
         </div>
     </div>
-</div>
 
-<div ng-if="ctrl.showScoreForm" uib-collapse="!ctrl.showReorderPlayers">
-    <reorder-players></reorder-players>
+    <div uib-collapse="!ctrl.showModifyPlayers">
+        <modify-players></modify-players>
+    </div>
 </div>
 
 <div ng-if="ctrl.showError">
 	<div class="btn-row">
 		<button type="button" class="btn btn-danger btn-block btn-lg" ng-click="ctrl.returnToActiveGames()">
 			Return to Active Games
-		</button>
-	</div>
-</div>
-
-<div class="overlay add-player-open" ng-show="ctrl.showAddPlayer" ng-click="ctrl.toggleAddPlayer()"></div>
-
-<div class="add-player-panel" ng-show="ctrl.showAddPlayer">
-    <div class="playlist-scores-row">
-        <div class="panel panel-default" style="box-shadow: 0 3px 3px 0 rgba(0,0,0,0.5)">
-            <div class="panel-heading">
-                <h3 class="panel-title">
-                    Add Player
-                </h3>
-            </div>
-            <div class="panel-body">
-                <player-selector players="ctrl.allPlayers" on-selected="ctrl.onSelected(data)"></player-selector>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="footer-spacer"></div>
-
-<div class="footer-bar text-center">
-	<div class="btn-group" role="group">
-		<button type="button" class="btn btn-primary btn-lg" ng-class="{active: ctrl.showAddPlayer}" ng-click="ctrl.toggleAddPlayer()" ng-disabled="ctrl.disableControls || ctrl.showReorderPlayers" aria-label="Add Player">
-			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-			<div class="btn-text">Player</div>
-		</button>
-		
-		<button type="button" class="btn btn-primary btn-lg" ng-class="{active: ctrl.showReorderPlayers}" ng-click="ctrl.toggleReorderPlayers()" ng-disabled="ctrl.disableControls || ctrl.showAddPlayer" aria-label="Reorder Players">
-			<span class="glyphicon glyphicon-sort" aria-hidden="true"></span>
-			<div class="btn-text">Reorder</div> 
-		</button>
-		
-		<button type="button" class="btn btn-success btn-lg" ng-click="ctrl.save()" ng-disabled="ctrl.disableControls || ctrl.disableSave()" aria-label="Save Game">
-			<span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
-			<div class="btn-text">Save</div>
 		</button>
 	</div>
 </div>

@@ -78,7 +78,7 @@ module CreateGame {
 			
 			this.selected.forEach(playerId => {
 				var found = this.players.filter(player => {
-					return player.player._id === playerId;
+					return player.playerId === playerId;
 				});
 				
 				if(found.length === 1) {
@@ -104,12 +104,12 @@ module CreateGame {
 
 		public selectPlayer(player: Shared.INewGamePlayer): void {
 			if (!this.isPlayerSelected(player.player)) {
-				this.selected.push(player.player._id);
+				this.selected.push(player.playerId);
 			}
 		}
 
 		public deselectPlayer(player: Shared.INewGamePlayer): void {
-			var index = this.selected.indexOf(player.player._id);
+			var index = this.selected.indexOf(player.playerId);
 			if (index > -1) {
 				this.selected.splice(index, 1);
 			}

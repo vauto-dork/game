@@ -58,7 +58,7 @@ var CreateGame;
             var selection = [];
             this.selected.forEach(function (playerId) {
                 var found = _this.players.filter(function (player) {
-                    return player.player._id === playerId;
+                    return player.playerId === playerId;
                 });
                 if (found.length === 1) {
                     selection.push(found[0]);
@@ -80,11 +80,11 @@ var CreateGame;
         };
         CreateGameService.prototype.selectPlayer = function (player) {
             if (!this.isPlayerSelected(player.player)) {
-                this.selected.push(player.player._id);
+                this.selected.push(player.playerId);
             }
         };
         CreateGameService.prototype.deselectPlayer = function (player) {
-            var index = this.selected.indexOf(player.player._id);
+            var index = this.selected.indexOf(player.playerId);
             if (index > -1) {
                 this.selected.splice(index, 1);
             }

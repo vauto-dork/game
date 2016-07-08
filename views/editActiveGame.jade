@@ -1,10 +1,12 @@
 extends layout
 
 block modules
+    script(src='/shared/directives/PlayerSelectorDirective.js')
     script(src='/shared/directives/PlayerBonusPanelDirective.js')
     script(src='/areas/editActiveGame/services/EditActiveGameService.js')
     script(src='/areas/editActiveGame/directives/EditScoresDirective.js')
     script(src='/areas/editActiveGame/directives/ReorderPlayersDirective.js')
+    script(src='/areas/editActiveGame/directives/ModifyPlayersDirective.js')
     script(src='/areas/editActiveGame/directives/RevertFinalizeDirective.js')
     script(src='/areas/editActiveGame/directives/EditActiveGameDirective.js')
     
@@ -12,6 +14,9 @@ block modules
         var EditActiveGameModule = angular.module('EditActiveGameModule', []);
 		
         EditActiveGameModule.service('editActiveGameService', EditActiveGame.EditActiveGameService);
+        
+        EditActiveGameModule.controller('PlayerSelectorController', Shared.PlayerSelectorController);
+        EditActiveGameModule.directive('playerSelector', Shared.PlayerSelectorDirective);
 		
         EditActiveGameModule.controller('EditActiveGameController', EditActiveGame.EditActiveGameController);
         EditActiveGameModule.directive('editActiveGame', EditActiveGame.EditActiveGameDirective);
@@ -21,6 +26,9 @@ block modules
 
         EditActiveGameModule.controller('ReorderPlayersController', EditActiveGame.ReorderPlayersController);
         EditActiveGameModule.directive('reorderPlayers', EditActiveGame.ReorderPlayersDirective);
+        
+        EditActiveGameModule.controller('ModifyPlayersController', EditActiveGame.ModifyPlayersController);
+        EditActiveGameModule.directive('modifyPlayers', EditActiveGame.ModifyPlayersDirective);
 
         EditActiveGameModule.controller('RevertFinalizeController', EditActiveGame.RevertFinalizeController);
         EditActiveGameModule.directive('revertFinalize', EditActiveGame.RevertFinalizeDirective);

@@ -29,7 +29,7 @@ var EditActiveGame;
         EditScoresController.prototype.rankHandler = function (player) {
             player.rank = player.rank === null ? 0 : player.rank;
             this.players.forEach(function (p) {
-                if (p._id !== player._id) {
+                if (p.playerId !== player.playerId) {
                     if (player.rank > 0 && p.rank === player.rank) {
                         p.rank = 0;
                     }

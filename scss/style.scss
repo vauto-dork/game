@@ -113,9 +113,12 @@
 
 .playlist-scores-row {
 	@include row;
-	max-width: 50em;
 	padding: 0 $standard-spacing;
 	margin: auto;
+
+    .panel-body {
+        cursor: pointer;
+    }
 }
 
 .dotm-row {

@@ -1,4 +1,10 @@
 ﻿<div class="btn-row">
+    <p>
+        <button type="button" class="btn btn-success btn-lg btn-block" ng-click="ctrl.save()" ng-disabled="ctrl.disabled" aria-label="Save Game">
+            <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Save
+        </button>
+    </p>
+
     <div class="btn-group btn-group-justified" role="group">
         <div class="btn-group" role="group">
             <button type="button" class="btn btn-danger btn-lg btn-block" ng-click="ctrl.revert()" ng-disabled="ctrl.disabled" aria-label="Revert Changes">

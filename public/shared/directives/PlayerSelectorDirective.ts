@@ -1,11 +1,11 @@
-module Players {
+module Shared {
     export function PlayerSelectorDirective(): ng.IDirective {
         return {
             scope: {
 				players: '=',
 				onSelected: '&'
 			},
-			templateUrl: '/areas/players/directives/PlayerSelectorTemplate.html',
+			templateUrl: '/shared/directives/PlayerSelectorTemplate.html',
 			controller: 'PlayerSelectorController',
 			controllerAs: 'ctrl',
 			bindToController: true
@@ -15,7 +15,7 @@ module Players {
     export class PlayerSelectorController {
         public static $inject: string[] = ['$scope', '$element', '$timeout', 'apiService'];
 
-		private players: Shared.INewGamePlayer[];
+		private players: INewGamePlayer[];
 		private onSelected: Function;
 		
 		private filter: string = '';
@@ -38,7 +38,7 @@ module Players {
 			this.filter = '';
 		}
 
-		private selectPlayer(item: Shared.IPlayer, model, label): void {
+		private selectPlayer(item: IPlayer, model, label): void {
 			this.$element.find("input").focus();
 			this.onSelected({ data: item });
 			this.removeFilter();

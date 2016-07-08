@@ -13,6 +13,13 @@ var Shared;
             this.rank = player.rank || 0;
             this.points = player.points || 0;
         }
+        Object.defineProperty(GamePlayer.prototype, "playerId", {
+            get: function () {
+                return this.player._id;
+            },
+            enumerable: true,
+            configurable: true
+        });
         GamePlayer.prototype.toGamePlayerViewModel = function () {
             var player = {
                 _id: this._id,
