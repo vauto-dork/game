@@ -31,10 +31,6 @@ module EditActiveGame {
 
         private alerts = [];
         
-        private get numPlayers(): number {
-            return this.editActiveGameService.players.length;
-        }
-
         private get showModifyPlayers(): boolean {
             return this.editActiveGameService.showModifyPlayers;
         }
@@ -138,8 +134,7 @@ module EditActiveGame {
                 this.addAlert('success', 'Game saved successfully!');
                 this.changeState(State.Ready);
             }, () => {
-                // get error messages and display alerts
-                this.changeState(State.Ready);
+                this.saveReject();
             });
         }
 	
@@ -147,9 +142,15 @@ module EditActiveGame {
             this.editActiveGameService.finalize().then(() => {
                 this.$window.location.href = '/GameHistory';
             }, () => {
-                // get error messages and display alerts
-                this.changeState(State.Ready);
+                this.saveReject();
             });
+        }
+
+        private saveReject(): void {
+            // get error messages and display alerts
+            this.clearAlerts();
+            this.editActiveGameService.getErrorMessages().forEach(msg => { this.addAlert('danger', msg); });
+            this.changeState(State.Ready);
         }
      
         // UI Hookups

@@ -2,12 +2,15 @@ module EditActiveGame {
     export interface IEditActiveGameService {
         datePlayed: Date;
         players: Shared.IGamePlayer[];
+        curatedNewPlayers: Shared.INewGamePlayer[];
         showModifyPlayers: boolean;
 
+        addPlayer(player: Shared.IGamePlayer): void;
+        removePlayer(player: Shared.IGamePlayer): void;
+        playerIndex(playerId: string): number;
         toggleModifyPlayers(): void;
         getErrorMessages(): string[];
         getActiveGame(): ng.IPromise<void>;
-        getAllPlayers(): ng.IPromise<Shared.INewGamePlayer[]>;
         save(): ng.IPromise<void>;
         finalize(): ng.IPromise<void>;
     }
@@ -18,6 +21,7 @@ module EditActiveGame {
         private gameIdPath: string;
         private activeGame: Shared.IGame;
         private allPlayers: Shared.INewGamePlayer[];
+        private curatedPlayersList: Shared.INewGamePlayer[];
         private showModifyPlayersScreen: boolean;
 
         private eventPlaylistUpdate: string = "eventPlaylistUpdate";
@@ -53,6 +57,10 @@ module EditActiveGame {
             this.activeGame.players = value;
         }
 
+        public get curatedNewPlayers(): Shared.INewGamePlayer[] {
+            return this.curatedPlayersList;
+        }
+
         constructor(private $location: ng.ILocationService,
             private $q: ng.IQService,
             $timeout: ng.ITimeoutService,
@@ -71,7 +79,13 @@ module EditActiveGame {
                 this.gameIdPath = this.$location.path();
             }
 
-            this.apiService.getActiveGame(this.gameIdPath).then((game) => {
+            var allPlayersPromise = this.getAllPlayers();
+            allPlayersPromise.then((data) => {
+                this.allPlayers = data;
+            });
+
+            var activeGamePromise = this.apiService.getActiveGame(this.gameIdPath);
+            activeGamePromise.then((game) => {
                 this.activeGame = game;
                 def.resolve();
             }, () => {
@@ -79,10 +93,14 @@ module EditActiveGame {
                 def.reject();
             });
 
+            this.$q.all([allPlayersPromise, activeGamePromise]).then(() => {
+                this.curateNewPlayerList();
+            });
+
             return def.promise;
         }
 
-        public getAllPlayers(): ng.IPromise<Shared.INewGamePlayer[]> {
+        private getAllPlayers(): ng.IPromise<Shared.INewGamePlayer[]> {
             var def = this.$q.defer<Shared.INewGamePlayer[]>();
 
             this.apiService.getPlayersForNewGame().then(data => {
@@ -92,6 +110,31 @@ module EditActiveGame {
             });
 
             return def.promise;
+        }
+
+        private curateNewPlayerList(): void {
+            // Get the nested player before getting ID because IDs don't match
+            var currentPlayerIds = this.players.map(p => p.playerId);
+
+            // Get players that are not in the current playlist.
+            this.curatedPlayersList = this.allPlayers.filter(player => {
+                return currentPlayerIds.indexOf(player.playerId) === -1;
+            });
+        }
+
+        public playerIndex(playerId: string): number {
+            return this.players.map(p => { return p.playerId; }).indexOf(playerId);
+        }
+
+        public addPlayer(player: Shared.IGamePlayer): void {
+            this.players.push(player);
+            this.curateNewPlayerList();
+        }
+
+        public removePlayer(player: Shared.IGamePlayer): void {
+            var index = this.playerIndex(player.playerId);
+            this.players.splice(index, 1);
+            this.curateNewPlayerList();
         }
         
         public save(): ng.IPromise<void> {
@@ -113,7 +156,7 @@ module EditActiveGame {
         public finalize(): ng.IPromise<void> {
             var def = this.$q.defer<void>();
 
-            if(this.hasRanks() && this.filterRemovedPlayers()) {
+            if (this.filterRemovedPlayers() && this.hasRanks()) {
                 this.apiService.finalizeGame(this.activeGame).then(() => {
                     this.apiService.deleteActiveGame(this.gameIdPath).then(() => {
                         def.resolve();
@@ -145,19 +188,13 @@ module EditActiveGame {
         }
 
         private filterRemovedPlayers(): boolean {
-            var remainingPlayers = this.activeGame.players.filter((player) => {
-                return !player.removed;
-            });
-
-            if (remainingPlayers.length < 3) {
+            if (this.players.length < 3) {
                 this.addErrorMessage('Game cannot have less than three players.');
                 return false;
             }
-
-            this.activeGame.players = remainingPlayers;
             
             // Convert blank points to zeroes.
-            this.activeGame.players.forEach((player) => {
+            this.players.forEach((player) => {
                 player.points = !player.points ? 0 : player.points;
             });
 
@@ -167,9 +204,9 @@ module EditActiveGame {
         private hasRanks(): boolean {
             this.clearErrorMessages();
             
-            var rank1 = this.activeGame.players.filter((value) => {return value.rank === 1;}).length;
-            var rank2 = this.activeGame.players.filter((value) => {return value.rank === 2;}).length;
-            var rank3 = this.activeGame.players.filter((value) => {return value.rank === 3;}).length;
+            var rank1 = this.players.filter((value) => {return value.rank === 1;}).length;
+            var rank2 = this.players.filter((value) => {return value.rank === 2;}).length;
+            var rank3 = this.players.filter((value) => {return value.rank === 3;}).length;
             
             if(rank1 !== 1) {
                 this.addErrorMessage('No winner selected.', false);
@@ -186,7 +223,7 @@ module EditActiveGame {
             var hasRanks = (rank1 === 1 && rank2 === 1 && rank3 === 1);
             
             if(hasRanks) {
-                var winner = this.activeGame.players.filter((player) => { return player.rank === 1; });
+                var winner = this.players.filter((player) => { return player.rank === 1; });
                 this.activeGame.winner = winner[0].player;
             }
             

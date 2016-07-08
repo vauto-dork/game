@@ -16,9 +16,17 @@ var EditActiveGame;
     }
     EditActiveGame.RevertFinalizeDirective = RevertFinalizeDirective;
     var RevertFinalizeController = (function () {
-        function RevertFinalizeController() {
+        function RevertFinalizeController(editActiveGameService) {
+            this.editActiveGameService = editActiveGameService;
         }
-        RevertFinalizeController.$inject = [];
+        Object.defineProperty(RevertFinalizeController.prototype, "numPlayers", {
+            get: function () {
+                return this.editActiveGameService.players.length;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        RevertFinalizeController.$inject = ['editActiveGameService'];
         return RevertFinalizeController;
     }());
     EditActiveGame.RevertFinalizeController = RevertFinalizeController;

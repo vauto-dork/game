@@ -14,6 +14,7 @@ var EditActiveGame;
         function ReorderPlayersController($scope, editActiveGameService) {
             this.$scope = $scope;
             this.editActiveGameService = editActiveGameService;
+            this.unselect();
         }
         Object.defineProperty(ReorderPlayersController.prototype, "players", {
             get: function () {
@@ -49,6 +50,9 @@ var EditActiveGame;
             this.dropZoneActive = false;
             this.selectedPlayerId = null;
         };
+        ReorderPlayersController.prototype.playerIndex = function (playerId) {
+            return this.editActiveGameService.playerIndex(playerId);
+        };
         ReorderPlayersController.prototype.dropPlayerHere = function (player) {
             var _this = this;
             if (!!this.selectedPlayerId) {
@@ -56,15 +60,17 @@ var EditActiveGame;
                     return p.playerId === _this.selectedPlayerId;
                 });
                 if (selectedPlayer.length === 1) {
-                    var selectedPlayerIndex = this.players.map(function (p) { return p.playerId; }).indexOf(this.selectedPlayerId);
+                    var selectedPlayerIndex = this.playerIndex(this.selectedPlayerId);
                     this.players.splice(selectedPlayerIndex, 1);
-                    var dropIndex = this.players.map(function (p) { return p.playerId; }).indexOf(player.playerId);
+                    var dropIndex = this.playerIndex(player.playerId);
                     this.players.splice(dropIndex, 0, selectedPlayer[0]);
                 }
             }
             this.unselect();
         };
-        ;
+        ReorderPlayersController.prototype.removePlayer = function (player) {
+            this.editActiveGameService.removePlayer(player);
+        };
         ReorderPlayersController.$inject = ['$scope', 'editActiveGameService'];
         return ReorderPlayersController;
     }());

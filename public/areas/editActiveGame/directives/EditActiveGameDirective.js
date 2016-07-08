@@ -34,13 +34,6 @@ var EditActiveGame;
             this.alerts = [];
             this.changeState(State.Init);
         }
-        Object.defineProperty(EditActiveGameController.prototype, "numPlayers", {
-            get: function () {
-                return this.editActiveGameService.players.length;
-            },
-            enumerable: true,
-            configurable: true
-        });
         Object.defineProperty(EditActiveGameController.prototype, "showModifyPlayers", {
             get: function () {
                 return this.editActiveGameService.showModifyPlayers;
@@ -129,8 +122,7 @@ var EditActiveGame;
                 _this.addAlert('success', 'Game saved successfully!');
                 _this.changeState(State.Ready);
             }, function () {
-                // get error messages and display alerts
-                _this.changeState(State.Ready);
+                _this.saveReject();
             });
         };
         EditActiveGameController.prototype.finalizeGame = function () {
@@ -138,9 +130,15 @@ var EditActiveGame;
             this.editActiveGameService.finalize().then(function () {
                 _this.$window.location.href = '/GameHistory';
             }, function () {
-                // get error messages and display alerts
-                _this.changeState(State.Ready);
+                _this.saveReject();
             });
+        };
+        EditActiveGameController.prototype.saveReject = function () {
+            var _this = this;
+            // get error messages and display alerts
+            this.clearAlerts();
+            this.editActiveGameService.getErrorMessages().forEach(function (msg) { _this.addAlert('danger', msg); });
+            this.changeState(State.Ready);
         };
         // UI Hookups
         EditActiveGameController.prototype.save = function () {

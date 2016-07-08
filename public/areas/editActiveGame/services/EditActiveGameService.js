@@ -50,6 +50,13 @@ var EditActiveGame;
             enumerable: true,
             configurable: true
         });
+        Object.defineProperty(EditActiveGameService.prototype, "curatedNewPlayers", {
+            get: function () {
+                return this.curatedPlayersList;
+            },
+            enumerable: true,
+            configurable: true
+        });
         EditActiveGameService.prototype.toggleModifyPlayers = function () {
             this.showModifyPlayersScreen = !this.showModifyPlayersScreen;
         };
@@ -59,12 +66,20 @@ var EditActiveGame;
             if (this.$location.path() !== undefined || this.$location.path() !== '') {
                 this.gameIdPath = this.$location.path();
             }
-            this.apiService.getActiveGame(this.gameIdPath).then(function (game) {
+            var allPlayersPromise = this.getAllPlayers();
+            allPlayersPromise.then(function (data) {
+                _this.allPlayers = data;
+            });
+            var activeGamePromise = this.apiService.getActiveGame(this.gameIdPath);
+            activeGamePromise.then(function (game) {
                 _this.activeGame = game;
                 def.resolve();
             }, function () {
                 _this.addErrorMessage('Cannot get active game.');
                 def.reject();
+            });
+            this.$q.all([allPlayersPromise, activeGamePromise]).then(function () {
+                _this.curateNewPlayerList();
             });
             return def.promise;
         };
@@ -76,6 +91,26 @@ var EditActiveGame;
                 def.reject();
             });
             return def.promise;
+        };
+        EditActiveGameService.prototype.curateNewPlayerList = function () {
+            // Get the nested player before getting ID because IDs don't match
+            var currentPlayerIds = this.players.map(function (p) { return p.playerId; });
+            // Get players that are not in the current playlist.
+            this.curatedPlayersList = this.allPlayers.filter(function (player) {
+                return currentPlayerIds.indexOf(player.playerId) === -1;
+            });
+        };
+        EditActiveGameService.prototype.playerIndex = function (playerId) {
+            return this.players.map(function (p) { return p.playerId; }).indexOf(playerId);
+        };
+        EditActiveGameService.prototype.addPlayer = function (player) {
+            this.players.push(player);
+            this.curateNewPlayerList();
+        };
+        EditActiveGameService.prototype.removePlayer = function (player) {
+            var index = this.playerIndex(player.playerId);
+            this.players.splice(index, 1);
+            this.curateNewPlayerList();
         };
         EditActiveGameService.prototype.save = function () {
             var _this = this;
@@ -96,7 +131,7 @@ var EditActiveGame;
         EditActiveGameService.prototype.finalize = function () {
             var _this = this;
             var def = this.$q.defer();
-            if (this.hasRanks() && this.filterRemovedPlayers()) {
+            if (this.filterRemovedPlayers() && this.hasRanks()) {
                 this.apiService.finalizeGame(this.activeGame).then(function () {
                     _this.apiService.deleteActiveGame(_this.gameIdPath).then(function () {
                         def.resolve();
@@ -125,25 +160,21 @@ var EditActiveGame;
             this.errorMessages = [];
         };
         EditActiveGameService.prototype.filterRemovedPlayers = function () {
-            var remainingPlayers = this.activeGame.players.filter(function (player) {
-                return !player.removed;
-            });
-            if (remainingPlayers.length < 3) {
+            if (this.players.length < 3) {
                 this.addErrorMessage('Game cannot have less than three players.');
                 return false;
             }
-            this.activeGame.players = remainingPlayers;
             // Convert blank points to zeroes.
-            this.activeGame.players.forEach(function (player) {
+            this.players.forEach(function (player) {
                 player.points = !player.points ? 0 : player.points;
             });
             return true;
         };
         EditActiveGameService.prototype.hasRanks = function () {
             this.clearErrorMessages();
-            var rank1 = this.activeGame.players.filter(function (value) { return value.rank === 1; }).length;
-            var rank2 = this.activeGame.players.filter(function (value) { return value.rank === 2; }).length;
-            var rank3 = this.activeGame.players.filter(function (value) { return value.rank === 3; }).length;
+            var rank1 = this.players.filter(function (value) { return value.rank === 1; }).length;
+            var rank2 = this.players.filter(function (value) { return value.rank === 2; }).length;
+            var rank3 = this.players.filter(function (value) { return value.rank === 3; }).length;
             if (rank1 !== 1) {
                 this.addErrorMessage('No winner selected.', false);
             }
@@ -155,7 +186,7 @@ var EditActiveGame;
             }
             var hasRanks = (rank1 === 1 && rank2 === 1 && rank3 === 1);
             if (hasRanks) {
-                var winner = this.activeGame.players.filter(function (player) { return player.rank === 1; });
+                var winner = this.players.filter(function (player) { return player.rank === 1; });
                 this.activeGame.winner = winner[0].player;
             }
             return hasRanks;

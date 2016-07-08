@@ -15,14 +15,18 @@
     }
 
     export class RevertFinalizeController {
-        public static $inject: string[] = [];
+        public static $inject: string[] = ['editActiveGameService'];
 
         private save: Function;
         private revert: Function;
         private finalize: Function;
         private disabled: boolean;
 
-        constructor() {
+        private get numPlayers(): number {
+            return this.editActiveGameService.players.length;
+        }
+
+        constructor(private editActiveGameService: IEditActiveGameService) {
             
         }
     }

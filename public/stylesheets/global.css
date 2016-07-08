@@ -13,6 +13,9 @@ body {
   margin-bottom: 2em;
   background-color: #e4e9ef; }
 
+hr {
+  border-color: #7a8394; }
+
 .player-selector .dropdown-menu {
   width: 100%;
   font-size: 2em;

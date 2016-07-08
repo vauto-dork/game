@@ -3,6 +3,11 @@
 
         <div class="panel-heading">
             <h3 class="panel-title">
+                <div class="pull-right">
+                    <button ng-click="ctrl.removePlayer(player)" class="btn btn-danger" aria-label="Remove Player">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                    </button>
+                </div>
                 <player-nametag player="player.player"></player-nametag>
             </h3>
         </div>
@@ -11,11 +16,11 @@
 
             <div class="player-move-panel-content">
                 <span ng-if="!ctrl.dropZoneActive && !ctrl.isPlayerSelected(player)">
-                    Tap to select
+                    Select to move
                 </span>
 
                 <span ng-if="ctrl.dropZoneActive && ctrl.isPlayerSelected(player)">
-                    Tap to unselect
+                    Unselect
                 </span>
 
                 <span ng-if="ctrl.dropZoneActive && !ctrl.isPlayerSelected(player)">

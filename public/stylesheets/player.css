@@ -4,28 +4,6 @@
   height: 2em;
   line-height: 2em; }
 
-.player-delete-blur {
-  -webkit-filter: blur(2px);
-  -moz-filter: blur(2px);
-  -ms-filter: blur(2px);
-  -o-filter: blur(2px);
-  filter: blur(2px); }
-
-.player-delete-warning-overlay {
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  z-index: 20;
-  background: rgba(0, 0, 0, 0.6);
-  color: #fff;
-  text-align: center; }
-  .player-delete-warning-overlay h3 {
-    text-shadow: 0 0 20px #000; }
-  .player-delete-warning-overlay .overlay-text-container {
-    width: 100%;
-    height: 100%;
-    cursor: pointer; }
-
 .panel-title .player-nickname {
   margin-left: 0.3em;
   padding-left: 0.5em;

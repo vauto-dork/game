@@ -50,7 +50,7 @@ module EditActiveGame {
                 var points = player.points;
                 player.points = (points + 1 <= this.pointsMax) ? points + 1 : points;
             }
-        };
+        }
         
         public toggleRemoved(player: Shared.IGamePlayer): void {
             player.removed = !player.removed;

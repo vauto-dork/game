@@ -134,4 +134,17 @@
 
 .edit-active-game {
     padding-top: 2em;
+
+    .modify-players-button {
+        margin-bottom: 20px;
+    }
+
+    .bonus-points-notice {
+        margin-top: 15px;
+    }
+
+    .bonus-points-table {
+        font-size: 14px;
+        margin-bottom: 0;
+    }
 }

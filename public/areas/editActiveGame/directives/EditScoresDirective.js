@@ -48,7 +48,6 @@ var EditActiveGame;
                 player.points = (points + 1 <= this.pointsMax) ? points + 1 : points;
             }
         };
-        ;
         EditScoresController.prototype.toggleRemoved = function (player) {
             player.removed = !player.removed;
         };

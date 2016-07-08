@@ -25,7 +25,7 @@
         }
 
         constructor(private $scope: ng.IScope, private editActiveGameService: IEditActiveGameService) {
-            
+            this.unselect();
         }
         
         private clickHandler(player): void {
@@ -39,7 +39,7 @@
                 }
             }
         }
-
+        
         private isPlayerSelected(player: Shared.IGamePlayer): boolean {
             return this.selectedPlayerId === player.playerId;
         }
@@ -54,6 +54,10 @@
             this.selectedPlayerId = null;
         }
 
+        private playerIndex(playerId: string): number {
+            return this.editActiveGameService.playerIndex(playerId);
+        }
+
         private dropPlayerHere(player: Shared.IGamePlayer): void {
             if (!!this.selectedPlayerId) {
                 var selectedPlayer = this.players.filter(p => {
@@ -61,15 +65,19 @@
                 });
 
                 if (selectedPlayer.length === 1) {
-                    var selectedPlayerIndex = this.players.map(p => { return p.playerId; }).indexOf(this.selectedPlayerId);
+                    var selectedPlayerIndex = this.playerIndex(this.selectedPlayerId);
                     this.players.splice(selectedPlayerIndex, 1);
 
-                    var dropIndex = this.players.map(p => { return p.playerId; }).indexOf(player.playerId);
+                    var dropIndex = this.playerIndex(player.playerId);
                     this.players.splice(dropIndex, 0, selectedPlayer[0]);
                 }
             }
 
             this.unselect();
-        };
+        }
+
+        public removePlayer(player: Shared.IGamePlayer): void {
+            this.editActiveGameService.removePlayer(player);
+        }
     }
 }
