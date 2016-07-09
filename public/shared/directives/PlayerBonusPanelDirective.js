@@ -17,7 +17,7 @@ var Shared;
         }
         PlayerBonusPanelController.$inject = [];
         return PlayerBonusPanelController;
-    }());
+    })();
     Shared.PlayerBonusPanelController = PlayerBonusPanelController;
 })(Shared || (Shared = {}));
 //# sourceMappingURL=PlayerBonusPanelDirective.js.map

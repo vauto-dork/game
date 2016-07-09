@@ -29,7 +29,7 @@ module Shared {
 	
 		private getActiveGamePath(gameIdPath: string): string {
 			return '/ActiveGames/json' + gameIdPath;
-		};
+		}
 		
 		private getEditActiveGamePath(gameId: string): string {
 			return '/activeGames/edit/#/' + gameId;

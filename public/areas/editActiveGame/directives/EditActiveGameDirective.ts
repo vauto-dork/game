@@ -21,7 +21,7 @@ module EditActiveGame {
 
     export class EditActiveGameController {
         public static $inject: string[] = ['$scope', '$timeout', '$window', 'editActiveGameService'];
-        
+
         private showLoading: boolean = false;
         private showError: boolean = false;
         private showScoreForm: boolean = false;
@@ -30,15 +30,15 @@ module EditActiveGame {
         private datePlayed: Date;
 
         private alerts = [];
-        
+
         private get showModifyPlayers(): boolean {
             return this.editActiveGameService.showModifyPlayers;
         }
 
         constructor(private $scope: ng.IScope,
-                    private $timeout: ng.ITimeoutService,
-                    private $window: ng.IWindowService,
-                    private editActiveGameService: IEditActiveGameService) {
+            private $timeout: ng.ITimeoutService,
+            private $window: ng.IWindowService,
+            private editActiveGameService: IEditActiveGameService) {
             this.changeState(State.Init);
         }
 
@@ -69,10 +69,7 @@ module EditActiveGame {
                     this.scrollToTop();
                     break;
                 case State.Ready:
-                    if (this.showModifyPlayers) {
-                        this.editActiveGameService.toggleModifyPlayers();
-                    }
-                    this.scrollToTop();
+                    this.ready();
                     break;
                 case State.Saving:
                     this.saveGame();
@@ -82,7 +79,14 @@ module EditActiveGame {
                     break;
             }
         }
-        
+
+        private ready(): void {
+            if (this.showModifyPlayers) {
+                this.editActiveGameService.toggleModifyPlayers();
+            }
+            this.scrollToTop();
+        }
+
         private errorHandler(data: string, errorMessage: string) {
             this.addAlert('danger', errorMessage);
             console.error(data);
@@ -100,23 +104,19 @@ module EditActiveGame {
         private clearAlerts(): void {
             this.alerts = [];
         }
-        
-        private returnToActiveGames(): void{
-            this.$window.location.href = '/ActiveGames';
-        }
-        
+
         private scrollToTop(): void {
             this.$timeout(() => {
                 this.$window.scrollTo(0, 0);
             });
         }
-        
+
         private scrollToBottom(): void {
             this.$timeout(() => {
                 this.$window.scrollTo(0, 100000);
             });
         }
-        
+
         private getActiveGame(): void {
             this.editActiveGameService.getActiveGame().then(() => {
                 this.changeState(State.Ready);
@@ -137,9 +137,9 @@ module EditActiveGame {
                 this.saveReject();
             });
         }
-	
+
         public finalizeGame(): void {
-            this.editActiveGameService.finalize().then(() => {
+            this.editActiveGameService.finalize(true).then(() => {
                 this.$window.location.href = '/GameHistory';
             }, () => {
                 this.saveReject();
@@ -149,20 +149,20 @@ module EditActiveGame {
         private saveReject(): void {
             // get error messages and display alerts
             this.clearAlerts();
-            this.editActiveGameService.getErrorMessages().forEach(msg => { this.addAlert('danger', msg); });
+            this.editActiveGameService.errorMessages.forEach(msg => { this.addAlert('danger', msg); });
             this.changeState(State.Ready);
         }
-     
+
         // UI Hookups
-        
+
         private save(): void {
-            this.changeState(State.Saving);	
+            this.changeState(State.Saving);
         }
-	
+
         private finalize(): void {
             this.changeState(State.Finalizing);
         }
-	
+
         private revert(): void {
             this.changeState(State.Loading);
         }

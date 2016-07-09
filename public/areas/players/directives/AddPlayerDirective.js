@@ -79,7 +79,7 @@ var Players;
         ;
         AddPlayerController.$inject = ['$timeout', 'apiService'];
         return AddPlayerController;
-    }());
+    })();
     Players.AddPlayerController = AddPlayerController;
 })(Players || (Players = {}));
 //# sourceMappingURL=AddPlayerDirective.js.map

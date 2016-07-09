@@ -2,8 +2,6 @@ var Shared;
 (function (Shared) {
     var GamePlayer = (function () {
         function GamePlayer(player) {
-            this.selected = false;
-            this.removed = false;
             if (!player) {
                 this.player = new Shared.Player();
                 return;
@@ -30,7 +28,7 @@ var Shared;
             return player;
         };
         return GamePlayer;
-    }());
+    })();
     Shared.GamePlayer = GamePlayer;
 })(Shared || (Shared = {}));
 //# sourceMappingURL=GamePlayer.js.map

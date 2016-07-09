@@ -23,6 +23,9 @@ var EditActiveGame;
             get: function () {
                 return this.editActiveGameService.players;
             },
+            set: function (value) {
+                this.editActiveGameService.players = value;
+            },
             enumerable: true,
             configurable: true
         });
@@ -48,12 +51,9 @@ var EditActiveGame;
                 player.points = (points + 1 <= this.pointsMax) ? points + 1 : points;
             }
         };
-        EditScoresController.prototype.toggleRemoved = function (player) {
-            player.removed = !player.removed;
-        };
         EditScoresController.$inject = ['$scope', 'editActiveGameService'];
         return EditScoresController;
-    }());
+    })();
     EditActiveGame.EditScoresController = EditScoresController;
 })(EditActiveGame || (EditActiveGame = {}));
 //# sourceMappingURL=EditScoresDirective.js.map

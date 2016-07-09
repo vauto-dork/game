@@ -10,7 +10,6 @@ var Shared;
         ApiService.prototype.getActiveGamePath = function (gameIdPath) {
             return '/ActiveGames/json' + gameIdPath;
         };
-        ;
         ApiService.prototype.getEditActiveGamePath = function (gameId) {
             return '/activeGames/edit/#/' + gameId;
         };
@@ -234,7 +233,7 @@ var Shared;
         };
         ApiService.$inject = ['$http', '$q'];
         return ApiService;
-    }());
+    })();
     Shared.ApiService = ApiService;
 })(Shared || (Shared = {}));
 //# sourceMappingURL=ApiService.js.map

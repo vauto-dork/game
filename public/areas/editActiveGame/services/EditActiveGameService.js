@@ -1,19 +1,12 @@
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
 var EditActiveGame;
 (function (EditActiveGame) {
-    var EditActiveGameService = (function (_super) {
-        __extends(EditActiveGameService, _super);
-        function EditActiveGameService($location, $q, $timeout, apiService) {
-            _super.call(this, $timeout);
+    var EditActiveGameService = (function () {
+        function EditActiveGameService($location, $q, apiService) {
             this.$location = $location;
             this.$q = $q;
             this.apiService = apiService;
             this.eventPlaylistUpdate = "eventPlaylistUpdate";
-            this.errorMessages = [];
+            this.errorMessageList = [];
         }
         Object.defineProperty(EditActiveGameService.prototype, "datePlayed", {
             get: function () {
@@ -37,9 +30,13 @@ var EditActiveGame;
             enumerable: true,
             configurable: true
         });
-        EditActiveGameService.prototype.getErrorMessages = function () {
-            return this.errorMessages;
-        };
+        Object.defineProperty(EditActiveGameService.prototype, "errorMessages", {
+            get: function () {
+                return this.errorMessageList;
+            },
+            enumerable: true,
+            configurable: true
+        });
         Object.defineProperty(EditActiveGameService.prototype, "players", {
             get: function () {
                 return this.activeGame.players;
@@ -128,10 +125,13 @@ var EditActiveGame;
             }
             return def.promise;
         };
-        EditActiveGameService.prototype.finalize = function () {
+        EditActiveGameService.prototype.finalize = function (addBonusPoints) {
             var _this = this;
             var def = this.$q.defer();
             if (this.filterRemovedPlayers() && this.hasRanks()) {
+                if (addBonusPoints) {
+                    this.addBonusPoints();
+                }
                 this.apiService.finalizeGame(this.activeGame).then(function () {
                     _this.apiService.deleteActiveGame(_this.gameIdPath).then(function () {
                         def.resolve();
@@ -149,15 +149,29 @@ var EditActiveGame;
             }
             return def.promise;
         };
+        EditActiveGameService.prototype.addBonusPoints = function () {
+            var numPlayers = this.players.length;
+            this.players.forEach(function (player) {
+                if (player.rank === 1) {
+                    player.points += numPlayers - 1;
+                }
+                if (player.rank === 2) {
+                    player.points += numPlayers - 2;
+                }
+                if (player.rank === 3) {
+                    player.points += numPlayers - 3;
+                }
+            });
+        };
         EditActiveGameService.prototype.addErrorMessage = function (message, clear) {
             if (clear === void 0) { clear = true; }
             if (clear) {
-                this.clearErrorMessages();
+                this.clearerrorMessageList();
             }
-            this.errorMessages.push(message);
+            this.errorMessageList.push(message);
         };
-        EditActiveGameService.prototype.clearErrorMessages = function () {
-            this.errorMessages = [];
+        EditActiveGameService.prototype.clearerrorMessageList = function () {
+            this.errorMessageList = [];
         };
         EditActiveGameService.prototype.filterRemovedPlayers = function () {
             if (this.players.length < 3) {
@@ -171,7 +185,7 @@ var EditActiveGame;
             return true;
         };
         EditActiveGameService.prototype.hasRanks = function () {
-            this.clearErrorMessages();
+            this.clearerrorMessageList();
             var rank1 = this.players.filter(function (value) { return value.rank === 1; }).length;
             var rank2 = this.players.filter(function (value) { return value.rank === 2; }).length;
             var rank3 = this.players.filter(function (value) { return value.rank === 3; }).length;
@@ -191,9 +205,9 @@ var EditActiveGame;
             }
             return hasRanks;
         };
-        EditActiveGameService.$inject = ['$location', '$q', '$timeout', 'apiService'];
+        EditActiveGameService.$inject = ['$location', '$q', 'apiService'];
         return EditActiveGameService;
-    }(Shared.PubSubServiceBase));
+    })();
     EditActiveGame.EditActiveGameService = EditActiveGameService;
 })(EditActiveGame || (EditActiveGame = {}));
 //# sourceMappingURL=EditActiveGameService.js.map

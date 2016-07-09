@@ -30,7 +30,7 @@ var Shared;
         };
         DatePickerController.$inject = ['$scope'];
         return DatePickerController;
-    }());
+    })();
     Shared.DatePickerController = DatePickerController;
 })(Shared || (Shared = {}));
 //# sourceMappingURL=DatePickerDirective.js.map

@@ -110,7 +110,7 @@ var CreateGame;
         };
         CreateGameService.$inject = ['$q', 'apiService'];
         return CreateGameService;
-    }());
+    })();
     CreateGame.CreateGameService = CreateGameService;
 })(CreateGame || (CreateGame = {}));
 //# sourceMappingURL=CreateGameService.js.map

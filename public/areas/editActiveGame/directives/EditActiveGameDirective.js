@@ -63,10 +63,7 @@ var EditActiveGame;
                     this.scrollToTop();
                     break;
                 case State.Ready:
-                    if (this.showModifyPlayers) {
-                        this.editActiveGameService.toggleModifyPlayers();
-                    }
-                    this.scrollToTop();
+                    this.ready();
                     break;
                 case State.Saving:
                     this.saveGame();
@@ -75,6 +72,12 @@ var EditActiveGame;
                     this.finalizeGame();
                     break;
             }
+        };
+        EditActiveGameController.prototype.ready = function () {
+            if (this.showModifyPlayers) {
+                this.editActiveGameService.toggleModifyPlayers();
+            }
+            this.scrollToTop();
         };
         EditActiveGameController.prototype.errorHandler = function (data, errorMessage) {
             this.addAlert('danger', errorMessage);
@@ -89,9 +92,6 @@ var EditActiveGame;
         };
         EditActiveGameController.prototype.clearAlerts = function () {
             this.alerts = [];
-        };
-        EditActiveGameController.prototype.returnToActiveGames = function () {
-            this.$window.location.href = '/ActiveGames';
         };
         EditActiveGameController.prototype.scrollToTop = function () {
             var _this = this;
@@ -127,7 +127,7 @@ var EditActiveGame;
         };
         EditActiveGameController.prototype.finalizeGame = function () {
             var _this = this;
-            this.editActiveGameService.finalize().then(function () {
+            this.editActiveGameService.finalize(true).then(function () {
                 _this.$window.location.href = '/GameHistory';
             }, function () {
                 _this.saveReject();
@@ -137,7 +137,7 @@ var EditActiveGame;
             var _this = this;
             // get error messages and display alerts
             this.clearAlerts();
-            this.editActiveGameService.getErrorMessages().forEach(function (msg) { _this.addAlert('danger', msg); });
+            this.editActiveGameService.errorMessages.forEach(function (msg) { _this.addAlert('danger', msg); });
             this.changeState(State.Ready);
         };
         // UI Hookups
@@ -155,7 +155,7 @@ var EditActiveGame;
         };
         EditActiveGameController.$inject = ['$scope', '$timeout', '$window', 'editActiveGameService'];
         return EditActiveGameController;
-    }());
+    })();
     EditActiveGame.EditActiveGameController = EditActiveGameController;
 })(EditActiveGame || (EditActiveGame = {}));
 //# sourceMappingURL=EditActiveGameDirective.js.map

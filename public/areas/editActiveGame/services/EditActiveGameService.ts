@@ -4,19 +4,19 @@ module EditActiveGame {
         players: Shared.IGamePlayer[];
         curatedNewPlayers: Shared.INewGamePlayer[];
         showModifyPlayers: boolean;
+        errorMessages: string[];
 
         addPlayer(player: Shared.IGamePlayer): void;
         removePlayer(player: Shared.IGamePlayer): void;
         playerIndex(playerId: string): number;
         toggleModifyPlayers(): void;
-        getErrorMessages(): string[];
         getActiveGame(): ng.IPromise<void>;
         save(): ng.IPromise<void>;
-        finalize(): ng.IPromise<void>;
+        finalize(addBonusPoints?: boolean): ng.IPromise<void>;
     }
 
-    export class EditActiveGameService extends Shared.PubSubServiceBase implements IEditActiveGameService {
-        public static $inject: string[] = ['$location', '$q', '$timeout', 'apiService'];
+    export class EditActiveGameService implements IEditActiveGameService {
+        public static $inject: string[] = ['$location', '$q', 'apiService'];
         private imLoading: ng.IPromise<void>;
         private gameIdPath: string;
         private activeGame: Shared.IGame;
@@ -25,7 +25,7 @@ module EditActiveGame {
         private showModifyPlayersScreen: boolean;
 
         private eventPlaylistUpdate: string = "eventPlaylistUpdate";
-        private errorMessages: string[] = [];
+        private errorMessageList: string[] = [];
 
         public get datePlayed(): Date {
             if (this.activeGame && this.activeGame.datePlayed) {
@@ -44,9 +44,9 @@ module EditActiveGame {
         public get showModifyPlayers(): boolean {
             return this.showModifyPlayersScreen;
         }
-        
-        public getErrorMessages(): string[] {
-            return this.errorMessages;
+
+        public get errorMessages(): string[] {
+            return this.errorMessageList;
         }
 
         public get players(): Shared.IGamePlayer[] {
@@ -63,18 +63,16 @@ module EditActiveGame {
 
         constructor(private $location: ng.ILocationService,
             private $q: ng.IQService,
-            $timeout: ng.ITimeoutService,
             private apiService: Shared.IApiService) {
-            super($timeout);
         }
 
         public toggleModifyPlayers(): void {
             this.showModifyPlayersScreen = !this.showModifyPlayersScreen;
         }
-        
+
         public getActiveGame(): ng.IPromise<void> {
             var def = this.$q.defer<void>();
-            
+
             if (this.$location.path() !== undefined || this.$location.path() !== '') {
                 this.gameIdPath = this.$location.path();
             }
@@ -136,7 +134,7 @@ module EditActiveGame {
             this.players.splice(index, 1);
             this.curateNewPlayerList();
         }
-        
+
         public save(): ng.IPromise<void> {
             var def = this.$q.defer<void>();
 
@@ -153,10 +151,14 @@ module EditActiveGame {
             return def.promise;
         }
 
-        public finalize(): ng.IPromise<void> {
+        public finalize(addBonusPoints?: boolean): ng.IPromise<void> {
             var def = this.$q.defer<void>();
 
             if (this.filterRemovedPlayers() && this.hasRanks()) {
+                if (addBonusPoints) {
+                    this.addBonusPoints();
+                }
+
                 this.apiService.finalizeGame(this.activeGame).then(() => {
                     this.apiService.deleteActiveGame(this.gameIdPath).then(() => {
                         def.resolve();
@@ -171,20 +173,35 @@ module EditActiveGame {
             } else {
                 def.reject();
             }
-            
+
             return def.promise;
         }
-        
-        private addErrorMessage(message: string, clear: boolean = true) {
-            if(clear) {
-                this.clearErrorMessages();
-            }
-            
-            this.errorMessages.push(message);
+
+        private addBonusPoints(): void {
+            var numPlayers = this.players.length;
+            this.players.forEach(player => {
+                if (player.rank === 1) {
+                    player.points += numPlayers - 1;
+                }
+                if (player.rank === 2) {
+                    player.points += numPlayers - 2;
+                }
+                if (player.rank === 3) {
+                    player.points += numPlayers - 3;
+                }
+            });
         }
-        
-        private clearErrorMessages() {
-            this.errorMessages = [];
+
+        private addErrorMessage(message: string, clear: boolean = true) {
+            if (clear) {
+                this.clearerrorMessageList();
+            }
+
+            this.errorMessageList.push(message);
+        }
+
+        private clearerrorMessageList() {
+            this.errorMessageList = [];
         }
 
         private filterRemovedPlayers(): boolean {
@@ -192,7 +209,7 @@ module EditActiveGame {
                 this.addErrorMessage('Game cannot have less than three players.');
                 return false;
             }
-            
+
             // Convert blank points to zeroes.
             this.players.forEach((player) => {
                 player.points = !player.points ? 0 : player.points;
@@ -200,33 +217,33 @@ module EditActiveGame {
 
             return true;
         }
-        
+
         private hasRanks(): boolean {
-            this.clearErrorMessages();
-            
-            var rank1 = this.players.filter((value) => {return value.rank === 1;}).length;
-            var rank2 = this.players.filter((value) => {return value.rank === 2;}).length;
-            var rank3 = this.players.filter((value) => {return value.rank === 3;}).length;
-            
-            if(rank1 !== 1) {
+            this.clearerrorMessageList();
+
+            var rank1 = this.players.filter(value => { return value.rank === 1; }).length;
+            var rank2 = this.players.filter(value => { return value.rank === 2; }).length;
+            var rank3 = this.players.filter(value => { return value.rank === 3; }).length;
+
+            if (rank1 !== 1) {
                 this.addErrorMessage('No winner selected.', false);
             }
-            
-            if(rank2 !== 1) {
+
+            if (rank2 !== 1) {
                 this.addErrorMessage('No second place selected.', false);
             }
-            
-            if(rank3 !== 1) {
+
+            if (rank3 !== 1) {
                 this.addErrorMessage('No third place selected.', false);
             }
-            
+
             var hasRanks = (rank1 === 1 && rank2 === 1 && rank3 === 1);
-            
-            if(hasRanks) {
+
+            if (hasRanks) {
                 var winner = this.players.filter((player) => { return player.rank === 1; });
                 this.activeGame.winner = winner[0].player;
             }
-            
+
             return hasRanks;
         }
     }
