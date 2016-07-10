@@ -15,22 +15,22 @@ var CreateGame;
             this.$scope = $scope;
             this.createGameService = createGameService;
         }
-        Object.defineProperty(SelectedPlayersController.prototype, "selectedPlayers", {
+        Object.defineProperty(SelectedPlayersController.prototype, "players", {
             get: function () {
-                return this.createGameService.getSelectedPlayers();
+                return this.createGameService.playersSorted;
             },
             enumerable: true,
             configurable: true
         });
         Object.defineProperty(SelectedPlayersController.prototype, "hasMinimumPlayers", {
             get: function () {
-                return this.selectedPlayers.length >= 3;
+                return this.createGameService.hasMinimumPlayers;
             },
             enumerable: true,
             configurable: true
         });
         SelectedPlayersController.prototype.removePlayer = function (player) {
-            this.createGameService.deselectPlayer(player);
+            this.createGameService.removePlayer(player);
         };
         SelectedPlayersController.$inject = ['$scope', 'createGameService'];
         return SelectedPlayersController;

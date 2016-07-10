@@ -5,7 +5,6 @@ var EditActiveGame;
             this.$location = $location;
             this.$q = $q;
             this.apiService = apiService;
-            this.eventPlaylistUpdate = "eventPlaylistUpdate";
             this.errorMessageList = [];
         }
         Object.defineProperty(EditActiveGameService.prototype, "datePlayed", {
@@ -90,9 +89,7 @@ var EditActiveGame;
             return def.promise;
         };
         EditActiveGameService.prototype.curateNewPlayerList = function () {
-            // Get the nested player before getting ID because IDs don't match
             var currentPlayerIds = this.players.map(function (p) { return p.playerId; });
-            // Get players that are not in the current playlist.
             this.curatedPlayersList = this.allPlayers.filter(function (player) {
                 return currentPlayerIds.indexOf(player.playerId) === -1;
             });
@@ -178,7 +175,6 @@ var EditActiveGame;
                 this.addErrorMessage('Game cannot have less than three players.');
                 return false;
             }
-            // Convert blank points to zeroes.
             this.players.forEach(function (player) {
                 player.points = !player.points ? 0 : player.points;
             });

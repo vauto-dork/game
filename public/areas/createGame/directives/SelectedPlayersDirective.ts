@@ -13,19 +13,19 @@ module CreateGame {
     export class SelectedPlayersController {
         public static $inject: string[] = ['$scope', 'createGameService'];
         
-        private get selectedPlayers(): Shared.INewGamePlayer[] {
-            return this.createGameService.getSelectedPlayers();
+        private get players(): Shared.INewGamePlayer[] {
+            return this.createGameService.playersSorted;
         }
 
         private get hasMinimumPlayers(): boolean {
-            return this.selectedPlayers.length >= 3;
+            return this.createGameService.hasMinimumPlayers;
         }
 
         constructor(private $scope: ng.IScope, private createGameService: ICreateGameService) {
         }
         
         private removePlayer(player: Shared.INewGamePlayer) {
-            this.createGameService.deselectPlayer(player);
+            this.createGameService.removePlayer(player);
         }
     }
 }

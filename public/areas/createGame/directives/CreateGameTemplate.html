@@ -7,12 +7,12 @@
 
 <div ng-if="ctrl.showPlayers">
 
-    <div class="container" uib-collapse="ctrl.showModifyPlayers">
+    <div class="container">
         <div class="row">
 
             <div class="col-xs-12 col-md-7">
                 <div class="status-banner">
-                    <player-selector players="ctrl.unselectedPlayers" on-selected="ctrl.onSelected(data)"></player-selector>
+                    <player-selector players="ctrl.curatedNewPlayers" on-selected="ctrl.addPlayer(data)"></player-selector>
                 </div>
 
                 <div class="playlist-instructions">
@@ -30,13 +30,13 @@
                     <div class="btn-group btn-group-justified" role="group">
 
                         <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-danger btn-lg" ng-click="ctrl.removeAll()" ng-disabled="!ctrl.hasSelectedPlayers">
+                            <button type="button" class="btn btn-danger btn-lg" ng-click="ctrl.reset()" ng-disabled="!ctrl.hasSelectedPlayers">
                                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Reset
                             </button>
                         </div>
 
                         <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-success btn-lg" ng-click="ctrl.startGame()" ng-disabled="ctrl.disableGameCreation">
+                            <button type="button" class="btn btn-success btn-lg" ng-click="ctrl.createGame()" ng-disabled="ctrl.disableGameCreation">
                                 <span class="glyphicon glyphicon-play" aria-hidden="true"></span> Create
                             </button>
                         </div>
@@ -54,14 +54,14 @@
                     <div class="btn-group btn-group-justified" role="group">
                         
                         <label class="btn btn-info"
-                               ng-model="ctrl.orderModel"
+                               ng-model="ctrl.sortOrder"
                                uib-btn-radio="'Selected'"
                                ng-click="ctrl.useThisOrder()">Sort by Order Added</label>
 
                         <label class="btn btn-info"
-                               ng-model="ctrl.orderModel"
+                               ng-model="ctrl.sortOrder"
                                uib-btn-radio="'Rating'"
-                               ng-click="ctrl.useGameOrder()">Sort by Ranking</label>
+                               ng-click="ctrl.useGameOrder()">Sort by Game Order</label>
 
                     </div>
                 </div>

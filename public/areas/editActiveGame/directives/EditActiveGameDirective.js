@@ -135,12 +135,10 @@ var EditActiveGame;
         };
         EditActiveGameController.prototype.saveReject = function () {
             var _this = this;
-            // get error messages and display alerts
             this.clearAlerts();
             this.editActiveGameService.errorMessages.forEach(function (msg) { _this.addAlert('danger', msg); });
             this.changeState(State.Ready);
         };
-        // UI Hookups
         EditActiveGameController.prototype.save = function () {
             this.changeState(State.Saving);
         };

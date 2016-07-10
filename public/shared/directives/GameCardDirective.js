@@ -58,7 +58,6 @@ var Shared;
             console.error(data);
             this.changeState(State.Error);
         };
-        // Dont call directly. Change state to "Deleting" instead.
         GameCardController.prototype.delete = function () {
             var _this = this;
             this.apiService.deleteActiveGame(this.game.getIdAsPath()).then(function () {
@@ -67,7 +66,6 @@ var Shared;
                 _this.errorHandler(data, 'Error deleting game!');
             });
         };
-        // Dont call directly. Change state to "Copy" instead.
         GameCardController.prototype.copy = function () {
             var _this = this;
             var newGame = new Shared.Game();

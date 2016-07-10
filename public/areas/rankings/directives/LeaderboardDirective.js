@@ -29,7 +29,6 @@ var Rankings;
                 var lastGame = new Date(_this.lastDatePlayed);
                 var lastGameMonth = lastGame.getMonth();
                 var lastGameYear = lastGame.getFullYear();
-                // If the last played game is in the current month and year, then there is at least one game this month.
                 _this.noGamesThisMonth = !(_this.currentMonth === lastGameMonth && _this.currentYear === lastGameYear);
             }, function () {
                 debugger;

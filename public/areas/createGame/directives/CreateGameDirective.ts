@@ -24,42 +24,38 @@ module CreateGame {
 		private showErrorMessage: boolean = false;
 		private showPlayers: boolean = false;
 		
-		private selectedPlayers: Shared.INewGamePlayer[] = [];
-		private unselectedPlayers: Shared.INewGamePlayer[] = [];
-		
 		private orderedPlayersLoaded: boolean = false;
 		private disableOrderedPlayers: boolean = false;
 
 		private datePlayed: Date = null;
 		
-		private get firstGameOfMonth(): boolean {
-			return this.createGameService.isFirstGameOfMonth();
-		}
-
-        private get orderModel(): string {
-            if(this.createGameService.playerSort === NewGameSort.Rating) {
+        private get sortOrder(): string {
+            if(this.createGameService.sortOrder === NewGameSort.Rating) {
                 return 'Rating';
             } else {
                 return 'Selected';
             }
         }
-
+        
 		private get hasDate(): boolean {
 			return this.datePlayed !== null && this.datePlayed !== undefined && this.datePlayed.toISOString() !== "";
 		}
-        
-        private set orderModel(value: string) {
-            // do nothing
-        }
+
+		private get curatedNewPlayers(): Shared.INewGamePlayer[] {
+			return this.createGameService.curatedNewPlayers;
+		}
+
+		private get hasSelectedPlayers(): boolean {
+			return this.createGameService.numPlayers > 0;
+		}
+		
+		private get disableGameCreation(): boolean {
+			return !this.hasDate || !this.createGameService.hasMinimumPlayers;
+		}
         		
         constructor(private $scope: ng.IScope, private $window: ng.IWindowService, private createGameService: ICreateGameService) {
 			this.createGameService.init().then(() => {
-				this.updatePlayers();
 				this.changeState(State.Loaded);
-			});
-			
-			$scope.$watch(() => this.createGameService.numberSelectedPlayers(), () => {
-				this.updatePlayers();
 			});
         }
 
@@ -75,37 +71,16 @@ module CreateGame {
 			}
 		}
 		
-		private getPlayersInGameOrder(): void {
-			this.createGameService.playerSort = NewGameSort.Rating;
+		private addPlayer(data: Shared.INewGamePlayer): void {
+			this.createGameService.addPlayer(data);
 		}
 		
-		private onSelected(data: Shared.INewGamePlayer): void {
-			this.createGameService.selectPlayer(data);
-		}
-		
-		private get hasSelectedPlayers(): boolean {
-			return this.createGameService.numberSelectedPlayers() > 0;
-		}
-		
-		private get disableGameCreation(): boolean {
-			return !this.hasDate || this.createGameService.numberSelectedPlayers() < 3;
-		}
-
-		private get sortByRating(): boolean {
-			return this.createGameService.playerSort === NewGameSort.Rating;
-		}
-		
-		// Cannot use setter/getter with the player selector
-		private updatePlayers(): void {
-			this.selectedPlayers = this.createGameService.getSelectedPlayers();
-			this.unselectedPlayers = this.createGameService.getUnselectedPlayers();
-		}
-		
-		private removeAll(): void {
+		private reset(): void {
+			this.datePlayed = null;
 			this.createGameService.reset();
 		}
 
-		private startGame(): void {
+		private createGame(): void {
 			this.changeState(State.CreatingGame);
 		}
 
@@ -122,11 +97,11 @@ module CreateGame {
 		}
 
 		private useThisOrder(): void {
-			this.createGameService.playerSort = NewGameSort.Selected;
+			this.createGameService.sortOrder = NewGameSort.Selected;
 		}
         
         private useGameOrder(): void {
-			this.createGameService.playerSort = NewGameSort.Rating;
+			this.createGameService.sortOrder = NewGameSort.Rating;
 		}
     }
 }

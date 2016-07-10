@@ -11,11 +11,11 @@ var CreateGame;
             this.apiService = apiService;
             this.firstGameOfMonth = false;
             this.players = [];
-            this.selected = [];
+            this.gameOrderSortedPlayers = [];
             this.sort = NewGameSort.Selected;
             this.getPlayers();
         }
-        Object.defineProperty(CreateGameService.prototype, "playerSort", {
+        Object.defineProperty(CreateGameService.prototype, "sortOrder", {
             get: function () {
                 return this.sort;
             },
@@ -25,84 +25,91 @@ var CreateGame;
             enumerable: true,
             configurable: true
         });
+        Object.defineProperty(CreateGameService.prototype, "playersSorted", {
+            get: function () {
+                if (this.sort === NewGameSort.Selected) {
+                    return this.players;
+                }
+                else {
+                    return this.gameOrderSortedPlayers;
+                }
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(CreateGameService.prototype, "curatedNewPlayers", {
+            get: function () {
+                return this.curatedPlayersList;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(CreateGameService.prototype, "hasMinimumPlayers", {
+            get: function () {
+                return this.players.length >= 3;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(CreateGameService.prototype, "numPlayers", {
+            get: function () {
+                return this.players.length;
+            },
+            enumerable: true,
+            configurable: true
+        });
         CreateGameService.prototype.getPlayers = function () {
             var _this = this;
             var def = this.$q.defer();
             this.apiService.getPlayersForNewGame().then(function (data) {
-                _this.firstGameOfMonth = data.firstGameOfMonth;
-                _this.players = data.players;
-                _this.reset();
+                _this.initializeData(data.firstGameOfMonth, data.players);
                 def.resolve();
             }, function () {
-                _this.firstGameOfMonth = true;
-                _this.players = [];
-                _this.reset();
+                _this.initializeData(true, []);
                 def.resolve();
             });
             this.playerLoadPromise = def.promise;
         };
-        CreateGameService.prototype.isPlayerSelected = function (player) {
-            return this.selected.indexOf(player._id) > -1;
+        CreateGameService.prototype.initializeData = function (firstGameOfMonth, players) {
+            this.firstGameOfMonth = firstGameOfMonth;
+            this.allPlayers = players;
+            this.reset();
+            this.curateNewPlayerList();
+        };
+        CreateGameService.prototype.curateNewPlayerList = function () {
+            var currentPlayerIds = this.players.map(function (p) { return p.playerId; });
+            this.curatedPlayersList = this.allPlayers.filter(function (player) {
+                return currentPlayerIds.indexOf(player.playerId) === -1;
+            });
+            this.gameOrderSortedPlayers = angular.copy(this.players);
+            this.gameOrderSortedPlayers.sort(function (a, b) {
+                return b.rating - a.rating;
+            });
         };
         CreateGameService.prototype.init = function () {
             return this.playerLoadPromise;
         };
-        CreateGameService.prototype.isFirstGameOfMonth = function () {
-            return this.firstGameOfMonth;
+        CreateGameService.prototype.playerIndex = function (playerId) {
+            return this.players.map(function (p) { return p.playerId; }).indexOf(playerId);
         };
-        CreateGameService.prototype.getAllPlayers = function () {
-            return this.players;
+        CreateGameService.prototype.addPlayer = function (player) {
+            this.players.push(player);
+            this.curateNewPlayerList();
         };
-        CreateGameService.prototype.getSelectedPlayers = function () {
-            var _this = this;
-            var selection = [];
-            this.selected.forEach(function (playerId) {
-                var found = _this.players.filter(function (player) {
-                    return player.playerId === playerId;
-                });
-                if (found.length === 1) {
-                    selection.push(found[0]);
-                }
-            });
-            if (this.sort === NewGameSort.Rating) {
-                selection.sort(function (a, b) {
-                    return b.rating - a.rating;
-                });
-            }
-            return selection;
-        };
-        CreateGameService.prototype.getUnselectedPlayers = function () {
-            var _this = this;
-            // This function just returns the list alphabetically.
-            return this.players.filter(function (player) {
-                return !_this.isPlayerSelected(player.player);
-            });
-        };
-        CreateGameService.prototype.selectPlayer = function (player) {
-            if (!this.isPlayerSelected(player.player)) {
-                this.selected.push(player.playerId);
-            }
-        };
-        CreateGameService.prototype.deselectPlayer = function (player) {
-            var index = this.selected.indexOf(player.playerId);
-            if (index > -1) {
-                this.selected.splice(index, 1);
-            }
+        CreateGameService.prototype.removePlayer = function (player) {
+            var index = this.playerIndex(player.playerId);
+            this.players.splice(index, 1);
+            this.curateNewPlayerList();
         };
         CreateGameService.prototype.reset = function () {
-            this.selected = [];
-            this.playerSort = NewGameSort.Selected;
-        };
-        CreateGameService.prototype.numberSelectedPlayers = function () {
-            if (!this.selected) {
-                return 0;
-            }
-            return this.selected.length;
+            this.players = [];
+            this.curateNewPlayerList();
+            this.sortOrder = NewGameSort.Selected;
         };
         CreateGameService.prototype.createNewActiveGame = function (datePlayed) {
             var game = new Shared.Game();
             game.datePlayed = datePlayed.toISOString();
-            game.players = this.getSelectedPlayers().map(function (player) {
+            game.players = this.playersSorted.map(function (player) {
                 var gamePlayer = new Shared.GamePlayer();
                 gamePlayer.player = player.player;
                 return gamePlayer;

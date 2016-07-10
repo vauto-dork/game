@@ -23,8 +23,6 @@ module EditActiveGame {
         private allPlayers: Shared.INewGamePlayer[];
         private curatedPlayersList: Shared.INewGamePlayer[];
         private showModifyPlayersScreen: boolean;
-
-        private eventPlaylistUpdate: string = "eventPlaylistUpdate";
         private errorMessageList: string[] = [];
 
         public get datePlayed(): Date {

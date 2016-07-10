@@ -43,7 +43,6 @@ var ActiveGame;
             console.error(data);
             this.changeState(State.Error);
         };
-        // Dont call directly. Change state to "Loading" instead.
         ActiveGamesController.prototype.getGames = function () {
             var _this = this;
             this.apiService.getAllActiveGames().then(function (data) {
