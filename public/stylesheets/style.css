@@ -1,9 +1,8 @@
-﻿@font-face {
+@font-face {
   font-family: 'Ubuntu';
   font-style: normal;
   font-weight: 400;
   src: local("Ubuntu"), url(/fonts/sDGTilo5QRsfWu6Yc11AXg.woff2) format("woff2"), url(/fonts/_xyN3apAT_yRRDeqB3sPRg.woff) format("woff"); }
-
 html,
 body {
   font-family: 'Ubuntu', sans-serif;
@@ -74,13 +73,11 @@ hr {
     .navbar-collapse li > a {
       padding-top: 0.5em;
       padding-bottom: 0.5em; } }
-
 @media (min-width: 768px) {
   .navbar-collapse {
     font-size: 1.4em; }
     .navbar-collapse li > a {
       border-radius: 4px; } }
-
 .navbar-collapse {
   -moz-box-shadow: inset 0px 8px 9px -6px rgba(0, 0, 0, 0.5);
   -webkit-box-shadow: inset 0px 8px 9px -6px rgba(0, 0, 0, 0.5);
@@ -195,7 +192,6 @@ input.ng-touched.ng-invalid {
   border-left: 2px solid #e4e9ef;
   display: inline-block;
   white-space: nowrap; }
-
 .panel-title .player-name {
   background-color: #4f6885;
   color: #e4e9ef;
@@ -401,9 +397,12 @@ input.ng-touched.ng-invalid {
     color: #7a8394; }
 
 .playlist-instructions {
-  padding: 1em;
-  text-align: center;
+  padding: 0 1em 1em 1em;
   font-size: 1.4em; }
+
+.selected-players-list {
+  border: 2px solid #7a8394;
+  border-radius: 5px; }
 
 .player-selector-filter {
   padding: 0.25em;
@@ -472,3 +471,4 @@ input.ng-touched.ng-invalid {
     font-size: 14px;
     margin-bottom: 0; }
 
+/*# sourceMappingURL=style.css.map */

@@ -99,8 +99,9 @@ var CreateGame;
             }
             return this.selected.length;
         };
-        CreateGameService.prototype.createNewActiveGame = function () {
+        CreateGameService.prototype.createNewActiveGame = function (datePlayed) {
             var game = new Shared.Game();
+            game.datePlayed = datePlayed.toISOString();
             game.players = this.getSelectedPlayers().map(function (player) {
                 var gamePlayer = new Shared.GamePlayer();
                 gamePlayer.player = player.player;

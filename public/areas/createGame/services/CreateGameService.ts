@@ -1,7 +1,8 @@
 module CreateGame {
 	export interface ICreateGameService {
-		init(): ng.IPromise<void>;
 		playerSort: NewGameSort;
+
+		init(): ng.IPromise<void>;		
 		isFirstGameOfMonth(): boolean;
 		getAllPlayers(): Shared.INewGamePlayer[];
 		getSelectedPlayers(): Shared.INewGamePlayer[];
@@ -10,7 +11,7 @@ module CreateGame {
 		deselectPlayer(player: Shared.INewGamePlayer): void;
 		reset(): void;
 		numberSelectedPlayers(): number;
-		createNewActiveGame(): ng.IPromise<string>;
+		createNewActiveGame(datePlayed: Date): ng.IPromise<string>;
 	}
 
 	export enum NewGameSort {
@@ -128,8 +129,9 @@ module CreateGame {
 			return this.selected.length;
 		}
 
-		public createNewActiveGame(): ng.IPromise<string> {			
+		public createNewActiveGame(datePlayed: Date): ng.IPromise<string> {			
 			var game = new Shared.Game();
+			game.datePlayed = datePlayed.toISOString();
 			game.players = this.getSelectedPlayers().map((player) => {
 				var gamePlayer = new Shared.GamePlayer();
 				gamePlayer.player = player.player;

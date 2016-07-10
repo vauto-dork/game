@@ -30,6 +30,7 @@ var CreateGame;
             this.unselectedPlayers = [];
             this.orderedPlayersLoaded = false;
             this.disableOrderedPlayers = false;
+            this.datePlayed = null;
             this.createGameService.init().then(function () {
                 _this.updatePlayers();
                 _this.changeState(State.Loaded);
@@ -41,6 +42,28 @@ var CreateGame;
         Object.defineProperty(CreateGameController.prototype, "firstGameOfMonth", {
             get: function () {
                 return this.createGameService.isFirstGameOfMonth();
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(CreateGameController.prototype, "orderModel", {
+            get: function () {
+                if (this.createGameService.playerSort === CreateGame.NewGameSort.Rating) {
+                    return 'Rating';
+                }
+                else {
+                    return 'Selected';
+                }
+            },
+            set: function (value) {
+                // do nothing
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(CreateGameController.prototype, "hasDate", {
+            get: function () {
+                return this.datePlayed !== null && this.datePlayed !== undefined && this.datePlayed.toISOString() !== "";
             },
             enumerable: true,
             configurable: true
@@ -61,7 +84,6 @@ var CreateGame;
         CreateGameController.prototype.onSelected = function (data) {
             this.createGameService.selectPlayer(data);
         };
-        ;
         Object.defineProperty(CreateGameController.prototype, "hasSelectedPlayers", {
             get: function () {
                 return this.createGameService.numberSelectedPlayers() > 0;
@@ -69,10 +91,16 @@ var CreateGame;
             enumerable: true,
             configurable: true
         });
-        ;
         Object.defineProperty(CreateGameController.prototype, "disableGameCreation", {
             get: function () {
-                return this.createGameService.numberSelectedPlayers() < 3;
+                return !this.hasDate || this.createGameService.numberSelectedPlayers() < 3;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(CreateGameController.prototype, "sortByRating", {
+            get: function () {
+                return this.createGameService.playerSort === CreateGame.NewGameSort.Rating;
             },
             enumerable: true,
             configurable: true
@@ -85,20 +113,26 @@ var CreateGame;
         CreateGameController.prototype.removeAll = function () {
             this.createGameService.reset();
         };
-        ;
         CreateGameController.prototype.startGame = function () {
             this.changeState(State.CreatingGame);
         };
-        ;
         CreateGameController.prototype.createNewActiveGame = function () {
             var _this = this;
-            this.createGameService.createNewActiveGame().then(function (editUrl) {
+            this.createGameService.createNewActiveGame(this.datePlayed).then(function (editUrl) {
                 _this.$window.location.href = editUrl;
             }, function () {
                 _this.changeState(State.Error);
             });
         };
-        ;
+        CreateGameController.prototype.useCurrentDateTime = function () {
+            this.datePlayed = new Date();
+        };
+        CreateGameController.prototype.useThisOrder = function () {
+            this.createGameService.playerSort = CreateGame.NewGameSort.Selected;
+        };
+        CreateGameController.prototype.useGameOrder = function () {
+            this.createGameService.playerSort = CreateGame.NewGameSort.Rating;
+        };
         CreateGameController.$inject = ['$scope', '$window', 'createGameService'];
         return CreateGameController;
     })();

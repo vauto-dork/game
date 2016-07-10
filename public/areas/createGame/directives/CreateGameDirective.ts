@@ -29,11 +29,29 @@ module CreateGame {
 		
 		private orderedPlayersLoaded: boolean = false;
 		private disableOrderedPlayers: boolean = false;
+
+		private datePlayed: Date = null;
 		
 		private get firstGameOfMonth(): boolean {
 			return this.createGameService.isFirstGameOfMonth();
 		}
-		
+
+        private get orderModel(): string {
+            if(this.createGameService.playerSort === NewGameSort.Rating) {
+                return 'Rating';
+            } else {
+                return 'Selected';
+            }
+        }
+
+		private get hasDate(): boolean {
+			return this.datePlayed !== null && this.datePlayed !== undefined && this.datePlayed.toISOString() !== "";
+		}
+        
+        private set orderModel(value: string) {
+            // do nothing
+        }
+        		
         constructor(private $scope: ng.IScope, private $window: ng.IWindowService, private createGameService: ICreateGameService) {
 			this.createGameService.init().then(() => {
 				this.updatePlayers();
@@ -63,14 +81,18 @@ module CreateGame {
 		
 		private onSelected(data: Shared.INewGamePlayer): void {
 			this.createGameService.selectPlayer(data);
-		};
+		}
 		
 		private get hasSelectedPlayers(): boolean {
 			return this.createGameService.numberSelectedPlayers() > 0;
-		};
+		}
 		
 		private get disableGameCreation(): boolean {
-			return this.createGameService.numberSelectedPlayers() < 3;
+			return !this.hasDate || this.createGameService.numberSelectedPlayers() < 3;
+		}
+
+		private get sortByRating(): boolean {
+			return this.createGameService.playerSort === NewGameSort.Rating;
 		}
 		
 		// Cannot use setter/getter with the player selector
@@ -81,18 +103,30 @@ module CreateGame {
 		
 		private removeAll(): void {
 			this.createGameService.reset();
-		};
+		}
 
 		private startGame(): void {
 			this.changeState(State.CreatingGame);
-		};
+		}
 
 		private createNewActiveGame() {
-			this.createGameService.createNewActiveGame().then(editUrl => {
+			this.createGameService.createNewActiveGame(this.datePlayed).then(editUrl => {
 				this.$window.location.href = editUrl;
 			}, () => {
 				this.changeState(State.Error);
 			});
-		};
+		}
+
+		private useCurrentDateTime(): void {
+			this.datePlayed = new Date();
+		}
+
+		private useThisOrder(): void {
+			this.createGameService.playerSort = NewGameSort.Selected;
+		}
+        
+        private useGameOrder(): void {
+			this.createGameService.playerSort = NewGameSort.Rating;
+		}
     }
 }

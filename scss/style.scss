@@ -52,9 +52,13 @@
 }
 
 .playlist-instructions {
-	padding: 1em;
-	text-align: center;
+	padding: 0 1em 1em 1em;
 	font-size: $font-large;
+}
+
+.selected-players-list {
+	border: 2px solid $gray;
+	border-radius: $card-border-radius;	
 }
 
 .player-selector-filter {

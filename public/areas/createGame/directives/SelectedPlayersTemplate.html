@@ -1,14 +1,3 @@
-<!-- Sort Buttons -->
-
-<div class="btn-row">
-
-	<div class="btn-group btn-group-justified" role="group">
-		
-		<label class="btn btn-info" ng-model="ctrl.orderModel" btn-radio="'Selected'" ng-click="ctrl.useThisOrder()">Use this order</label>
-        <label class="btn btn-info" ng-model="ctrl.orderModel" btn-radio="'Rating'" ng-click="ctrl.useGameOrder()">Use game order</label>
-
-	</div>
-</div>
 
 <!-- Player list -->
 
@@ -25,6 +14,6 @@
 	</div>
 </div>
 
-<div ng-if="ctrl.disablePlaylistCreation()" class="playlist-instructions">
-	<b>At least three players required.</b>
+<div ng-if="!ctrl.hasMinimumPlayers" class="alert alert-danger text-center">
+	At least three players required.
 </div>
