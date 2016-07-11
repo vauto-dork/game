@@ -20,7 +20,7 @@ module Players {
 	}
 
     export class PlayersListController {
-        public static $inject: string[] = ['$scope', '$window', 'apiService'];
+        public static $inject: string[] = ['apiService', 'alertsService'];
 
 		private disableControls: boolean = false;
 		private showError: boolean = false;
@@ -28,13 +28,15 @@ module Players {
 		private showPlayers: boolean = false;
 		private showPlayerEdit: boolean = false;
 
-		private alerts = [];
+        private get alerts(): Shared.IAlert[] {
+            return this.alertsService.alerts;
+        }
 
 		private players: Shared.IPlayer[] = [];
 		private selectedPlayer: Shared.IPlayer;
 		private filter: string = '';
 
-        constructor(private $scope: ng.IScope, private $window: ng.IWindowService, private apiService: Shared.ApiService) {
+        constructor(private apiService: Shared.ApiService, private alertsService: Shared.IAlertsService) {
 			this.changeState(State.Loading);
         }
 
@@ -50,36 +52,24 @@ module Players {
 					this.loadPlayers();
 					break;
 				case State.EditPlayer:
-					this.clearAlerts();
+					this.alertsService.clearAlerts();
 					break;
 				case State.SavingPlayer:
 					this.savePlayer();
 					break;
 				case State.Saved:
-					this.addAlert('success', 'Player saved successfully!');
+					this.alertsService.addAlert('success', 'Player saved successfully!');
 					this.changeState(State.Loading);
 					break;
 			}
 		}
 
 		private errorHandler(data: string, errorMessage: string): void {
-			this.addAlert('danger', errorMessage);
+			this.alertsService.addAlert('danger', errorMessage);
 			console.error(data);
 			this.changeState(State.Error);
 		}
-
-		private closeAlert(index: number): void {
-			this.alerts.splice(index, 1);
-		}
-
-		private addAlert(messageType: string, message: string): void {
-			this.alerts.push({ type: messageType, msg: message });
-		}
-
-		private clearAlerts(): void {
-			this.alerts = [];
-		}
-
+        
 		private loadPlayers(): void {
 			this.apiService.getAllPlayers().then((data: Shared.IPlayer[]) => {
 				this.players = data;
@@ -100,11 +90,7 @@ module Players {
 		private removeFilter(): void {
 			this.filter = '';
 		}
-
-		private scrollToTop(): void {
-			this.$window.scrollTo(0, 0);
-		}
-
+        
 		private editPlayer(player: Shared.IPlayer): void {
 			this.selectedPlayer = player;
 			this.changeState(State.EditPlayer);
@@ -120,8 +106,12 @@ module Players {
 		}
 
 		private reload() {
-			this.clearAlerts();
+			this.alertsService.clearAlerts();
 			this.changeState(State.Loading);
-		}
+        }
+
+        private closeAlert(index: number): void {
+            this.alertsService.closeAlert(index);
+        }
     }
 }

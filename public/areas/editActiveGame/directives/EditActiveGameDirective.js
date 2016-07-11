@@ -21,18 +21,23 @@ var EditActiveGame;
     })(State || (State = {}));
     ;
     var EditActiveGameController = (function () {
-        function EditActiveGameController($scope, $timeout, $window, editActiveGameService) {
-            this.$scope = $scope;
-            this.$timeout = $timeout;
+        function EditActiveGameController($window, editActiveGameService, alertsService) {
             this.$window = $window;
             this.editActiveGameService = editActiveGameService;
+            this.alertsService = alertsService;
             this.showLoading = false;
             this.showError = false;
             this.showScoreForm = false;
             this.disabled = false;
-            this.alerts = [];
             this.changeState(State.Init);
         }
+        Object.defineProperty(EditActiveGameController.prototype, "alerts", {
+            get: function () {
+                return this.alertsService.alerts;
+            },
+            enumerable: true,
+            configurable: true
+        });
         Object.defineProperty(EditActiveGameController.prototype, "showModifyPlaylist", {
             get: function () {
                 return this.editActiveGameService.showModifyPlaylist;
@@ -59,7 +64,7 @@ var EditActiveGame;
                     this.getActiveGame();
                     break;
                 case State.Error:
-                    this.scrollToTop();
+                    this.alertsService.scrollToTop();
                     break;
                 case State.Ready:
                     this.ready();
@@ -76,33 +81,12 @@ var EditActiveGame;
             if (this.showModifyPlaylist) {
                 this.toggleModifyPlaylist();
             }
-            this.scrollToTop();
+            this.alertsService.scrollToTop();
         };
         EditActiveGameController.prototype.errorHandler = function (data, errorMessage) {
-            this.addAlert('danger', errorMessage);
+            this.alertsService.addAlert('danger', errorMessage);
             console.error(data);
             this.changeState(State.Error);
-        };
-        EditActiveGameController.prototype.closeAlert = function (index) {
-            this.alerts.splice(index, 1);
-        };
-        EditActiveGameController.prototype.addAlert = function (messageType, message) {
-            this.alerts.push({ type: messageType, msg: message });
-        };
-        EditActiveGameController.prototype.clearAlerts = function () {
-            this.alerts = [];
-        };
-        EditActiveGameController.prototype.scrollToTop = function () {
-            var _this = this;
-            this.$timeout(function () {
-                _this.$window.scrollTo(0, 0);
-            });
-        };
-        EditActiveGameController.prototype.scrollToBottom = function () {
-            var _this = this;
-            this.$timeout(function () {
-                _this.$window.scrollTo(0, 100000);
-            });
         };
         EditActiveGameController.prototype.getActiveGame = function () {
             var _this = this;
@@ -115,10 +99,10 @@ var EditActiveGame;
         };
         EditActiveGameController.prototype.saveGame = function () {
             var _this = this;
-            this.clearAlerts();
+            this.alertsService.clearAlerts();
             this.editActiveGameService.datePlayed = this.datePlayed;
             this.editActiveGameService.save().then(function () {
-                _this.addAlert('success', 'Game saved successfully!');
+                _this.alertsService.addAlert('success', 'Game saved successfully!');
                 _this.changeState(State.Ready);
             }, function () {
                 _this.saveReject();
@@ -135,11 +119,14 @@ var EditActiveGame;
         EditActiveGameController.prototype.saveReject = function () {
             var _this = this;
             // get error messages and display alerts
-            this.clearAlerts();
-            this.editActiveGameService.errorMessages.forEach(function (msg) { _this.addAlert('danger', msg); });
+            this.alertsService.clearAlerts();
+            this.editActiveGameService.errorMessages.forEach(function (msg) { _this.alertsService.addAlert('danger', msg); });
             this.changeState(State.Ready);
         };
         // UI Hookups
+        EditActiveGameController.prototype.closeAlert = function (index) {
+            this.alertsService.closeAlert(index);
+        };
         EditActiveGameController.prototype.save = function () {
             this.changeState(State.Saving);
         };
@@ -152,7 +139,7 @@ var EditActiveGame;
         EditActiveGameController.prototype.toggleModifyPlaylist = function () {
             this.editActiveGameService.toggleModifyPlaylist();
         };
-        EditActiveGameController.$inject = ['$scope', '$timeout', '$window', 'editActiveGameService'];
+        EditActiveGameController.$inject = ['$window', 'editActiveGameService', 'alertsService'];
         return EditActiveGameController;
     }());
     EditActiveGame.EditActiveGameController = EditActiveGameController;

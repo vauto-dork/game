@@ -20,20 +20,25 @@ var Players;
         State[State["Saved"] = 5] = "Saved";
     })(State || (State = {}));
     var PlayersListController = (function () {
-        function PlayersListController($scope, $window, apiService) {
-            this.$scope = $scope;
-            this.$window = $window;
+        function PlayersListController(apiService, alertsService) {
             this.apiService = apiService;
+            this.alertsService = alertsService;
             this.disableControls = false;
             this.showError = false;
             this.showLoading = false;
             this.showPlayers = false;
             this.showPlayerEdit = false;
-            this.alerts = [];
             this.players = [];
             this.filter = '';
             this.changeState(State.Loading);
         }
+        Object.defineProperty(PlayersListController.prototype, "alerts", {
+            get: function () {
+                return this.alertsService.alerts;
+            },
+            enumerable: true,
+            configurable: true
+        });
         PlayersListController.prototype.changeState = function (newState) {
             this.showLoading = newState === State.Loading;
             this.showPlayers = newState === State.Ready;
@@ -45,30 +50,21 @@ var Players;
                     this.loadPlayers();
                     break;
                 case State.EditPlayer:
-                    this.clearAlerts();
+                    this.alertsService.clearAlerts();
                     break;
                 case State.SavingPlayer:
                     this.savePlayer();
                     break;
                 case State.Saved:
-                    this.addAlert('success', 'Player saved successfully!');
+                    this.alertsService.addAlert('success', 'Player saved successfully!');
                     this.changeState(State.Loading);
                     break;
             }
         };
         PlayersListController.prototype.errorHandler = function (data, errorMessage) {
-            this.addAlert('danger', errorMessage);
+            this.alertsService.addAlert('danger', errorMessage);
             console.error(data);
             this.changeState(State.Error);
-        };
-        PlayersListController.prototype.closeAlert = function (index) {
-            this.alerts.splice(index, 1);
-        };
-        PlayersListController.prototype.addAlert = function (messageType, message) {
-            this.alerts.push({ type: messageType, msg: message });
-        };
-        PlayersListController.prototype.clearAlerts = function () {
-            this.alerts = [];
         };
         PlayersListController.prototype.loadPlayers = function () {
             var _this = this;
@@ -90,9 +86,6 @@ var Players;
         PlayersListController.prototype.removeFilter = function () {
             this.filter = '';
         };
-        PlayersListController.prototype.scrollToTop = function () {
-            this.$window.scrollTo(0, 0);
-        };
         PlayersListController.prototype.editPlayer = function (player) {
             this.selectedPlayer = player;
             this.changeState(State.EditPlayer);
@@ -105,10 +98,13 @@ var Players;
             this.changeState(State.SavingPlayer);
         };
         PlayersListController.prototype.reload = function () {
-            this.clearAlerts();
+            this.alertsService.clearAlerts();
             this.changeState(State.Loading);
         };
-        PlayersListController.$inject = ['$scope', '$window', 'apiService'];
+        PlayersListController.prototype.closeAlert = function (index) {
+            this.alertsService.closeAlert(index);
+        };
+        PlayersListController.$inject = ['apiService', 'alertsService'];
         return PlayersListController;
     }());
     Players.PlayersListController = PlayersListController;

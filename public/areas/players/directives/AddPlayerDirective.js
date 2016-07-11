@@ -29,6 +29,7 @@ var Players;
             this.changeState(State.Ready);
         }
         AddPlayerController.prototype.changeState = function (newState) {
+            var _this = this;
             this.success = newState === State.Saved;
             this.failure = newState === State.Fail;
             this.disableControls = newState === State.Saving;
@@ -42,7 +43,7 @@ var Players;
                 case State.Saved:
                     this.resetForm();
                     this.$timeout(function () {
-                        this.changeState(State.Ready);
+                        _this.changeState(State.Ready);
                     }, 5000);
                     break;
             }

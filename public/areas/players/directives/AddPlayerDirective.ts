@@ -45,7 +45,7 @@ module Players {
 					break;
 				case State.Saved:
 					this.resetForm();
-					this.$timeout(function() {
+					this.$timeout(() => {
 						this.changeState(State.Ready);
 					}, 5000);
 					break;

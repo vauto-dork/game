@@ -20,7 +20,7 @@ module EditActiveGame {
     };
 
     export class EditActiveGameController {
-        public static $inject: string[] = ['$scope', '$timeout', '$window', 'editActiveGameService'];
+        public static $inject: string[] = ['$window', 'editActiveGameService', 'alertsService'];
 
         private showLoading: boolean = false;
         private showError: boolean = false;
@@ -28,16 +28,17 @@ module EditActiveGame {
         private disabled: boolean = false;
         private datePlayed: Date;
 
-        private alerts = [];
+        private get alerts(): Shared.IAlert[] {
+            return this.alertsService.alerts;
+        }
 
         private get showModifyPlaylist(): boolean {
             return this.editActiveGameService.showModifyPlaylist;
         }
 
-        constructor(private $scope: ng.IScope,
-            private $timeout: ng.ITimeoutService,
-            private $window: ng.IWindowService,
-            private editActiveGameService: IEditActiveGameService) {
+        constructor(private $window: ng.IWindowService,
+            private editActiveGameService: IEditActiveGameService,
+            private alertsService: Shared.IAlertsService) {
             this.changeState(State.Init);
         }
 
@@ -65,7 +66,7 @@ module EditActiveGame {
                     this.getActiveGame();
                     break;
                 case State.Error:
-                    this.scrollToTop();
+                    this.alertsService.scrollToTop();
                     break;
                 case State.Ready:
                     this.ready();
@@ -83,37 +84,13 @@ module EditActiveGame {
             if (this.showModifyPlaylist) {
                 this.toggleModifyPlaylist();
             }
-            this.scrollToTop();
+            this.alertsService.scrollToTop();
         }
 
         private errorHandler(data: string, errorMessage: string) {
-            this.addAlert('danger', errorMessage);
+            this.alertsService.addAlert('danger', errorMessage);
             console.error(data);
             this.changeState(State.Error);
-        }
-
-        private closeAlert(index: number): void {
-            this.alerts.splice(index, 1);
-        }
-
-        private addAlert(messageType: string, message: string): void {
-            this.alerts.push({ type: messageType, msg: message });
-        }
-
-        private clearAlerts(): void {
-            this.alerts = [];
-        }
-
-        private scrollToTop(): void {
-            this.$timeout(() => {
-                this.$window.scrollTo(0, 0);
-            });
-        }
-
-        private scrollToBottom(): void {
-            this.$timeout(() => {
-                this.$window.scrollTo(0, 100000);
-            });
         }
 
         private getActiveGame(): void {
@@ -126,11 +103,11 @@ module EditActiveGame {
         }
 
         public saveGame(): void {
-            this.clearAlerts();
+            this.alertsService.clearAlerts();
             this.editActiveGameService.datePlayed = this.datePlayed;
 
             this.editActiveGameService.save().then(() => {
-                this.addAlert('success', 'Game saved successfully!');
+                this.alertsService.addAlert('success', 'Game saved successfully!');
                 this.changeState(State.Ready);
             }, () => {
                 this.saveReject();
@@ -147,12 +124,16 @@ module EditActiveGame {
 
         private saveReject(): void {
             // get error messages and display alerts
-            this.clearAlerts();
-            this.editActiveGameService.errorMessages.forEach(msg => { this.addAlert('danger', msg); });
+            this.alertsService.clearAlerts();
+            this.editActiveGameService.errorMessages.forEach(msg => { this.alertsService.addAlert('danger', msg); });
             this.changeState(State.Ready);
         }
-
+        
         // UI Hookups
+
+        private closeAlert(index: number): void {
+            this.alertsService.closeAlert(index);
+        }
 
         private save(): void {
             this.changeState(State.Saving);
