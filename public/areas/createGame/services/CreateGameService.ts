@@ -6,11 +6,10 @@ module CreateGame {
 		hasMinimumPlayers: boolean;
 		numPlayers: number;
 
-		init(): ng.IPromise<void>;
+        init(): ng.IPromise<void>;
+        reset(): void;
 		addPlayer(player: Shared.INewGamePlayer): void;
         removePlayer(player: Shared.INewGamePlayer): void;
-        playerIndex(playerId: string): number;
-		reset(): void;
 		createNewActiveGame(datePlayed: Date): ng.IPromise<string>;
 	}
 
@@ -20,16 +19,16 @@ module CreateGame {
 	}
 
 	export class CreateGameService implements ICreateGameService {
-		public static $inject: string[] = ['$q', 'apiService'];
+        public static $inject: string[] = ['$q', 'apiService', 'playerSelectionService'];
 		private firstGameOfMonth: boolean = false;
-		private players: Shared.INewGamePlayer[] = [];
 		private gameOrderSortedPlayers: Shared.INewGamePlayer[] = [];
-
-		private allPlayers: Shared.INewGamePlayer[];
-        private unselectedPlayersList: Shared.INewGamePlayer[];
-
+        
 		private sort: NewGameSort = NewGameSort.Selected;
 		private playerLoadPromise: ng.IPromise<void>;
+
+        private get players(): Shared.INewGamePlayer[] {
+            return this.playerSelectionService.selectedPlayers;
+        }
 
 		public get sortOrder(): NewGameSort {
 			return this.sort;
@@ -49,8 +48,8 @@ module CreateGame {
 		}
 
 		public get unselectedPlayers(): Shared.INewGamePlayer[] {
-            return this.unselectedPlayersList;
-        }
+		    return this.playerSelectionService.unselectedPlayers;
+		}
 
 		public get hasMinimumPlayers(): boolean {
             return this.players.length >= 3;
@@ -60,43 +59,22 @@ module CreateGame {
 			return this.players.length;
 		}
 
-		constructor(private $q: ng.IQService, private apiService: Shared.IApiService) {
-			this.getPlayers();
-		}
-
-		private getPlayers(): void {
-			var def = this.$q.defer<void>();
-
-			this.apiService.getPlayersForNewGame().then(data => {
-				this.initializeData(data.firstGameOfMonth, data.players);
-				def.resolve();
-			}, () => {
-				// We still resolve because we just initialize default data
-				this.initializeData(true, []);
-				def.resolve();
-			});
-
-			this.playerLoadPromise = def.promise;
-		}
-
-		private initializeData(firstGameOfMonth: boolean, players: Shared.INewGamePlayer[]): void {
-			this.firstGameOfMonth = firstGameOfMonth;
-			this.allPlayers = players;
-			this.reset();
-			this.curateNewPlayerList();
-		}
-
-		private curateNewPlayerList(): void {
-            // Get the nested player before getting ID because IDs don't match
-            var currentPlayerIds = this.players.map(p => p.playerId);
-
-            // Get players that are not in the current playlist.
-            this.unselectedPlayersList = this.allPlayers.filter(player => {
-                return currentPlayerIds.indexOf(player.playerId) === -1;
+        constructor(private $q: ng.IQService,
+            private apiService: Shared.IApiService,
+            private playerSelectionService: Shared.IPlayerSelectionService) {
+            this.playerLoadPromise = this.playerSelectionService.getPlayers().then((data) => {
+                this.initializeData(data.firstGameOfMonth);
+                this.$q.resolve();
+            }, () => {
+                this.initializeData(true);
+                this.$q.resolve();
             });
-
-            this.sortPlayersByGameOrder();
         }
+        
+		private initializeData(firstGameOfMonth: boolean): void {
+			this.firstGameOfMonth = firstGameOfMonth;
+			this.reset();
+		}
 
         private sortPlayersByGameOrder(): void {
             // Sorts in an alternating outside-in order by rating.
@@ -148,30 +126,25 @@ module CreateGame {
             });
         }
 
-		public init(): ng.IPromise<void> {
+        public init(): ng.IPromise<void> {
 			return this.playerLoadPromise;
 		}
-
-		public playerIndex(playerId: string): number {
-            return this.players.map(p => { return p.playerId; }).indexOf(playerId);
+        
+		public reset(): void {
+            this.playerSelectionService.reset();
+            this.sortPlayersByGameOrder();
+			this.sortOrder = NewGameSort.Selected;
         }
 
         public addPlayer(player: Shared.INewGamePlayer): void {
-            this.players.push(player);
-            this.curateNewPlayerList();
+            this.playerSelectionService.addPlayer(player.player);
+            this.sortPlayersByGameOrder();
         }
 
         public removePlayer(player: Shared.INewGamePlayer): void {
-            var index = this.playerIndex(player.playerId);
-            this.players.splice(index, 1);
-            this.curateNewPlayerList();
+            this.playerSelectionService.removePlayer(player.player);
+            this.sortPlayersByGameOrder();
         }
-
-		public reset(): void {
-			this.players = [];
-			this.curateNewPlayerList();
-			this.sortOrder = NewGameSort.Selected;
-		}
 
 		public createNewActiveGame(datePlayed: Date): ng.IPromise<string> {
 			var game = new Shared.Game();
@@ -187,27 +160,8 @@ module CreateGame {
 
         // Debug functions
 
-        private debugShowAllPlayersTable(): void {
-            this.debugPrintPlayersTable(this.allPlayers);
-        }
-
-        private debugShowCuratedPlayersTable(): void {
-            this.debugPrintPlayersTable(this.unselectedPlayers);
-        }
-
         private debugShowSortedPlayersTable(): void {
-            this.debugPrintPlayersTable(this.playersSorted);
-        }
-
-        private debugPrintPlayersTable(players: Shared.INewGamePlayer[]): void {
-            // Change "info" to "table" to show as table in browser debugger
-            console.info(players.map((p) => {
-                return {
-                    orderNumber: p.orderNumber,
-                    rating: p.rating,
-                    name: p.player.fullname
-                };
-            }));
+            this.playerSelectionService.debugPrintPlayersTable(this.playersSorted);
         }
     }
 }

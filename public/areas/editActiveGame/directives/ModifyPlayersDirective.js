@@ -27,7 +27,7 @@ var EditActiveGame;
             this.editActiveGameService.addPlayer(player);
         };
         ModifyPlayersController.prototype.back = function () {
-            this.editActiveGameService.toggleModifyPlayers();
+            this.editActiveGameService.toggleModifyPlaylist();
         };
         ModifyPlayersController.$inject = ['$scope', 'editActiveGameService'];
         return ModifyPlayersController;

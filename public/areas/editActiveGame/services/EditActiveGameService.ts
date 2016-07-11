@@ -3,26 +3,24 @@ module EditActiveGame {
         datePlayed: Date;
         players: Shared.IGamePlayer[];
         unselectedPlayers: Shared.INewGamePlayer[];
-        showModifyPlayers: boolean;
+        showModifyPlaylist: boolean;
         errorMessages: string[];
 
         addPlayer(player: Shared.IGamePlayer): void;
         removePlayer(player: Shared.IGamePlayer): void;
         playerIndex(playerId: string): number;
-        toggleModifyPlayers(): void;
+        toggleModifyPlaylist(): void;
         getActiveGame(): ng.IPromise<void>;
         save(): ng.IPromise<void>;
         finalize(addBonusPoints?: boolean): ng.IPromise<void>;
     }
 
     export class EditActiveGameService implements IEditActiveGameService {
-        public static $inject: string[] = ['$location', '$q', 'apiService'];
+        public static $inject: string[] = ['$location', '$q', 'apiService', 'playerSelectionService'];
         private imLoading: ng.IPromise<void>;
         private gameIdPath: string;
         private activeGame: Shared.IGame;
-        private allPlayers: Shared.INewGamePlayer[];
-        private unselectedPlayersList: Shared.INewGamePlayer[];
-        private showModifyPlayersScreen: boolean;
+        private showModifyPlaylistScreen: boolean;
         private errorMessageList: string[] = [];
 
         public get datePlayed(): Date {
@@ -39,8 +37,8 @@ module EditActiveGame {
             }
         }
 
-        public get showModifyPlayers(): boolean {
-            return this.showModifyPlayersScreen;
+        public get showModifyPlaylist(): boolean {
+            return this.showModifyPlaylistScreen;
         }
 
         public get errorMessages(): string[] {
@@ -56,16 +54,17 @@ module EditActiveGame {
         }
 
         public get unselectedPlayers(): Shared.INewGamePlayer[] {
-            return this.unselectedPlayersList;
+            return this.playerSelectionService.unselectedPlayers;
         }
 
         constructor(private $location: ng.ILocationService,
             private $q: ng.IQService,
-            private apiService: Shared.IApiService) {
+            private apiService: Shared.IApiService,
+            private playerSelectionService: Shared.IPlayerSelectionService) {
         }
 
-        public toggleModifyPlayers(): void {
-            this.showModifyPlayersScreen = !this.showModifyPlayersScreen;
+        public toggleModifyPlaylist(): void {
+            this.showModifyPlaylistScreen = !this.showModifyPlaylistScreen;
         }
 
         public getActiveGame(): ng.IPromise<void> {
@@ -75,10 +74,7 @@ module EditActiveGame {
                 this.gameIdPath = this.$location.path();
             }
 
-            var allPlayersPromise = this.getAllPlayers();
-            allPlayersPromise.then((data) => {
-                this.allPlayers = data;
-            });
+            var allPlayersPromise = this.playerSelectionService.getPlayers();
 
             var activeGamePromise = this.apiService.getActiveGame(this.gameIdPath);
             activeGamePromise.then((game) => {
@@ -90,47 +86,27 @@ module EditActiveGame {
             });
 
             this.$q.all([allPlayersPromise, activeGamePromise]).then(() => {
-                this.curateNewPlayerList();
+                this.players.forEach(p => {
+                    this.playerSelectionService.addPlayer(p.player);
+                });
             });
 
             return def.promise;
         }
-
-        private getAllPlayers(): ng.IPromise<Shared.INewGamePlayer[]> {
-            var def = this.$q.defer<Shared.INewGamePlayer[]>();
-
-            this.apiService.getPlayersForNewGame().then(data => {
-                def.resolve(data.players);
-            }, () => {
-                def.reject();
-            });
-
-            return def.promise;
-        }
-
-        private curateNewPlayerList(): void {
-            // Get the nested player before getting ID because IDs don't match
-            var currentPlayerIds = this.players.map(p => p.playerId);
-
-            // Get players that are not in the current playlist.
-            this.unselectedPlayersList = this.allPlayers.filter(player => {
-                return currentPlayerIds.indexOf(player.playerId) === -1;
-            });
-        }
-
+        
         public playerIndex(playerId: string): number {
             return this.players.map(p => { return p.playerId; }).indexOf(playerId);
         }
 
         public addPlayer(player: Shared.IGamePlayer): void {
             this.players.push(player);
-            this.curateNewPlayerList();
+            this.playerSelectionService.addPlayer(player.player);
         }
 
         public removePlayer(player: Shared.IGamePlayer): void {
             var index = this.playerIndex(player.playerId);
             this.players.splice(index, 1);
-            this.curateNewPlayerList();
+            this.playerSelectionService.removePlayer(player.player);
         }
 
         public save(): ng.IPromise<void> {

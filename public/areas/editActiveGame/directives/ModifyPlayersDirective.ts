@@ -27,7 +27,7 @@
         }
 
         private back(): void {
-            this.editActiveGameService.toggleModifyPlayers();
+            this.editActiveGameService.toggleModifyPlaylist();
         }
     }
 }

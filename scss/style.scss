@@ -56,11 +56,15 @@
 	font-size: $font-large;
 }
 
-.selected-players-list {
+.selected-players-wrapper {
     padding: 0 15px;
     margin-bottom: 20px;
 	border: 2px solid $gray;
 	border-radius: $card-border-radius;	
+
+    .selected-players {
+        margin-bottom: 15px;
+    }
 }
 
 .player-selector-filter {

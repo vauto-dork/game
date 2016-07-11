@@ -6,7 +6,7 @@
     </div>
 
     <div ng-if="ctrl.showScoreForm">
-        <div class="container" uib-collapse="ctrl.showModifyPlayers">
+        <div class="container" uib-collapse="ctrl.showModifyPlaylist">
             <div class="row">
 
                 <div class="col-xs-12 col-md-6 col-lg-5">
@@ -23,7 +23,7 @@
                 <div class="col-xs-12 col-md-6 col-lg-7">
                     <p class="modify-players-button">
                         <button type="button" class="btn btn-primary btn-lg btn-block"
-                                ng-click="ctrl.toggleModifyPlayers()"
+                                ng-click="ctrl.toggleModifyPlaylist()"
                                 ng-disabled="ctrl.disabled"
                                 aria-label="Modify Playlist">
                             <span class="glyphicon glyphicon-sort" aria-hidden="true"></span> Modify Playlist
@@ -42,7 +42,7 @@
             </div>
         </div>
 
-        <div uib-collapse="!ctrl.showModifyPlayers">
+        <div uib-collapse="!ctrl.showModifyPlaylist">
             <modify-players save="ctrl.save()"></modify-players>
         </div>
     </div>

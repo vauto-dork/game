@@ -1,10 +1,11 @@
 var EditActiveGame;
 (function (EditActiveGame) {
     var EditActiveGameService = (function () {
-        function EditActiveGameService($location, $q, apiService) {
+        function EditActiveGameService($location, $q, apiService, playerSelectionService) {
             this.$location = $location;
             this.$q = $q;
             this.apiService = apiService;
+            this.playerSelectionService = playerSelectionService;
             this.errorMessageList = [];
         }
         Object.defineProperty(EditActiveGameService.prototype, "datePlayed", {
@@ -22,9 +23,9 @@ var EditActiveGame;
             enumerable: true,
             configurable: true
         });
-        Object.defineProperty(EditActiveGameService.prototype, "showModifyPlayers", {
+        Object.defineProperty(EditActiveGameService.prototype, "showModifyPlaylist", {
             get: function () {
-                return this.showModifyPlayersScreen;
+                return this.showModifyPlaylistScreen;
             },
             enumerable: true,
             configurable: true
@@ -48,13 +49,13 @@ var EditActiveGame;
         });
         Object.defineProperty(EditActiveGameService.prototype, "unselectedPlayers", {
             get: function () {
-                return this.unselectedPlayersList;
+                return this.playerSelectionService.unselectedPlayers;
             },
             enumerable: true,
             configurable: true
         });
-        EditActiveGameService.prototype.toggleModifyPlayers = function () {
-            this.showModifyPlayersScreen = !this.showModifyPlayersScreen;
+        EditActiveGameService.prototype.toggleModifyPlaylist = function () {
+            this.showModifyPlaylistScreen = !this.showModifyPlaylistScreen;
         };
         EditActiveGameService.prototype.getActiveGame = function () {
             var _this = this;
@@ -62,10 +63,7 @@ var EditActiveGame;
             if (this.$location.path() !== undefined || this.$location.path() !== '') {
                 this.gameIdPath = this.$location.path();
             }
-            var allPlayersPromise = this.getAllPlayers();
-            allPlayersPromise.then(function (data) {
-                _this.allPlayers = data;
-            });
+            var allPlayersPromise = this.playerSelectionService.getPlayers();
             var activeGamePromise = this.apiService.getActiveGame(this.gameIdPath);
             activeGamePromise.then(function (game) {
                 _this.activeGame = game;
@@ -75,38 +73,23 @@ var EditActiveGame;
                 def.reject();
             });
             this.$q.all([allPlayersPromise, activeGamePromise]).then(function () {
-                _this.curateNewPlayerList();
+                _this.players.forEach(function (p) {
+                    _this.playerSelectionService.addPlayer(p.player);
+                });
             });
             return def.promise;
-        };
-        EditActiveGameService.prototype.getAllPlayers = function () {
-            var def = this.$q.defer();
-            this.apiService.getPlayersForNewGame().then(function (data) {
-                def.resolve(data.players);
-            }, function () {
-                def.reject();
-            });
-            return def.promise;
-        };
-        EditActiveGameService.prototype.curateNewPlayerList = function () {
-            // Get the nested player before getting ID because IDs don't match
-            var currentPlayerIds = this.players.map(function (p) { return p.playerId; });
-            // Get players that are not in the current playlist.
-            this.unselectedPlayersList = this.allPlayers.filter(function (player) {
-                return currentPlayerIds.indexOf(player.playerId) === -1;
-            });
         };
         EditActiveGameService.prototype.playerIndex = function (playerId) {
             return this.players.map(function (p) { return p.playerId; }).indexOf(playerId);
         };
         EditActiveGameService.prototype.addPlayer = function (player) {
             this.players.push(player);
-            this.curateNewPlayerList();
+            this.playerSelectionService.addPlayer(player.player);
         };
         EditActiveGameService.prototype.removePlayer = function (player) {
             var index = this.playerIndex(player.playerId);
             this.players.splice(index, 1);
-            this.curateNewPlayerList();
+            this.playerSelectionService.removePlayer(player.player);
         };
         EditActiveGameService.prototype.save = function () {
             var _this = this;
@@ -204,7 +187,7 @@ var EditActiveGame;
             }
             return hasRanks;
         };
-        EditActiveGameService.$inject = ['$location', '$q', 'apiService'];
+        EditActiveGameService.$inject = ['$location', '$q', 'apiService', 'playerSelectionService'];
         return EditActiveGameService;
     }());
     EditActiveGame.EditActiveGameService = EditActiveGameService;

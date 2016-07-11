@@ -30,8 +30,8 @@ module EditActiveGame {
 
         private alerts = [];
 
-        private get showModifyPlayers(): boolean {
-            return this.editActiveGameService.showModifyPlayers;
+        private get showModifyPlaylist(): boolean {
+            return this.editActiveGameService.showModifyPlaylist;
         }
 
         constructor(private $scope: ng.IScope,
@@ -80,8 +80,8 @@ module EditActiveGame {
         }
 
         private ready(): void {
-            if (this.showModifyPlayers) {
-                this.editActiveGameService.toggleModifyPlayers();
+            if (this.showModifyPlaylist) {
+                this.toggleModifyPlaylist();
             }
             this.scrollToTop();
         }
@@ -166,8 +166,8 @@ module EditActiveGame {
             this.changeState(State.Loading);
         }
 
-        private toggleModifyPlayers(): void {
-            this.editActiveGameService.toggleModifyPlayers();
+        private toggleModifyPlaylist(): void {
+            this.editActiveGameService.toggleModifyPlaylist();
         }
     }
 }

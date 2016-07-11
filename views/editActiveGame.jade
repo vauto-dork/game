@@ -1,6 +1,7 @@
 extends layout
 
 block modules
+    script(src='/shared/services/PlayerSelectionService.js')
     script(src='/shared/directives/PlayerSelectorDirective.js')
     script(src='/shared/directives/PlayerBonusPanelDirective.js')
     script(src='/areas/editActiveGame/services/EditActiveGameService.js')
@@ -13,6 +14,7 @@ block modules
     script.
         var EditActiveGameModule = angular.module('EditActiveGameModule', []);
 		
+        EditActiveGameModule.service('playerSelectionService', Shared.PlayerSelectionService);
         EditActiveGameModule.service('editActiveGameService', EditActiveGame.EditActiveGameService);
         
         EditActiveGameModule.controller('PlayerSelectorController', Shared.PlayerSelectorController);

@@ -33,9 +33,9 @@ var EditActiveGame;
             this.alerts = [];
             this.changeState(State.Init);
         }
-        Object.defineProperty(EditActiveGameController.prototype, "showModifyPlayers", {
+        Object.defineProperty(EditActiveGameController.prototype, "showModifyPlaylist", {
             get: function () {
-                return this.editActiveGameService.showModifyPlayers;
+                return this.editActiveGameService.showModifyPlaylist;
             },
             enumerable: true,
             configurable: true
@@ -73,8 +73,8 @@ var EditActiveGame;
             }
         };
         EditActiveGameController.prototype.ready = function () {
-            if (this.showModifyPlayers) {
-                this.editActiveGameService.toggleModifyPlayers();
+            if (this.showModifyPlaylist) {
+                this.toggleModifyPlaylist();
             }
             this.scrollToTop();
         };
@@ -149,8 +149,8 @@ var EditActiveGame;
         EditActiveGameController.prototype.revert = function () {
             this.changeState(State.Loading);
         };
-        EditActiveGameController.prototype.toggleModifyPlayers = function () {
-            this.editActiveGameService.toggleModifyPlayers();
+        EditActiveGameController.prototype.toggleModifyPlaylist = function () {
+            this.editActiveGameService.toggleModifyPlaylist();
         };
         EditActiveGameController.$inject = ['$scope', '$timeout', '$window', 'editActiveGameService'];
         return EditActiveGameController;

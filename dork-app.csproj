@@ -154,6 +154,7 @@
     <TypeScriptCompile Include="public\shared\services\ApiService.ts" />
     <TypeScriptCompile Include="public\shared\services\DateTimeService.ts" />
     <TypeScriptCompile Include="public\shared\services\MonthYearQueryService.ts" />
+    <TypeScriptCompile Include="public\shared\services\PlayerSelectionService.ts" />
     <TypeScriptCompile Include="public\shared\services\PubSubServiceBase.ts" />
     <TypeScriptCompile Include="Scripts\typings\angular-ui-bootstrap\angular-ui-bootstrap.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\angularjs\angular-animate.d.ts" />

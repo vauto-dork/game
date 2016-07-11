@@ -1,6 +1,7 @@
 extends layout
 
 block modules
+	script(src='/shared/services/PlayerSelectionService.js')
 	script(src='/shared/directives/PlayerSelectorDirective.js')
 	script(src='/areas/createGame/services/CreateGameService.js')
 	script(src='/areas/createGame/directives/ButtonsPanelDirective.js')
@@ -10,6 +11,7 @@ block modules
 	script.
 		var CreateGameModule = angular.module('CreateGameModule', []);
 		
+		CreateGameModule.service('playerSelectionService', Shared.PlayerSelectionService);
 		CreateGameModule.service('createGameService', CreateGame.CreateGameService);
 
 		CreateGameModule.controller('PlayerSelectorController', Shared.PlayerSelectorController);

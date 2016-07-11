@@ -39,6 +39,6 @@ module Shared {
 			}
 			
 			return player;
-		}
+        }
 	}
 }

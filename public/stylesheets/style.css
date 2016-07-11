@@ -404,11 +404,13 @@ input.ng-touched.ng-invalid {
   padding: 0 1em 1em 1em;
   font-size: 1.4em; }
 
-.selected-players-list {
+.selected-players-wrapper {
   padding: 0 15px;
   margin-bottom: 20px;
   border: 2px solid #7a8394;
   border-radius: 5px; }
+  .selected-players-wrapper .selected-players {
+    margin-bottom: 15px; }
 
 .player-selector-filter {
   padding: 0.25em;
