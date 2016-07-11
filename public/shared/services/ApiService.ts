@@ -83,10 +83,10 @@ module Shared {
 			var def = this.$q.defer<INewGame>();
 			
 			this.$http.get('/players/newgame')
-				.success(function(data: ICreateGameViewModel, status, headers, config) {
+				.success((data: ICreateGameViewModel, status, headers, config) => {
 					def.resolve(new NewGame(data));
 				})
-				.error(function(data, status, headers, config) {
+				.error((data, status, headers, config) => {
 					console.error('Cannot get players for new game');
 					def.reject(data);
 				});
@@ -271,7 +271,7 @@ module Shared {
 				
 				def.resolve(game);
 			})
-			.error(function(data, status, headers, config) {
+			.error((data, status, headers, config) => {
 					console.error('Cannot get games played.');
 					def.reject(data);
 				});

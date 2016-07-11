@@ -236,9 +236,9 @@ function getRanked(req, res, next) {
 		if (!!req.query.hideUnranked && req.query.hideUnranked.toLowerCase() === 'true') {
 			rankedPlayers = rankedPlayers.filter(
 				function (element) {
-					return element.rating > 0;
+					return element.gamesPlayed > 0;
 				}
-				);
+		    );
 		}
 		res.json(rankedPlayers);
 	});

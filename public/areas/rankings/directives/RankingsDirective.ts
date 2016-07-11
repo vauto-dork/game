@@ -35,7 +35,7 @@ module Rankings {
 
         private players: Shared.IRankedPlayer[] = [];
         private playersUnderTen: Shared.IRankedPlayer[] = [];
-        private numberUnranked: number = 0;
+        private numberNoGames: number = 0;
 
         constructor(private $scope: ng.IScope, private rankingsService: IRankingsService) {
             $scope.$watchGroup([() => this.month, () => this.year],
@@ -51,7 +51,7 @@ module Rankings {
         private changeState(newState: State) {
             this.showLoading = newState === State.Loading;
             this.showRankings = newState === State.Loaded;
-            this.showUnrankBtn = newState === State.Loaded && this.numberUnranked > 0;
+            this.showUnrankBtn = newState === State.Loaded && this.numberNoGames > 0;
             this.showErrorMessage = newState === State.Error;
             this.showNoRankingsMessage = newState === State.NoRankings;
 
@@ -74,16 +74,16 @@ module Rankings {
             this.players = this.rankingsService.getPlayersOverTenGames();
             this.playersUnderTen = this.rankingsService.getPlayersUnderTenGames();
 
-            if (this.playersUnderTen.some((elem: Shared.IRankedPlayer) => { return elem.rank > 0; })) {
-                this.numberUnranked = this.playersUnderTen.filter((element: Shared.IRankedPlayer) => { return element.rank <= 0; }).length;
+            if (this.playersUnderTen.some(elem => { return elem.gamesPlayed > 0; })) {
+                this.numberNoGames = this.playersUnderTen.filter(element => { return element.gamesPlayed <= 0; }).length;
                 this.changeState(State.Loaded);
             } else {
                 this.changeState(State.NoRankings);
             }
         }
 
-        private hasNoRank(rank: number): string {
-            if (rank > 0) {
+        private hasNoRank(player: Shared.IRankedPlayer): string {
+            if (player.gamesPlayed > 0) {
                 return '';
             }
 
@@ -92,10 +92,10 @@ module Rankings {
             }
 
             return 'ranking-no-rank';
-        };
+        }
 
         private toggleUnrankedPlayers() {
             this.showUnrankedPlayers = !this.showUnrankedPlayers;
-        };
+        }
     }
 }

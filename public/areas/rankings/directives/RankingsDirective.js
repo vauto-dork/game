@@ -35,7 +35,7 @@ var Rankings;
             this.showNoRankingsMessage = false;
             this.players = [];
             this.playersUnderTen = [];
-            this.numberUnranked = 0;
+            this.numberNoGames = 0;
             $scope.$watchGroup([function () { return _this.month; }, function () { return _this.year; }], function (newValue, oldValue) {
                 if ((newValue !== oldValue)) {
                     _this.changeState(State.Loading);
@@ -46,7 +46,7 @@ var Rankings;
         RankingsController.prototype.changeState = function (newState) {
             this.showLoading = newState === State.Loading;
             this.showRankings = newState === State.Loaded;
-            this.showUnrankBtn = newState === State.Loaded && this.numberUnranked > 0;
+            this.showUnrankBtn = newState === State.Loaded && this.numberNoGames > 0;
             this.showErrorMessage = newState === State.Error;
             this.showNoRankingsMessage = newState === State.NoRankings;
             switch (newState) {
@@ -66,16 +66,16 @@ var Rankings;
         RankingsController.prototype.loadingSuccess = function () {
             this.players = this.rankingsService.getPlayersOverTenGames();
             this.playersUnderTen = this.rankingsService.getPlayersUnderTenGames();
-            if (this.playersUnderTen.some(function (elem) { return elem.rank > 0; })) {
-                this.numberUnranked = this.playersUnderTen.filter(function (element) { return element.rank <= 0; }).length;
+            if (this.playersUnderTen.some(function (elem) { return elem.gamesPlayed > 0; })) {
+                this.numberNoGames = this.playersUnderTen.filter(function (element) { return element.gamesPlayed <= 0; }).length;
                 this.changeState(State.Loaded);
             }
             else {
                 this.changeState(State.NoRankings);
             }
         };
-        RankingsController.prototype.hasNoRank = function (rank) {
-            if (rank > 0) {
+        RankingsController.prototype.hasNoRank = function (player) {
+            if (player.gamesPlayed > 0) {
                 return '';
             }
             if (!this.showUnrankedPlayers) {
@@ -83,11 +83,9 @@ var Rankings;
             }
             return 'ranking-no-rank';
         };
-        ;
         RankingsController.prototype.toggleUnrankedPlayers = function () {
             this.showUnrankedPlayers = !this.showUnrankedPlayers;
         };
-        ;
         RankingsController.$inject = ['$scope', 'rankingsService'];
         return RankingsController;
     }());

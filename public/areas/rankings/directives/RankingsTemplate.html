@@ -1,7 +1,10 @@
 <div ng-show="ctrl.showErrorMessage" class="status-banner bg-danger">
-	<h4>Error getting rankings.</h4></div>
+	<h4>Error getting rankings.</h4>
+</div>
+
 <div ng-show="ctrl.showNoRankingsMessage" class="text-center">
-	<h2>No rankings for this month.</h2></div>
+	<h2>No rankings for this month.</h2>
+</div>
 
 <div class="load-bar" ng-show="ctrl.showLoading">
 	<img src="/images/loader.gif" width="220" height="19" />
@@ -11,7 +14,7 @@
 	<div class="row" ng-if="ctrl.players.length > 0">
 		<div class="ranking-row col-xs-12 col-sm-6 col-md-4 col-lg-3"
 			 ng-repeat="playerRank in ctrl.players">
-			<rankings-card player="playerRank"></ranking-card>
+			<rankings-card player="playerRank"></rankings-card>
 		</div>
 	</div>
 
@@ -22,14 +25,14 @@
 
 		<div class="ranking-row col-xs-12 col-sm-6 col-md-4 col-lg-3"
 			 ng-repeat="playerRank in ctrl.playersUnderTen"
-			 ng-class="ctrl.hasNoRank(playerRank.rank)">
-			<rankings-card player="playerRank"></ranking-card>
+			 ng-class="ctrl.hasNoRank(playerRank)">
+			<rankings-card player="playerRank"></rankings-card>
 		</div>
 	</div>
 </div>
 
 <div class="btn-row" ng-show="ctrl.showUnrankBtn">
 	<button type="button" class="btn btn-primary btn-block btn-lg" ng-click="ctrl.toggleUnrankedPlayers()">
-		<span ng-bind="(ctrl.showUnrankedPlayers ? 'Hide' : 'Show') + ' ' + ctrl.numberUnranked"></span> Unranked Players
+		<span ng-bind="(ctrl.showUnrankedPlayers ? 'Hide' : 'Show') + ' ' + ctrl.numberNoGames"></span> Unranked Players
 	</button>
 </div>
