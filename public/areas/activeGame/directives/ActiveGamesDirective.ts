@@ -18,7 +18,7 @@ module ActiveGame {
 	};
 
     export class ActiveGamesController {
-        public static $inject: string[] = ['$scope', 'apiService'];
+        public static $inject: string[] = ['apiService'];
 		
 		private loading: boolean = false;
 		private showNoGamesWarning: boolean = false;
@@ -27,7 +27,7 @@ module ActiveGame {
 		private games: Shared.IGame[];
 		private errorMessage: string = '';
 
-        constructor(private $scope: ng.IScope, private apiService: Shared.IApiService) {
+        constructor(private apiService: Shared.IApiService) {
 			this.changeState(State.Loading);
         }
 		
@@ -35,9 +35,9 @@ module ActiveGame {
 			this.loading = newState === State.Loading;
 			this.showErrorMessage = newState === State.Error;
 			this.showNoGamesWarning = newState === State.NoGames;
-			
+            
 			switch(newState){
-				case State.Loading:
+                case State.Loading:
                     this.getGames();
 					break;
 			}

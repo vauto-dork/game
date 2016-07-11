@@ -23,7 +23,7 @@ module Shared {
 	}
 
 	export class GameCardController {
-		public static $inject: string[] = ['$scope', '$http', '$window', 'apiService'];
+		public static $inject: string[] = ['$http', '$window', 'apiService'];
 
 		private showOverlay: boolean = false;
 		private showLoadBar: boolean = false;
@@ -34,7 +34,7 @@ module Shared {
 		private game: IGame;
 		private errorMessage: string;
 		
-		constructor(private $scope: ng.IScope, private $http: ng.IHttpService, private $window: ng.IWindowService, private apiService: IApiService) {
+		constructor(private $http: ng.IHttpService, private $window: ng.IWindowService, private apiService: IApiService) {
 			this.changeState(State.Ready);
 		}
 

@@ -62,8 +62,6 @@
     <Content Include="public\shared\directives\PlayerBonusPanelTemplate.html" />
     <Content Include="public\shared\directives\PlayerNametagTemplate.html" />
     <Content Include="public\shared\directives\PlayerScoretagTemplate.html" />
-    <Content Include="public\shared\modules\GameCardModule.js" />
-    <Content Include="public\shared\modules\UxControlsModule.js" />
     <Content Include="public\stylesheets\admin.css" />
     <Content Include="public\stylesheets\animation.css" />
     <Content Include="public\stylesheets\bootstrap.min.css" />
@@ -127,6 +125,7 @@
     <TypeScriptCompile Include="public\areas\history\directives\RankingHistoryDirective.ts" />
     <TypeScriptCompile Include="public\areas\players\directives\AddPlayerDirective.ts" />
     <TypeScriptCompile Include="public\areas\players\directives\PlayerFormDirective.ts" />
+    <TypeScriptCompile Include="public\shared\directives\LoadSpinnerDirective.ts" />
     <TypeScriptCompile Include="public\shared\directives\PlayerSelectorDirective.ts" />
     <TypeScriptCompile Include="public\areas\players\directives\PlayersListDirective.ts" />
     <TypeScriptCompile Include="public\areas\rankings\directives\LeaderboardDirective.ts" />
@@ -176,8 +175,6 @@
     <Content Include="public\fonts\_xyN3apAT_yRRDeqB3sPRg.woff" />
     <Content Include="public\scripts\angular.min.js.map" />
     <Content Include="public\scripts\jquery.min.map" />
-    <Content Include="public\shared\modules\GameCardModule.js.map" />
-    <Content Include="public\shared\modules\NumericUpDownModule.js.map" />
   </ItemGroup>
   <ItemGroup>
     <None Include="compilerconfig.json" />

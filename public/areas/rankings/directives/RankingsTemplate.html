@@ -6,9 +6,7 @@
 	<h2>No rankings for this month.</h2>
 </div>
 
-<div class="load-bar" ng-show="ctrl.showLoading">
-	<img src="/images/loader.gif" width="220" height="19" />
-</div>
+<load-spinner ng-show="ctrl.showLoading"></load-spinner>
 
 <div ng-show="ctrl.showRankings">
 	<div class="row" ng-if="ctrl.players.length > 0">

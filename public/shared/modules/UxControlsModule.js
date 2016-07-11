@@ -2,6 +2,8 @@ var UxControlsModule = angular.module('UxControlsModule', ['ngAnimate', 'ui.boot
 UxControlsModule.service('dateTimeService', Shared.DateTimeService);
 UxControlsModule.service('monthYearQueryService', Shared.MonthYearQueryService);
 UxControlsModule.service('apiService', Shared.ApiService);
+UxControlsModule.controller('LoadSpinnerController', Shared.LoadSpinnerController);
+UxControlsModule.directive('loadSpinner', Shared.LoadSpinnerDirective);
 UxControlsModule.controller('DatePickerController', Shared.DatePickerController);
 UxControlsModule.directive('datePicker', Shared.DatePickerDirective);
 UxControlsModule.controller('MonthYearPickerController', Shared.MonthYearPickerController);

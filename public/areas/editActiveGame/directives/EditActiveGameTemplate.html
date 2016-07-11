@@ -1,9 +1,7 @@
 <div class="edit-active-game">
     <uib-alert ng-repeat="alert in ctrl.alerts" type="{{alert.type}}" close="ctrl.closeAlert($index)">{{alert.msg}}</uib-alert>
-
-    <div class="load-bar" ng-if="ctrl.showLoading">
-        <img src="/images/loader.gif" width="220" height="19" />
-    </div>
+    
+    <load-spinner ng-show="ctrl.showLoading"></load-spinner>
 
     <div ng-if="ctrl.showScoreForm">
         <div class="container" uib-collapse="ctrl.showModifyPlaylist">

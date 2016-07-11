@@ -24,8 +24,7 @@ var Shared;
         State[State["Error"] = 5] = "Error";
     })(State || (State = {}));
     var GameCardController = (function () {
-        function GameCardController($scope, $http, $window, apiService) {
-            this.$scope = $scope;
+        function GameCardController($http, $window, apiService) {
             this.$http = $http;
             this.$window = $window;
             this.apiService = apiService;
@@ -94,7 +93,7 @@ var Shared;
         GameCardController.prototype.copyGame = function (game) {
             this.changeState(State.Copy);
         };
-        GameCardController.$inject = ['$scope', '$http', '$window', 'apiService'];
+        GameCardController.$inject = ['$http', '$window', 'apiService'];
         return GameCardController;
     }());
     Shared.GameCardController = GameCardController;

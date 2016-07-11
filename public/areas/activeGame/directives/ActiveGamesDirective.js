@@ -19,8 +19,7 @@ var ActiveGame;
     })(State || (State = {}));
     ;
     var ActiveGamesController = (function () {
-        function ActiveGamesController($scope, apiService) {
-            this.$scope = $scope;
+        function ActiveGamesController(apiService) {
             this.apiService = apiService;
             this.loading = false;
             this.showNoGamesWarning = false;
@@ -61,7 +60,7 @@ var ActiveGame;
         ActiveGamesController.prototype.reload = function () {
             this.changeState(State.Loading);
         };
-        ActiveGamesController.$inject = ['$scope', 'apiService'];
+        ActiveGamesController.$inject = ['apiService'];
         return ActiveGamesController;
     }());
     ActiveGame.ActiveGamesController = ActiveGamesController;

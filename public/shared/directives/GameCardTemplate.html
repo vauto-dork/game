@@ -1,8 +1,6 @@
 <div class="panel panel-default">
 	<div class="game-warning-overlay" ng-class="ctrl.showOverlay ? 'show' : 'hidden'">
-		<div class="load-bar" ng-if="ctrl.showLoadBar">
-			<img src="/images/loader.gif" width="220" height="19" />
-		</div>
+	    <load-spinner ng-show="ctrl.showLoadBar"></load-spinner>
 		
 		<div ng-if="ctrl.showDeleteWarning">
 			<h3>Delete this game?</h3>
