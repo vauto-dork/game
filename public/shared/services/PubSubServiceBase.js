@@ -54,7 +54,7 @@ var Shared;
             return !!this.topics[callbackId];
         };
         return PubSubServiceBase;
-    })();
+    }());
     Shared.PubSubServiceBase = PubSubServiceBase;
 })(Shared || (Shared = {}));
 //# sourceMappingURL=PubSubServiceBase.js.map

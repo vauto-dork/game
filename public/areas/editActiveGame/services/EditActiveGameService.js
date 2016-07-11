@@ -46,9 +46,9 @@ var EditActiveGame;
             enumerable: true,
             configurable: true
         });
-        Object.defineProperty(EditActiveGameService.prototype, "curatedNewPlayers", {
+        Object.defineProperty(EditActiveGameService.prototype, "unselectedPlayers", {
             get: function () {
-                return this.curatedPlayersList;
+                return this.unselectedPlayersList;
             },
             enumerable: true,
             configurable: true
@@ -89,8 +89,10 @@ var EditActiveGame;
             return def.promise;
         };
         EditActiveGameService.prototype.curateNewPlayerList = function () {
+            // Get the nested player before getting ID because IDs don't match
             var currentPlayerIds = this.players.map(function (p) { return p.playerId; });
-            this.curatedPlayersList = this.allPlayers.filter(function (player) {
+            // Get players that are not in the current playlist.
+            this.unselectedPlayersList = this.allPlayers.filter(function (player) {
                 return currentPlayerIds.indexOf(player.playerId) === -1;
             });
         };
@@ -175,6 +177,7 @@ var EditActiveGame;
                 this.addErrorMessage('Game cannot have less than three players.');
                 return false;
             }
+            // Convert blank points to zeroes.
             this.players.forEach(function (player) {
                 player.points = !player.points ? 0 : player.points;
             });
@@ -203,7 +206,7 @@ var EditActiveGame;
         };
         EditActiveGameService.$inject = ['$location', '$q', 'apiService'];
         return EditActiveGameService;
-    })();
+    }());
     EditActiveGame.EditActiveGameService = EditActiveGameService;
 })(EditActiveGame || (EditActiveGame = {}));
 //# sourceMappingURL=EditActiveGameService.js.map

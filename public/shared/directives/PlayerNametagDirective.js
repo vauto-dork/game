@@ -18,7 +18,7 @@ var Shared;
         }
         PlayerNametagController.$inject = ['$scope'];
         return PlayerNametagController;
-    })();
+    }());
     Shared.PlayerNametagController = PlayerNametagController;
 })(Shared || (Shared = {}));
 //# sourceMappingURL=PlayerNametagDirective.js.map

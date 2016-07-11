@@ -2,7 +2,7 @@ module EditActiveGame {
     export interface IEditActiveGameService {
         datePlayed: Date;
         players: Shared.IGamePlayer[];
-        curatedNewPlayers: Shared.INewGamePlayer[];
+        unselectedPlayers: Shared.INewGamePlayer[];
         showModifyPlayers: boolean;
         errorMessages: string[];
 
@@ -21,7 +21,7 @@ module EditActiveGame {
         private gameIdPath: string;
         private activeGame: Shared.IGame;
         private allPlayers: Shared.INewGamePlayer[];
-        private curatedPlayersList: Shared.INewGamePlayer[];
+        private unselectedPlayersList: Shared.INewGamePlayer[];
         private showModifyPlayersScreen: boolean;
         private errorMessageList: string[] = [];
 
@@ -55,8 +55,8 @@ module EditActiveGame {
             this.activeGame.players = value;
         }
 
-        public get curatedNewPlayers(): Shared.INewGamePlayer[] {
-            return this.curatedPlayersList;
+        public get unselectedPlayers(): Shared.INewGamePlayer[] {
+            return this.unselectedPlayersList;
         }
 
         constructor(private $location: ng.ILocationService,
@@ -113,7 +113,7 @@ module EditActiveGame {
             var currentPlayerIds = this.players.map(p => p.playerId);
 
             // Get players that are not in the current playlist.
-            this.curatedPlayersList = this.allPlayers.filter(player => {
+            this.unselectedPlayersList = this.allPlayers.filter(player => {
                 return currentPlayerIds.indexOf(player.playerId) === -1;
             });
         }

@@ -29,8 +29,7 @@ var EditActiveGame;
             this.showLoading = false;
             this.showError = false;
             this.showScoreForm = false;
-            this.disableControls = false;
-            this.showAddPlayer = false;
+            this.disabled = false;
             this.alerts = [];
             this.changeState(State.Init);
         }
@@ -48,7 +47,7 @@ var EditActiveGame;
             this.showScoreForm = (newState !== State.Init) &&
                 (newState !== State.Loading) &&
                 (newState !== State.Error);
-            this.disableControls = (newState === State.Saving) ||
+            this.disabled = (newState === State.Saving) ||
                 (newState === State.Finalizing) ||
                 (newState === State.Init) ||
                 (newState === State.Loading);
@@ -135,10 +134,12 @@ var EditActiveGame;
         };
         EditActiveGameController.prototype.saveReject = function () {
             var _this = this;
+            // get error messages and display alerts
             this.clearAlerts();
             this.editActiveGameService.errorMessages.forEach(function (msg) { _this.addAlert('danger', msg); });
             this.changeState(State.Ready);
         };
+        // UI Hookups
         EditActiveGameController.prototype.save = function () {
             this.changeState(State.Saving);
         };
@@ -153,7 +154,7 @@ var EditActiveGame;
         };
         EditActiveGameController.$inject = ['$scope', '$timeout', '$window', 'editActiveGameService'];
         return EditActiveGameController;
-    })();
+    }());
     EditActiveGame.EditActiveGameController = EditActiveGameController;
 })(EditActiveGame || (EditActiveGame = {}));
 //# sourceMappingURL=EditActiveGameDirective.js.map

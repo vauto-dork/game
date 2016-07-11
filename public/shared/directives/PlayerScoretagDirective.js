@@ -27,7 +27,7 @@ var Shared;
         });
         PlayerScoretagController.$inject = ['$scope'];
         return PlayerScoretagController;
-    })();
+    }());
     Shared.PlayerScoretagController = PlayerScoretagController;
 })(Shared || (Shared = {}));
 //# sourceMappingURL=PlayerScoretagDirective.js.map

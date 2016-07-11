@@ -13,8 +13,8 @@
     export class ModifyPlayersController {
         public static $inject: string[] = ['$scope', 'editActiveGameService'];
         
-        private get curatedPlayersList(): Shared.INewGamePlayer[] {
-            return this.editActiveGameService.curatedNewPlayers;
+        private get unselectedPlayers(): Shared.INewGamePlayer[] {
+            return this.editActiveGameService.unselectedPlayers;
         }
         
         constructor(private $scope: ng.IScope,

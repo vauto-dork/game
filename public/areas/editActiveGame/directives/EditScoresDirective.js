@@ -53,7 +53,7 @@ var EditActiveGame;
         };
         EditScoresController.$inject = ['$scope', 'editActiveGameService'];
         return EditScoresController;
-    })();
+    }());
     EditActiveGame.EditScoresController = EditScoresController;
 })(EditActiveGame || (EditActiveGame = {}));
 //# sourceMappingURL=EditScoresDirective.js.map

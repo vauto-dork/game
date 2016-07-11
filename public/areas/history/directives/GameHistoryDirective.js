@@ -70,6 +70,7 @@ var DorkHistory;
             console.error(data);
             this.changeState(State.Error);
         };
+        // Dont call directly. Change state to "Loading" instead.
         GameHistoryController.prototype.getGames = function () {
             var _this = this;
             this.apiService.getGames(this.month, this.year).then(function (data) {
@@ -94,7 +95,7 @@ var DorkHistory;
         ;
         GameHistoryController.$inject = ['$scope', '$timeout', 'dateTimeService', 'monthYearQueryService', 'apiService'];
         return GameHistoryController;
-    })();
+    }());
     DorkHistory.GameHistoryController = GameHistoryController;
 })(DorkHistory || (DorkHistory = {}));
 //# sourceMappingURL=GameHistoryDirective.js.map

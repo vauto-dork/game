@@ -95,7 +95,7 @@ var Shared;
         ;
         MonthYearPickerController.$inject = ['$scope', 'dateTimeService'];
         return MonthYearPickerController;
-    })();
+    }());
     Shared.MonthYearPickerController = MonthYearPickerController;
 })(Shared || (Shared = {}));
 //# sourceMappingURL=MonthYearPickerDirective.js.map

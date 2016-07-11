@@ -22,7 +22,7 @@ module CreateGame {
 
 		private showLoading: boolean = false;
 		private showErrorMessage: boolean = false;
-		private showPlayers: boolean = false;
+		private showForm: boolean = false;
 		
 		private orderedPlayersLoaded: boolean = false;
 		private disableOrderedPlayers: boolean = false;
@@ -30,38 +30,26 @@ module CreateGame {
 		private datePlayed: Date = null;
 		
         private get sortOrder(): string {
-            if(this.createGameService.sortOrder === NewGameSort.Rating) {
-                return 'Rating';
-            } else {
-                return 'Selected';
-            }
+            return NewGameSort[this.createGameService.sortOrder];
+        }
+
+        private set sortOrder(value: string) {
+            // do nothing, but required to have a setter
         }
         
-		private get hasDate(): boolean {
-			return this.datePlayed !== null && this.datePlayed !== undefined && this.datePlayed.toISOString() !== "";
+		private get unselectedPlayers(): Shared.INewGamePlayer[] {
+			return this.createGameService.unselectedPlayers;
 		}
-
-		private get curatedNewPlayers(): Shared.INewGamePlayer[] {
-			return this.createGameService.curatedNewPlayers;
-		}
-
-		private get hasSelectedPlayers(): boolean {
-			return this.createGameService.numPlayers > 0;
-		}
-		
-		private get disableGameCreation(): boolean {
-			return !this.hasDate || !this.createGameService.hasMinimumPlayers;
-		}
-        		
+        
         constructor(private $scope: ng.IScope, private $window: ng.IWindowService, private createGameService: ICreateGameService) {
-			this.createGameService.init().then(() => {
-				this.changeState(State.Loaded);
-			});
+            this.createGameService.init().then(() => {
+                this.changeState(State.Loaded);
+            });
         }
 
 		private changeState(newState: State): void {
 			this.showLoading = (newState === State.Loading) || (newState === State.CreatingGame);
-			this.showPlayers = (newState === State.Loaded);
+			this.showForm = (newState === State.Loaded);
 			this.showErrorMessage = newState === State.Error;
 
 			switch (newState) {
@@ -73,11 +61,6 @@ module CreateGame {
 		
 		private addPlayer(data: Shared.INewGamePlayer): void {
 			this.createGameService.addPlayer(data);
-		}
-		
-		private reset(): void {
-			this.datePlayed = null;
-			this.createGameService.reset();
 		}
 
 		private createGame(): void {
@@ -91,11 +74,7 @@ module CreateGame {
 				this.changeState(State.Error);
 			});
 		}
-
-		private useCurrentDateTime(): void {
-			this.datePlayed = new Date();
-		}
-
+        
 		private useThisOrder(): void {
 			this.createGameService.sortOrder = NewGameSort.Selected;
 		}

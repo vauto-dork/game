@@ -29,6 +29,8 @@ var DorkHistory;
         }
         RankingHistoryController.prototype.changeState = function (newState) {
             var _this = this;
+            // Timeouts are required to force a digest cycle so the query
+            // param factory will update in the correct scope.
             switch (newState) {
                 case State.Init:
                     this.$timeout(function () {
@@ -50,7 +52,7 @@ var DorkHistory;
         };
         RankingHistoryController.$inject = ['$scope', '$timeout', 'monthYearQueryService', 'dateTimeService'];
         return RankingHistoryController;
-    })();
+    }());
     DorkHistory.RankingHistoryController = RankingHistoryController;
 })(DorkHistory || (DorkHistory = {}));
 //# sourceMappingURL=RankingHistoryDirective.js.map

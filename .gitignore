@@ -13,3 +13,4 @@ obj/
 bin/
 packages/
 dork-app.csproj.user
+dump/

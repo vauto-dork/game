@@ -29,6 +29,7 @@
     <Content Include="models\index.js" />
     <Content Include="models\player.js" />
     <Content Include="public\areas\activeGame\directives\ActiveGamesTemplate.html" />
+    <Content Include="public\areas\createGame\directives\ButtonsPanelTemplate.html" />
     <Content Include="public\areas\createGame\directives\CreateGameTemplate.html" />
     <Content Include="public\areas\createGame\directives\SelectedPlayersTemplate.html" />
     <Content Include="public\areas\dotm\directives\DotmTemplate.html" />
@@ -110,6 +111,7 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="public\areas\activeGame\directives\ActiveGamesDirective.ts" />
+    <TypeScriptCompile Include="public\areas\createGame\directives\ButtonsPanelDirective.ts" />
     <TypeScriptCompile Include="public\areas\createGame\directives\CreateGameDirective.ts" />
     <TypeScriptCompile Include="public\areas\createGame\directives\SelectedPlayersDirective.ts" />
     <TypeScriptCompile Include="public\areas\createGame\services\CreateGameService.ts" />

@@ -25,8 +25,7 @@ module EditActiveGame {
         private showLoading: boolean = false;
         private showError: boolean = false;
         private showScoreForm: boolean = false;
-        private disableControls: boolean = false;
-        private showAddPlayer: boolean = false;
+        private disabled: boolean = false;
         private datePlayed: Date;
 
         private alerts = [];
@@ -53,7 +52,7 @@ module EditActiveGame {
                 (newState !== State.Loading) &&
                 (newState !== State.Error);
 
-            this.disableControls = (newState === State.Saving) ||
+            this.disabled = (newState === State.Saving) ||
                 (newState === State.Finalizing) ||
                 (newState === State.Init) ||
                 (newState === State.Loading);
