@@ -1,50 +1,44 @@
-var DotmDirective = function() {
-	return {
-		scope: {
-			month: "=",
-			year: "="
-		},
-		templateUrl: '/areas/dotm/directives/DotmTemplate.html',
-		controller: 'DotmController',
-		controllerAs: 'ctrl',
-		bindToController: true
-	};
-}
-
-var DotmController = function ($scope, $http) {
-	var me = this;
-	me.showDorks = false;
-	me.hasUberdorks = false;
-	me.hasNegadorks = false;
-	me.uberdorkHeading = 'Uberdork';
-	me.negadorkHeading = 'Negadork';
-	
-	me.getDotm = function() {
-		var query = '?month=' + me.month + '&year=' + me.year;
-		
-		$http.get("/Players/dotm" + query).success(function(data, status, headers, config) {
-		    me.loaded(data);
-		}).
-		error(function(data, status, headers, config) {
-		    debugger;
-		});
-	};
-	
-	me.loaded = function(data) {
-	    me.dotm = data;
-		me.hasUberdorks = data.uberdorks.length > 0;
-		// Let's not show negadorks because it's not nice.
-		//me.hasNegadorks = data.negadorks.length > 0;
-		me.showDorks = true;
-	}
-	
-	$scope.$watchGroup([function(){ return me.month; }, function(){ return me.year; }], function(newValue, oldValue){
-		if(newValue != oldValue) {
-			me.getDotm();
-		}
-	});
-	
-	me.getDotm();
-}
-
-DotmController.$inject = ['$scope', '$http'];
+var Dotm;
+(function (Dotm) {
+    function DotmDirective() {
+        return {
+            scope: {
+                month: "=",
+                year: "="
+            },
+            templateUrl: '/areas/dotm/directives/DotmTemplate.html',
+            controller: 'DotmController',
+            controllerAs: 'ctrl',
+            bindToController: true
+        };
+    }
+    Dotm.DotmDirective = DotmDirective;
+    var DotmController = (function () {
+        function DotmController($scope, apiService) {
+            var _this = this;
+            this.$scope = $scope;
+            this.apiService = apiService;
+            this.hasUberdorks = false;
+            this.getDotm();
+            $scope.$watchGroup([function () { return _this.month; }, function () { return _this.year; }], function (newValue, oldValue) {
+                if (newValue !== oldValue) {
+                    _this.getDotm();
+                }
+            });
+        }
+        DotmController.prototype.getDotm = function () {
+            var _this = this;
+            this.hasUberdorks = false;
+            this.apiService.getDotm(this.month, this.year).then(function (data) {
+                _this.dotm = data;
+                _this.hasUberdorks = data.uberdorks.length > 0;
+            }, function () {
+                console.error("Cannot get DOTM.");
+            });
+        };
+        DotmController.$inject = ['$scope', 'apiService'];
+        return DotmController;
+    }());
+    Dotm.DotmController = DotmController;
+})(Dotm || (Dotm = {}));
+//# sourceMappingURL=DotmDirective.js.map

@@ -1,68 +1,98 @@
-var MonthYearPickerDirective = function() {
-	return {
-		scope: {
-			month: "=",
-			year: "=",
-			disabled: "=",
-			change: "&"
-		},
-		templateUrl: '/shared/directives/MonthYearPickerTemplate.html',
-		controller: 'MonthYearPickerController',
-		controllerAs: 'ctrl',
-		bindToController: true
-	};
-};
-
-var MonthYearPickerController = function ($scope) {
-	var me = this;
-	me.minimumYear = 2015;
-	
-	me.disableMonth = me.disabled || false;
-	me.disableYear = me.disabled || false;
-	
-	me.currentMonth = me.month !== undefined && me.month !== null ? me.month : new Date().getMonth();
-	me.currentYear = me.year !== undefined && me.year !== null ? me.year : new Date().getFullYear();
-	
-	me.init = function() {
-		me.months = [
-			{name: 'January', value: 0},
-			{name: 'February', value: 1},
-			{name: 'March', value: 2},
-			{name: 'April', value: 3},
-			{name: 'May', value: 4},
-			{name: 'June', value: 5},
-			{name: 'July', value: 6},
-			{name: 'August', value: 7},
-			{name: 'September', value: 8},
-			{name: 'October', value: 9},
-			{name: 'November', value: 10},
-			{name: 'December', value: 11}
-			];
-		me.selectedMonth = me.months[me.currentMonth];
-		
-		me.years = [];	
-		for(var i = me.minimumYear; i <= me.currentYear; i++){
-			var tempYear = { name: i.toString(), value: i };
-			me.years.push(tempYear);
-			
-			if(i === me.currentYear){
-				me.selectedYear = tempYear;
-			}
-		}
-		
-		me.disableYear = me.disableYear || me.years.length <= 1;
-	};
-	
-	me.updateParams = function(){
-		me.month = me.selectedMonth.value;
-		me.year = me.selectedYear.value;
-		
-		if(me.change !== undefined) {
-			me.change();
-		}
-	};
-	
-	me.init();
-};
-
-MonthYearPickerController.$inject = ['$scope'];
+var Shared;
+(function (Shared) {
+    function MonthYearPickerDirective() {
+        return {
+            scope: {
+                month: "=",
+                year: "=",
+                disabled: "=?",
+                change: "&"
+            },
+            templateUrl: '/shared/directives/MonthYearPickerTemplate.html',
+            controller: 'MonthYearPickerController',
+            controllerAs: 'ctrl',
+            bindToController: true
+        };
+    }
+    Shared.MonthYearPickerDirective = MonthYearPickerDirective;
+    var MonthYearPickerController = (function () {
+        function MonthYearPickerController(dateTimeService) {
+            this.dateTimeService = dateTimeService;
+            this.isDisabled = false;
+            this.minimumYear = 2015;
+            this.disableYear = false;
+            this.years = [];
+            this.months = [
+                { name: 'January', value: 0 },
+                { name: 'February', value: 1 },
+                { name: 'March', value: 2 },
+                { name: 'April', value: 3 },
+                { name: 'May', value: 4 },
+                { name: 'June', value: 5 },
+                { name: 'July', value: 6 },
+                { name: 'August', value: 7 },
+                { name: 'September', value: 8 },
+                { name: 'October', value: 9 },
+                { name: 'November', value: 10 },
+                { name: 'December', value: 11 }
+            ];
+            this.init();
+        }
+        Object.defineProperty(MonthYearPickerController.prototype, "disabled", {
+            get: function () {
+                return this.isDisabled;
+            },
+            set: function (value) {
+                this.isDisabled = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MonthYearPickerController.prototype, "month", {
+            get: function () {
+                return this.currentMonth === undefined || this.currentMonth === null
+                    ? this.dateTimeService.currentMonthValue()
+                    : this.currentMonth;
+            },
+            set: function (value) {
+                this.currentMonth = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MonthYearPickerController.prototype, "year", {
+            get: function () {
+                return this.currentYear === undefined || this.currentYear === null
+                    ? this.dateTimeService.currentYear()
+                    : this.currentYear;
+            },
+            set: function (value) {
+                this.currentYear = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        MonthYearPickerController.prototype.init = function () {
+            this.selectedMonth = this.months[this.currentMonth];
+            for (var i = this.minimumYear; i <= this.currentYear; i++) {
+                var tempYear = { name: i.toString(), value: i };
+                this.years.push(tempYear);
+                if (i === this.currentYear) {
+                    this.selectedYear = tempYear;
+                }
+            }
+            this.disableYear = this.disableYear || this.years.length <= 1;
+        };
+        MonthYearPickerController.prototype.updateParams = function () {
+            this.month = this.selectedMonth.value;
+            this.year = this.selectedYear.value;
+            if (this.change !== undefined) {
+                this.change();
+            }
+        };
+        MonthYearPickerController.$inject = ['dateTimeService'];
+        return MonthYearPickerController;
+    }());
+    Shared.MonthYearPickerController = MonthYearPickerController;
+})(Shared || (Shared = {}));
+//# sourceMappingURL=MonthYearPickerDirective.js.map

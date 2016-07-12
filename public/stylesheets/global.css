@@ -1,8 +1,9 @@
-@font-face {
+﻿@font-face {
   font-family: 'Ubuntu';
   font-style: normal;
   font-weight: 400;
   src: local("Ubuntu"), url(/fonts/sDGTilo5QRsfWu6Yc11AXg.woff2) format("woff2"), url(/fonts/_xyN3apAT_yRRDeqB3sPRg.woff) format("woff"); }
+
 html,
 body {
   font-family: 'Ubuntu', sans-serif;
@@ -12,10 +13,8 @@ body {
   margin-bottom: 2em;
   background-color: #e4e9ef; }
 
-.player-selector .dropdown-menu {
-  width: 100%;
-  font-size: 2em;
-  line-height: 2em; }
+hr {
+  border-color: #7a8394; }
 
 .panel {
   position: relative; }
@@ -70,11 +69,13 @@ body {
     .navbar-collapse li > a {
       padding-top: 0.5em;
       padding-bottom: 0.5em; } }
+
 @media (min-width: 768px) {
   .navbar-collapse {
     font-size: 1.4em; }
     .navbar-collapse li > a {
       border-radius: 4px; } }
+
 .navbar-collapse {
   -moz-box-shadow: inset 0px 8px 9px -6px rgba(0, 0, 0, 0.5);
   -webkit-box-shadow: inset 0px 8px 9px -6px rgba(0, 0, 0, 0.5);
@@ -127,8 +128,8 @@ input[type='number']::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0; }
 
-input.ng-invalid {
-  background: #F84072;
+.ng-submitted input.ng-invalid-required,
+input.ng-touched.ng-invalid {
+  background: #F2DEDE;
   border: 1px red solid; }
 
-/*# sourceMappingURL=global.css.map */

@@ -1,21 +1,23 @@
-var PlayerNametagDirective = function() {
-	return {
-		scope: {
-			player: '='
-		},
-		templateUrl: '/shared/directives/PlayerNametagTemplate.html',
-		controller: 'PlayerNametagController',
-		controllerAs: 'ctrl',
-		bindToController: true
-	};
-};
-
-var PlayerNametagController = function ($scope) {
-	var me = this;
-	
-	me.initials = this.player.initials;
-	me.fullname = this.player.fullname;
-	me.nickname = this.player.nickname;
-};
-
-PlayerNametagController.$inject = ['$scope'];
+var Shared;
+(function (Shared) {
+    function PlayerNametagDirective() {
+        return {
+            scope: {
+                player: '='
+            },
+            templateUrl: '/shared/directives/PlayerNametagTemplate.html',
+            controller: 'PlayerNametagController',
+            controllerAs: 'ctrl',
+            bindToController: true
+        };
+    }
+    Shared.PlayerNametagDirective = PlayerNametagDirective;
+    var PlayerNametagController = (function () {
+        function PlayerNametagController() {
+        }
+        PlayerNametagController.$inject = [];
+        return PlayerNametagController;
+    }());
+    Shared.PlayerNametagController = PlayerNametagController;
+})(Shared || (Shared = {}));
+//# sourceMappingURL=PlayerNametagDirective.js.map

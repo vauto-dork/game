@@ -13,9 +13,9 @@ var DateHelper = require('./dateHelper');
 router.get('/', function (req, res, next) {
 	// TODO Make this return only Active players. At the time of writing there is no concept of 'Active' players.
 	PlayerModel.find(function (err, players) {
-		if(err) return next(err);
+		if (err) return next(err);
 		//sort
-		if(req.query.sort) {
+		if (req.query.sort) {
 			sortPlayersAlphabetically(players);
 		}
 		res.json(players);
@@ -41,56 +41,67 @@ router.get('/newgame', function (req, res, next) {
 	var dateRange = DateHelper.getCurrentMonthRange();
 	var startDateRange = dateRange[0];
 	var endDateRange = dateRange[1];
-	
+
 	GameModel.find(function (err, games) {
-			if (err) return next(err);
-			getAllPlayersForNewGame(games, res, next);
-		})
+		if (err) return next(err);
+		getAllPlayersForNewGame(games, res, next);
+	})
 		.where('datePlayed').gte(startDateRange).lt(endDateRange)
 		.exec();
 });
 
 function getAllPlayersForNewGame(games, res, next) {
-	
+
 	var isFirstGameOfMonth = !games || games.length === 0;
-	var gamePlayers = games.map(function(game) {
-		return game.players.map(function(player) {
-			// convert to string
-			return player.player + '';
+	var playerPoints = {};
+	var playerGames = {};
+
+	if (games) {
+		games.forEach(function (game) {
+			game.players.forEach(function (player) {
+				// Force it to be a string
+				var playerId = player.player + '';
+
+				if (!playerGames[playerId]) {
+					playerGames[playerId] = 1;
+				} else {
+					playerGames[playerId]++;
+				}
+
+				if (!playerPoints[playerId]) {
+					playerPoints[playerId] = player.points;
+				} else {
+					playerPoints[playerId] += player.points;
+				}
+			});
 		});
-	});
+	}
 	
 	// TODO Make this return only Active players. At the time of writing there is no concept of 'Active' players.
 	PlayerModel.find(function (err, players) {
-		if(err) return next(err);
-		
+		if (err) return next(err);
+
 		sortPlayersAlphabetically(players);
-		
+
 		var orderNumber = 0;
-		
+
 		var playersList = [];
-		for(var i = 0; i < players.length; i++) {
-			var gamesPlayed = 0;
-			
-			// find all games the player played
-			for(var j = 0; j < gamePlayers.length; j++) {
-				// must convert to string
-				var playerId = players[i]._id + '';
-				
-				if(gamePlayers[j].indexOf(playerId) > -1 ) {
-					gamesPlayed++;
-				}
-			}
-			
+		for (var i = 0; i < players.length; i++) {
+			// Force it to be a string
+			var playerId = players[i]._id + '';
+
+			var gamesPlayed = playerGames[playerId] || 0;
+			var rating = gamesPlayed === 0 ? 0 : (playerPoints[playerId] || 0) / gamesPlayed;
+
 			var playerOrderNumber = gamesPlayed > 0 ? -gamesPlayed : orderNumber++;
-			playersList.push({ player: players[i], /*gamesPlayed: gamesPlayed,*/ orderNumber: playerOrderNumber });
+			playersList.push({ player: players[i], /*gamesPlayed: gamesPlayed,*/ orderNumber: playerOrderNumber, rating: rating });
 		}
-		
-		playersList.sort(function(a, b) {
+
+		playersList.sort(function (a, b) {
 			return a.orderNumber - b.orderNumber;
 		});
-		
-		res.json({firstGameOfMonth: isFirstGameOfMonth, players: playersList });
+
+		res.json({ firstGameOfMonth: isFirstGameOfMonth, players: playersList });
 	});
 };
 
@@ -112,37 +123,37 @@ function getAllPlayersForNewGame(games, res, next) {
  * 	</pre>
  */
 
-router.get('/dotm/', function(req, res, next) {
-	getRankedPlayers(req, next, function(rankedPlayers) {
-		rankedPlayers = rankedPlayers.filter( function(element) {
+router.get('/dotm/', function (req, res, next) {
+	getRankedPlayers(req, next, function (rankedPlayers) {
+		rankedPlayers = rankedPlayers.filter(function (element) {
 			return element.gamesPlayed >= 10;
 		});
-		
-		var uberdorks = rankedPlayers.filter( function(element) {
+
+		var uberdorks = rankedPlayers.filter(function (element) {
 			return element.rating === rankedPlayers[0].rating;
 		});
-		
-		var negativePoints = rankedPlayers.filter( function(element) {
+
+		var negativePoints = rankedPlayers.filter(function (element) {
 			return element.totalPoints < 0;
 		});
-		
+
 		var negadorks;
-		if(negativePoints.length > 1) {
+		if (negativePoints.length > 1) {
 			var found = negativePoints[0];
-			
-			for(var i = 0; i < negativePoints.length; i++) {
-				if(PlayerModel.getRankedPlayerAverage(negativePoints[i]) < PlayerModel.getRankedPlayerAverage(found)) {
+
+			for (var i = 0; i < negativePoints.length; i++) {
+				if (PlayerModel.getRankedPlayerAverage(negativePoints[i]) < PlayerModel.getRankedPlayerAverage(found)) {
 					found = negativePoints[i];
 				}
 			}
-			
-			negadorks = negativePoints.filter( function(element) {
+
+			negadorks = negativePoints.filter(function (element) {
 				return PlayerModel.getRankedPlayerAverage(element) === PlayerModel.getRankedPlayerAverage(found);
 			});
 		} else {
 			negadorks = negativePoints;
 		}
-		
+
 		res.json({ uberdorks: uberdorks, negadorks: negadorks });
 	});
 });
@@ -155,9 +166,9 @@ router.get('/dotm/', function(req, res, next) {
  * @body List of players to sort
  */
 router.post('/sort/', function (req, res, next) {
-	getRankedPlayers(req, next, function(rankedPlayers) {
+	getRankedPlayers(req, next, function (rankedPlayers) {
 		var players = [];
-		for(var i=0; i<rankedPlayers.length; i++) {
+		for (var i = 0; i < rankedPlayers.length; i++) {
 			players.push(rankedPlayers[i].player);
 		}
 		res.json(players);
@@ -166,23 +177,23 @@ router.post('/sort/', function (req, res, next) {
 
 /* POST save a player. */
 router.post('/', function (req, res, next) {
-	if(!req.body) {
+	if (!req.body) {
 		return next(new Error("Cannot save a player without data!"));
 	}
 	if (req.body && req.body.constructor === Array) {
-		PlayerModel.create(req.body, function(err, player) {
-			if(err) return next(err);
+		PlayerModel.create(req.body, function (err, player) {
+			if (err) return next(err);
 			res.json();
 		});
 	} else {
-		if(!req.body.firstName) {
+		if (!req.body.firstName) {
 			return next(new Error("Cannot save a player without a first name!"));
 		}
-		if(!req.body.lastName) {
+		if (!req.body.lastName) {
 			return next(new Error("Cannot save a player without a last name!"));
 		}
-		PlayerModel.create(req.body, function (err, player){
-			if(err) return next(err);
+		PlayerModel.create(req.body, function (err, player) {
+			if (err) return next(err);
 			res.json(player);
 		});
 	}
@@ -212,22 +223,22 @@ router.post('/', function (req, res, next) {
  *		}
  * 	</pre>
  */
-router.post('/ranked/sort/', function(req, res, next) {
+router.post('/ranked/sort/', function (req, res, next) {
 	getRanked(req, res, next);
 });
 
-router.get('/ranked/', function(req, res, next) {
+router.get('/ranked/', function (req, res, next) {
 	getRanked(req, res, next);
 });
 
 function getRanked(req, res, next) {
-	getRankedPlayers(req, next, function(rankedPlayers) {
-		if(!!req.query.hideUnranked && req.query.hideUnranked.toLowerCase() === 'true') {
+	getRankedPlayers(req, next, function (rankedPlayers) {
+		if (!!req.query.hideUnranked && req.query.hideUnranked.toLowerCase() === 'true') {
 			rankedPlayers = rankedPlayers.filter(
-				function(element) {
-					return element.rating > 0;
+				function (element) {
+					return element.gamesPlayed > 0;
 				}
-			);
+		    );
 		}
 		res.json(rankedPlayers);
 	});
@@ -241,10 +252,10 @@ function getRankedPlayers(req, next, success) {
 
 	// validate sort type
 	var sortType = req.query.sortType;
-	if(!sortType) {
+	if (!sortType) {
 		sortType = PlayerModel.SortTypes.Rating;
 	}
-	if(!PlayerModel.isSortTypeValid(sortType)) {
+	if (!PlayerModel.isSortTypeValid(sortType)) {
 		return next(new Error("Invalid sort type \"" + sortType + "\"."));
 	}
 
@@ -260,15 +271,15 @@ function getRankedPlayers(req, next, success) {
 		.populate('players')
 		.populate('players.player')
 		.exec(function (err, games) {
-			if(err) return next(err);
+			if (err) return next(err);
 
 			var rankedPlayers = [];
-			if(games) {
+			if (games) {
 				// loop through all games
 				for (var i = 0; i < games.length; i++) {
 					var game = games[i];
 					// combine each player's stats
-					for(var j=0; j < game.players.length; j++) {
+					for (var j = 0; j < game.players.length; j++) {
 						var gamePlayer = game.players[j];
 						// TODO There's gotta be a more efficient way to do this...
 						rankedPlayers = pushGamePlayerToRankedArray(rankedPlayers, gamePlayer);
@@ -276,10 +287,10 @@ function getRankedPlayers(req, next, success) {
 				} // end loop for game
 				//all ranked players are set at this point
 
-				if(!returnAllPlayers) {
+				if (!returnAllPlayers) {
 					// remove players not in the request body
-					for(var k=0; k<rankedPlayers.length; k++) {
-						if(!PlayerModel.arrContains(req.body, rankedPlayers[k].player)) {
+					for (var k = 0; k < rankedPlayers.length; k++) {
+						if (!PlayerModel.arrContains(req.body, rankedPlayers[k].player)) {
 							// Not interested in this player, remove it from the array
 							rankedPlayers.splice(k--, 1);
 						}
@@ -290,23 +301,23 @@ function getRankedPlayers(req, next, success) {
 				PlayerModel.rankedPlayerSort(rankedPlayers, PlayerModel.SortTypes.Rating);
 				
 				// assign the player's rating
-				rankedPlayers.forEach(function(player) {
+				rankedPlayers.forEach(function (player) {
 					player.rating = PlayerModel.getRankedPlayerAverage(player);
 				});
 			}
 
 			// Get array of all requested player ids
 			var requestedPlayerIds = null;
-			if(!returnAllPlayers) {
+			if (!returnAllPlayers) {
 				requestedPlayerIds = [];
-				for(var p=0; p<req.body.length; p++) {
+				for (var p = 0; p < req.body.length; p++) {
 					requestedPlayerIds.push(req.body[p]._id);
 				}
 			}
 
 			// Now fetch the complete list of players and append any
 			// of them to the list if need be. These are the "un-ranked" players.
-			var where = returnAllPlayers ? {} : {'_id': {$in: requestedPlayerIds}};
+			var where = returnAllPlayers ? {} : { '_id': { $in: requestedPlayerIds } };
 			PlayerModel.find(where, function (err, players) {
 				if (err) return next(err);
 
@@ -319,7 +330,7 @@ function getRankedPlayers(req, next, success) {
 				}
 
 				// rating sort is already done so don't redo that work.
-				if(sortType != PlayerModel.SortTypes.Rating) {
+				if (sortType != PlayerModel.SortTypes.Rating) {
 					PlayerModel.rankedPlayerSort(rankedPlayers, sortType);
 				}
 				success(rankedPlayers);
@@ -329,9 +340,9 @@ function getRankedPlayers(req, next, success) {
 
 function pushGamePlayerToRankedArray(rankedPlayersArr, gamePlayer) {
 	// first look for an existing player. If found then update it.
-	for(var i=0; i < rankedPlayersArr.length; i++) {
+	for (var i = 0; i < rankedPlayersArr.length; i++) {
 		var rankedPlayer = rankedPlayersArr[i];
-		if(rankedPlayer.player._id == gamePlayer.player._id) {
+		if (rankedPlayer.player._id == gamePlayer.player._id) {
 			rankedPlayersArr[i] = mergeRankedPlayerObjects(rankedPlayer, gamePlayer);
 			return rankedPlayersArr;
 		}
@@ -352,8 +363,8 @@ function mergeRankedPlayerObjects(rp1, rp2) {
 
 /* GET player. */
 router.get('/:id', function (req, res, next) {
-	PlayerModel.findById(req.params.id, function (err, player){
-		if(err) return next(err);
+	PlayerModel.findById(req.params.id, function (err, player) {
+		if (err) return next(err);
 		res.json(player);
 	});
 });
@@ -361,14 +372,14 @@ router.get('/:id', function (req, res, next) {
 /* PUT update a player. */
 router.put('/:id', function (req, res, next) {
 	PlayerModel.findByIdAndUpdate(req.params.id, req.body, function (err, player) {
-		if(err) return next(err);
+		if (err) return next(err);
 		res.end();
 		// res.json(player);
 	});
 });
 
 router.delete('/:id', function (req, res, next) {
-	PlayerModel.findByIdAndRemove(req.params.id, function (err, player){
+	PlayerModel.findByIdAndRemove(req.params.id, function (err, player) {
 		if (err) return next(err);
 		res.end();
 		// res.json(player);

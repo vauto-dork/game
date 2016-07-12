@@ -1,50 +1,57 @@
-var RankingHistoryDirective = function() {
-	return {
-		scope: {
-		},
-		templateUrl: '/areas/history/directives/RankingHistoryTemplate.html',
-		controller: 'RankingHistoryController',
-		controllerAs: 'ctrl',
-		bindToController: true
-	};
-};
-
-var RankingHistoryController = function ($scope, $timeout, monthYearQueryFactory, dateTimeFactory) {
-	var me = this;
-	me.month = dateTimeFactory.LastMonthValue();
-	me.year = dateTimeFactory.LastMonthYear();
-	
-	me.State = {
-		Init: 0,
-		Ready: 1,
-		Change: 2
-	};
-	
-	me.changeState = function(newState) {
-		// Timeouts are required to force a digest cycle so the query
-		// param factory will update in the correct scope.
-		switch(newState) {
-			case me.State.Init:
-				$timeout(function() {
-					me.month = monthYearQueryFactory.GetMonthQueryParam(me.month);
-					me.year = monthYearQueryFactory.GetYearQueryParam(me.year);
-				}, 0);
-				me.changeState(me.State.Ready);
-				break;
-			case me.State.Change:
-				$timeout(function() {
-					monthYearQueryFactory.SaveQueryParams(me.month, me.year);
-				}, 0);
-				me.changeState(me.State.Ready);
-				break;
-		}
-	};	
-	
-	me.updateQueryParams = function() {
-		me.changeState(me.State.Change);
-	};
-	
-	me.changeState(me.State.Init);
-};
-
-RankingHistoryController.$inject = ['$scope', '$timeout', 'monthYearQueryFactory', 'dateTimeFactory'];
+var DorkHistory;
+(function (DorkHistory) {
+    function RankingHistoryDirective() {
+        return {
+            scope: {},
+            templateUrl: '/areas/history/directives/RankingHistoryTemplate.html',
+            controller: 'RankingHistoryController',
+            controllerAs: 'ctrl',
+            bindToController: true
+        };
+    }
+    DorkHistory.RankingHistoryDirective = RankingHistoryDirective;
+    var State;
+    (function (State) {
+        State[State["Init"] = 0] = "Init";
+        State[State["Ready"] = 1] = "Ready";
+        State[State["Change"] = 2] = "Change";
+    })(State || (State = {}));
+    ;
+    var RankingHistoryController = (function () {
+        function RankingHistoryController($timeout, monthYearQueryService, dateTimeService) {
+            this.$timeout = $timeout;
+            this.monthYearQueryService = monthYearQueryService;
+            this.dateTimeService = dateTimeService;
+            this.month = dateTimeService.lastMonthValue();
+            this.year = dateTimeService.lastMonthYear();
+            this.changeState(State.Init);
+        }
+        RankingHistoryController.prototype.changeState = function (newState) {
+            var _this = this;
+            // Timeouts are required to force a digest cycle so the query
+            // param factory will update in the correct scope.
+            switch (newState) {
+                case State.Init:
+                    this.$timeout(function () {
+                        _this.month = _this.monthYearQueryService.getMonthQueryParam(_this.month);
+                        _this.year = _this.monthYearQueryService.getYearQueryParam(_this.year);
+                    }, 0);
+                    this.changeState(State.Ready);
+                    break;
+                case State.Change:
+                    this.$timeout(function () {
+                        _this.monthYearQueryService.saveQueryParams(_this.month, _this.year);
+                    }, 0);
+                    this.changeState(State.Ready);
+                    break;
+            }
+        };
+        RankingHistoryController.prototype.updateQueryParams = function () {
+            this.changeState(State.Change);
+        };
+        RankingHistoryController.$inject = ['$timeout', 'monthYearQueryService', 'dateTimeService'];
+        return RankingHistoryController;
+    }());
+    DorkHistory.RankingHistoryController = RankingHistoryController;
+})(DorkHistory || (DorkHistory = {}));
+//# sourceMappingURL=RankingHistoryDirective.js.map

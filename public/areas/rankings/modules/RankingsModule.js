@@ -1,9 +1,7 @@
 var RankingsModule = angular.module('RankingsModule', []);
-
-RankingsModule.factory('rankingsFactory', RankingsFactory);
-
-RankingsModule.controller('RankingsCardController', RankingsCardController);
-RankingsModule.directive('rankingsCard', RankingsCardDirective);
-
-RankingsModule.controller('RankingsController', RankingsController);
-RankingsModule.directive('rankings', RankingsDirective);
+RankingsModule.service('rankingsService', Rankings.RankingsService);
+RankingsModule.controller('RankingsCardController', Rankings.RankingsCardController);
+RankingsModule.directive('rankingsCard', Rankings.RankingsCardDirective);
+RankingsModule.controller('RankingsController', Rankings.RankingsController);
+RankingsModule.directive('rankings', Rankings.RankingsDirective);
+//# sourceMappingURL=RankingsModule.js.map

@@ -9,8 +9,8 @@ block modules
 	script.
 		var GameHistoryModule = angular.module('GameHistoryModule', ['GameCardModule']);
 		
-		GameHistoryModule.controller('GameHistoryController', GameHistoryController);
-		GameHistoryModule.directive('gameHistory', GameHistoryDirective);
+		GameHistoryModule.controller('GameHistoryController', DorkHistory.GameHistoryController);
+		GameHistoryModule.directive('gameHistory', DorkHistory.GameHistoryDirective);
 		
 	- var modules = ['GameHistoryModule']
 

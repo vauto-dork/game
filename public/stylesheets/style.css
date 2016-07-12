@@ -1,8 +1,9 @@
-@font-face {
+﻿@font-face {
   font-family: 'Ubuntu';
   font-style: normal;
   font-weight: 400;
   src: local("Ubuntu"), url(/fonts/sDGTilo5QRsfWu6Yc11AXg.woff2) format("woff2"), url(/fonts/_xyN3apAT_yRRDeqB3sPRg.woff) format("woff"); }
+
 html,
 body {
   font-family: 'Ubuntu', sans-serif;
@@ -12,10 +13,8 @@ body {
   margin-bottom: 2em;
   background-color: #e4e9ef; }
 
-.player-selector .dropdown-menu {
-  width: 100%;
-  font-size: 2em;
-  line-height: 2em; }
+hr {
+  border-color: #7a8394; }
 
 .panel {
   position: relative; }
@@ -70,11 +69,13 @@ body {
     .navbar-collapse li > a {
       padding-top: 0.5em;
       padding-bottom: 0.5em; } }
+
 @media (min-width: 768px) {
   .navbar-collapse {
     font-size: 1.4em; }
     .navbar-collapse li > a {
       border-radius: 4px; } }
+
 .navbar-collapse {
   -moz-box-shadow: inset 0px 8px 9px -6px rgba(0, 0, 0, 0.5);
   -webkit-box-shadow: inset 0px 8px 9px -6px rgba(0, 0, 0, 0.5);
@@ -127,8 +128,9 @@ input[type='number']::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0; }
 
-input.ng-invalid {
-  background: #F84072;
+.ng-submitted input.ng-invalid-required,
+input.ng-touched.ng-invalid {
+  background: #F2DEDE;
   border: 1px red solid; }
 
 .animate-appear.ng-move,
@@ -157,10 +159,12 @@ input.ng-invalid {
   display: inline-block;
   vertical-align: middle; }
 
-.staticDateTime {
-  margin: auto;
-  padding: 1em 0 2em 0;
-  max-width: 50em; }
+.datepicker {
+  max-width: 15em; }
+
+.player-selector-container {
+  padding-top: 1em;
+  padding-bottom: 1em; }
 
 .add-player-status {
   padding: 1em;
@@ -180,34 +184,13 @@ input.ng-invalid {
   height: 2em;
   line-height: 2em; }
 
-.player-delete-blur {
-  -webkit-filter: blur(2px);
-  -moz-filter: blur(2px);
-  -ms-filter: blur(2px);
-  -o-filter: blur(2px);
-  filter: blur(2px); }
-
-.player-delete-warning-overlay {
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  z-index: 20;
-  background: rgba(0, 0, 0, 0.6);
-  color: #fff;
-  text-align: center; }
-  .player-delete-warning-overlay h3 {
-    text-shadow: 0 0 20px #000; }
-  .player-delete-warning-overlay .overlay-text-container {
-    width: 100%;
-    height: 100%;
-    cursor: pointer; }
-
 .panel-title .player-nickname {
   margin-left: 0.3em;
   padding-left: 0.5em;
   border-left: 2px solid #e4e9ef;
   display: inline-block;
   white-space: nowrap; }
+
 .panel-title .player-name {
   background-color: #4f6885;
   color: #e4e9ef;
@@ -273,36 +256,6 @@ input.ng-invalid {
     .player-score-card .game-rank .game-rank-dot {
       display: inline-block;
       margin: 0 0.5em; }
-
-.footer-spacer {
-  width: 100%;
-  height: 5.5em; }
-
-.footer-bar {
-  -moz-box-shadow: 0 2px 4px 2px rgba(0, 0, 0, 0.5);
-  -webkit-box-shadow: 0 2px 4px 2px rgba(0, 0, 0, 0.5);
-  box-shadow: 0 2px 4px 2px rgba(0, 0, 0, 0.5);
-  margin: 0;
-  padding: 0 0.5em;
-  color: #fff;
-  background-color: #4f6885;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  z-index: 100;
-  width: 100%;
-  height: 2em;
-  line-height: 1.8em;
-  font-size: 2.2em;
-  font-weight: bold; }
-  .footer-bar .btn {
-    margin-left: 0.25em;
-    margin-right: 0.25em; }
-  .footer-bar .btn-text {
-    font-size: 12px; }
-  .footer-bar button.active {
-    color: #00ff00;
-    text-shadow: 0 0 4px #ffffff; }
 
 .overlay {
   top: 0;
@@ -443,20 +396,31 @@ input.ng-invalid {
     color: #7a8394; }
 
 .playlist-instructions {
-  padding: 1em;
-  text-align: center;
+  padding: 0 1em 1em 1em;
   font-size: 1.4em; }
 
-.player-selector-filter {
+.selected-players-wrapper {
+  padding: 0 15px;
+  margin-bottom: 20px;
+  border: 2px solid #7a8394;
+  border-radius: 5px; }
+  .selected-players-wrapper .selected-players {
+    margin-bottom: 15px; }
+
+.player-selector .player-selector-filter {
   padding: 0.25em;
   width: 100%;
   font-size: 2em;
   line-height: 2em;
   height: 2em; }
 
-.player-selector-filter-remove {
+.player-selector .player-selector-remove-btn {
+  border: 2px solid #ccc; }
+
+.player-selector .dropdown-menu {
+  width: 100%;
   font-size: 2em;
-  cursor: pointer; }
+  line-height: 2em; }
 
 .playlist-row {
   display: block;
@@ -492,9 +456,10 @@ input.ng-invalid {
   display: block;
   line-height: 2em;
   padding: 1em 0;
-  max-width: 50em;
   padding: 0 0.5em;
   margin: auto; }
+  .playlist-scores-row .panel-body, .dotm-row .panel-body, .btn-row .panel-body {
+    cursor: pointer; }
 
 .dotm-row {
   margin-top: 1em;
@@ -503,4 +468,16 @@ input.ng-invalid {
 .btn-row {
   padding: 1em 0.5em; }
 
-/*# sourceMappingURL=style.css.map */
+.edit-active-game {
+  padding-top: 2em; }
+  .edit-active-game .modify-players-button {
+    margin-bottom: 20px; }
+  .edit-active-game .bonus-points-notice {
+    margin-top: 15px; }
+  .edit-active-game .bonus-points-table {
+    font-size: 14px;
+    margin-bottom: 0; }
+
+.ranking-history .month-year-picker {
+  padding: 1.5em 0 2em 0; }
+

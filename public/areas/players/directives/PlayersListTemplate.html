@@ -1,49 +1,46 @@
-<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)" ng-bind="alert.msg"></alert>
+<div class="col-xs-12">
+	<uib-alert ng-repeat="alert in ctrl.alerts" type="{{alert.type}}" close="ctrl.closeAlert($index)">{{alert.msg}}</uib-alert>
 
-<div ng-if="ctrl.showError">
-	<div class="btn-row">
-		<button type="button" class="btn btn-success btn-block btn-lg" ng-click="ctrl.reload()">
-			<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Reload
-		</button>
+	<div ng-show="ctrl.showError">
+		<div class="btn-row">
+			<button type="button" class="btn btn-success btn-block btn-lg" ng-click="ctrl.reload()">
+				<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Reload
+			</button>
+		</div>
 	</div>
-</div>
+    
+    <load-spinner ng-show="ctrl.showLoading"></load-spinner>
 
-<div class="load-bar" ng-if="ctrl.showLoading">
-	<img src="/images/loader.gif" width="220" height="19" />
-</div>
-
-<div class="status-banner" ng-if="ctrl.showPlayers">
-	<div class="form-group">
-		<div class="input-group">
-			<input type="text" class="form-control player-selector-filter"
-				placeholder="Type name..."
-				ng-model="ctrl.filter"
-				autocomplete="off"
+	<div class="player-selector-container" ng-show="ctrl.showPlayers">
+		<div class="form-group">
+			<div class="input-group">
+				<input type="text" class="form-control player-selector-filter" placeholder="Type name..." ng-model="ctrl.filter" autocomplete="off"
 				autofocus />
-			<div class="input-group-addon player-selector-filter-remove" ng-click="ctrl.removeFilter()">
-				<span class="glyphicon glyphicon-remove-sign"></span>
+				<div class="input-group-addon player-selector-filter-remove" ng-click="ctrl.removeFilter()">
+					<span class="glyphicon glyphicon-remove-sign"></span>
+				</div>
 			</div>
 		</div>
 	</div>
 </div>
 
-<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-repeat="player in ctrl.players | filter:ctrl.filter" ng-if="ctrl.showPlayers">
+<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-repeat="player in ctrl.players | filter:ctrl.filter" ng-show="ctrl.showPlayers">
 	<div class="player-card players-list-card">
-    	<player-nametag player="player"></player-nametag>
-		
+		<player-nametag player="player"></player-nametag>
+
 		<div class="edit-player-btn">
 			<button type="button" class="btn btn-warning" ng-click="ctrl.editPlayer(player)" aria-label="Edit Game">
 				<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Edit
 			</button>
 		</div>
-    </div>
+	</div>
 </div>
- 
-<form ng-submit="ctrl.save()" ng-if="ctrl.showPlayerEdit">
+
+<form ng-submit="ctrl.save()" ng-show="ctrl.showPlayerEdit">
 	<div class="status-banner">
 		<player-form player="ctrl.selectedPlayer" disable-form="ctrl.disableControls"></player-form>
 	</div>
-	
+
 	<div class="btn-row">
 		<div class="btn-group btn-group-justified" role="group">
 			<div class="btn-group" role="group">

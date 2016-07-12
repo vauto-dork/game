@@ -24,20 +24,6 @@
 	line-height: 2em;
 }
 
-.player-delete-blur {
-	@include blur(2px);
-}
-
-.player-delete-warning-overlay {
-	@include panel-overlay;
-	
-	.overlay-text-container {
-		width: 100%;
-		height: 100%;
-		cursor: pointer;
-	}
-}
-
 .panel-title {
 	.player-nickname {
 		@include player-nickname;
@@ -116,42 +102,6 @@
 			display: inline-block;
 			margin: 0 $standard-spacing;
 		}
-	}
-}
-
-.footer-spacer {
-	width: 100%;
-	height: $global-nav-spacer + 2em;
-}
-
-.footer-bar {
-	@include shadow(0 2px 4px 2px rgba(0, 0, 0, 0.5));
-	margin: 0;
-	padding: 0 $standard-spacing;
-	color: $global-nav-text-color;
-	background-color: $global-nav-bg;
-	position: fixed;
-	bottom: 0;
-	left: 0;
-	z-index: 100;
-	width: 100%;
-	height: $global-nav-height;
-	line-height: 1.8em;
-	font-size: 2.2em;
-	font-weight: bold;
-	
-	.btn {
-		margin-left: 0.25em;
-		margin-right: 0.25em;
-	}
-	
-	.btn-text {
-		font-size: 12px;
-	}
-	
-	button.active {
-		color: #00ff00;
-		text-shadow: 0 0 4px #ffffff;
 	}
 }
 

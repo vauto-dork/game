@@ -1,17 +1,20 @@
 extends layout
 
 block modules
+	script(src='/shared/services/AlertsService.js')
 	script(src='/areas/players/directives/PlayerFormDirective.js')
 	script(src='/areas/players/directives/PlayersListDirective.js')
 	
 	script.
 		var PlayersListModule = angular.module('PlayersListModule', []);
+
+		PlayersListModule.service('alertsService', Shared.AlertsService);
 		
-		PlayersListModule.controller('PlayersListController', PlayersListController);
-		PlayersListModule.directive('playersList', PlayersListDirective);
+		PlayersListModule.controller('PlayersListController', Players.PlayersListController);
+		PlayersListModule.directive('playersList', Players.PlayersListDirective);
 		
-		PlayersListModule.controller('PlayerFormController', PlayerFormController);
-		PlayersListModule.directive('playerForm', PlayerFormDirective);
+		PlayersListModule.controller('PlayerFormController', Players.PlayerFormController);
+		PlayersListModule.directive('playerForm', Players.PlayerFormDirective);
 	
 	- var modules = ['PlayersListModule']
 

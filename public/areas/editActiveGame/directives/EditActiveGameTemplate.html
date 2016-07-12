@@ -1,0 +1,55 @@
+<div class="edit-active-game">
+    <uib-alert ng-repeat="alert in ctrl.alerts" type="{{alert.type}}" close="ctrl.closeAlert($index)">{{alert.msg}}</uib-alert>
+    
+    <load-spinner ng-show="ctrl.showLoading"></load-spinner>
+
+    <div ng-if="ctrl.showScoreForm">
+        <div class="container" uib-collapse="ctrl.showModifyPlaylist">
+            <div class="row">
+
+                <div class="col-xs-12 col-md-6 col-lg-5">
+                    <date-picker date="ctrl.datePlayed" disabled="ctrl.disabled"></date-picker>
+                    
+                    <revert-finalize class="visible-md-block visible-lg-block"
+                                     save="ctrl.save()"
+                                     revert="ctrl.revert()"
+                                     finalize="ctrl.finalize()"
+                                     disabled="ctrl.disabled">
+                    </revert-finalize>
+                </div>
+
+                <div class="col-xs-12 col-md-6 col-lg-7">
+                    <p class="modify-players-button">
+                        <button type="button" class="btn btn-primary btn-lg btn-block"
+                                ng-click="ctrl.toggleModifyPlaylist()"
+                                ng-disabled="ctrl.disabled"
+                                aria-label="Modify Playlist">
+                            <span class="glyphicon glyphicon-sort" aria-hidden="true"></span> Modify Playlist
+                        </button>
+                    </p>
+
+                    <edit-scores disabled="ctrl.disabled"></edit-scores>
+
+                    <revert-finalize class="visible-xs-block visible-sm-block"
+                                     save="ctrl.save()"
+                                     revert="ctrl.revert()"
+                                     finalize="ctrl.finalize()"
+                                     disabled="ctrl.disabled">
+                    </revert-finalize>
+                </div>
+            </div>
+        </div>
+
+        <div uib-collapse="!ctrl.showModifyPlaylist">
+            <modify-players save="ctrl.save()"></modify-players>
+        </div>
+    </div>
+
+    <div ng-if="ctrl.showError">
+        <div class="btn-row">
+            <a type="button" class="btn btn-danger btn-block btn-lg" href="/ActiveGames">
+                Return to Active Games
+            </a>
+        </div>
+    </div>
+</div>

@@ -52,22 +52,39 @@
 }
 
 .playlist-instructions {
-	padding: 1em;
-	text-align: center;
+	padding: 0 1em 1em 1em;
 	font-size: $font-large;
 }
 
-.player-selector-filter {
-	padding: 0.25em;
-	width: 100%;
-	font-size: $font-larger;
-	line-height: 2em;
-	height: 2em;
+.selected-players-wrapper {
+    padding: 0 15px;
+    margin-bottom: 20px;
+	border: 2px solid $gray;
+	border-radius: $card-border-radius;	
+
+    .selected-players {
+        margin-bottom: 15px;
+    }
 }
 
-.player-selector-filter-remove {
-	font-size: 2em;
-	cursor: pointer;
+.player-selector{
+    .player-selector-filter {
+	    padding: 0.25em;
+	    width: 100%;
+	    font-size: $font-larger;
+	    line-height: 2em;
+	    height: 2em;
+    }
+
+    .player-selector-remove-btn {
+        border: 2px solid #ccc;
+    }
+
+    .dropdown-menu {
+	    width: 100%;
+	    font-size: $font-larger;
+	    line-height: 2em;
+    }
 }
 
 .playlist-row {
@@ -113,9 +130,12 @@
 
 .playlist-scores-row {
 	@include row;
-	max-width: 50em;
 	padding: 0 $standard-spacing;
 	margin: auto;
+
+    .panel-body {
+        cursor: pointer;
+    }
 }
 
 .dotm-row {
@@ -127,4 +147,27 @@
 .btn-row {
 	@extend .playlist-scores-row;
 	padding: 1em $standard-spacing;
+}
+
+.edit-active-game {
+    padding-top: 2em;
+
+    .modify-players-button {
+        margin-bottom: 20px;
+    }
+
+    .bonus-points-notice {
+        margin-top: 15px;
+    }
+
+    .bonus-points-table {
+        font-size: 14px;
+        margin-bottom: 0;
+    }
+}
+
+.ranking-history {
+    .month-year-picker {
+        padding: 1.5em 0 2em 0;
+    }
 }

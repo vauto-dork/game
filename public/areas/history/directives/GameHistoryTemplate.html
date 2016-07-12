@@ -3,9 +3,7 @@
 		<month-year-picker month="ctrl.month" year="ctrl.year" change="ctrl.updateQueryParams()"></month-year-picker>
 	</div>
 	
-	<div class="load-bar" ng-if="ctrl.loading">
-		<img src="/images/loader.gif" width="220" height="19" />
-	</div>
+    <load-spinner ng-show="ctrl.loading"></load-spinner>
 	
 	<div ng-if="!ctrl.loading">
 		<div class="text-center" ng-if="ctrl.showNoGamesWarning"><h2>There are no recorded games.</h2></div>

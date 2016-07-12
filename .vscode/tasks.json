@@ -21,7 +21,7 @@
 	"showOutput": "silent",
 
 	// args is the HelloWorld program to compile.
-	//"args": [""],
+	"args": [],
 
 	// use the standard tsc problem matcher to find compile problems
 	// in the output.
@@ -156,7 +156,7 @@
 }
 */
 // A task runner example that defines a problemMatcher inline instead of using
-// a predefined one.
+// a predfined one.
 /*
 {
 	"version": "0.1.0",

@@ -1,79 +1,82 @@
-var AddPlayerDirective = function() {
-	return {
-		scope: {
-		},
-		templateUrl: '/areas/players/directives/AddPlayerTemplate.html',
-		controller: 'AddPlayerController',
-		controllerAs: 'ctrl',
-		bindToController: true
-	};
-};
-
-var AddPlayerController = function ($scope, $timeout, $http) {
-	var me = this;
-	me.success = false;
-	me.failure = false;
-	me.disableControls = false;
-	
-	me.player = {
-		firstName: '',
-		lastName: '',
-		nickname: ''
-	}
-	
-	me.State = {
-		Ready: 0,
-		Saving: 1,
-		Saved: 2,
-		Fail: 3
-	};
-	
-	me.changeState = function(newState) {
-		me.success = newState === me.State.Saved;
-		me.failure = newState === me.State.Fail;
-		me.disableControls = newState === me.State.Saving;
-		
-		switch(newState) {
-			case me.State.Ready:
-				me.resetForm();
-				break;
-			case me.State.Saving:
-				me.savePlayer();
-				break;
-			case me.State.Saved:
-				me.resetForm();
-				$timeout(function(){
-					me.changeState(me.State.Ready);
-				}, 5000);
-				break;				
-		}
-	};
-	
-	me.resetForm = function() {
-		me.player.firstName = '';
-		me.player.lastName = '';
-		me.player.nickname = '';
-	};
-	
-	me.savePlayer = function() {
-		$http.post('/players', me.player)
-			.success(function (data, status, headers, config) {
-				me.changeState(me.State.Saved);
-			}).error(function (data, status, headers, config) {
-				me.changeState(me.State.Fail);
-				console.error(data);
-		});
-	};
-	
-	me.reset = function () {
-		me.changeState(me.State.Ready);
-	};
-	
-	me.submit = function(){
-		me.changeState(me.State.Saving);
-	};
-	
-	me.changeState(me.State.Ready);
-};
-
-AddPlayerController.$inject = ['$scope', '$timeout', '$http'];
+var Players;
+(function (Players) {
+    function AddPlayerDirective() {
+        return {
+            scope: {},
+            templateUrl: '/areas/players/directives/AddPlayerTemplate.html',
+            controller: 'AddPlayerController',
+            controllerAs: 'ctrl',
+            bindToController: true
+        };
+    }
+    Players.AddPlayerDirective = AddPlayerDirective;
+    var State;
+    (function (State) {
+        State[State["Ready"] = 0] = "Ready";
+        State[State["Saving"] = 1] = "Saving";
+        State[State["Saved"] = 2] = "Saved";
+        State[State["Fail"] = 3] = "Fail";
+    })(State || (State = {}));
+    ;
+    var AddPlayerController = (function () {
+        function AddPlayerController($timeout, apiService) {
+            this.$timeout = $timeout;
+            this.apiService = apiService;
+            this.success = false;
+            this.failure = false;
+            this.disableControls = false;
+            this.player = new Shared.Player();
+            this.changeState(State.Ready);
+        }
+        AddPlayerController.prototype.changeState = function (newState) {
+            var _this = this;
+            this.success = newState === State.Saved;
+            this.failure = newState === State.Fail;
+            this.disableControls = newState === State.Saving;
+            switch (newState) {
+                case State.Ready:
+                    this.resetForm();
+                    break;
+                case State.Saving:
+                    this.savePlayer();
+                    break;
+                case State.Saved:
+                    this.resetForm();
+                    this.$timeout(function () {
+                        _this.changeState(State.Ready);
+                    }, 5000);
+                    break;
+            }
+        };
+        AddPlayerController.prototype.savePlayer = function () {
+            var _this = this;
+            this.apiService.saveNewPlayer(this.player).then(function () {
+                _this.changeState(State.Saved);
+            }, function (data) {
+                _this.changeState(State.Fail);
+            });
+        };
+        AddPlayerController.prototype.resetForm = function () {
+            this.player.firstName = '';
+            this.player.lastName = '';
+            this.player.nickname = '';
+            if (this.addPlayerForm) {
+                this.addPlayerForm.$setPristine();
+                this.addPlayerForm.$setUntouched();
+            }
+        };
+        AddPlayerController.prototype.reset = function () {
+            this.changeState(State.Ready);
+        };
+        AddPlayerController.prototype.submit = function () {
+            this.addPlayerForm.$setSubmitted();
+            if (!this.addPlayerForm.$invalid) {
+                this.changeState(State.Saving);
+            }
+        };
+        AddPlayerController.$inject = ['$timeout', 'apiService'];
+        return AddPlayerController;
+    }());
+    Players.AddPlayerController = AddPlayerController;
+})(Players || (Players = {}));
+//# sourceMappingURL=AddPlayerDirective.js.map
