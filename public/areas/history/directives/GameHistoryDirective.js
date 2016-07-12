@@ -88,11 +88,9 @@ var DorkHistory;
         GameHistoryController.prototype.updateQueryParams = function () {
             this.changeState(State.Change);
         };
-        ;
         GameHistoryController.prototype.reload = function () {
             this.changeState(State.Loading);
         };
-        ;
         GameHistoryController.$inject = ['$scope', '$timeout', 'dateTimeService', 'monthYearQueryService', 'apiService'];
         return GameHistoryController;
     }());

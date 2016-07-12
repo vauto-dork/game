@@ -56,7 +56,6 @@ var Players;
                 _this.changeState(State.Fail);
             });
         };
-        ;
         AddPlayerController.prototype.resetForm = function () {
             this.player.firstName = '';
             this.player.lastName = '';
@@ -66,18 +65,15 @@ var Players;
                 this.addPlayerForm.$setUntouched();
             }
         };
-        ;
         AddPlayerController.prototype.reset = function () {
             this.changeState(State.Ready);
         };
-        ;
         AddPlayerController.prototype.submit = function () {
             this.addPlayerForm.$setSubmitted();
             if (!this.addPlayerForm.$invalid) {
                 this.changeState(State.Saving);
             }
         };
-        ;
         AddPlayerController.$inject = ['$timeout', 'apiService'];
         return AddPlayerController;
     }());

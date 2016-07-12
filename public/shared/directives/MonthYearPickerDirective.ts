@@ -15,8 +15,8 @@ module Shared {
     }
 
 	interface INameValuePair {
-		name: string,
-		value: number
+		name: string;
+		value: number;
 	}
 
     export class MonthYearPickerController {
@@ -95,7 +95,7 @@ module Shared {
 			}
 
 			this.disableYear = this.disableYear || this.years.length <= 1;
-		};
+		}
 
 		private updateParams(): void {
 			this.month = this.selectedMonth.value;
@@ -104,6 +104,6 @@ module Shared {
 			if (this.change !== undefined) {
 				this.change();
 			}
-		};
+		}
     }
 }

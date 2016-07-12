@@ -98,10 +98,10 @@ module DorkHistory {
 
 		private updateQueryParams(): void {
 			this.changeState(State.Change);
-		};
+		}
 
 		private reload(): void {
 			this.changeState(State.Loading);
-		};
+		}
 	}
 }

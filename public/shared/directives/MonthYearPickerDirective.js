@@ -84,7 +84,6 @@ var Shared;
             }
             this.disableYear = this.disableYear || this.years.length <= 1;
         };
-        ;
         MonthYearPickerController.prototype.updateParams = function () {
             this.month = this.selectedMonth.value;
             this.year = this.selectedYear.value;
@@ -92,7 +91,6 @@ var Shared;
                 this.change();
             }
         };
-        ;
         MonthYearPickerController.$inject = ['$scope', 'dateTimeService'];
         return MonthYearPickerController;
     }());

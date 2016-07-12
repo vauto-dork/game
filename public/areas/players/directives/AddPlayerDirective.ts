@@ -58,7 +58,7 @@ module Players {
 			}, (data: string) => {
 				this.changeState(State.Fail);
 			});
-		};
+		}
 
 		private resetForm(): void {
 			this.player.firstName = '';
@@ -69,11 +69,11 @@ module Players {
 				this.addPlayerForm.$setPristine();
 				this.addPlayerForm.$setUntouched();
 			}
-		};
+		}
 
 		private reset(): void {
 			this.changeState(State.Ready);
-		};
+		}
 
 		private submit(): void {
 			this.addPlayerForm.$setSubmitted();
@@ -81,7 +81,7 @@ module Players {
 			if (!this.addPlayerForm.$invalid) {
 				this.changeState(State.Saving);
 			}
-		};
+		}
 
     }
 }
