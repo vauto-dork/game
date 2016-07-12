@@ -21,8 +21,7 @@ var DorkHistory;
     })(State || (State = {}));
     ;
     var GameHistoryController = (function () {
-        function GameHistoryController($scope, $timeout, dateTimeService, monthYearQueryService, apiService) {
-            this.$scope = $scope;
+        function GameHistoryController($timeout, dateTimeService, monthYearQueryService, apiService) {
             this.$timeout = $timeout;
             this.dateTimeService = dateTimeService;
             this.monthYearQueryService = monthYearQueryService;
@@ -91,7 +90,7 @@ var DorkHistory;
         GameHistoryController.prototype.reload = function () {
             this.changeState(State.Loading);
         };
-        GameHistoryController.$inject = ['$scope', '$timeout', 'dateTimeService', 'monthYearQueryService', 'apiService'];
+        GameHistoryController.$inject = ['$timeout', 'dateTimeService', 'monthYearQueryService', 'apiService'];
         return GameHistoryController;
     }());
     DorkHistory.GameHistoryController = GameHistoryController;

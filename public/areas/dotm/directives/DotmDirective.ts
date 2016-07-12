@@ -36,7 +36,7 @@ module Dotm {
 				this.dotm = data;
 				this.hasUberdorks = data.uberdorks.length > 0;
 			}, ()=>{
-				debugger;
+				console.error("Cannot get DOTM.");
 			});
 		}
     }

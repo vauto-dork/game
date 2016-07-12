@@ -33,7 +33,7 @@ var Dotm;
                 _this.dotm = data;
                 _this.hasUberdorks = data.uberdorks.length > 0;
             }, function () {
-                debugger;
+                console.error("Cannot get DOTM.");
             });
         };
         DotmController.$inject = ['$scope', 'apiService'];

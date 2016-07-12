@@ -12,7 +12,7 @@ module Shared {
     }
 
     export class PlayerScoretagController {
-        public static $inject: string[] = ['$scope'];
+        public static $inject: string[] = [];
 		
 		private player: IGamePlayer;
 		private rank: any[]; // This is a number array for looping to print the dots above player name.
@@ -21,7 +21,7 @@ module Shared {
 			return this.player.player;
 		}
 
-        constructor(private $scope: ng.IScope) {
+        constructor() {
 			var rankArray = !this.player.rank ? 0 : this.player.rank;
 			this.rank = new Array(rankArray);
         }

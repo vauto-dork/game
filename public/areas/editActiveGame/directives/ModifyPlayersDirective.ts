@@ -11,7 +11,7 @@
     }
 
     export class ModifyPlayersController {
-        public static $inject: string[] = ['$scope', 'editActiveGameService'];
+        public static $inject: string[] = ['editActiveGameService'];
         
         private get unselectedPlayers(): Shared.INewGamePlayer[] {
             return this.editActiveGameService.unselectedPlayers;
@@ -21,8 +21,7 @@
             return this.editActiveGameService.movePlayerActive;
         }
         
-        constructor(private $scope: ng.IScope,
-            private editActiveGameService: IEditActiveGameService) {
+        constructor(private editActiveGameService: IEditActiveGameService) {
         }
 
         private onSelected(data: Shared.INewGamePlayer): void {

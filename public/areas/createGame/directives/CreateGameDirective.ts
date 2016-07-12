@@ -18,7 +18,7 @@ module CreateGame {
 	}
 
     export class CreateGameController {
-        public static $inject: string[] = ['$scope', '$window', 'createGameService'];
+        public static $inject: string[] = ['$window', 'createGameService'];
 
 		private showLoading: boolean = false;
 		private showErrorMessage: boolean = false;
@@ -41,7 +41,7 @@ module CreateGame {
 			return this.createGameService.unselectedPlayers;
 		}
         
-        constructor(private $scope: ng.IScope, private $window: ng.IWindowService, private createGameService: ICreateGameService) {
+        constructor(private $window: ng.IWindowService, private createGameService: ICreateGameService) {
             this.createGameService.init().then(() => {
                 this.changeState(State.Loaded);
             });

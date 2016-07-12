@@ -14,13 +14,13 @@ var Shared;
     }
     Shared.DatePickerDirective = DatePickerDirective;
     var DatePickerController = (function () {
-        function DatePickerController($scope) {
-            this.$scope = $scope;
+        function DatePickerController() {
             this.format = 'MMMM dd, yyyy';
             this.hstep = 1;
             this.mstep = 1;
             this.opened = false;
             this.dateOptions = {
+                minDate: new Date(2015, 4, 1),
                 showWeeks: false,
                 startingDay: 0
             };
@@ -28,7 +28,7 @@ var Shared;
         DatePickerController.prototype.open = function () {
             this.opened = true;
         };
-        DatePickerController.$inject = ['$scope'];
+        DatePickerController.$inject = [];
         return DatePickerController;
     }());
     Shared.DatePickerController = DatePickerController;

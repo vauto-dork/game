@@ -13,8 +13,7 @@ var Shared;
     }
     Shared.PlayerScoretagDirective = PlayerScoretagDirective;
     var PlayerScoretagController = (function () {
-        function PlayerScoretagController($scope) {
-            this.$scope = $scope;
+        function PlayerScoretagController() {
             var rankArray = !this.player.rank ? 0 : this.player.rank;
             this.rank = new Array(rankArray);
         }
@@ -25,7 +24,7 @@ var Shared;
             enumerable: true,
             configurable: true
         });
-        PlayerScoretagController.$inject = ['$scope'];
+        PlayerScoretagController.$inject = [];
         return PlayerScoretagController;
     }());
     Shared.PlayerScoretagController = PlayerScoretagController;

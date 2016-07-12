@@ -13,10 +13,9 @@ var Rankings;
     }
     Rankings.RankingsCardDirective = RankingsCardDirective;
     var RankingsCardController = (function () {
-        function RankingsCardController($scope) {
-            this.$scope = $scope;
+        function RankingsCardController() {
         }
-        RankingsCardController.$inject = ['$scope'];
+        RankingsCardController.$inject = [];
         return RankingsCardController;
     }());
     Rankings.RankingsCardController = RankingsCardController;

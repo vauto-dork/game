@@ -18,9 +18,8 @@ var CreateGame;
         State[State["CreatingGame"] = 3] = "CreatingGame";
     })(State || (State = {}));
     var CreateGameController = (function () {
-        function CreateGameController($scope, $window, createGameService) {
+        function CreateGameController($window, createGameService) {
             var _this = this;
-            this.$scope = $scope;
             this.$window = $window;
             this.createGameService = createGameService;
             this.showLoading = false;
@@ -80,7 +79,7 @@ var CreateGame;
         CreateGameController.prototype.useGameOrder = function () {
             this.createGameService.sortOrder = CreateGame.NewGameSort.Rating;
         };
-        CreateGameController.$inject = ['$scope', '$window', 'createGameService'];
+        CreateGameController.$inject = ['$window', 'createGameService'];
         return CreateGameController;
     }());
     CreateGame.CreateGameController = CreateGameController;

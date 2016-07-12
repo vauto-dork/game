@@ -11,8 +11,7 @@ var EditActiveGame;
     }
     EditActiveGame.ModifyPlayersDirective = ModifyPlayersDirective;
     var ModifyPlayersController = (function () {
-        function ModifyPlayersController($scope, editActiveGameService) {
-            this.$scope = $scope;
+        function ModifyPlayersController(editActiveGameService) {
             this.editActiveGameService = editActiveGameService;
         }
         Object.defineProperty(ModifyPlayersController.prototype, "unselectedPlayers", {
@@ -36,7 +35,7 @@ var EditActiveGame;
         ModifyPlayersController.prototype.back = function () {
             this.editActiveGameService.toggleModifyPlaylist();
         };
-        ModifyPlayersController.$inject = ['$scope', 'editActiveGameService'];
+        ModifyPlayersController.$inject = ['editActiveGameService'];
         return ModifyPlayersController;
     }());
     EditActiveGame.ModifyPlayersController = ModifyPlayersController;

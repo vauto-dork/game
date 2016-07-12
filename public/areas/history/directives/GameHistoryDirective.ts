@@ -20,7 +20,7 @@ module DorkHistory {
 	};
 
     export class GameHistoryController {
-        public static $inject: string[] = ['$scope', '$timeout', 'dateTimeService', 'monthYearQueryService', 'apiService'];
+        public static $inject: string[] = ['$timeout', 'dateTimeService', 'monthYearQueryService', 'apiService'];
 
 		private month: number;
 		private year: number;
@@ -31,7 +31,7 @@ module DorkHistory {
 		private showErrorMessage: boolean = false;
 		private showNoGamesWarning: boolean = false;
 
-		constructor(private $scope: ng.IScope,
+		constructor(
 			private $timeout: ng.ITimeoutService,
 			private dateTimeService: Shared.IDateTimeService,
 			private monthYearQueryService: Shared.IMonthYearQueryService,

@@ -12,10 +12,10 @@ module Rankings {
     }
 
     export class RankingsCardController {
-        public static $inject: string[] = ['$scope'];
+        public static $inject: string[] = [];
         private player: Shared.IRankedPlayer;
 
-        constructor(private $scope: ng.IScope) {
+        constructor() {
         }
     }
 }

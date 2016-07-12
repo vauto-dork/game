@@ -11,8 +11,7 @@ var CreateGame;
     }
     CreateGame.SelectedPlayersDirective = SelectedPlayersDirective;
     var SelectedPlayersController = (function () {
-        function SelectedPlayersController($scope, createGameService) {
-            this.$scope = $scope;
+        function SelectedPlayersController(createGameService) {
             this.createGameService = createGameService;
         }
         Object.defineProperty(SelectedPlayersController.prototype, "players", {
@@ -32,7 +31,7 @@ var CreateGame;
         SelectedPlayersController.prototype.removePlayer = function (player) {
             this.createGameService.removePlayer(player);
         };
-        SelectedPlayersController.$inject = ['$scope', 'createGameService'];
+        SelectedPlayersController.$inject = ['createGameService'];
         return SelectedPlayersController;
     }());
     CreateGame.SelectedPlayersController = SelectedPlayersController;

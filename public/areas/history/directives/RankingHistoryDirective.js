@@ -18,8 +18,7 @@ var DorkHistory;
     })(State || (State = {}));
     ;
     var RankingHistoryController = (function () {
-        function RankingHistoryController($scope, $timeout, monthYearQueryService, dateTimeService) {
-            this.$scope = $scope;
+        function RankingHistoryController($timeout, monthYearQueryService, dateTimeService) {
             this.$timeout = $timeout;
             this.monthYearQueryService = monthYearQueryService;
             this.dateTimeService = dateTimeService;
@@ -50,7 +49,7 @@ var DorkHistory;
         RankingHistoryController.prototype.updateQueryParams = function () {
             this.changeState(State.Change);
         };
-        RankingHistoryController.$inject = ['$scope', '$timeout', 'monthYearQueryService', 'dateTimeService'];
+        RankingHistoryController.$inject = ['$timeout', 'monthYearQueryService', 'dateTimeService'];
         return RankingHistoryController;
     }());
     DorkHistory.RankingHistoryController = RankingHistoryController;

@@ -11,8 +11,7 @@ var Rankings;
     }
     Rankings.LeaderboardDirective = LeaderboardDirective;
     var LeaderboardController = (function () {
-        function LeaderboardController($scope, dateTimeService, apiService) {
-            this.$scope = $scope;
+        function LeaderboardController(dateTimeService, apiService) {
             this.dateTimeService = dateTimeService;
             this.apiService = apiService;
             this.noGamesThisMonth = false;
@@ -32,10 +31,10 @@ var Rankings;
                 // If the last played game is in the current month and year, then there is at least one game this month.
                 _this.noGamesThisMonth = !(_this.currentMonth === lastGameMonth && _this.currentYear === lastGameYear);
             }, function () {
-                debugger;
+                console.error("Cannot get last game played.");
             });
         };
-        LeaderboardController.$inject = ['$scope', 'dateTimeService', 'apiService'];
+        LeaderboardController.$inject = ['dateTimeService', 'apiService'];
         return LeaderboardController;
     }());
     Rankings.LeaderboardController = LeaderboardController;

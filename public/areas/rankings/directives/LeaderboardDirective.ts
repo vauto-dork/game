@@ -12,7 +12,7 @@ module Rankings {
     }
 
     export class LeaderboardController {
-        public static $inject: string[] = ['$scope', 'dateTimeService', 'apiService'];
+        public static $inject: string[] = ['dateTimeService', 'apiService'];
 
 		private lastDatePlayed: string;
 		private currentMonth: number;
@@ -21,7 +21,7 @@ module Rankings {
 		private lastMonthYear: number;
 		private noGamesThisMonth: boolean = false;
 
-        constructor(private $scope: ng.IScope, private dateTimeService: Shared.IDateTimeService, private apiService: Shared.IApiService) {
+        constructor(private dateTimeService: Shared.IDateTimeService, private apiService: Shared.IApiService) {
 			this.currentMonth = dateTimeService.currentMonthValue();
 			this.currentYear = dateTimeService.currentYear();
 			this.lastMonth = dateTimeService.lastMonthValue();
@@ -41,7 +41,7 @@ module Rankings {
 				// If the last played game is in the current month and year, then there is at least one game this month.
 				this.noGamesThisMonth = !(this.currentMonth === lastGameMonth && this.currentYear === lastGameYear);
 			}, ()=>{
-				debugger;
+				console.error("Cannot get last game played.");
 			});
 		}
     }

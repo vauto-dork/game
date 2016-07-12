@@ -17,12 +17,12 @@ module DorkHistory {
 	};
 
     export class RankingHistoryController {
-        public static $inject: string[] = ['$scope', '$timeout', 'monthYearQueryService', 'dateTimeService'];
+        public static $inject: string[] = ['$timeout', 'monthYearQueryService', 'dateTimeService'];
 
 		private month: number;
 		private year: number;
 
-        constructor(private $scope: ng.IScope,
+        constructor(
 			private $timeout: ng.ITimeoutService,
 			private monthYearQueryService: Shared.IMonthYearQueryService,
 			private dateTimeService: Shared.IDateTimeService) {

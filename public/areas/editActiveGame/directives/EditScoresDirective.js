@@ -13,8 +13,7 @@ var EditActiveGame;
     }
     EditActiveGame.EditScoresDirective = EditScoresDirective;
     var EditScoresController = (function () {
-        function EditScoresController($scope, editActiveGameService) {
-            this.$scope = $scope;
+        function EditScoresController(editActiveGameService) {
             this.editActiveGameService = editActiveGameService;
             this.pointsMin = -4;
             this.pointsMax = 99;
@@ -51,7 +50,7 @@ var EditActiveGame;
                 player.points = (points + 1 <= this.pointsMax) ? points + 1 : points;
             }
         };
-        EditScoresController.$inject = ['$scope', 'editActiveGameService'];
+        EditScoresController.$inject = ['editActiveGameService'];
         return EditScoresController;
     }());
     EditActiveGame.EditScoresController = EditScoresController;

@@ -14,7 +14,7 @@ module Shared {
     }
 
     export class PlayerSelectorController {
-        public static $inject: string[] = ['$scope', '$element', '$timeout', 'apiService'];
+        public static $inject: string[] = ['$element', '$timeout'];
 
 		private players: INewGamePlayer[];
         private onSelected: Function;
@@ -22,18 +22,8 @@ module Shared {
 		
 		private filter: string = '';
 		
-        constructor(private $scope: ng.IScope, private $element: ng.IAugmentedJQuery, private $timeout: ng.ITimeoutService, private apiService: Shared.ApiService) {
-			$scope.$on('PlayerSelectorFocus', (event, data) => {
-				// Wrapped in timeout so it does this after UI is rendered.
-				$timeout(() => {
-					$element.find("input").focus();
-				});
-			});
-
-			$scope.$on('PlayerSelectorBlur', (event, data) => {
-				// UI should be already rendered at this point so timeout is not needed.
-				$element.find("input").blur();
-			});
+        constructor(private $element: ng.IAugmentedJQuery, private $timeout: ng.ITimeoutService) {
+			
         }
 		
 		private removeFilter(): void {

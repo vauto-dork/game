@@ -12,15 +12,15 @@ module Shared {
     }
 
     export class GlobalNavController {
-        public static $inject: string[] = ['$scope'];
+        public static $inject: string[] = [];
 		
 		private sidebarOpen: boolean = false;
 
-        constructor(private $scope: ng.IScope) {
+        constructor() {
         }
 		
 		private closeSidebar(): void {
-			if(this.sidebarOpen === true){
+			if(this.sidebarOpen){
 				this.sidebarOpen = false;
 			}
 		}

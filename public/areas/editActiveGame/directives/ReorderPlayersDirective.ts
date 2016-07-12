@@ -11,7 +11,7 @@
     }
 
     export class ReorderPlayersController {
-        public static $inject: string[] = ['$scope', 'editActiveGameService'];
+        public static $inject: string[] = ['editActiveGameService'];
         
         private selectedPlayerId: string;
 
@@ -31,7 +31,7 @@
             this.editActiveGameService.players = value;
         }
 
-        constructor(private $scope: ng.IScope, private editActiveGameService: IEditActiveGameService) {
+        constructor(private editActiveGameService: IEditActiveGameService) {
             this.unselect();
         }
         

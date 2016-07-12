@@ -12,11 +12,11 @@ module Shared {
     }
 
     export class PlayerNametagController {
-        public static $inject: string[] = ['$scope'];
+        public static $inject: string[] = [];
 		
 		private player: IPlayerViewModel;
 
-        constructor(private $scope: ng.IScope) {
+        constructor() {
         }
     }
 }

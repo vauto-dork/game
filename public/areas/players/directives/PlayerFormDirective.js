@@ -14,11 +14,10 @@ var Players;
     }
     Players.PlayerFormDirective = PlayerFormDirective;
     var PlayerFormController = (function () {
-        function PlayerFormController($scope) {
-            this.$scope = $scope;
+        function PlayerFormController() {
             this.disableForm = false;
         }
-        PlayerFormController.$inject = ['$scope'];
+        PlayerFormController.$inject = [];
         return PlayerFormController;
     }());
     Players.PlayerFormController = PlayerFormController;

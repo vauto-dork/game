@@ -11,8 +11,7 @@ var EditActiveGame;
     }
     EditActiveGame.ReorderPlayersDirective = ReorderPlayersDirective;
     var ReorderPlayersController = (function () {
-        function ReorderPlayersController($scope, editActiveGameService) {
-            this.$scope = $scope;
+        function ReorderPlayersController(editActiveGameService) {
             this.editActiveGameService = editActiveGameService;
             this.unselect();
         }
@@ -72,7 +71,7 @@ var EditActiveGame;
         ReorderPlayersController.prototype.removePlayer = function (player) {
             this.editActiveGameService.removePlayer(player);
         };
-        ReorderPlayersController.$inject = ['$scope', 'editActiveGameService'];
+        ReorderPlayersController.$inject = ['editActiveGameService'];
         return ReorderPlayersController;
     }());
     EditActiveGame.ReorderPlayersController = ReorderPlayersController;

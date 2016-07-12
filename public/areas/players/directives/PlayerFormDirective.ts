@@ -13,13 +13,13 @@ module Players {
     }
 
     export class PlayerFormController {
-        public static $inject: string[] = ['$scope'];
+        public static $inject: string[] = [];
 		
 		private playerForm: ng.IFormController;
 		private player: Shared.IPlayer;
 		private disableForm: boolean = false;
 
-        constructor(private $scope: ng.IScope) {
+        constructor() {
         }
     }
 }

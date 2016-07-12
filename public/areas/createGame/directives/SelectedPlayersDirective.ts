@@ -11,7 +11,7 @@ module CreateGame {
     }
 
     export class SelectedPlayersController {
-        public static $inject: string[] = ['$scope', 'createGameService'];
+        public static $inject: string[] = ['createGameService'];
         
         private get players(): Shared.INewGamePlayer[] {
             return this.createGameService.playersSorted;
@@ -21,7 +21,7 @@ module CreateGame {
             return this.createGameService.hasMinimumPlayers;
         }
 
-        constructor(private $scope: ng.IScope, private createGameService: ICreateGameService) {
+        constructor(private createGameService: ICreateGameService) {
         }
         
         private removePlayer(player: Shared.INewGamePlayer) {

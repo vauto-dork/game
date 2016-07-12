@@ -12,7 +12,7 @@ module EditActiveGame {
     }
 
     export class EditScoresController {
-        public static $inject: string[] = ['$scope', 'editActiveGameService'];
+        public static $inject: string[] = ['editActiveGameService'];
 
         private disabled: boolean;
 
@@ -27,7 +27,7 @@ module EditActiveGame {
             this.editActiveGameService.players = value;
         }
 
-        constructor(private $scope: ng.IScope, private editActiveGameService: IEditActiveGameService) {
+        constructor(private editActiveGameService: IEditActiveGameService) {
         }
 
         public rankHandler(player: Shared.IGamePlayer): void {

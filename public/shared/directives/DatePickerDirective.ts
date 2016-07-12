@@ -13,7 +13,7 @@ module Shared {
     }
 
     export class DatePickerController {
-        public static $inject: string[] = ['$scope'];
+        public static $inject: string[] = [];
 		
 		private date: Date;
 		
@@ -22,12 +22,13 @@ module Shared {
 		private mstep: number = 1;
 		private opened: boolean = false;
 		
-		private dateOptions = {
+        private dateOptions = {
+            minDate: new Date(2015, 4, 1),
             showWeeks: false,
             startingDay: 0
 		};
 		
-        constructor(private $scope: ng.IScope) {
+        constructor() {
         }
 	
 		private open() {

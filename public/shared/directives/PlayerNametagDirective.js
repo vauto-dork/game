@@ -13,10 +13,9 @@ var Shared;
     }
     Shared.PlayerNametagDirective = PlayerNametagDirective;
     var PlayerNametagController = (function () {
-        function PlayerNametagController($scope) {
-            this.$scope = $scope;
+        function PlayerNametagController() {
         }
-        PlayerNametagController.$inject = ['$scope'];
+        PlayerNametagController.$inject = [];
         return PlayerNametagController;
     }());
     Shared.PlayerNametagController = PlayerNametagController;

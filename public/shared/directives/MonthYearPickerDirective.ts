@@ -20,7 +20,7 @@ module Shared {
 	}
 
     export class MonthYearPickerController {
-        public static $inject: string[] = ['$scope', 'dateTimeService'];
+        public static $inject: string[] = ['dateTimeService'];
 
 		private change: Function;
 		private isDisabled: boolean = false;
@@ -78,7 +78,7 @@ module Shared {
 			this.currentYear = value;
 		}
 
-        constructor(private $scope: ng.IScope, private dateTimeService: Shared.IDateTimeService) {
+        constructor(private dateTimeService: Shared.IDateTimeService) {
 			this.init();
         }
 

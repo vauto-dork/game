@@ -11,16 +11,15 @@ var Shared;
     }
     Shared.GlobalNavDirective = GlobalNavDirective;
     var GlobalNavController = (function () {
-        function GlobalNavController($scope) {
-            this.$scope = $scope;
+        function GlobalNavController() {
             this.sidebarOpen = false;
         }
         GlobalNavController.prototype.closeSidebar = function () {
-            if (this.sidebarOpen === true) {
+            if (this.sidebarOpen) {
                 this.sidebarOpen = false;
             }
         };
-        GlobalNavController.$inject = ['$scope'];
+        GlobalNavController.$inject = [];
         return GlobalNavController;
     }());
     Shared.GlobalNavController = GlobalNavController;
