@@ -150,6 +150,7 @@
     <TypeScriptCompile Include="public\shared\models\RankedPlayer.ts" />
     <TypeScriptCompile Include="public\shared\modules\GameCardModule.ts" />
     <TypeScriptCompile Include="public\shared\modules\UxControlsModule.ts" />
+    <TypeScriptCompile Include="public\shared\services\AlertsService.ts" />
     <TypeScriptCompile Include="public\shared\services\ApiService.ts" />
     <TypeScriptCompile Include="public\shared\services\DateTimeService.ts" />
     <TypeScriptCompile Include="public\shared\services\MonthYearQueryService.ts" />
