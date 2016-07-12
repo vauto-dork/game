@@ -16,6 +16,10 @@
         private get unselectedPlayers(): Shared.INewGamePlayer[] {
             return this.editActiveGameService.unselectedPlayers;
         }
+
+        private get movePlayerActive(): boolean {
+            return this.editActiveGameService.movePlayerActive;
+        }
         
         constructor(private $scope: ng.IScope,
             private editActiveGameService: IEditActiveGameService) {

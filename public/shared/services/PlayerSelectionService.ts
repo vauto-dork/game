@@ -18,12 +18,11 @@
         public static $inject: string[] = ['$q', 'apiService'];
 
         private allPlayers: INewGamePlayer[] = [];
-        private players: IPlayer[] = [];
-        private selectedPlayersList: INewGamePlayer[] = [];
+        private players: INewGamePlayer[] = [];
         private unselectedPlayersList: INewGamePlayer[] = [];
         
         public get selectedPlayers(): INewGamePlayer[] {
-            return this.selectedPlayersList;
+            return this.players;
         }
 
         public get unselectedPlayers(): INewGamePlayer[] {
@@ -35,12 +34,18 @@
         }
         
         private playerIndex(playerId: string): number {
-            return this.players.map(p => { return p._id; }).indexOf(playerId);
+            return this.players.map(p => { return p.playerId; }).indexOf(playerId);
         }
 
         public addPlayer(player: IPlayer): void {
-            this.players.push(player);
-            this.curateNewPlayerList();
+            var found = this.allPlayers.filter(p => { return p.playerId === player._id });
+
+            if (found.length === 1) {
+                this.players.push(found[0]);
+                this.curateNewPlayerList();
+            } else {
+                console.error("Player not found.", player);
+            }
         }
 
         public removePlayer(player: IPlayer): void {
@@ -65,16 +70,11 @@
 
         public curateNewPlayerList(): void {
             // Get the nested player before getting ID because IDs don't match
-            var currentPlayerIds = this.players.map(p => p._id);
+            var currentPlayerIds = this.players.map(p => p.playerId);
 
             // Get players that are not in the current playlist.
             this.unselectedPlayersList = this.allPlayers.filter(player => {
                 return currentPlayerIds.indexOf(player.playerId) === -1;
-            });
-
-            // Get players that are in the current playlist.
-            this.selectedPlayersList = this.allPlayers.filter(player => {
-                return currentPlayerIds.indexOf(player.playerId) >= 0;
             });
         }
 

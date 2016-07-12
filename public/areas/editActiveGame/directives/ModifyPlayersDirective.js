@@ -22,6 +22,13 @@ var EditActiveGame;
             enumerable: true,
             configurable: true
         });
+        Object.defineProperty(ModifyPlayersController.prototype, "movePlayerActive", {
+            get: function () {
+                return this.editActiveGameService.movePlayerActive;
+            },
+            enumerable: true,
+            configurable: true
+        });
         ModifyPlayersController.prototype.onSelected = function (data) {
             var player = new Shared.GamePlayer(data.toGamePlayerViewModel());
             this.editActiveGameService.addPlayer(player);

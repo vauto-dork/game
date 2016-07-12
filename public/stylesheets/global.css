@@ -16,11 +16,6 @@ body {
 hr {
   border-color: #7a8394; }
 
-.player-selector .dropdown-menu {
-  width: 100%;
-  font-size: 2em;
-  line-height: 2em; }
-
 .panel {
   position: relative; }
 

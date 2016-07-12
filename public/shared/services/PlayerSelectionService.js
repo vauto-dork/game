@@ -6,12 +6,11 @@ var Shared;
             this.apiService = apiService;
             this.allPlayers = [];
             this.players = [];
-            this.selectedPlayersList = [];
             this.unselectedPlayersList = [];
         }
         Object.defineProperty(PlayerSelectionService.prototype, "selectedPlayers", {
             get: function () {
-                return this.selectedPlayersList;
+                return this.players;
             },
             enumerable: true,
             configurable: true
@@ -24,11 +23,17 @@ var Shared;
             configurable: true
         });
         PlayerSelectionService.prototype.playerIndex = function (playerId) {
-            return this.players.map(function (p) { return p._id; }).indexOf(playerId);
+            return this.players.map(function (p) { return p.playerId; }).indexOf(playerId);
         };
         PlayerSelectionService.prototype.addPlayer = function (player) {
-            this.players.push(player);
-            this.curateNewPlayerList();
+            var found = this.allPlayers.filter(function (p) { return p.playerId === player._id; });
+            if (found.length === 1) {
+                this.players.push(found[0]);
+                this.curateNewPlayerList();
+            }
+            else {
+                console.error("Player not found.", player);
+            }
         };
         PlayerSelectionService.prototype.removePlayer = function (player) {
             var index = this.playerIndex(player._id);
@@ -49,14 +54,10 @@ var Shared;
         };
         PlayerSelectionService.prototype.curateNewPlayerList = function () {
             // Get the nested player before getting ID because IDs don't match
-            var currentPlayerIds = this.players.map(function (p) { return p._id; });
+            var currentPlayerIds = this.players.map(function (p) { return p.playerId; });
             // Get players that are not in the current playlist.
             this.unselectedPlayersList = this.allPlayers.filter(function (player) {
                 return currentPlayerIds.indexOf(player.playerId) === -1;
-            });
-            // Get players that are in the current playlist.
-            this.selectedPlayersList = this.allPlayers.filter(function (player) {
-                return currentPlayerIds.indexOf(player.playerId) >= 0;
             });
         };
         PlayerSelectionService.prototype.reset = function () {

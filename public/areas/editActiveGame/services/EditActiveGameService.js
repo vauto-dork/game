@@ -23,6 +23,16 @@ var EditActiveGame;
             enumerable: true,
             configurable: true
         });
+        Object.defineProperty(EditActiveGameService.prototype, "movePlayerActive", {
+            get: function () {
+                return this.isMovePlayerActive;
+            },
+            set: function (value) {
+                this.isMovePlayerActive = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
         Object.defineProperty(EditActiveGameService.prototype, "showModifyPlaylist", {
             get: function () {
                 return this.showModifyPlaylistScreen;
@@ -90,6 +100,23 @@ var EditActiveGame;
             var index = this.playerIndex(player.playerId);
             this.players.splice(index, 1);
             this.playerSelectionService.removePlayer(player.player);
+        };
+        EditActiveGameService.prototype.movePlayer = function (selectedPlayerId, destinationPlayer) {
+            var selectedPlayer = this.players.filter(function (p) {
+                return p.playerId === selectedPlayerId;
+            });
+            if (selectedPlayer.length === 1) {
+                var selectedPlayerIndex = this.playerIndex(selectedPlayerId);
+                this.players.splice(selectedPlayerIndex, 1);
+                var dropIndex = this.playerIndex(destinationPlayer.playerId);
+                if (selectedPlayerIndex <= dropIndex) {
+                    dropIndex += 1;
+                }
+                this.players.splice(dropIndex, 0, selectedPlayer[0]);
+            }
+            else {
+                console.error("Cannot find player: ", selectedPlayerId);
+            }
         };
         EditActiveGameService.prototype.save = function () {
             var _this = this;

@@ -4,7 +4,8 @@ var Shared;
         return {
             scope: {
                 players: '=',
-                onSelected: '&'
+                onSelected: '&',
+                disabled: '='
             },
             templateUrl: '/shared/directives/PlayerSelectorTemplate.html',
             controller: 'PlayerSelectorController',

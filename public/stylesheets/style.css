@@ -16,11 +16,6 @@ body {
 hr {
   border-color: #7a8394; }
 
-.player-selector .dropdown-menu {
-  width: 100%;
-  font-size: 2em;
-  line-height: 2em; }
-
 .panel {
   position: relative; }
 
@@ -412,16 +407,20 @@ input.ng-touched.ng-invalid {
   .selected-players-wrapper .selected-players {
     margin-bottom: 15px; }
 
-.player-selector-filter {
+.player-selector .player-selector-filter {
   padding: 0.25em;
   width: 100%;
   font-size: 2em;
   line-height: 2em;
   height: 2em; }
 
-.player-selector-filter-remove {
+.player-selector .player-selector-remove-btn {
+  border: 2px solid #ccc; }
+
+.player-selector .dropdown-menu {
+  width: 100%;
   font-size: 2em;
-  cursor: pointer; }
+  line-height: 2em; }
 
 .playlist-row {
   display: block;

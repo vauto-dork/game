@@ -3,7 +3,8 @@ module Shared {
         return {
             scope: {
 				players: '=',
-				onSelected: '&'
+                onSelected: '&',
+                disabled: '='
 			},
 			templateUrl: '/shared/directives/PlayerSelectorTemplate.html',
 			controller: 'PlayerSelectorController',
@@ -16,7 +17,8 @@ module Shared {
         public static $inject: string[] = ['$scope', '$element', '$timeout', 'apiService'];
 
 		private players: INewGamePlayer[];
-		private onSelected: Function;
+        private onSelected: Function;
+        private disabled: boolean;
 		
 		private filter: string = '';
 		

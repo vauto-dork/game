@@ -14,7 +14,14 @@
         public static $inject: string[] = ['$scope', 'editActiveGameService'];
         
         private selectedPlayerId: string;
-        private dropZoneActive: boolean;
+
+        private get dropZoneActive(): boolean {
+            return this.editActiveGameService.movePlayerActive;
+        }
+
+        private set dropZoneActive(value: boolean) {
+            this.editActiveGameService.movePlayerActive = value;
+        }
 
         private get players(): Shared.IGamePlayer[] {
             return this.editActiveGameService.players;
@@ -58,19 +65,9 @@
             return this.editActiveGameService.playerIndex(playerId);
         }
 
-        private dropPlayerHere(player: Shared.IGamePlayer): void {
+        private dropPlayerHere(destinationPlayer: Shared.IGamePlayer): void {
             if (!!this.selectedPlayerId) {
-                var selectedPlayer = this.players.filter(p => {
-                    return p.playerId === this.selectedPlayerId;
-                });
-
-                if (selectedPlayer.length === 1) {
-                    var selectedPlayerIndex = this.playerIndex(this.selectedPlayerId);
-                    this.players.splice(selectedPlayerIndex, 1);
-
-                    var dropIndex = this.playerIndex(player.playerId);
-                    this.players.splice(dropIndex, 0, selectedPlayer[0]);
-                }
+                this.editActiveGameService.movePlayer(this.selectedPlayerId, destinationPlayer);
             }
 
             this.unselect();

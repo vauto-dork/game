@@ -16,6 +16,16 @@ var EditActiveGame;
             this.editActiveGameService = editActiveGameService;
             this.unselect();
         }
+        Object.defineProperty(ReorderPlayersController.prototype, "dropZoneActive", {
+            get: function () {
+                return this.editActiveGameService.movePlayerActive;
+            },
+            set: function (value) {
+                this.editActiveGameService.movePlayerActive = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
         Object.defineProperty(ReorderPlayersController.prototype, "players", {
             get: function () {
                 return this.editActiveGameService.players;
@@ -53,18 +63,9 @@ var EditActiveGame;
         ReorderPlayersController.prototype.playerIndex = function (playerId) {
             return this.editActiveGameService.playerIndex(playerId);
         };
-        ReorderPlayersController.prototype.dropPlayerHere = function (player) {
-            var _this = this;
+        ReorderPlayersController.prototype.dropPlayerHere = function (destinationPlayer) {
             if (!!this.selectedPlayerId) {
-                var selectedPlayer = this.players.filter(function (p) {
-                    return p.playerId === _this.selectedPlayerId;
-                });
-                if (selectedPlayer.length === 1) {
-                    var selectedPlayerIndex = this.playerIndex(this.selectedPlayerId);
-                    this.players.splice(selectedPlayerIndex, 1);
-                    var dropIndex = this.playerIndex(player.playerId);
-                    this.players.splice(dropIndex, 0, selectedPlayer[0]);
-                }
+                this.editActiveGameService.movePlayer(this.selectedPlayerId, destinationPlayer);
             }
             this.unselect();
         };

@@ -4,10 +4,12 @@ module EditActiveGame {
         players: Shared.IGamePlayer[];
         unselectedPlayers: Shared.INewGamePlayer[];
         showModifyPlaylist: boolean;
+        movePlayerActive: boolean;
         errorMessages: string[];
 
         addPlayer(player: Shared.IGamePlayer): void;
         removePlayer(player: Shared.IGamePlayer): void;
+        movePlayer(selectedPlayerId: string, destinationPlayer: Shared.IGamePlayer): void;
         playerIndex(playerId: string): number;
         toggleModifyPlaylist(): void;
         getActiveGame(): ng.IPromise<void>;
@@ -21,6 +23,7 @@ module EditActiveGame {
         private gameIdPath: string;
         private activeGame: Shared.IGame;
         private showModifyPlaylistScreen: boolean;
+        private isMovePlayerActive: boolean;
         private errorMessageList: string[] = [];
 
         public get datePlayed(): Date {
@@ -35,6 +38,14 @@ module EditActiveGame {
             if (this.activeGame) {
                 this.activeGame.datePlayed = value.toISOString();
             }
+        }
+
+        public get movePlayerActive(): boolean {
+            return this.isMovePlayerActive;
+        }
+
+        public set movePlayerActive(value: boolean) {
+            this.isMovePlayerActive = value;
         }
 
         public get showModifyPlaylist(): boolean {
@@ -107,6 +118,27 @@ module EditActiveGame {
             var index = this.playerIndex(player.playerId);
             this.players.splice(index, 1);
             this.playerSelectionService.removePlayer(player.player);
+        }
+
+        public movePlayer(selectedPlayerId: string, destinationPlayer: Shared.IGamePlayer): void {
+            var selectedPlayer = this.players.filter(p => {
+                return p.playerId === selectedPlayerId;
+            });
+
+            if (selectedPlayer.length === 1) {
+                var selectedPlayerIndex = this.playerIndex(selectedPlayerId);
+                this.players.splice(selectedPlayerIndex, 1);
+
+                var dropIndex = this.playerIndex(destinationPlayer.playerId);
+
+                if (selectedPlayerIndex <= dropIndex) {
+                    dropIndex += 1;
+                }
+
+                this.players.splice(dropIndex, 0, selectedPlayer[0]);
+            } else {
+                console.error("Cannot find player: ", selectedPlayerId);
+            }
         }
 
         public save(): ng.IPromise<void> {

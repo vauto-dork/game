@@ -5,7 +5,7 @@
                 <button type="button"
                         class="btn btn-primary btn-lg btn-block"
                         ng-click="ctrl.back()"
-                        ng-disabled="ctrl.disabled"
+                        ng-disabled="ctrl.disabled || ctrl.movePlayerActive"
                         aria-label="Back">
                     <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Back
                 </button>
@@ -14,7 +14,9 @@
             <hr class="modify-players-divider visible-xs-block visible-sm-block" />
 
             <h2>Add Player</h2>
-            <player-selector players="ctrl.unselectedPlayers" on-selected="ctrl.onSelected(data)"></player-selector>
+            <player-selector players="ctrl.unselectedPlayers"
+                             on-selected="ctrl.onSelected(data)"
+                             disabled="ctrl.movePlayerActive"></player-selector>
 
             <hr class="modify-players-divider visible-xs-block visible-sm-block" />
         </div>

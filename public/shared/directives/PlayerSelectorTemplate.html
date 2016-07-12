@@ -1,16 +1,22 @@
-
 <div class="form-group player-selector">
 	<div class="input-group">
-		<input type="text" class="form-control player-selector-filter"
-			placeholder="Type name..."
-			ng-model="ctrl.filter"
-			uib-typeahead="p as p.player.fullname for p in ctrl.players | filter:$viewValue | limitTo:6"
-			typeahead-on-select="ctrl.selectPlayer($item, $model, $label)"
-			typeahead-focus-on-select="false"
-			autocomplete="off"
-			autofocus />
-		<div class="input-group-addon player-selector-filter-remove" ng-click="ctrl.removeFilter()">
-			<span class="glyphicon glyphicon-remove-sign"></span>
-		</div>
+		<input type="text"
+               class="form-control player-selector-filter"
+               placeholder="Type name..."
+               ng-model="ctrl.filter"
+               ng-disabled="ctrl.disabled"
+               uib-typeahead="p as p.player.fullname for p in ctrl.players | filter:$viewValue | limitTo:6"
+               typeahead-on-select="ctrl.selectPlayer($item, $model, $label)"
+               typeahead-focus-on-select="false"
+               autocomplete="off"
+               autofocus />
+		<span class="input-group-btn">
+		    <button type="button"
+                    class="btn btn-lg player-selector-remove-btn"
+                    ng-click="ctrl.removeFilter()"
+                    ng-disabled="ctrl.disabled">
+		        <span class="glyphicon glyphicon-remove-sign"></span>
+		    </button>
+		</span>
 	</div>
 </div>

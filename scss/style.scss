@@ -67,17 +67,24 @@
     }
 }
 
-.player-selector-filter {
-	padding: 0.25em;
-	width: 100%;
-	font-size: $font-larger;
-	line-height: 2em;
-	height: 2em;
-}
+.player-selector{
+    .player-selector-filter {
+	    padding: 0.25em;
+	    width: 100%;
+	    font-size: $font-larger;
+	    line-height: 2em;
+	    height: 2em;
+    }
 
-.player-selector-filter-remove {
-	font-size: 2em;
-	cursor: pointer;
+    .player-selector-remove-btn {
+        border: 2px solid #ccc;
+    }
+
+    .dropdown-menu {
+	    width: 100%;
+	    font-size: $font-larger;
+	    line-height: 2em;
+    }
 }
 
 .playlist-row {
