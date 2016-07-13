@@ -42,6 +42,7 @@
     <Content Include="public\areas\history\directives\RankingHistoryTemplate.html" />
     <Content Include="public\areas\players\directives\AddPlayerTemplate.html" />
     <Content Include="public\areas\players\directives\PlayerFormTemplate.html" />
+    <Content Include="public\images\favicon.ico" />
     <Content Include="public\shared\directives\PlayerSelectorTemplate.html" />
     <Content Include="public\areas\players\directives\PlayersListTemplate.html" />
     <Content Include="public\areas\rankings\directives\LeaderboardTemplate.html" />
@@ -183,6 +184,7 @@
       <DependentUpon>compilerconfig.json</DependentUpon>
     </None>
     <Content Include="packages.config" />
+    <Content Include="package.json" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">12.0</VisualStudioVersion>
