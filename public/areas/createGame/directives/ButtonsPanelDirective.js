@@ -49,7 +49,7 @@ var CreateGame;
         });
         ButtonsPanelController.$inject = ['$window', 'createGameService'];
         return ButtonsPanelController;
-    }());
+    })();
     CreateGame.ButtonsPanelController = ButtonsPanelController;
 })(CreateGame || (CreateGame = {}));
 //# sourceMappingURL=ButtonsPanelDirective.js.map

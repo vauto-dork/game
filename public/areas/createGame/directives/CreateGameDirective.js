@@ -37,7 +37,6 @@ var CreateGame;
                 return CreateGame.NewGameSort[this.createGameService.sortOrder];
             },
             set: function (value) {
-                // do nothing, but required to have a setter
             },
             enumerable: true,
             configurable: true
@@ -81,7 +80,7 @@ var CreateGame;
         };
         CreateGameController.$inject = ['$window', 'createGameService'];
         return CreateGameController;
-    }());
+    })();
     CreateGame.CreateGameController = CreateGameController;
 })(CreateGame || (CreateGame = {}));
 //# sourceMappingURL=CreateGameDirective.js.map

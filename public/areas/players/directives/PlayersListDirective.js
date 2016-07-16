@@ -106,7 +106,7 @@ var Players;
         };
         PlayersListController.$inject = ['apiService', 'alertsService'];
         return PlayersListController;
-    }());
+    })();
     Players.PlayersListController = PlayersListController;
 })(Players || (Players = {}));
 //# sourceMappingURL=PlayersListDirective.js.map

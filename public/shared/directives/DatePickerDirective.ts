@@ -13,7 +13,7 @@ module Shared {
     }
 
     export class DatePickerController {
-        public static $inject: string[] = [];
+        public static $inject: string[] = ['dateTimeService'];
 		
 		private date: Date;
 		
@@ -27,12 +27,20 @@ module Shared {
             showWeeks: false,
             startingDay: 0
 		};
+
+		private get prettyDate(): IPrettyDate {
+			return this.dateTimeService.beautifyDate(this.date);
+		}
 		
-        constructor() {
+        constructor(private dateTimeService: IDateTimeService) {
         }
 	
 		private open() {
 			this.opened = true;
+		}
+
+		private withLeadingZero(value: number): string {
+			return value < 10 ? "0" + value : "" + value;
 		}
     }
 }

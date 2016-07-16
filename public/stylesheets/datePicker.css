@@ -1,11 +1,40 @@
-﻿.datepicker,
-.timepicker {
-  padding-left: 1em;
-  padding-right: 1em;
-  font-size: 1.4em;
-  display: inline-block;
-  vertical-align: middle; }
+.date-picker-wrapper {
+  display: table;
+  width: 100%; }
+  .date-picker-wrapper .datepicker,
+  .date-picker-wrapper .timepicker {
+    display: table-cell;
+    width: 49%;
+    font-size: 1.4em;
+    display: inline-block;
+    vertical-align: middle; }
+    .date-picker-wrapper .datepicker .button-wrapper,
+    .date-picker-wrapper .timepicker .button-wrapper {
+      display: table;
+      width: 100%; }
+    .date-picker-wrapper .datepicker .left-value,
+    .date-picker-wrapper .datepicker .middle-value,
+    .date-picker-wrapper .datepicker .right-value,
+    .date-picker-wrapper .timepicker .left-value,
+    .date-picker-wrapper .timepicker .middle-value,
+    .date-picker-wrapper .timepicker .right-value {
+      display: table-cell;
+      vertical-align: middle; }
+    .date-picker-wrapper .datepicker .left-value,
+    .date-picker-wrapper .timepicker .left-value {
+      width: 2em;
+      padding-right: 0.5em;
+      line-height: 0;
+      font-size: 3em; }
+    .date-picker-wrapper .datepicker .right-value,
+    .date-picker-wrapper .timepicker .right-value {
+      width: 3em; }
+    .date-picker-wrapper .datepicker .input-wrapper,
+    .date-picker-wrapper .timepicker .input-wrapper {
+      position: relative; }
+  .date-picker-wrapper .datepicker {
+    text-align: left; }
+  .date-picker-wrapper .timepicker {
+    text-align: right; }
 
-.datepicker {
-  max-width: 15em; }
-
+/*# sourceMappingURL=datePicker.css.map */

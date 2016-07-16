@@ -118,12 +118,10 @@ var EditActiveGame;
         };
         EditActiveGameController.prototype.saveReject = function () {
             var _this = this;
-            // get error messages and display alerts
             this.alertsService.clearAlerts();
             this.editActiveGameService.errorMessages.forEach(function (msg) { _this.alertsService.addAlert('danger', msg); });
             this.changeState(State.Ready);
         };
-        // UI Hookups
         EditActiveGameController.prototype.closeAlert = function (index) {
             this.alertsService.closeAlert(index);
         };
@@ -141,7 +139,7 @@ var EditActiveGame;
         };
         EditActiveGameController.$inject = ['$window', 'editActiveGameService', 'alertsService'];
         return EditActiveGameController;
-    }());
+    })();
     EditActiveGame.EditActiveGameController = EditActiveGameController;
 })(EditActiveGame || (EditActiveGame = {}));
 //# sourceMappingURL=EditActiveGameDirective.js.map

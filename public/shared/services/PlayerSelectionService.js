@@ -53,9 +53,7 @@ var Shared;
             return def.promise;
         };
         PlayerSelectionService.prototype.curateNewPlayerList = function () {
-            // Get the nested player before getting ID because IDs don't match
             var currentPlayerIds = this.players.map(function (p) { return p.playerId; });
-            // Get players that are not in the current playlist.
             this.unselectedPlayersList = this.allPlayers.filter(function (player) {
                 return currentPlayerIds.indexOf(player.playerId) === -1;
             });
@@ -64,7 +62,6 @@ var Shared;
             this.players = [];
             this.curateNewPlayerList();
         };
-        // Debug functions
         PlayerSelectionService.prototype.debugShowAllPlayersTable = function () {
             this.debugPrintPlayersTable(this.allPlayers);
         };
@@ -72,7 +69,6 @@ var Shared;
             this.debugPrintPlayersTable(this.unselectedPlayers);
         };
         PlayerSelectionService.prototype.debugPrintPlayersTable = function (players) {
-            // Change "info" to "table" to show as table in browser debugger
             console.info(players.map(function (p) {
                 return {
                     orderNumber: p.orderNumber,
@@ -83,7 +79,7 @@ var Shared;
         };
         PlayerSelectionService.$inject = ['$q', 'apiService'];
         return PlayerSelectionService;
-    }());
+    })();
     Shared.PlayerSelectionService = PlayerSelectionService;
 })(Shared || (Shared = {}));
 //# sourceMappingURL=PlayerSelectionService.js.map

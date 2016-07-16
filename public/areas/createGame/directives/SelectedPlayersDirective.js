@@ -33,7 +33,7 @@ var CreateGame;
         };
         SelectedPlayersController.$inject = ['createGameService'];
         return SelectedPlayersController;
-    }());
+    })();
     CreateGame.SelectedPlayersController = SelectedPlayersController;
 })(CreateGame || (CreateGame = {}));
 //# sourceMappingURL=SelectedPlayersDirective.js.map

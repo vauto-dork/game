@@ -150,13 +150,12 @@ var CreateGame;
             });
             return this.apiService.createActiveGame(game);
         };
-        // Debug functions
         CreateGameService.prototype.debugShowSortedPlayersTable = function () {
             this.playerSelectionService.debugPrintPlayersTable(this.playersSorted);
         };
         CreateGameService.$inject = ['$q', 'apiService', 'playerSelectionService'];
         return CreateGameService;
-    }());
+    })();
     CreateGame.CreateGameService = CreateGameService;
 })(CreateGame || (CreateGame = {}));
 //# sourceMappingURL=CreateGameService.js.map

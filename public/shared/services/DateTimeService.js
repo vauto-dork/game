@@ -30,8 +30,30 @@ var Shared;
             }
             return '';
         };
+        DateTimeService.prototype.beautifyDate = function (date) {
+            if (!date) {
+                return {
+                    month: this.monthName(0),
+                    day: 1,
+                    year: 1970,
+                    hour: 12,
+                    minute: 0,
+                    ampm: "AM"
+                };
+            }
+            ;
+            var hour = date.getHours();
+            return {
+                month: this.monthName(date.getMonth()),
+                day: date.getDate(),
+                year: date.getFullYear(),
+                hour: hour === 0 ? 12 : (hour > 12 ? hour - 12 : hour),
+                minute: date.getMinutes(),
+                ampm: hour >= 12 ? "PM" : "AM"
+            };
+        };
         return DateTimeService;
-    }());
+    })();
     Shared.DateTimeService = DateTimeService;
 })(Shared || (Shared = {}));
 //# sourceMappingURL=DateTimeService.js.map

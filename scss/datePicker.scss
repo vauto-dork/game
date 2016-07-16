@@ -1,15 +1,51 @@
 @import "variables";
 @import "mixins";
 
-.datepicker,
-.timepicker {
-	padding-left: 1em;
-	padding-right: 1em;
-	font-size: $font-large;
-	display: inline-block;
-	vertical-align: middle;
-}
+.date-picker-wrapper {
+	display: table;
+	width: 100%;
 
-.datepicker {
-	max-width: 15em;
+	.datepicker,
+	.timepicker {
+		display: table-cell;
+		width: 49%;
+		font-size: $font-large;
+		display: inline-block;
+		vertical-align: middle;
+
+		.button-wrapper {
+			display: table;
+			width: 100%;
+		}
+
+		.left-value,
+		.middle-value,
+		.right-value {
+			display: table-cell;
+			vertical-align: middle;
+		}
+
+		.left-value {
+			width: 2em;
+			padding-right: $standard-spacing;
+			line-height: 0;
+			font-size: $font-largest;
+		}
+
+		.right-value {
+			width: 3em;
+		}
+
+		.input-wrapper {
+			position: relative;
+		}
+	}
+
+	.datepicker {
+		text-align: left;
+	}
+
+	.timepicker {
+		text-align: right;
+	}
 }

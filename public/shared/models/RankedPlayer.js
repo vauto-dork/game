@@ -28,7 +28,7 @@ var Shared;
             return player;
         };
         return RankedPlayer;
-    }());
+    })();
     Shared.RankedPlayer = RankedPlayer;
 })(Shared || (Shared = {}));
 //# sourceMappingURL=RankedPlayer.js.map

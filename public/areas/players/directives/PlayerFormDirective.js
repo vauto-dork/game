@@ -19,7 +19,7 @@ var Players;
         }
         PlayerFormController.$inject = [];
         return PlayerFormController;
-    }());
+    })();
     Players.PlayerFormController = PlayerFormController;
 })(Players || (Players = {}));
 //# sourceMappingURL=PlayerFormDirective.js.map

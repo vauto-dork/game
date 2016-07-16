@@ -1,9 +1,8 @@
-﻿@font-face {
+@font-face {
   font-family: 'Ubuntu';
   font-style: normal;
   font-weight: 400;
   src: local("Ubuntu"), url(/fonts/sDGTilo5QRsfWu6Yc11AXg.woff2) format("woff2"), url(/fonts/_xyN3apAT_yRRDeqB3sPRg.woff) format("woff"); }
-
 html,
 body {
   font-family: 'Ubuntu', sans-serif;
@@ -69,13 +68,11 @@ hr {
     .navbar-collapse li > a {
       padding-top: 0.5em;
       padding-bottom: 0.5em; } }
-
 @media (min-width: 768px) {
   .navbar-collapse {
     font-size: 1.4em; }
     .navbar-collapse li > a {
       border-radius: 4px; } }
-
 .navbar-collapse {
   -moz-box-shadow: inset 0px 8px 9px -6px rgba(0, 0, 0, 0.5);
   -webkit-box-shadow: inset 0px 8px 9px -6px rgba(0, 0, 0, 0.5);
@@ -151,16 +148,44 @@ input.ng-touched.ng-invalid {
 .admin-list {
   font-size: 1.5em; }
 
-.datepicker,
-.timepicker {
-  padding-left: 1em;
-  padding-right: 1em;
-  font-size: 1.4em;
-  display: inline-block;
-  vertical-align: middle; }
-
-.datepicker {
-  max-width: 15em; }
+.date-picker-wrapper {
+  display: table;
+  width: 100%; }
+  .date-picker-wrapper .datepicker,
+  .date-picker-wrapper .timepicker {
+    display: table-cell;
+    width: 49%;
+    font-size: 1.4em;
+    display: inline-block;
+    vertical-align: middle; }
+    .date-picker-wrapper .datepicker .button-wrapper,
+    .date-picker-wrapper .timepicker .button-wrapper {
+      display: table;
+      width: 100%; }
+    .date-picker-wrapper .datepicker .left-value,
+    .date-picker-wrapper .datepicker .middle-value,
+    .date-picker-wrapper .datepicker .right-value,
+    .date-picker-wrapper .timepicker .left-value,
+    .date-picker-wrapper .timepicker .middle-value,
+    .date-picker-wrapper .timepicker .right-value {
+      display: table-cell;
+      vertical-align: middle; }
+    .date-picker-wrapper .datepicker .left-value,
+    .date-picker-wrapper .timepicker .left-value {
+      width: 2em;
+      padding-right: 0.5em;
+      line-height: 0;
+      font-size: 3em; }
+    .date-picker-wrapper .datepicker .right-value,
+    .date-picker-wrapper .timepicker .right-value {
+      width: 3em; }
+    .date-picker-wrapper .datepicker .input-wrapper,
+    .date-picker-wrapper .timepicker .input-wrapper {
+      position: relative; }
+  .date-picker-wrapper .datepicker {
+    text-align: left; }
+  .date-picker-wrapper .timepicker {
+    text-align: right; }
 
 .player-selector-container {
   padding-top: 1em;
@@ -190,7 +215,6 @@ input.ng-touched.ng-invalid {
   border-left: 2px solid #e4e9ef;
   display: inline-block;
   white-space: nowrap; }
-
 .panel-title .player-name {
   background-color: #4f6885;
   color: #e4e9ef;
@@ -413,10 +437,8 @@ input.ng-touched.ng-invalid {
   font-size: 2em;
   line-height: 2em;
   height: 2em; }
-
 .player-selector .player-selector-remove-btn {
   border: 2px solid #ccc; }
-
 .player-selector .dropdown-menu {
   width: 100%;
   font-size: 2em;
@@ -481,3 +503,4 @@ input.ng-touched.ng-invalid {
 .ranking-history .month-year-picker {
   padding: 1.5em 0 2em 0; }
 
+/*# sourceMappingURL=style.css.map */

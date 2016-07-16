@@ -37,7 +37,7 @@ var Shared;
             return player;
         };
         return Player;
-    }());
+    })();
     Shared.Player = Player;
 })(Shared || (Shared = {}));
 //# sourceMappingURL=Player.js.map

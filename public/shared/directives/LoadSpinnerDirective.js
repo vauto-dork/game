@@ -15,7 +15,7 @@ var Shared;
         }
         LoadSpinnerController.$inject = [];
         return LoadSpinnerController;
-    }());
+    })();
     Shared.LoadSpinnerController = LoadSpinnerController;
 })(Shared || (Shared = {}));
 //# sourceMappingURL=LoadSpinnerDirective.js.map

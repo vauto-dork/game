@@ -67,7 +67,7 @@ var Rankings;
         };
         RankingsService.$inject = ['$q', 'apiService'];
         return RankingsService;
-    }());
+    })();
     Rankings.RankingsService = RankingsService;
 })(Rankings || (Rankings = {}));
 //# sourceMappingURL=RankingsService.js.map

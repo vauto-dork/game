@@ -37,7 +37,7 @@ var Shared;
         };
         MonthYearQueryService.$inject = ['$location'];
         return MonthYearQueryService;
-    }());
+    })();
     Shared.MonthYearQueryService = MonthYearQueryService;
 })(Shared || (Shared = {}));
 //# sourceMappingURL=MonthYearQueryService.js.map

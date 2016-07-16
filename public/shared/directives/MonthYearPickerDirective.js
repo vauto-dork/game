@@ -92,7 +92,7 @@ var Shared;
         };
         MonthYearPickerController.$inject = ['dateTimeService'];
         return MonthYearPickerController;
-    }());
+    })();
     Shared.MonthYearPickerController = MonthYearPickerController;
 })(Shared || (Shared = {}));
 //# sourceMappingURL=MonthYearPickerDirective.js.map

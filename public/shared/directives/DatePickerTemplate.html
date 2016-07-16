@@ -1,29 +1,57 @@
-<div class="text-center">
+<div class="date-picker-wrapper text-center">
 	<div class="datepicker">
-		<div class="input-group">
-			<input type="text"
-                   class="form-control"
-                   uib-datepicker-popup="{{ctrl.format}}"
-                   ng-model="ctrl.date"
-                   is-open="ctrl.opened"
-                   datepicker-options="ctrl.dateOptions"
-                   show-button-bar="false"
-                   ng-required="true"
-                   close-text="Close"
-                   ng-disabled="ctrl.disabled" />
-			<span class="input-group-btn">
-				<button type="button" class="btn btn-default" ng-click="ctrl.open()" ng-disabled="ctrl.disabled">
-					<span class="glyphicon glyphicon-calendar"></span>
-			    </button>
-			</span>
+
+		<button type="button" class="btn btn-default btn-block" ng-click="ctrl.open()" ng-disabled="ctrl.disabled">
+			<div class="button-wrapper">
+				<div class="left-value text-right">
+					{{ctrl.withLeadingZero(ctrl.prettyDate.day)}}
+				</div>
+				<div class="middle-value text-left">
+					{{ctrl.prettyDate.month}}<br>{{ctrl.prettyDate.year}}
+				</div>
+				<div class="right-value btn-link text-right">
+					<span class="glyphicon glyphicon-menu-down"></span>
+				</div>
+			</div>
+		</button>
+
+		<div class="input-wrapper">
+			<input type="hidden"
+				class="form-control"
+				uib-datepicker-popup="{{ctrl.format}}"
+				ng-model="ctrl.date"
+				is-open="ctrl.opened"
+				datepicker-options="ctrl.dateOptions"
+				show-button-bar="false"
+				ng-required="true"
+				close-text="Close"
+				ng-disabled="ctrl.disabled"
+			/>
 		</div>
 	</div>
 	<div class="timepicker">
-		<uib-timepicker ng-model="ctrl.date"
-                    hour-step="ctrl.hstep"
-                    minute-step="ctrl.mstep"
-                    show-meridian="true"
-                    ng-disabled="ctrl.disabled">
-		</uib-timepicker>
+		<button type="button" class="btn btn-default btn-block" ng-disabled="ctrl.disabled">
+			<div class="button-wrapper">
+				<div class="left-value text-right">
+					{{ctrl.withLeadingZero(ctrl.prettyDate.hour)}}
+				</div>
+				<div class="middle-value text-left">
+					:{{ctrl.withLeadingZero(ctrl.prettyDate.minute)}}<br>{{ctrl.prettyDate.ampm}}
+				</div>
+				<div class="right-value btn-link text-right">
+					<span class="glyphicon glyphicon-menu-down"></span>
+				</div>
+			</div>
+		</button>
+
+		<div>
+			<uib-timepicker
+				ng-model="ctrl.date"
+				hour-step="ctrl.hstep"
+				minute-step="ctrl.mstep"
+				show-meridian="true"
+				ng-disabled="ctrl.disabled">
+			</uib-timepicker>
+		</div>
 	</div>
 </div>

@@ -13,7 +13,7 @@ var Shared;
             });
         }
         return NewGame;
-    }());
+    })();
     Shared.NewGame = NewGame;
 })(Shared || (Shared = {}));
 //# sourceMappingURL=NewGame.js.map

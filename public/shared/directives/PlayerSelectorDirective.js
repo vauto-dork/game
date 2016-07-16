@@ -30,7 +30,7 @@ var Shared;
         };
         PlayerSelectorController.$inject = ['$element', '$timeout'];
         return PlayerSelectorController;
-    }());
+    })();
     Shared.PlayerSelectorController = PlayerSelectorController;
 })(Shared || (Shared = {}));
 //# sourceMappingURL=PlayerSelectorDirective.js.map

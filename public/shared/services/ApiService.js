@@ -5,8 +5,6 @@ var Shared;
             this.$http = $http;
             this.$q = $q;
         }
-        // --------------------------------------------------------------
-        // Active Games
         ApiService.prototype.getActiveGamePath = function (gameIdPath) {
             return '/ActiveGames/json' + gameIdPath;
         };
@@ -100,8 +98,6 @@ var Shared;
             });
             return def.promise;
         };
-        // --------------------------------------------------------------
-        // Players
         ApiService.prototype.saveNewPlayer = function (player) {
             var def = this.$q.defer();
             this.$http.post('/players', player)
@@ -164,8 +160,6 @@ var Shared;
             });
             return playersList;
         };
-        // --------------------------------------------------------------
-        // Dork of the Month
         ApiService.prototype.getDotm = function (month, year) {
             var def = this.$q.defer();
             var query = '?month=' + month + '&year=' + year;
@@ -179,8 +173,6 @@ var Shared;
             });
             return def.promise;
         };
-        // --------------------------------------------------------------
-        // Games
         ApiService.prototype.getLastPlayedGame = function () {
             var def = this.$q.defer();
             this.$http.get("/Games/LastPlayed")
@@ -233,7 +225,7 @@ var Shared;
         };
         ApiService.$inject = ['$http', '$q'];
         return ApiService;
-    }());
+    })();
     Shared.ApiService = ApiService;
 })(Shared || (Shared = {}));
 //# sourceMappingURL=ApiService.js.map
