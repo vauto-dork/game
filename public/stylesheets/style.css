@@ -548,7 +548,7 @@ input.ng-touched.ng-invalid {
     font-size: 14px;
     margin-bottom: 0; }
   .edit-active-game .datepicker-filler {
-    height: 2em; }
+    padding-bottom: 20px; }
 
 .ranking-history .month-year-picker {
   padding: 1.5em 0 2em 0; }

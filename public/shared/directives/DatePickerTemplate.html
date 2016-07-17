@@ -8,6 +8,7 @@
 
 			<button type="button"
 			class="btn btn-default btn-block"
+			ng-class="{'active': ctrl.datePickerOpened}"
 			ng-click="ctrl.openDatePicker()"
 			ng-disabled="ctrl.disabled">
 				<div class="button-wrapper">
@@ -37,6 +38,7 @@
 		<button type="button"
 			id="time-picker-toggle"
 			class="btn btn-default btn-block"
+			ng-class="{'active': ctrl.timePickerOpened}"
 			ng-disabled="ctrl.disabled"
 			uib-dropdown-toggle>
 			<div class="button-wrapper">
