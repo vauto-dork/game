@@ -151,17 +151,43 @@ input.ng-touched.ng-invalid {
 .date-picker-wrapper {
   display: table;
   width: 100%; }
+  .date-picker-wrapper .now-button {
+    display: table-cell;
+    vertical-align: middle; }
+    @media screen and (max-width: 430px) {
+      .date-picker-wrapper .now-button {
+        display: block; } }
   .date-picker-wrapper .datepicker,
   .date-picker-wrapper .timepicker {
     display: table-cell;
-    width: 49%;
+    vertical-align: middle;
     font-size: 1.4em;
-    display: inline-block;
-    vertical-align: middle; }
+    min-width: 144px; }
+    @media screen and (max-width: 430px) {
+      .date-picker-wrapper .datepicker,
+      .date-picker-wrapper .timepicker {
+        display: block; } }
     .date-picker-wrapper .datepicker .button-wrapper,
     .date-picker-wrapper .timepicker .button-wrapper {
+      position: relative;
       display: table;
       width: 100%; }
+    .date-picker-wrapper .datepicker .no-selection,
+    .date-picker-wrapper .timepicker .no-selection {
+      position: absolute;
+      top: 0;
+      left: 0; }
+      .date-picker-wrapper .datepicker .no-selection div,
+      .date-picker-wrapper .timepicker .no-selection div {
+        display: inline-block;
+        vertical-align: middle; }
+      .date-picker-wrapper .datepicker .no-selection .glyphicon,
+      .date-picker-wrapper .timepicker .no-selection .glyphicon {
+        padding-right: 0.25em;
+        font-size: 30px; }
+      .date-picker-wrapper .datepicker .no-selection .no-sel-label,
+      .date-picker-wrapper .timepicker .no-selection .no-sel-label {
+        text-align: left; }
     .date-picker-wrapper .datepicker .left-value,
     .date-picker-wrapper .datepicker .middle-value,
     .date-picker-wrapper .datepicker .right-value,
@@ -172,20 +198,42 @@ input.ng-touched.ng-invalid {
       vertical-align: middle; }
     .date-picker-wrapper .datepicker .left-value,
     .date-picker-wrapper .timepicker .left-value {
-      width: 2em;
-      padding-right: 0.5em;
+      width: 1.25em;
+      padding-right: 0.25em;
       line-height: 0;
-      font-size: 3em; }
+      font-size: 3em;
+      text-align: right; }
+    .date-picker-wrapper .datepicker .middle-value,
+    .date-picker-wrapper .timepicker .middle-value {
+      text-align: left; }
     .date-picker-wrapper .datepicker .right-value,
     .date-picker-wrapper .timepicker .right-value {
-      width: 3em; }
-    .date-picker-wrapper .datepicker .input-wrapper,
-    .date-picker-wrapper .timepicker .input-wrapper {
-      position: relative; }
+      width: 2.25em; }
   .date-picker-wrapper .datepicker {
     text-align: left; }
+    .date-picker-wrapper .datepicker .input-wrapper {
+      position: relative; }
   .date-picker-wrapper .timepicker {
     text-align: right; }
+    .date-picker-wrapper .timepicker .input-wrapper {
+      padding: 0 1em; }
+
+.uib-datepicker .text-muted {
+  color: #999999; }
+.uib-datepicker .btn {
+  border-radius: 0; }
+  .uib-datepicker .btn.btn-info.active .text-info {
+    color: white; }
+.uib-datepicker .btn[disabled] {
+  color: #C0C0C0;
+  opacity: 1; }
+  .uib-datepicker .btn[disabled] .text-muted {
+    color: #C0C0C0; }
+.uib-datepicker th,
+.uib-datepicker .uib-year,
+.uib-datepicker .uib-month,
+.uib-datepicker .uib-day {
+  padding: 2px; }
 
 .player-selector-container {
   padding-top: 1em;
@@ -499,6 +547,8 @@ input.ng-touched.ng-invalid {
   .edit-active-game .bonus-points-table {
     font-size: 14px;
     margin-bottom: 0; }
+  .edit-active-game .datepicker-filler {
+    height: 2em; }
 
 .ranking-history .month-year-picker {
   padding: 1.5em 0 2em 0; }

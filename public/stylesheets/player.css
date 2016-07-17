@@ -1,4 +1,4 @@
-﻿.player-move-panel-content {
+.player-move-panel-content {
   font-size: 2em;
   color: #7a8394;
   height: 2em;
@@ -10,7 +10,6 @@
   border-left: 2px solid #e4e9ef;
   display: inline-block;
   white-space: nowrap; }
-
 .panel-title .player-name {
   background-color: #4f6885;
   color: #e4e9ef;
@@ -105,3 +104,4 @@
     padding-top: 0;
     font-size: 1.4em; }
 
+/*# sourceMappingURL=player.css.map */

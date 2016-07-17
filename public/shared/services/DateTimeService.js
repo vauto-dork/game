@@ -5,6 +5,9 @@ var Shared;
             this.monthNames = ["January", "February", "March", "April", "May", "June",
                 "July", "August", "September", "October", "November", "December"
             ];
+            this.abbrMonthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June",
+                "July", "Aug", "Sept", "Oct", "Nov", "Dec"
+            ];
         }
         DateTimeService.prototype.currentYear = function () {
             return new Date().getFullYear();
@@ -24,16 +27,17 @@ var Shared;
         DateTimeService.prototype.lastMonthName = function () {
             return this.monthNames[this.lastMonthValue()];
         };
-        DateTimeService.prototype.monthName = function (monthValue) {
+        DateTimeService.prototype.monthName = function (monthValue, abbreviateMonth) {
+            var monthNames = abbreviateMonth ? this.abbrMonthNames : this.monthNames;
             if (monthValue >= 0 && monthValue <= 11) {
-                return this.monthNames[monthValue];
+                return monthNames[monthValue];
             }
             return '';
         };
-        DateTimeService.prototype.beautifyDate = function (date) {
+        DateTimeService.prototype.beautifyDate = function (date, abbreviateMonth) {
             if (!date) {
                 return {
-                    month: this.monthName(0),
+                    month: this.monthName(0, abbreviateMonth),
                     day: 1,
                     year: 1970,
                     hour: 12,
@@ -44,7 +48,7 @@ var Shared;
             ;
             var hour = date.getHours();
             return {
-                month: this.monthName(date.getMonth()),
+                month: this.monthName(date.getMonth(), abbreviateMonth),
                 day: date.getDate(),
                 year: date.getFullYear(),
                 hour: hour === 0 ? 12 : (hour > 12 ? hour - 12 : hour),

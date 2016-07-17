@@ -1,21 +1,53 @@
 @import "variables";
 @import "mixins";
 
+@mixin cell-align() {
+	display: table-cell;
+	vertical-align: middle;
+
+	@media screen and (max-width: 430px) {
+		display: block;
+	}
+}
+
 .date-picker-wrapper {
 	display: table;
 	width: 100%;
 
+	.now-button {
+		@include cell-align;
+	}
+
 	.datepicker,
 	.timepicker {
-		display: table-cell;
-		width: 49%;
+		@include cell-align;
 		font-size: $font-large;
-		display: inline-block;
-		vertical-align: middle;
+		min-width: 144px;
 
 		.button-wrapper {
+			position: relative;
 			display: table;
 			width: 100%;
+		}
+
+		.no-selection {
+			position: absolute;
+			top: 0;
+			left: 0;
+
+			div {
+				display: inline-block;
+				vertical-align: middle;
+			}
+
+			.glyphicon{
+				padding-right: $standard-spacing / 2;
+				font-size: 30px;
+			}
+
+			.no-sel-label {
+				text-align: left;
+			}
 		}
 
 		.left-value,
@@ -26,26 +58,68 @@
 		}
 
 		.left-value {
-			width: 2em;
-			padding-right: $standard-spacing;
+			width: 1.25em;
+			padding-right: $standard-spacing / 2;
 			line-height: 0;
 			font-size: $font-largest;
+			text-align: right;
+		}
+
+		.middle-value {
+			text-align: left;
 		}
 
 		.right-value {
-			width: 3em;
+			width: 2.25em;
 		}
+	}
+
+	.datepicker {
+		text-align: left;
 
 		.input-wrapper {
 			position: relative;
 		}
 	}
 
-	.datepicker {
-		text-align: left;
-	}
-
 	.timepicker {
 		text-align: right;
+
+		.input-wrapper {
+			padding: 0 (2 * $standard-spacing);
+		}
+	}
+}
+
+.uib-datepicker {
+
+	.text-muted {
+		color: $med-gray;
+	}
+
+	.btn {
+		border-radius: 0;
+
+		&.btn-info.active {
+			.text-info {
+				color: white;
+			}
+		}
+	}
+
+	.btn[disabled] {
+		color: $silver;
+		opacity: 1;
+
+		.text-muted {
+			color: $silver;
+		}
+	}
+
+	th,
+	.uib-year,
+	.uib-month,
+	.uib-day {
+		padding: 2px;	
 	}
 }

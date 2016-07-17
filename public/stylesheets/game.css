@@ -1,4 +1,4 @@
-﻿.game-column-player,
+.game-column-player,
 .game-column-rank,
 .game-column-points {
   position: relative;
@@ -71,3 +71,4 @@
   .btn-group-lg.game-rank-group > .btn {
     padding: 0.5em 1em; }
 
+/*# sourceMappingURL=game.css.map */
