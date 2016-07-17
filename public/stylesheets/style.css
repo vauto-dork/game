@@ -154,7 +154,7 @@ input.ng-touched.ng-invalid {
   .date-picker-wrapper .now-button {
     display: table-cell;
     vertical-align: middle; }
-    @media screen and (max-width: 430px) {
+    @media screen and (max-width: 479px) {
       .date-picker-wrapper .now-button {
         display: block; } }
   .date-picker-wrapper .datepicker,
@@ -163,7 +163,7 @@ input.ng-touched.ng-invalid {
     vertical-align: middle;
     font-size: 1.4em;
     min-width: 144px; }
-    @media screen and (max-width: 430px) {
+    @media screen and (max-width: 479px) {
       .date-picker-wrapper .datepicker,
       .date-picker-wrapper .timepicker {
         display: block; } }
