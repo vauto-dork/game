@@ -139,14 +139,15 @@
 }
 
 .dotm-row {
-	@extend .playlist-scores-row;
-	margin-top: 1em;
-	margin-bottom: 1em;
+	@include row;
+	padding: 0 $standard-spacing;
+	margin: 1em auto;
 }
 
 .btn-row {
-	@extend .playlist-scores-row;
+	@include row;
 	padding: 1em $standard-spacing;
+	margin: auto;
 }
 
 .edit-active-game {

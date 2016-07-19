@@ -1,6 +1,9 @@
 .date-picker-wrapper {
   display: table;
-  width: 100%; }
+  width: 100%;
+  border: 1px solid #CCC; }
+  .date-picker-wrapper .btn {
+    border-radius: 0; }
   .date-picker-wrapper .now-button {
     display: table-cell;
     vertical-align: middle; }
@@ -75,6 +78,7 @@
   .uib-datepicker .btn.btn-info.active .text-info {
     color: white; }
 .uib-datepicker .btn[disabled] {
+  background-color: #EEE;
   color: #C0C0C0;
   opacity: 1; }
   .uib-datepicker .btn[disabled] .text-muted {

@@ -150,7 +150,10 @@ input.ng-touched.ng-invalid {
 
 .date-picker-wrapper {
   display: table;
-  width: 100%; }
+  width: 100%;
+  border: 1px solid #CCC; }
+  .date-picker-wrapper .btn {
+    border-radius: 0; }
   .date-picker-wrapper .now-button {
     display: table-cell;
     vertical-align: middle; }
@@ -225,6 +228,7 @@ input.ng-touched.ng-invalid {
   .uib-datepicker .btn.btn-info.active .text-info {
     color: white; }
 .uib-datepicker .btn[disabled] {
+  background-color: #EEE;
   color: #C0C0C0;
   opacity: 1; }
   .uib-datepicker .btn[disabled] .text-muted {
@@ -522,21 +526,28 @@ input.ng-touched.ng-invalid {
   width: 100%;
   padding: 1em; }
 
-.playlist-scores-row, .dotm-row, .btn-row {
+.playlist-scores-row {
   display: block;
   line-height: 2em;
   padding: 1em 0;
   padding: 0 0.5em;
   margin: auto; }
-  .playlist-scores-row .panel-body, .dotm-row .panel-body, .btn-row .panel-body {
+  .playlist-scores-row .panel-body {
     cursor: pointer; }
 
 .dotm-row {
-  margin-top: 1em;
-  margin-bottom: 1em; }
+  display: block;
+  line-height: 2em;
+  padding: 1em 0;
+  padding: 0 0.5em;
+  margin: 1em auto; }
 
 .btn-row {
-  padding: 1em 0.5em; }
+  display: block;
+  line-height: 2em;
+  padding: 1em 0;
+  padding: 1em 0.5em;
+  margin: auto; }
 
 .edit-active-game {
   padding-top: 2em; }

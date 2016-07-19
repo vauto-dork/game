@@ -13,6 +13,11 @@
 .date-picker-wrapper {
 	display: table;
 	width: 100%;
+	border: 1px solid $btn-default-border-color;
+
+	.btn {
+		border-radius: 0;
+	}
 
 	.now-button {
 		@include cell-align;
@@ -108,6 +113,7 @@
 	}
 
 	.btn[disabled] {
+		background-color: $calendar-disabled-date-bg-color;
 		color: $silver;
 		opacity: 1;
 
