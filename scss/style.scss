@@ -171,8 +171,21 @@
 	}
 }
 
-.ranking-history {
-    .month-year-picker {
-        padding: 1.5em 0 2em 0;
-    }
+.month-year-picker {
+	display: table;
+	width: 100%;
+	border: 1px solid $btn-default-border-color;
+	margin: 1.5em 0 2em 0;
+
+	.myp-month,
+	.myp-year {
+		display: table-cell;
+		font-size: 18px;
+		
+		// Font-size is duplicated because the custom
+		// arrow hack doesn't size with the parent element.
+		select {
+			font-size: 18px;
+		}
+	}
 }
