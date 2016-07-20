@@ -8,7 +8,6 @@ node_modules
 **/*.js.map
 **/*.css.map
 obj/
-.vscode/settings.json
 .vs/
 bin/
 packages/
