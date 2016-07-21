@@ -139,7 +139,7 @@ var EditActiveGame;
         };
         EditActiveGameController.$inject = ['$window', 'editActiveGameService', 'alertsService'];
         return EditActiveGameController;
-    })();
+    }());
     EditActiveGame.EditActiveGameController = EditActiveGameController;
 })(EditActiveGame || (EditActiveGame = {}));
 //# sourceMappingURL=EditActiveGameDirective.js.map

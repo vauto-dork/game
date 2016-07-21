@@ -73,7 +73,7 @@ var EditActiveGame;
         };
         ReorderPlayersController.$inject = ['editActiveGameService'];
         return ReorderPlayersController;
-    })();
+    }());
     EditActiveGame.ReorderPlayersController = ReorderPlayersController;
 })(EditActiveGame || (EditActiveGame = {}));
 //# sourceMappingURL=ReorderPlayersDirective.js.map

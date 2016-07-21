@@ -28,7 +28,7 @@ var EditActiveGame;
         });
         RevertFinalizeController.$inject = ['editActiveGameService'];
         return RevertFinalizeController;
-    })();
+    }());
     EditActiveGame.RevertFinalizeController = RevertFinalizeController;
 })(EditActiveGame || (EditActiveGame = {}));
 //# sourceMappingURL=RevertFinalizeDirective.js.map

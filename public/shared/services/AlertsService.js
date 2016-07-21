@@ -36,7 +36,7 @@ var Shared;
         };
         AlertsService.$inject = ['$timeout', '$window'];
         return AlertsService;
-    })();
+    }());
     Shared.AlertsService = AlertsService;
 })(Shared || (Shared = {}));
 //# sourceMappingURL=AlertsService.js.map

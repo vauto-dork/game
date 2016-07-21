@@ -57,7 +57,7 @@ var Shared;
             };
         };
         return DateTimeService;
-    })();
+    }());
     Shared.DateTimeService = DateTimeService;
 })(Shared || (Shared = {}));
 //# sourceMappingURL=DateTimeService.js.map

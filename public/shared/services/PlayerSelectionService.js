@@ -79,7 +79,7 @@ var Shared;
         };
         PlayerSelectionService.$inject = ['$q', 'apiService'];
         return PlayerSelectionService;
-    })();
+    }());
     Shared.PlayerSelectionService = PlayerSelectionService;
 })(Shared || (Shared = {}));
 //# sourceMappingURL=PlayerSelectionService.js.map

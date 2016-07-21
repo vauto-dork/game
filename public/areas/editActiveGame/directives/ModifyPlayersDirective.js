@@ -37,7 +37,7 @@ var EditActiveGame;
         };
         ModifyPlayersController.$inject = ['editActiveGameService'];
         return ModifyPlayersController;
-    })();
+    }());
     EditActiveGame.ModifyPlayersController = ModifyPlayersController;
 })(EditActiveGame || (EditActiveGame = {}));
 //# sourceMappingURL=ModifyPlayersDirective.js.map

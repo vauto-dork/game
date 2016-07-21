@@ -1,4 +1,3 @@
-// modified from https://github.com/georapbox/angular-PubSub/blob/master/src/angular-pubsub.js
 var Shared;
 (function (Shared) {
     var PubSubServiceBase = (function () {
@@ -54,7 +53,7 @@ var Shared;
             return !!this.topics[callbackId];
         };
         return PubSubServiceBase;
-    })();
+    }());
     Shared.PubSubServiceBase = PubSubServiceBase;
 })(Shared || (Shared = {}));
 //# sourceMappingURL=PubSubServiceBase.js.map

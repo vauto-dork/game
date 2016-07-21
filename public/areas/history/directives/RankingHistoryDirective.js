@@ -49,7 +49,7 @@ var DorkHistory;
         };
         RankingHistoryController.$inject = ['$timeout', 'monthYearQueryService', 'dateTimeService'];
         return RankingHistoryController;
-    })();
+    }());
     DorkHistory.RankingHistoryController = RankingHistoryController;
 })(DorkHistory || (DorkHistory = {}));
 //# sourceMappingURL=RankingHistoryDirective.js.map

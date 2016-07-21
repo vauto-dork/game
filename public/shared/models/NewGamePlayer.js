@@ -24,7 +24,7 @@ var Shared;
             return player;
         };
         return NewGamePlayer;
-    })();
+    }());
     Shared.NewGamePlayer = NewGamePlayer;
 })(Shared || (Shared = {}));
 //# sourceMappingURL=NewGamePlayer.js.map

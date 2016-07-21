@@ -50,7 +50,7 @@ var Shared;
         };
         DatePickerController.$inject = ['dateTimeService'];
         return DatePickerController;
-    })();
+    }());
     Shared.DatePickerController = DatePickerController;
 })(Shared || (Shared = {}));
 //# sourceMappingURL=DatePickerDirective.js.map

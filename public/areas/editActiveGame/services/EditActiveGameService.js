@@ -215,7 +215,7 @@ var EditActiveGame;
         };
         EditActiveGameService.$inject = ['$location', '$q', 'apiService', 'playerSelectionService'];
         return EditActiveGameService;
-    })();
+    }());
     EditActiveGame.EditActiveGameService = EditActiveGameService;
 })(EditActiveGame || (EditActiveGame = {}));
 //# sourceMappingURL=EditActiveGameService.js.map

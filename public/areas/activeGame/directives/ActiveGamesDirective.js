@@ -61,7 +61,7 @@ var ActiveGame;
         };
         ActiveGamesController.$inject = ['apiService'];
         return ActiveGamesController;
-    })();
+    }());
     ActiveGame.ActiveGamesController = ActiveGamesController;
 })(ActiveGame || (ActiveGame = {}));
 //# sourceMappingURL=ActiveGamesDirective.js.map

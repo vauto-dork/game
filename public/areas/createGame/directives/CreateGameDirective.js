@@ -80,7 +80,7 @@ var CreateGame;
         };
         CreateGameController.$inject = ['$window', 'createGameService'];
         return CreateGameController;
-    })();
+    }());
     CreateGame.CreateGameController = CreateGameController;
 })(CreateGame || (CreateGame = {}));
 //# sourceMappingURL=CreateGameDirective.js.map

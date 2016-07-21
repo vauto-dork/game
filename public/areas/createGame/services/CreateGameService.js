@@ -77,11 +77,6 @@ var CreateGame;
             this.reset();
         };
         CreateGameService.prototype.sortPlayersByGameOrder = function () {
-            // Sorts in an alternating outside-in order by rating.
-            // For example if the players have the following rating:
-            //     1 2 3 4 5 6
-            // They would be sorted like so:
-            //     6 4 2 1 3 5
             var _this = this;
             var temp = angular.copy(this.players);
             temp.sort(function (a, b) {
@@ -155,7 +150,7 @@ var CreateGame;
         };
         CreateGameService.$inject = ['$q', 'apiService', 'playerSelectionService'];
         return CreateGameService;
-    })();
+    }());
     CreateGame.CreateGameService = CreateGameService;
 })(CreateGame || (CreateGame = {}));
 //# sourceMappingURL=CreateGameService.js.map
