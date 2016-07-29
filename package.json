@@ -17,5 +17,9 @@
   },
   "engines": {
     "node": "0.12.x"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-bundle-assets": "^2.27.1"
   }
 }
