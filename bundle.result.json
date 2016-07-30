@@ -1,5 +1,11 @@
 {
   "shared": {
-    "scripts": "<script src='/bundles/shared.js' type='text/javascript'></script>"
+    "scripts": "<script src='/bundles/scripts/shared.js' type='text/javascript'></script>"
+  },
+  "activeGames": {
+    "scripts": "<script src='/bundles/scripts/activeGames.js' type='text/javascript'></script>"
+  },
+  "index": {
+    "scripts": "<script src='/bundles/scripts/index.js' type='text/javascript'></script>"
   }
 }

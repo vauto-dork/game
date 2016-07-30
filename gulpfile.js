@@ -42,9 +42,9 @@ gulp.task("bundle", ["ts-compile"], function() {
   return gulp.src("./bundle.config.js")
     .pipe(bundle())
     .pipe(bundle.results({
-      pathPrefix: "/bundles/"
+      pathPrefix: "/bundles/scripts/"
     })) // arg is destination of bundle.result.json
-    .pipe(gulp.dest("./public/bundles"));
+    .pipe(gulp.dest("./public/bundles/scripts"));
 });
 
 gulp.task("bundle-watch", ["bundle"], function() {

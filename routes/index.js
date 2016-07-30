@@ -9,17 +9,17 @@ router.get('/', function(req, res, next) {
 
 /* GET new game page. */
 router.get('/CreateGame', function(req, res, next) {
-  res.render('createGame', { title: 'Create Game' });
+  res.render('createGame', { title: 'Create Game', bundle: bundles});
 });
 
 /* GET game history page. */
 router.get('/GameHistory', function(req, res, next) {
-  res.render('gameHistory', { title: 'Game History' });
+  res.render('gameHistory', { title: 'Game History', bundle: bundles});
 });
 
 /* GET ranking history page. */
 router.get('/RankingHistory', function(req, res, next) {
-  res.render('rankingHistory', { title: 'Ranking History' });
+  res.render('rankingHistory', { title: 'Ranking History', bundle: bundles});
 });
 
 module.exports = router;
