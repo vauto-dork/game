@@ -1,9 +1,10 @@
 var express = require('express');
 var router = express.Router();
+var bundles = require('../bundle.result.json');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Leaderboard'});
+  res.render('index', { title: 'Leaderboard', bundle: bundles});
 });
 
 /* GET new game page. */
