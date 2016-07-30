@@ -1,6 +1,8 @@
-var gulp = require('gulp'),
-  bundle = require('gulp-bundle-assets');
- 
+var gulp = require("gulp");
+var ts = require("gulp-typescript");
+var tsProject = ts.createProject("tsconfig.json");
+var bundle = require("gulp-bundle-assets");
+
  /*
   gulp-bundle-assets repo:
   https://github.com/dowjones/gulp-bundle-assets
@@ -11,11 +13,19 @@ var gulp = require('gulp'),
   example.
 */
 
-gulp.task('bundle', function() {
-  return gulp.src('./bundle.config.js')
+gulp.task("bundle", function() {
+  return gulp.src("./bundle.config.js")
     .pipe(bundle())
     .pipe(bundle.results({
-      pathPrefix: '/bundles/'
+      pathPrefix: "/bundles/"
     })) // arg is destination of bundle.result.json
-    .pipe(gulp.dest('./public/bundles'));
+    .pipe(gulp.dest("./public/bundles"));
 });
+
+gulp.task("ts-compile", function () {
+    return tsProject.src()
+        .pipe(ts(tsProject))
+        .js.pipe(gulp.dest("generated"));
+});
+
+gulp.task("default", ["ts-compile", "bundle"]);
