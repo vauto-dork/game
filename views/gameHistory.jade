@@ -1,19 +1,5 @@
 extends layout
 
-block modules
-	script(src='/shared/directives/GameCardDirective.js')
-	script(src='/shared/modules/GameCardModule.js')
-	
-	script(src='/areas/history/directives/GameHistoryDirective.js')
-
-	script.
-		var GameHistoryModule = angular.module('GameHistoryModule', ['GameCardModule']);
-		
-		GameHistoryModule.controller('GameHistoryController', DorkHistory.GameHistoryController);
-		GameHistoryModule.directive('gameHistory', DorkHistory.GameHistoryDirective);
-		
-	- var modules = ['GameHistoryModule']
-
 block content
 	div.row
 		game-history

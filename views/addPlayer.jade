@@ -1,20 +1,5 @@
 extends layout
 
-block modules
-	script(src='/areas/players/directives/PlayerFormDirective.js')
-	script(src='/areas/players/directives/AddPlayerDirective.js')
-	
-	script.
-		var AddPlayerModule = angular.module('AddPlayerModule', []);
-		
-		AddPlayerModule.controller('AddPlayerController', Players.AddPlayerController);
-		AddPlayerModule.directive('addPlayer', Players.AddPlayerDirective);
-		
-		AddPlayerModule.controller('PlayerFormController', Players.PlayerFormController);
-		AddPlayerModule.directive('playerForm', Players.PlayerFormDirective);
-	
-	- var modules = ['AddPlayerModule']
-
 block content
 	div.row
 		add-player
