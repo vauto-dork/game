@@ -1,8 +1,11 @@
 var bundleFiles = require('./public/bundles/bundleFiles.json');
 
 // Paths for file generation
-var generatedFilePath = './generated/';
-var pageModuleFilePath = './public/bundles/pageModules/';
+var generatedFilePath = './' + bundleFiles.sourceRootFilePath + '/';
+var pageModuleFilePath = './' + bundleFiles.sourceRootFilePath + '/bundles/pageModules/';
+
+console.log(generatedFilePath);
+console.log(pageModuleFilePath);
 
 //-----------------------------------------------------------------------------
 var getScriptsArray = function(scriptPathArray, pageModuleFile) {
@@ -21,7 +24,7 @@ var getScriptsArray = function(scriptPathArray, pageModuleFile) {
 
 //-----------------------------------------------------------------------------
 var getScriptConfig = function(pageModuleName) {
-  var pageModuleFile = pageModuleName === 'shared' ? null : (pageModuleName + '.js');
+  var pageModuleFile = !bundleFiles.hasPageModule[pageModuleName] ? null : (pageModuleName + '.js');
   var scripts = bundleFiles.scripts[pageModuleName];
 
   return {

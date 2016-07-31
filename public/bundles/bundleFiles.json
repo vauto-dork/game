@@ -1,4 +1,17 @@
 {
+    "sourceRootFilePath": "public",
+    "hasPageModule": {
+        "shared": false,
+        "activeGames": true,
+        "addPlayer": true,
+        "admin": true,
+        "createGame": true,
+        "editActiveGame": true,
+        "gameHistory": true,
+        "index": true,
+        "playersList": true,
+        "rankingHistory": true
+    },
     "scripts": {
         "shared": [
             "shared/models/*.js",

@@ -13,6 +13,5 @@ bin/
 packages/
 dork-app.csproj.user
 dump/
-generated/
 public/areas/**/*.js
 public/shared/**/*.js
