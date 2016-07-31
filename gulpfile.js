@@ -1,11 +1,10 @@
 var gulp = require("gulp");
 var sass = require("gulp-sass");
-var ts = require("gulp-typescript");
+var shell = require('gulp-shell')
 var bundle = require("gulp-bundle-assets");
 var fs = require("fs");
 var path = require("path");
 
-var tsProject = ts.createProject("tsconfig.json");
 var bundleFiles = require('./public/bundles/bundleFiles.json');
 
 //-----------------------------------------------------------------------------
@@ -62,12 +61,7 @@ gulp.task("debug-bundle", function () {
 //-----------------------------------------------------------------------------
 // Typescript configuration
 // https://www.typescriptlang.org/docs/handbook/gulp.html
-gulp.task("ts-compile", function () {
-    var outputDir = path.join(".", bundleFiles.sourceRootFilePath)
-    return tsProject.src()
-        .pipe(ts(tsProject))
-        .js.pipe(gulp.dest(outputDir));
-});
+gulp.task("ts-compile", shell.task("tsc"));
 
 //-----------------------------------------------------------------------------
 // Sass configuration

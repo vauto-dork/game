@@ -4,9 +4,6 @@ var bundleFiles = require('./public/bundles/bundleFiles.json');
 var generatedFilePath = './' + bundleFiles.sourceRootFilePath + '/';
 var pageModuleFilePath = './' + bundleFiles.sourceRootFilePath + '/bundles/pageModules/';
 
-console.log(generatedFilePath);
-console.log(pageModuleFilePath);
-
 //-----------------------------------------------------------------------------
 var getScriptsArray = function(scriptPathArray, pageModuleFile) {
   var scriptsArray = [];

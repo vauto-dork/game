@@ -67,7 +67,6 @@ var Shared;
 })(Shared || (Shared = {}));
 
 
-
 var Shared;
 (function (Shared) {
     var NewGame = (function () {
