@@ -1,0 +1,325 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <SchemaVersion>2.0</SchemaVersion>
+        <ProjectGuid>{3ef32cab-a695-42c7-8990-ec740c27339a}</ProjectGuid>
+        <ProjectHome />
+        <ProjectView>ShowAllFiles</ProjectView>
+        <StartupFile>app.js</StartupFile>
+        <WorkingDirectory>.</WorkingDirectory>
+        <OutputPath>.</OutputPath>
+        <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{349c5851-65df-11da-9384-00065b846f21};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
+        <TypeScriptSourceMap>true</TypeScriptSourceMap>
+        <TypeScriptModuleKind>CommonJS</TypeScriptModuleKind>
+        <EnableTypeScript>true</EnableTypeScript>
+        <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+        <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+    <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+    <ItemGroup>
+        <Content Include="bundle.debug.json" />
+        <Content Include="bundle.result.json" />
+        <Content Include="package.json" />
+        <Content Include="tsconfig.json" />
+        <Content Include="README.md" />
+        <Compile Include="app.js" />
+        <Compile Include="bundle.config.js" />
+        <Compile Include="config.js" />
+        <Compile Include="gulpfile.js" />
+        <Content Include="data\players.json" />
+        <Compile Include="models\activeGame.js" />
+        <Compile Include="models\game.js" />
+        <Compile Include="models\index.js" />
+        <Compile Include="models\player.js" />
+        <Compile Include="routes\activeGameHelper.js" />
+        <Compile Include="routes\activeGames.js" />
+        <Compile Include="routes\admin.js" />
+        <Compile Include="routes\dateHelper.js" />
+        <Compile Include="routes\gameHelper.js" />
+        <Compile Include="routes\games.js" />
+        <Compile Include="routes\index.js" />
+        <Compile Include="routes\players.js" />
+        <Compile Include="routes\_bundler.js" />
+        <Content Include="views\activeGames.jade" />
+        <Content Include="views\addPlayer.jade" />
+        <Content Include="views\admin.jade" />
+        <Content Include="views\createGame.jade" />
+        <Content Include="views\editActiveGame.jade" />
+        <Content Include="views\error.jade" />
+        <Content Include="views\gameHistory.jade" />
+        <Content Include="views\index.jade" />
+        <Content Include="views\layout.jade" />
+        <Content Include="views\playersList.jade" />
+        <Content Include="views\rankingHistory.jade" />
+        <Content Include="dump\heroku_app35661254\activegames.metadata.json" />
+        <Content Include="dump\heroku_app35661254\games.metadata.json" />
+        <Content Include="dump\heroku_app35661254\objectlabs-system.admin.collections.metadata.json" />
+        <Content Include="dump\heroku_app35661254\objectlabs-system.metadata.json" />
+        <Content Include="dump\heroku_app35661254\players.metadata.json" />
+        <Content Include="public\bundles\bundleFiles.json" />
+        <Content Include="public\fonts\glyphicons-halflings-regular.svg" />
+        <Content Include="public\images\loader.gif" />
+        <Content Include="public\images\favicon.ico" />
+        <Compile Include="public\scripts\angular-animate.js" />
+        <Compile Include="public\scripts\angular.min.js" />
+        <Compile Include="public\scripts\jquery.js" />
+        <Compile Include="public\scripts\jquery.min.js" />
+        <Compile Include="public\scripts\ui-bootstrap-tpls-1.3.3.min.js" />
+        <Content Include="public\stylesheets\admin.css" />
+        <Content Include="public\stylesheets\animation.css" />
+        <Content Include="public\stylesheets\bootstrap.min.css" />
+        <Content Include="public\stylesheets\datePicker.css" />
+        <Content Include="public\stylesheets\game.css" />
+        <Content Include="public\stylesheets\global.css" />
+        <Content Include="public\stylesheets\mixins.css" />
+        <Content Include="public\stylesheets\player.css" />
+        <Content Include="public\stylesheets\playersList.css" />
+        <Content Include="public\stylesheets\style.css" />
+        <Content Include="public\stylesheets\variables.css" />
+        <Content Include="public\areas\activeGame\directives\ActiveGamesTemplate.html" />
+        <TypeScriptCompile Include="public\areas\activeGame\directives\ActiveGamesDirective.ts" />
+        <Compile Include="public\areas\activeGame\directives\ActiveGamesDirective.js" />
+        <Content Include="public\areas\createGame\directives\ButtonsPanelTemplate.html" />
+        <Content Include="public\areas\createGame\directives\CreateGameTemplate.html" />
+        <Content Include="public\areas\createGame\directives\SelectedPlayersTemplate.html" />
+        <TypeScriptCompile Include="public\areas\createGame\directives\ButtonsPanelDirective.ts" />
+        <TypeScriptCompile Include="public\areas\createGame\directives\CreateGameDirective.ts" />
+        <TypeScriptCompile Include="public\areas\createGame\directives\SelectedPlayersDirective.ts" />
+        <Compile Include="public\areas\createGame\directives\ButtonsPanelDirective.js" />
+        <Compile Include="public\areas\createGame\directives\CreateGameDirective.js" />
+        <Compile Include="public\areas\createGame\directives\SelectedPlayersDirective.js" />
+        <TypeScriptCompile Include="public\areas\createGame\services\CreateGameService.ts" />
+        <Compile Include="public\areas\createGame\services\CreateGameService.js" />
+        <Content Include="public\areas\dotm\directives\DotmTemplate.html" />
+        <TypeScriptCompile Include="public\areas\dotm\directives\DotmDirective.ts" />
+        <Compile Include="public\areas\dotm\directives\DotmDirective.js" />
+        <TypeScriptCompile Include="public\areas\dotm\modules\DotmModule.ts" />
+        <Compile Include="public\areas\dotm\modules\DotmModule.js" />
+        <Content Include="public\areas\editActiveGame\directives\EditActiveGameTemplate.html" />
+        <Content Include="public\areas\editActiveGame\directives\EditScoresTemplate.html" />
+        <Content Include="public\areas\editActiveGame\directives\ModifyPlayersTemplate.html" />
+        <Content Include="public\areas\editActiveGame\directives\ReorderPlayersTemplate.html" />
+        <Content Include="public\areas\editActiveGame\directives\RevertFinalizeTemplate.html" />
+        <TypeScriptCompile Include="public\areas\editActiveGame\directives\EditActiveGameDirective.ts" />
+        <TypeScriptCompile Include="public\areas\editActiveGame\directives\EditScoresDirective.ts" />
+        <TypeScriptCompile Include="public\areas\editActiveGame\directives\ModifyPlayersDirective.ts" />
+        <TypeScriptCompile Include="public\areas\editActiveGame\directives\ReorderPlayersDirective.ts" />
+        <TypeScriptCompile Include="public\areas\editActiveGame\directives\RevertFinalizeDirective.ts" />
+        <Compile Include="public\areas\editActiveGame\directives\EditActiveGameDirective.js" />
+        <Compile Include="public\areas\editActiveGame\directives\EditScoresDirective.js" />
+        <Compile Include="public\areas\editActiveGame\directives\ModifyPlayersDirective.js" />
+        <Compile Include="public\areas\editActiveGame\directives\ReorderPlayersDirective.js" />
+        <Compile Include="public\areas\editActiveGame\directives\RevertFinalizeDirective.js" />
+        <TypeScriptCompile Include="public\areas\editActiveGame\services\EditActiveGameService.ts" />
+        <Compile Include="public\areas\editActiveGame\services\EditActiveGameService.js" />
+        <Content Include="public\areas\history\directives\GameHistoryTemplate.html" />
+        <Content Include="public\areas\history\directives\RankingHistoryTemplate.html" />
+        <TypeScriptCompile Include="public\areas\history\directives\GameHistoryDirective.ts" />
+        <TypeScriptCompile Include="public\areas\history\directives\RankingHistoryDirective.ts" />
+        <Compile Include="public\areas\history\directives\GameHistoryDirective.js" />
+        <Compile Include="public\areas\history\directives\RankingHistoryDirective.js" />
+        <Content Include="public\areas\players\directives\AddPlayerTemplate.html" />
+        <Content Include="public\areas\players\directives\PlayerFormTemplate.html" />
+        <Content Include="public\areas\players\directives\PlayersListTemplate.html" />
+        <TypeScriptCompile Include="public\areas\players\directives\AddPlayerDirective.ts" />
+        <TypeScriptCompile Include="public\areas\players\directives\PlayerFormDirective.ts" />
+        <TypeScriptCompile Include="public\areas\players\directives\PlayersListDirective.ts" />
+        <Compile Include="public\areas\players\directives\AddPlayerDirective.js" />
+        <Compile Include="public\areas\players\directives\PlayerFormDirective.js" />
+        <Compile Include="public\areas\players\directives\PlayersListDirective.js" />
+        <Content Include="public\areas\rankings\directives\LeaderboardTemplate.html" />
+        <Content Include="public\areas\rankings\directives\RankingsCardTemplate.html" />
+        <Content Include="public\areas\rankings\directives\RankingsTemplate.html" />
+        <TypeScriptCompile Include="public\areas\rankings\directives\LeaderboardDirective.ts" />
+        <TypeScriptCompile Include="public\areas\rankings\directives\RankingsCardDirective.ts" />
+        <TypeScriptCompile Include="public\areas\rankings\directives\RankingsDirective.ts" />
+        <Compile Include="public\areas\rankings\directives\LeaderboardDirective.js" />
+        <Compile Include="public\areas\rankings\directives\RankingsCardDirective.js" />
+        <Compile Include="public\areas\rankings\directives\RankingsDirective.js" />
+        <TypeScriptCompile Include="public\areas\rankings\modules\RankingsModule.ts" />
+        <Compile Include="public\areas\rankings\modules\RankingsModule.js" />
+        <TypeScriptCompile Include="public\areas\rankings\services\RankingsService.ts" />
+        <Compile Include="public\areas\rankings\services\RankingsService.js" />
+        <Compile Include="public\bundles\pageModules\activeGames.js" />
+        <Compile Include="public\bundles\pageModules\addPlayer.js" />
+        <Compile Include="public\bundles\pageModules\admin.js" />
+        <Compile Include="public\bundles\pageModules\createGame.js" />
+        <Compile Include="public\bundles\pageModules\editActiveGame.js" />
+        <Compile Include="public\bundles\pageModules\gameHistory.js" />
+        <Compile Include="public\bundles\pageModules\index.js" />
+        <Compile Include="public\bundles\pageModules\playersList.js" />
+        <Compile Include="public\bundles\pageModules\rankingHistory.js" />
+        <Compile Include="public\bundles\scripts\activeGames.js" />
+        <Compile Include="public\bundles\scripts\addPlayer.js" />
+        <Compile Include="public\bundles\scripts\admin.js" />
+        <Compile Include="public\bundles\scripts\createGame.js" />
+        <Compile Include="public\bundles\scripts\editActiveGame.js" />
+        <Compile Include="public\bundles\scripts\gameHistory.js" />
+        <Compile Include="public\bundles\scripts\index.js" />
+        <Compile Include="public\bundles\scripts\playersList.js" />
+        <Compile Include="public\bundles\scripts\rankingHistory.js" />
+        <Compile Include="public\bundles\scripts\shared.js" />
+        <Compile Include="public\scripts\bootstrap\modal.js" />
+        <Content Include="public\shared\directives\DatePickerTemplate.html" />
+        <Content Include="public\shared\directives\GameCardTemplate.html" />
+        <Content Include="public\shared\directives\GlobalNavTemplate.html" />
+        <Content Include="public\shared\directives\MonthYearPickerTemplate.html" />
+        <Content Include="public\shared\directives\PlayerBonusPanelTemplate.html" />
+        <Content Include="public\shared\directives\PlayerNametagTemplate.html" />
+        <Content Include="public\shared\directives\PlayerScoretagTemplate.html" />
+        <Content Include="public\shared\directives\PlayerSelectorTemplate.html" />
+        <TypeScriptCompile Include="public\shared\directives\DatePickerDirective.ts" />
+        <TypeScriptCompile Include="public\shared\directives\GameCardDirective.ts" />
+        <TypeScriptCompile Include="public\shared\directives\GlobalNavDirective.ts" />
+        <TypeScriptCompile Include="public\shared\directives\LoadSpinnerDirective.ts" />
+        <TypeScriptCompile Include="public\shared\directives\MonthYearPickerDirective.ts" />
+        <TypeScriptCompile Include="public\shared\directives\NumericUpDownDirective.ts" />
+        <TypeScriptCompile Include="public\shared\directives\PlayerBonusPanelDirective.ts" />
+        <TypeScriptCompile Include="public\shared\directives\PlayerNametagDirective.ts" />
+        <TypeScriptCompile Include="public\shared\directives\PlayerScoretagDirective.ts" />
+        <TypeScriptCompile Include="public\shared\directives\PlayerSelectorDirective.ts" />
+        <Compile Include="public\shared\directives\DatePickerDirective.js" />
+        <Compile Include="public\shared\directives\GameCardDirective.js" />
+        <Compile Include="public\shared\directives\GlobalNavDirective.js" />
+        <Compile Include="public\shared\directives\LoadSpinnerDirective.js" />
+        <Compile Include="public\shared\directives\MonthYearPickerDirective.js" />
+        <Compile Include="public\shared\directives\NumericUpDownDirective.js" />
+        <Compile Include="public\shared\directives\PlayerBonusPanelDirective.js" />
+        <Compile Include="public\shared\directives\PlayerNametagDirective.js" />
+        <Compile Include="public\shared\directives\PlayerScoretagDirective.js" />
+        <Compile Include="public\shared\directives\PlayerSelectorDirective.js" />
+        <TypeScriptCompile Include="public\shared\models\Game.ts" />
+        <TypeScriptCompile Include="public\shared\models\GamePlayer.ts" />
+        <TypeScriptCompile Include="public\shared\models\IViewModels.ts" />
+        <TypeScriptCompile Include="public\shared\models\NewGame.ts" />
+        <TypeScriptCompile Include="public\shared\models\NewGamePlayer.ts" />
+        <TypeScriptCompile Include="public\shared\models\Player.ts" />
+        <TypeScriptCompile Include="public\shared\models\RankedPlayer.ts" />
+        <Compile Include="public\shared\models\Game.js" />
+        <Compile Include="public\shared\models\GamePlayer.js" />
+        <Compile Include="public\shared\models\IViewModels.js" />
+        <Compile Include="public\shared\models\NewGame.js" />
+        <Compile Include="public\shared\models\NewGamePlayer.js" />
+        <Compile Include="public\shared\models\Player.js" />
+        <Compile Include="public\shared\models\RankedPlayer.js" />
+        <TypeScriptCompile Include="public\shared\modules\GameCardModule.ts" />
+        <TypeScriptCompile Include="public\shared\modules\UxControlsModule.ts" />
+        <Compile Include="public\shared\modules\GameCardModule.js" />
+        <Compile Include="public\shared\modules\UxControlsModule.js" />
+        <TypeScriptCompile Include="public\shared\services\AlertsService.ts" />
+        <TypeScriptCompile Include="public\shared\services\ApiService.ts" />
+        <TypeScriptCompile Include="public\shared\services\DateTimeService.ts" />
+        <TypeScriptCompile Include="public\shared\services\MonthYearQueryService.ts" />
+        <TypeScriptCompile Include="public\shared\services\PlayerSelectionService.ts" />
+        <TypeScriptCompile Include="public\shared\services\PubSubServiceBase.ts" />
+        <Compile Include="public\shared\services\AlertsService.js" />
+        <Compile Include="public\shared\services\ApiService.js" />
+        <Compile Include="public\shared\services\DateTimeService.js" />
+        <Compile Include="public\shared\services\MonthYearQueryService.js" />
+        <Compile Include="public\shared\services\PlayerSelectionService.js" />
+        <Compile Include="public\shared\services\PubSubServiceBase.js" />
+        <TypeScriptCompile Include="Scripts\typings\angular-ui-bootstrap\angular-ui-bootstrap.d.ts" />
+        <TypeScriptCompile Include="Scripts\typings\angularjs\angular-animate.d.ts" />
+        <TypeScriptCompile Include="Scripts\typings\angularjs\angular-component-router.d.ts" />
+        <TypeScriptCompile Include="Scripts\typings\angularjs\angular-cookies.d.ts" />
+        <TypeScriptCompile Include="Scripts\typings\angularjs\angular-mocks.d.ts" />
+        <TypeScriptCompile Include="Scripts\typings\angularjs\angular-resource.d.ts" />
+        <TypeScriptCompile Include="Scripts\typings\angularjs\angular-route.d.ts" />
+        <TypeScriptCompile Include="Scripts\typings\angularjs\angular-sanitize.d.ts" />
+        <TypeScriptCompile Include="Scripts\typings\angularjs\angular.d.ts" />
+        <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
+    </ItemGroup>
+    <ItemGroup>
+        <Folder Include="bin" />
+        <Folder Include="data" />
+        <Folder Include="dump" />
+        <Folder Include="dump\heroku_app35661254" />
+        <Folder Include="models" />
+        <Folder Include="public" />
+        <Folder Include="public\areas" />
+        <Folder Include="public\areas\activeGame" />
+        <Folder Include="public\areas\activeGame\directives" />
+        <Folder Include="public\areas\createGame" />
+        <Folder Include="public\areas\createGame\directives" />
+        <Folder Include="public\areas\createGame\services" />
+        <Folder Include="public\areas\dotm" />
+        <Folder Include="public\areas\dotm\directives" />
+        <Folder Include="public\areas\dotm\modules" />
+        <Folder Include="public\areas\editActiveGame" />
+        <Folder Include="public\areas\editActiveGame\directives" />
+        <Folder Include="public\areas\editActiveGame\services" />
+        <Folder Include="public\areas\history" />
+        <Folder Include="public\areas\history\directives" />
+        <Folder Include="public\areas\players" />
+        <Folder Include="public\areas\players\directives" />
+        <Folder Include="public\areas\rankings" />
+        <Folder Include="public\areas\rankings\directives" />
+        <Folder Include="public\areas\rankings\modules" />
+        <Folder Include="public\areas\rankings\services" />
+        <Folder Include="public\bundles" />
+        <Folder Include="public\bundles\pageModules" />
+        <Folder Include="public\bundles\scripts" />
+        <Folder Include="public\fonts" />
+        <Folder Include="public\images" />
+        <Folder Include="public\scripts" />
+        <Folder Include="public\scripts\bootstrap" />
+        <Folder Include="public\shared" />
+        <Folder Include="public\shared\directives" />
+        <Folder Include="public\shared\models" />
+        <Folder Include="public\shared\modules" />
+        <Folder Include="public\shared\services" />
+        <Folder Include="public\stylesheets" />
+        <Folder Include="routes" />
+        <Folder Include="Scripts" />
+        <Folder Include="Scripts\typings" />
+        <Folder Include="Scripts\typings\angularjs" />
+        <Folder Include="Scripts\typings\angular-ui-bootstrap" />
+        <Folder Include="Scripts\typings\jquery" />
+        <Folder Include="scss" />
+        <Folder Include="views" />
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+    <!--Do not delete the following Import Project.  While this appears to do nothing it is a marker for setting TypeScript properties before our import that depends on them.-->
+    <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="False" />
+    <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsTools.targets" />
+    <ProjectExtensions>
+        <VisualStudio>
+          <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+            <WebProjectProperties>
+              <UseIIS>False</UseIIS>
+              <AutoAssignPort>True</AutoAssignPort>
+              <DevelopmentServerPort>0</DevelopmentServerPort>
+              <DevelopmentServerVPath>/</DevelopmentServerVPath>
+              <IISUrl>http://localhost:48022/</IISUrl>
+              <NTLMAuthentication>False</NTLMAuthentication>
+              <UseCustomServer>True</UseCustomServer>
+              <CustomServerUrl>http://localhost:1337</CustomServerUrl>
+              <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+            </WebProjectProperties>
+          </FlavorProperties>
+          <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}" User="">
+            <WebProjectProperties>
+              <StartPageUrl>
+              </StartPageUrl>
+              <StartAction>CurrentPage</StartAction>
+              <AspNetDebugging>True</AspNetDebugging>
+              <SilverlightDebugging>False</SilverlightDebugging>
+              <NativeDebugging>False</NativeDebugging>
+              <SQLDebugging>False</SQLDebugging>
+              <ExternalProgram>
+              </ExternalProgram>
+              <StartExternalURL>
+              </StartExternalURL>
+              <StartCmdLineArguments>
+              </StartCmdLineArguments>
+              <StartWorkingDirectory>
+              </StartWorkingDirectory>
+              <EnableENC>False</EnableENC>
+              <AlwaysStartWebServerOnDebug>False</AlwaysStartWebServerOnDebug>
+            </WebProjectProperties>
+          </FlavorProperties>
+        </VisualStudio>
+    </ProjectExtensions>
+</Project>

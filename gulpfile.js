@@ -3,7 +3,6 @@ var sass = require("gulp-sass");
 var shell = require('gulp-shell')
 var bundle = require("gulp-bundle-assets");
 var fs = require("fs");
-var path = require("path");
 
 var bundleFiles = require('./public/bundles/bundleFiles.json');
 
@@ -11,7 +10,7 @@ var bundleFiles = require('./public/bundles/bundleFiles.json');
 // Very fragile way of creating a debug scripts file because gulp plugins are terrible.
 
 var createScriptString = function(filepath) {
-    return "<script src='/" + filepath + "' type='text/javascript'></script>"
+    return "<script src='/" + filepath + "' type='text/javascript'></script>";
 };
 
 gulp.task("debug-bundle", function () {
@@ -31,7 +30,7 @@ gulp.task("debug-bundle", function () {
 
                 if(starIndex > 0){
                     var dirStr = filepath.substring(0, starIndex);
-                    var sourceDir = path.join(".", bundleFiles.sourceRootFilePath, dirStr);
+                    var sourceDir = "./" + bundleFiles.sourceRootFilePath + "/" + dirStr;
                     
                     fs.readdirSync(sourceDir).filter(function(element) {
                         return element.indexOf(".js") > 0 && element.indexOf(".js.map") === -1;
@@ -47,7 +46,7 @@ gulp.task("debug-bundle", function () {
             }
 
             if(bundleFiles.hasPageModule[key]){
-                var pageModuleFilePath = path.join("bundles", "pageModules", key + ".js");
+                var pageModuleFilePath = "bundles/pageModules/" + key + ".js";
                 scriptString += createScriptString(pageModuleFilePath);
             }
             
@@ -67,10 +66,10 @@ gulp.task("ts-compile", shell.task("tsc"));
 // Sass configuration
 // https://code.visualstudio.com/docs/languages/css#_transpiling-sass-and-less-into-css
 gulp.task("sass-compile", function() {
-    var outputDir = path.join(".", bundleFiles.sourceRootFilePath, "stylesheets")
+    var outputDir = "./" + bundleFiles.sourceRootFilePath + "/stylesheets";
     gulp.src("./scss/*.scss")
         .pipe(sass())
-        .pipe(gulp.dest(outputDir))
+        .pipe(gulp.dest(outputDir));
 });
 
 gulp.task("sass-watch", ["sass-compile"], function() {
@@ -89,7 +88,7 @@ gulp.task("sass-watch", ["sass-compile"], function() {
 */
 
 gulp.task("bundle", ["ts-compile", "debug-bundle"], function() {
-    var outputDir = path.join(".", bundleFiles.sourceRootFilePath, "bundles", "scripts")
+    var outputDir = "./" + bundleFiles.sourceRootFilePath + "/bundles/scripts";
     return gulp.src("./bundle.config.js")
         .pipe(bundle())
         .pipe(bundle.results({
