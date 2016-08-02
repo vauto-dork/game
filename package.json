@@ -22,6 +22,7 @@
     "gulp": "^3.9.1",
     "gulp-bundle-assets": "^2.27.1",
     "gulp-sass": "^2.3.2",
-    "gulp-shell": "^0.5.2"
+    "gulp-shell": "^0.5.2",
+    "typings": "^1.3.2"
   }
 }
