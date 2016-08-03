@@ -1,5 +1,5 @@
-var prodBundles = require('../bundle.result.json');
-var devBundles = require('../bundle.debug.json');
+var prodBundles = require('../public/bundles/bundle.result.json');
+var devBundles = require('../public/bundles/bundle.debug.json');
 
 module.exports = {
     scripts: function(scriptsBundle) {

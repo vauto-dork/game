@@ -1,31 +1,21 @@
-var bundleFiles = require('./public/bundles/bundleFiles.json');
+var bundleFiles = require('./bundle.files.json');
 
 // Paths for file generation
 var generatedFilePath = './' + bundleFiles.sourceRootFilePath + '/';
-var pageModuleFilePath = './' + bundleFiles.sourceRootFilePath + '/bundles/pageModules/';
 
 //-----------------------------------------------------------------------------
-var getScriptsArray = function(scriptPathArray, pageModuleFile) {
-  var scriptsArray = [];
-
-  scriptPathArray.forEach(function(element) {
-    scriptsArray.push(generatedFilePath + element);
+var getScriptsArray = function(scriptPathArray) {
+  return scriptPathArray.map(function(element) {
+    return generatedFilePath + element;
   });
-
-  if(pageModuleFile) {
-    scriptsArray.push(pageModuleFilePath + pageModuleFile);
-  }
-
-  return scriptsArray;
 };
 
 //-----------------------------------------------------------------------------
 var getScriptConfig = function(pageModuleName) {
-  var pageModuleFile = !bundleFiles.hasPageModule[pageModuleName] ? null : (pageModuleName + '.js');
   var scripts = bundleFiles.scripts[pageModuleName];
 
   return {
-    scripts: getScriptsArray(scripts, pageModuleFile),
+    scripts: getScriptsArray(scripts),
     options: {
       useMin: false,
       uglify: false,

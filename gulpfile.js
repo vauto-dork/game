@@ -4,7 +4,8 @@ var shell = require('gulp-shell')
 var bundle = require("gulp-bundle-assets");
 var fs = require("fs");
 
-var bundleFiles = require('./public/bundles/bundleFiles.json');
+var bundleFiles = require('./public/bundles/bundle.files.json');
+var bundlesFilePath = "./" + bundleFiles.sourceRootFilePath + "/bundles";
 
 //-----------------------------------------------------------------------------
 // Very fragile way of creating a debug scripts file because gulp plugins are terrible.
@@ -44,17 +45,12 @@ gulp.task("debug-bundle", function () {
                     scriptString += createScriptString(filepath);
                 }
             }
-
-            if(bundleFiles.hasPageModule[key]){
-                var pageModuleFilePath = "bundles/pageModules/" + key + ".js";
-                scriptString += createScriptString(pageModuleFilePath);
-            }
             
             output[key] = {"scripts": scriptString};
         }
     }
 
-    fs.writeFileSync("bundle.debug.json", JSON.stringify(output, null, "  "));
+    fs.writeFileSync(bundlesFilePath + "/bundle.debug.json", JSON.stringify(output, null, "  "));
 });
 
 //-----------------------------------------------------------------------------
@@ -87,11 +83,12 @@ gulp.task("sass-watch", ["sass-compile"], function() {
     example.
 */
 
-gulp.task("bundle", ["ts-compile", "debug-bundle"], function() {
-    var outputDir = "./" + bundleFiles.sourceRootFilePath + "/bundles/scripts";
-    return gulp.src("./bundle.config.js")
+gulp.task("bundle", ["ts-compile", "debug-bundle"], function() { 
+    var outputDir = bundlesFilePath + "/scripts";
+    return gulp.src(bundlesFilePath +"/bundle.config.js")
         .pipe(bundle())
         .pipe(bundle.results({
+            dest: bundlesFilePath,
             pathPrefix: "/bundles/scripts/"
         })) // arg is destination of bundle.result.json
         .pipe(gulp.dest(outputDir));
