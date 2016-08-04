@@ -15,4 +15,3 @@ dork-app.csproj.user
 dump/
 public/areas/**/*.js
 public/shared/**/*.js
-typings/
