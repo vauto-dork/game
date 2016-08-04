@@ -10,6 +10,7 @@
   border-left: 2px solid #e4e9ef;
   display: inline-block;
   white-space: nowrap; }
+
 .panel-title .player-name {
   background-color: #4f6885;
   color: #e4e9ef;
@@ -104,5 +105,3 @@
   .panel-dotm .panel-body {
     padding-top: 0;
     font-size: 1.4em; }
-
-/*# sourceMappingURL=player.css.map */

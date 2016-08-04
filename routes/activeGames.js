@@ -3,15 +3,16 @@ var mongoose = require('mongoose');
 var router = express.Router();
 var ActiveGameModel = mongoose.model('ActiveGame');
 var ActiveGameHelper = require('./activeGameHelper');
+var bundler = require('./_bundler.js');
 
 /* GET active game page. */
 router.get('/', function(req, res, next) {
-  res.render('activeGames', { title: 'Active Games' });
+  res.render('activeGames', { title: 'Active Games', scripts: bundler.scripts('activeGames')});
 });
 
 /* GET edit active game page. */
 router.get('/edit', function(req, res, next) {
-  res.render('editActiveGame', { title: 'Edit Game' });
+  res.render('editActiveGame', { title: 'Edit Game', scripts: bundler.scripts('editActiveGame')});
 });
 
 /* GET games listing. */

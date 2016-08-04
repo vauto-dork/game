@@ -3,6 +3,7 @@
   font-style: normal;
   font-weight: 400;
   src: local("Ubuntu"), url(/fonts/sDGTilo5QRsfWu6Yc11AXg.woff2) format("woff2"), url(/fonts/_xyN3apAT_yRRDeqB3sPRg.woff) format("woff"); }
+
 html,
 body {
   font-family: 'Ubuntu', sans-serif;
@@ -68,11 +69,13 @@ hr {
     .navbar-collapse li > a {
       padding-top: 0.5em;
       padding-bottom: 0.5em; } }
+
 @media (min-width: 768px) {
   .navbar-collapse {
     font-size: 1.4em; }
     .navbar-collapse li > a {
       border-radius: 4px; } }
+
 .navbar-collapse {
   -moz-box-shadow: inset 0px 8px 9px -6px rgba(0, 0, 0, 0.5);
   -webkit-box-shadow: inset 0px 8px 9px -6px rgba(0, 0, 0, 0.5);
@@ -157,5 +160,3 @@ input.ng-touched.ng-invalid {
     .select-wrapper select:-moz-focusring {
       color: transparent;
       text-shadow: 0 0 0 #000; }
-
-/*# sourceMappingURL=global.css.map */

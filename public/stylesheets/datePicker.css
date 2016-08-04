@@ -73,20 +73,21 @@
 
 .uib-datepicker .text-muted {
   color: #999999; }
+
 .uib-datepicker .btn {
   border-radius: 0; }
   .uib-datepicker .btn.btn-info.active .text-info {
     color: white; }
+
 .uib-datepicker .btn[disabled] {
   background-color: #EEE;
   color: #C0C0C0;
   opacity: 1; }
   .uib-datepicker .btn[disabled] .text-muted {
     color: #C0C0C0; }
+
 .uib-datepicker th,
 .uib-datepicker .uib-year,
 .uib-datepicker .uib-month,
 .uib-datepicker .uib-day {
   padding: 2px; }
-
-/*# sourceMappingURL=datePicker.css.map */
