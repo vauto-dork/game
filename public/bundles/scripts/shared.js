@@ -195,6 +195,51 @@ var Shared;
 
 var Shared;
 (function (Shared) {
+    function PlayerSelectorFilter() {
+        return function (playersList, filter) {
+            var caseInsensitiveMatch = function (value, filter) {
+                return value.toUpperCase().search(filter.toUpperCase()) >= 0;
+            };
+            var initials = playersList.filter(function (player) {
+                return caseInsensitiveMatch(player.player.initials, filter);
+            });
+            var nicknames = playersList.filter(function (player) {
+                return caseInsensitiveMatch(player.player.nickname, filter);
+            }).sort(function (a, b) {
+                if (a.player.nickname.length < b.player.nickname.length)
+                    return -1;
+                if (a.player.nickname.length > b.player.nickname.length)
+                    return 1;
+                return 0;
+            });
+            var fullname = playersList.filter(function (player) {
+                return caseInsensitiveMatch(player.player.fullname, filter);
+            });
+            var output = [];
+            var existsInOutput = function (playerId) {
+                return !output.length || output.map(function (p) { return p.playerId; }).indexOf(playerId) === -1;
+            };
+            initials.forEach(function (player) {
+                output.push(player);
+            });
+            nicknames.forEach(function (player) {
+                if (existsInOutput(player.playerId)) {
+                    output.push(player);
+                }
+            });
+            fullname.forEach(function (player) {
+                if (existsInOutput(player.playerId)) {
+                    output.push(player);
+                }
+            });
+            return output;
+        };
+    }
+    Shared.PlayerSelectorFilter = PlayerSelectorFilter;
+})(Shared || (Shared = {}));
+
+var Shared;
+(function (Shared) {
     var AlertsService = (function () {
         function AlertsService($timeout, $window) {
             this.$timeout = $timeout;
@@ -1188,6 +1233,11 @@ var Shared;
 var GameCardModule = angular.module('GameCardModule', []);
 GameCardModule.controller('GameCardController', Shared.GameCardController);
 GameCardModule.directive('gameCard', Shared.GameCardDirective);
+
+var PlayerSelectorModule = angular.module('PlayerSelectorModule', []);
+PlayerSelectorModule.filter('playerSelectorFilter', Shared.PlayerSelectorFilter);
+PlayerSelectorModule.controller('PlayerSelectorController', Shared.PlayerSelectorController);
+PlayerSelectorModule.directive('playerSelector', Shared.PlayerSelectorDirective);
 
 var UxControlsModule = angular.module('UxControlsModule', ['ngAnimate', 'ui.bootstrap']);
 UxControlsModule.service('dateTimeService', Shared.DateTimeService);

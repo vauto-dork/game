@@ -1,10 +1,7 @@
-var DorkModule = angular.module('DorkModule', ['UxControlsModule']);
+var DorkModule = angular.module('DorkModule', ['UxControlsModule', 'PlayerSelectorModule']);
 
 DorkModule.service('playerSelectionService', Shared.PlayerSelectionService);
 DorkModule.service('createGameService', CreateGame.CreateGameService);
-
-DorkModule.controller('PlayerSelectorController', Shared.PlayerSelectorController);
-DorkModule.directive('playerSelector', Shared.PlayerSelectorDirective);
 
 DorkModule.controller('ButtonsPanelController', CreateGame.ButtonsPanelController);
 DorkModule.directive('buttonsPanel', CreateGame.ButtonsPanelDirective);

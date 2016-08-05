@@ -3,6 +3,7 @@
     "scripts": {
         "shared": [
             "shared/models/*.js",
+            "shared/filters/*.js",
             "shared/services/*.js",
             "shared/directives/*.js",
             "shared/modules/*.js"
