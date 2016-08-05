@@ -132,10 +132,6 @@
 	@include row;
 	padding: 0 $standard-spacing;
 	margin: auto;
-
-    .panel-body {
-        cursor: pointer;
-    }
 }
 
 .dotm-row {
@@ -169,6 +165,12 @@
 	.datepicker-filler {
 		padding-bottom: 20px;
 	}
+}
+
+.reorder-players {
+	.panel-body {
+        cursor: pointer;
+    }
 }
 
 .month-year-picker {

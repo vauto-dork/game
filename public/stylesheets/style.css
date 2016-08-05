@@ -570,8 +570,6 @@ input.ng-touched.ng-invalid {
   padding: 1em 0;
   padding: 0 0.5em;
   margin: auto; }
-  .playlist-scores-row .panel-body {
-    cursor: pointer; }
 
 .dotm-row {
   display: block;
@@ -598,6 +596,9 @@ input.ng-touched.ng-invalid {
     margin-bottom: 0; }
   .edit-active-game .datepicker-filler {
     padding-bottom: 20px; }
+
+.reorder-players .panel-body {
+  cursor: pointer; }
 
 .month-year-picker {
   display: table;
