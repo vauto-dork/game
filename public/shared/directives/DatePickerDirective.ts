@@ -14,7 +14,7 @@ module Shared {
     }
 
     export class DatePickerController {
-        public static $inject: string[] = ['dateTimeService'];
+        public static $inject: string[] = ['$element', '$timeout', 'dateTimeService'];
 		
 		private date: Date;
 		private showNowButton: boolean;
@@ -36,8 +36,13 @@ module Shared {
 		private get prettyDate(): IPrettyDate {
 			return this.dateTimeService.beautifyDate(this.date, true);
 		}
-		
-        constructor(private dateTimeService: IDateTimeService) {
+
+        constructor(private $element: ng.IAugmentedJQuery,
+			private $timeout: ng.ITimeoutService,
+			private dateTimeService: IDateTimeService) {
+			$timeout(() => {
+				this.resizeTimePickerDropdown();
+			}, 0);
         }
 	
 		private openDatePicker(): void {
@@ -46,6 +51,21 @@ module Shared {
 
 		private openTimePicker(): void {
 			this.timePickerOpened = !this.timePickerOpened;
+
+			if(this.timePickerOpened) {
+				this.resizeTimePickerDropdown();
+			}
+		}
+
+		private resizeTimePickerDropdown(): void {
+			var buttonWidth = this.$element.find("#time-picker-toggle").outerWidth();
+			var dropdownMinWidth = parseInt(this.$element.find("#time-picker-dropdown").css("min-width"), 10);
+			var dropdownWidth = this.$element.find("#time-picker-dropdown").width();
+
+			if (dropdownWidth !== buttonWidth) {
+				var newWidth = buttonWidth > dropdownMinWidth ? buttonWidth : dropdownMinWidth;
+				this.$element.find("#time-picker-dropdown").width(newWidth);
+			}
 		}
 
 		private withLeadingZero(value: number): string {

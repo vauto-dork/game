@@ -733,7 +733,10 @@ var Shared;
     }
     Shared.DatePickerDirective = DatePickerDirective;
     var DatePickerController = (function () {
-        function DatePickerController(dateTimeService) {
+        function DatePickerController($element, $timeout, dateTimeService) {
+            var _this = this;
+            this.$element = $element;
+            this.$timeout = $timeout;
             this.dateTimeService = dateTimeService;
             this.format = 'MMMM dd, yyyy';
             this.hstep = 1;
@@ -746,6 +749,9 @@ var Shared;
                 showWeeks: false,
                 startingDay: 0
             };
+            $timeout(function () {
+                _this.resizeTimePickerDropdown();
+            }, 0);
         }
         Object.defineProperty(DatePickerController.prototype, "prettyDate", {
             get: function () {
@@ -759,6 +765,18 @@ var Shared;
         };
         DatePickerController.prototype.openTimePicker = function () {
             this.timePickerOpened = !this.timePickerOpened;
+            if (this.timePickerOpened) {
+                this.resizeTimePickerDropdown();
+            }
+        };
+        DatePickerController.prototype.resizeTimePickerDropdown = function () {
+            var buttonWidth = this.$element.find("#time-picker-toggle").outerWidth();
+            var dropdownMinWidth = parseInt(this.$element.find("#time-picker-dropdown").css("min-width"), 10);
+            var dropdownWidth = this.$element.find("#time-picker-dropdown").width();
+            if (dropdownWidth !== buttonWidth) {
+                var newWidth = buttonWidth > dropdownMinWidth ? buttonWidth : dropdownMinWidth;
+                this.$element.find("#time-picker-dropdown").width(newWidth);
+            }
         };
         DatePickerController.prototype.withLeadingZero = function (value) {
             return value < 10 ? "0" + value : "" + value;
@@ -766,7 +784,7 @@ var Shared;
         DatePickerController.prototype.useCurrentTime = function () {
             this.date = new Date();
         };
-        DatePickerController.$inject = ['dateTimeService'];
+        DatePickerController.$inject = ['$element', '$timeout', 'dateTimeService'];
         return DatePickerController;
     }());
     Shared.DatePickerController = DatePickerController;

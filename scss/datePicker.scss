@@ -92,6 +92,14 @@
 
 		.input-wrapper {
 			padding: 0 (2 * $standard-spacing);
+
+			table.uib-timepicker {
+				margin: auto;
+			}
+		}
+
+		.dropdown-menu {
+			min-width: 190px;
 		}
 	}
 }

@@ -251,6 +251,10 @@ input.ng-touched.ng-invalid {
     text-align: right; }
     .date-picker-wrapper .timepicker .input-wrapper {
       padding: 0 1em; }
+      .date-picker-wrapper .timepicker .input-wrapper table.uib-timepicker {
+        margin: auto; }
+    .date-picker-wrapper .timepicker .dropdown-menu {
+      min-width: 190px; }
 
 .uib-datepicker .text-muted {
   color: #999999; }
