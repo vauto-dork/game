@@ -154,7 +154,7 @@ input.ng-touched.ng-invalid {
     display: block;
     width: 100%;
     height: 3em;
-    line-height: 1em;
+    line-height: 1.1em;
     border: 1px solid #CCC;
     border-radius: 0;
     cursor: pointer;

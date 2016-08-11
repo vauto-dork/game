@@ -56,20 +56,20 @@ gulp.task("debug-bundle", function () {
 //-----------------------------------------------------------------------------
 // Typescript configuration
 // https://www.typescriptlang.org/docs/handbook/gulp.html
-gulp.task("ts-compile", shell.task("tsc"));
+gulp.task("ts-build", shell.task("tsc"));
 
 //-----------------------------------------------------------------------------
 // Sass configuration
 // https://code.visualstudio.com/docs/languages/css#_transpiling-sass-and-less-into-css
-gulp.task("sass-compile", function() {
+gulp.task("sass-build", function() {
     var outputDir = "./" + bundleFiles.sourceRootFilePath + "/stylesheets";
     gulp.src("./scss/*.scss")
         .pipe(sass())
         .pipe(gulp.dest(outputDir));
 });
 
-gulp.task("sass-watch", ["sass-compile"], function() {
-    gulp.watch("./scss/*.scss", ["sass-compile"]);
+gulp.task("sass-watch", ["sass-build"], function() {
+    gulp.watch("./scss/*.scss", ["sass-build"]);
 });
 
 //-----------------------------------------------------------------------------
@@ -83,7 +83,7 @@ gulp.task("sass-watch", ["sass-compile"], function() {
     example.
 */
 
-gulp.task("bundle", ["ts-compile", "debug-bundle"], function() { 
+gulp.task("bundle", ["ts-build", "debug-bundle"], function() { 
     var outputDir = bundlesFilePath + "/scripts";
     return gulp.src(bundlesFilePath +"/bundle.config.js")
         .pipe(bundle())
@@ -106,9 +106,9 @@ gulp.task("bundle-watch", ["bundle"], function() {
     Watches all Sass and Typescript files for transpiling and bundling
 
 	You want to run this one in the background with the command
-	"$ gulp transpile-watch"
+	"$ gulp build-watch"
 */
-gulp.task("transpile-watch", ["sass-watch", "bundle-watch"]);
+gulp.task("build-watch", ["sass-watch", "bundle-watch"]);
 
 /*
     Default build task that transpiles and bundles files.
@@ -116,4 +116,4 @@ gulp.task("transpile-watch", ["sass-watch", "bundle-watch"]);
     Hook this up to the Visual Studio build task or run with the command
     "$ gulp build"
 */
-gulp.task("build", ["sass-compile", "bundle"]);
+gulp.task("build", ["sass-build", "bundle"]);
