@@ -8,9 +8,10 @@ node_modules
 **/*.js.map
 **/*.css.map
 obj/
-.vscode/settings.json
 .vs/
 bin/
 packages/
 dork-app.csproj.user
 dump/
+public/areas/**/*.js
+public/shared/**/*.js

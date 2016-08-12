@@ -1,19 +1,5 @@
 extends layout
 
-block modules
-	script(src='/shared/directives/GameCardDirective.js')
-	script(src='/shared/modules/GameCardModule.js')
-	
-	script(src='/areas/activeGame/directives/ActiveGamesDirective.js')
-	
-	script.
-		var ActiveGamesModule = angular.module('ActiveGamesModule', ['GameCardModule']);
-
-		ActiveGamesModule.controller('ActiveGamesController', ActiveGame.ActiveGamesController);
-		ActiveGamesModule.directive('activeGames', ActiveGame.ActiveGamesDirective);
-	
-	- var modules = ['ActiveGamesModule']
-	
 block content
 	div.row
 		active-games

@@ -1,4 +1,4 @@
-﻿@font-face {
+@font-face {
   font-family: 'Ubuntu';
   font-style: normal;
   font-weight: 400;
@@ -36,7 +36,7 @@ hr {
   margin: 0 -15px;
   padding: 0 0.5em;
   color: #fff;
-  background-color: #4f6885;
+  background-color: black;
   height: 2em;
   line-height: 1.8em;
   font-size: 2.2em;
@@ -54,6 +54,8 @@ hr {
     padding: 0 0.25em;
     display: inline-block;
     vertical-align: middle; }
+    .global-nav-header .global-nav-brand img {
+      border: 0; }
 
 .horizontal-flip {
   -moz-transform: scaleX(-1);
@@ -82,7 +84,7 @@ hr {
   box-shadow: inset 0px 8px 9px -6px rgba(0, 0, 0, 0.5);
   background-color: #fff;
   border-top: 1px solid #000;
-  border-bottom: 1px solid #4f6885;
+  border-bottom: 1px solid black;
   padding-top: 0.25em;
   padding-bottom: 0.25em;
   padding-left: 0;
@@ -133,3 +135,30 @@ input.ng-touched.ng-invalid {
   background: #F2DEDE;
   border: 1px red solid; }
 
+.select-wrapper {
+  position: relative; }
+  .select-wrapper:after {
+    -webkit-font-smoothing: antialiased;
+    content: "\e259";
+    font-family: 'Glyphicons Halflings';
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1em;
+    position: absolute;
+    right: 1em;
+    top: 35%;
+    pointer-events: none; }
+  .select-wrapper select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    display: block;
+    width: 100%;
+    height: 3em;
+    line-height: 1.1em;
+    border: 1px solid #CCC;
+    border-radius: 0;
+    cursor: pointer;
+    padding: 0.5em; }
+    .select-wrapper select:-moz-focusring {
+      color: transparent;
+      text-shadow: 0 0 0 #000; }

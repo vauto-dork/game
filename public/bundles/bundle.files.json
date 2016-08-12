@@ -1,0 +1,69 @@
+{
+    "sourceRootFilePath": "public",
+    "scripts": {
+        "shared": [
+            "shared/models/*.js",
+            "shared/filters/*.js",
+            "shared/services/*.js",
+            "shared/directives/*.js",
+            "shared/modules/*.js"
+        ],
+        "activeGames": [
+            "areas/activeGame/directives/ActiveGamesDirective.js",
+            "bundles/pageModules/activeGames.js"
+        ],
+        "addPlayer": [
+            "areas/players/directives/PlayerFormDirective.js",
+            "areas/players/directives/AddPlayerDirective.js",
+            "bundles/pageModules/addPlayer.js"
+        ],
+        "admin": [
+            "bundles/pageModules/admin.js"
+        ],
+        "createGame": [
+            "areas/createGame/services/CreateGameService.js",
+            "areas/createGame/directives/ButtonsPanelDirective.js",
+            "areas/createGame/directives/SelectedPlayersDirective.js",
+            "areas/createGame/directives/CreateGameDirective.js",
+            "bundles/pageModules/createGame.js"
+        ],
+        "editActiveGame": [
+            "areas/editActiveGame/services/EditActiveGameService.js",
+            "areas/editActiveGame/directives/EditScoresDirective.js",
+            "areas/editActiveGame/directives/ReorderPlayersDirective.js",
+            "areas/editActiveGame/directives/ModifyPlayersDirective.js",
+            "areas/editActiveGame/directives/RevertFinalizeDirective.js",
+            "areas/editActiveGame/directives/EditActiveGameDirective.js",
+            "bundles/pageModules/editActiveGame.js"
+        ],
+        "gameHistory": [
+            "areas/history/directives/GameHistoryDirective.js",
+            "bundles/pageModules/gameHistory.js"
+        ],
+        "index": [
+            "areas/dotm/directives/DotmDirective.js",
+            "areas/dotm/modules/DotmModule.js",
+            "areas/rankings/services/RankingsService.js",
+            "areas/rankings/directives/RankingsCardDirective.js",
+            "areas/rankings/directives/RankingsDirective.js",
+            "areas/rankings/modules/RankingsModule.js",
+            "areas/rankings/directives/LeaderboardDirective.js",
+            "bundles/pageModules/index.js"
+        ],
+        "playersList": [
+            "/areas/players/directives/PlayerFormDirective.js",
+            "/areas/players/directives/PlayersListDirective.js",
+            "bundles/pageModules/playersList.js"
+        ],
+        "rankingHistory": [
+            "areas/dotm/directives/DotmDirective.js",
+            "areas/dotm/modules/DotmModule.js",
+            "areas/rankings/services/RankingsService.js",
+            "areas/rankings/directives/RankingsCardDirective.js",
+            "areas/rankings/directives/RankingsDirective.js",
+            "areas/rankings/modules/RankingsModule.js",
+            "areas/history/directives/RankingHistoryDirective.js",
+            "bundles/pageModules/rankingHistory.js"
+        ]
+    }
+}

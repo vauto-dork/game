@@ -70,6 +70,10 @@ hr {
 		padding: 0 0.25em;
 		display: inline-block;
 		vertical-align: middle;
+
+		img {
+			border: 0;
+		}
 	}
 }
 
@@ -174,4 +178,43 @@ input[type='number']::-webkit-inner-spin-button {
 input.ng-touched.ng-invalid { 
     background: #F2DEDE;
     border: 1px red solid;
+}
+
+// Custom select box
+// https://fabriceleven.com/design/clever-way-to-change-the-drop-down-selector-arrow-icon/
+.select-wrapper {
+	position: relative;
+
+	&:after {
+		-webkit-font-smoothing: antialiased;
+		content: "\e259";
+		font-family: 'Glyphicons Halflings';
+		font-style: normal;
+		font-weight: 400;
+		line-height: 1em;
+		position: absolute;
+		right: 1em;
+		top: 35%;		
+		pointer-events: none;
+	}
+
+	select {
+		-webkit-appearance: none;
+		-moz-appearance: none;
+
+		display: block;
+		width: 100%;
+		height: 3em;
+		line-height: 1.1em;
+		border: 1px solid $btn-default-border-color;
+		border-radius: 0;
+		cursor: pointer;
+		padding: $standard-spacing;
+
+		// Hack to remove the gray dotted box that only shows up in Firefox
+		&:-moz-focusring {
+			color: transparent;
+			text-shadow: 0 0 0 #000;
+		}
+	}
 }

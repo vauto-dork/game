@@ -4,7 +4,7 @@
 			&bull;
 		</div>
 	</div>
-	<div class="player-score-card-outline" title="{{ctrl.playerName.fullname}}">
+	<div class="player-score-card-outline" uib-tooltip="{{ctrl.playerName.fullname}}" tooltip-placement="top">
 		<div class="player-name" ng-bind="ctrl.playerName.initials"></div>
 		<div class="player-score-big" ng-bind="ctrl.player.points"></div>
 	</div>

@@ -5,7 +5,7 @@
                placeholder="Type name..."
                ng-model="ctrl.filter"
                ng-disabled="ctrl.disabled"
-               uib-typeahead="p as p.player.fullname for p in ctrl.players | filter:$viewValue | limitTo:6"
+               uib-typeahead="p as p.player.fullname for p in ctrl.players | playerSelectorFilter:$viewValue | limitTo:6"
                typeahead-on-select="ctrl.selectPlayer($item, $model, $label)"
                typeahead-focus-on-select="false"
                autocomplete="off"

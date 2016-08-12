@@ -1,4 +1,4 @@
-﻿.player-move-panel-content {
+.player-move-panel-content {
   font-size: 2em;
   color: #7a8394;
   height: 2em;
@@ -58,7 +58,8 @@
   margin-bottom: 0.75em;
   text-align: center;
   font-size: 1.4em;
-  width: 5em; }
+  width: 5em;
+  cursor: default; }
   .player-score-card .player-name {
     margin: 0.5em;
     background-color: #4f6885;
@@ -104,4 +105,3 @@
   .panel-dotm .panel-body {
     padding-top: 0;
     font-size: 1.4em; }
-

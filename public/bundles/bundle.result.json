@@ -1,0 +1,32 @@
+{
+  "shared": {
+    "scripts": "<script src='/bundles/scripts/shared.js' type='text/javascript'></script>"
+  },
+  "activeGames": {
+    "scripts": "<script src='/bundles/scripts/activeGames.js' type='text/javascript'></script>"
+  },
+  "addPlayer": {
+    "scripts": "<script src='/bundles/scripts/addPlayer.js' type='text/javascript'></script>"
+  },
+  "admin": {
+    "scripts": "<script src='/bundles/scripts/admin.js' type='text/javascript'></script>"
+  },
+  "createGame": {
+    "scripts": "<script src='/bundles/scripts/createGame.js' type='text/javascript'></script>"
+  },
+  "editActiveGame": {
+    "scripts": "<script src='/bundles/scripts/editActiveGame.js' type='text/javascript'></script>"
+  },
+  "gameHistory": {
+    "scripts": "<script src='/bundles/scripts/gameHistory.js' type='text/javascript'></script>"
+  },
+  "index": {
+    "scripts": "<script src='/bundles/scripts/index.js' type='text/javascript'></script>"
+  },
+  "playersList": {
+    "scripts": "<script src='/bundles/scripts/playersList.js' type='text/javascript'></script>"
+  },
+  "rankingHistory": {
+    "scripts": "<script src='/bundles/scripts/rankingHistory.js' type='text/javascript'></script>"
+  }
+}

@@ -6,7 +6,9 @@ $base-transition: all 0.3s ease-in-out;
 
 $background-color: #e4e9ef;
 $dark-bg: darken($background-color, 50%);
+$silver: #C0C0C0;
 $gray: #7a8394;
+$med-gray: #999999;
 $light-gray: #F1F5F8;
 $dark-orange: #df6d2e;
 $light-orange: #e7c0ab;
@@ -14,7 +16,7 @@ $light-orange: #e7c0ab;
 $global-nav-height: 2em;
 $global-nav-spacer: 3.5em;
 $global-nav-text-color: #fff;
-$global-nav-bg: $dark-bg;
+$global-nav-bg: black;
 $global-nav-menu-bg-color: #fff;
 $global-nav-menu-text-color: $dark-bg;
 
@@ -22,3 +24,6 @@ $default-border: 1px solid black;
 $card-border-radius: 5px;
 $icon-spacing: 0.5em;
 $standard-spacing: 0.5em;
+
+$btn-default-border-color: #CCC;
+$calendar-disabled-date-bg-color: #EEE;

@@ -1,7 +1,5 @@
 ﻿<div class="text-center alert" ng-class="{'alert-danger': !ctrl.hasDate}">
-    <date-picker date="ctrl.datePlayed"></date-picker>
-
-    <button type="button" class="btn btn-primary" ng-click="ctrl.useCurrentDateTime()">Use Current Date and Time</button>
+    <date-picker date="ctrl.datePlayed" show-now-button="true"></date-picker>
 </div>
 
 <div class="btn-row">
