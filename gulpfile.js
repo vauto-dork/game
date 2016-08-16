@@ -14,7 +14,7 @@ var createScriptString = function(filepath) {
     return "<script src='/" + filepath + "' type='text/javascript'></script>";
 };
 
-gulp.task("debug-bundle", function () {
+gulp.task("debug-bundle", ["ts-build"], function () {
     var files = bundleFiles.scripts;
     var output = {};
 
@@ -83,7 +83,7 @@ gulp.task("sass-watch", ["sass-build"], function() {
     example.
 */
 
-gulp.task("bundle", ["ts-build", "debug-bundle"], function() { 
+gulp.task("bundle", ["debug-bundle"], function() { 
     var outputDir = bundlesFilePath + "/scripts";
     return gulp.src(bundlesFilePath +"/bundle.config.js")
         .pipe(bundle())
