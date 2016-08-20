@@ -6,9 +6,9 @@ var Players;
                 player: "=",
                 disableForm: "="
             },
-            templateUrl: '/areas/players/directives/PlayerFormTemplate.html',
-            controller: 'PlayerFormController',
-            controllerAs: 'ctrl',
+            templateUrl: "/areas/players/directives/PlayerFormTemplate.html",
+            controller: "PlayerFormController",
+            controllerAs: "ctrl",
             bindToController: true
         };
     }
@@ -28,9 +28,9 @@ var Players;
     function PlayersListDirective() {
         return {
             scope: {},
-            templateUrl: '/areas/players/directives/PlayersListTemplate.html',
-            controller: 'PlayersListController',
-            controllerAs: 'ctrl',
+            templateUrl: "/areas/players/directives/PlayersListTemplate.html",
+            controller: "PlayersListController",
+            controllerAs: "ctrl",
             bindToController: true
         };
     }
@@ -54,7 +54,7 @@ var Players;
             this.showPlayers = false;
             this.showPlayerEdit = false;
             this.players = [];
-            this.filter = '';
+            this.filter = "";
             this.changeState(State.Loading);
         }
         Object.defineProperty(PlayersListController.prototype, "alerts", {
@@ -65,6 +65,7 @@ var Players;
             configurable: true
         });
         PlayersListController.prototype.changeState = function (newState) {
+            var _this = this;
             this.showLoading = newState === State.Loading;
             this.showPlayers = newState === State.Ready;
             this.showPlayerEdit = newState === State.EditPlayer || newState === State.SavingPlayer;
@@ -78,16 +79,18 @@ var Players;
                     this.alertsService.clearAlerts();
                     break;
                 case State.SavingPlayer:
-                    this.savePlayer();
+                    this.savePlayer(this.selectedPlayer, function () {
+                        _this.changeState(State.Saved);
+                    });
                     break;
                 case State.Saved:
-                    this.alertsService.addAlert('success', 'Player saved successfully!');
+                    this.alertsService.addAlert("success", "Player saved successfully!");
                     this.changeState(State.Loading);
                     break;
             }
         };
         PlayersListController.prototype.errorHandler = function (data, errorMessage) {
-            this.alertsService.addAlert('danger', errorMessage);
+            this.alertsService.addAlert("danger", errorMessage);
             console.error(data);
             this.changeState(State.Error);
         };
@@ -97,22 +100,28 @@ var Players;
                 _this.players = data;
                 _this.changeState(State.Ready);
             }, function (data) {
-                _this.errorHandler(data, 'Error fetching players!');
+                _this.errorHandler(data, "Error fetching players!");
             });
         };
-        PlayersListController.prototype.savePlayer = function () {
+        PlayersListController.prototype.toggleInactive = function (player) {
+            player.inactive = !player.inactive;
+            this.savePlayer(player, null);
+        };
+        PlayersListController.prototype.savePlayer = function (player, callback) {
             var _this = this;
-            this.apiService.saveExistingPlayer(this.selectedPlayer).then(function () {
-                _this.changeState(State.Saved);
+            this.apiService.saveExistingPlayer(player).then(function () {
+                if (callback) {
+                    callback();
+                }
             }, function (data) {
-                _this.errorHandler(data, 'Player save failure!');
+                _this.errorHandler(data, "Player save failure!");
             });
         };
         PlayersListController.prototype.removeFilter = function () {
-            this.filter = '';
+            this.filter = "";
         };
         PlayersListController.prototype.editPlayer = function (player) {
-            this.selectedPlayer = player;
+            this.selectedPlayer = angular.copy(player);
             this.changeState(State.EditPlayer);
         };
         PlayersListController.prototype.cancelEdit = function () {
@@ -129,7 +138,7 @@ var Players;
         PlayersListController.prototype.closeAlert = function (index) {
             this.alertsService.closeAlert(index);
         };
-        PlayersListController.$inject = ['apiService', 'alertsService'];
+        PlayersListController.$inject = ["apiService", "alertsService"];
         return PlayersListController;
     }());
     Players.PlayersListController = PlayersListController;

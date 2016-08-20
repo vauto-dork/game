@@ -46,7 +46,13 @@ module Shared {
                 }
             });
 
-            return output;
+            var inactivePlayers = output.filter(player => {
+                return player.player.inactive;
+            });
+
+            return output.filter(player => {
+                return !player.player.inactive;
+            }).concat(inactivePlayers);
         };
     }
 }

@@ -124,16 +124,22 @@ var Shared;
                 this.firstName = '';
                 this.lastName = '';
                 this.nickname = '';
+                this.customInitials = '';
+                this.duplicate = '';
+                this.inactive = false;
                 return;
             }
             this._id = player._id;
             this.firstName = player.firstName;
             this.lastName = player.lastName;
             this.nickname = player.nickname;
+            this.customInitials = player.customInitials;
+            this.duplicate = player.duplicate;
+            this.inactive = player.inactive;
         }
         Object.defineProperty(Player.prototype, "initials", {
             get: function () {
-                return this.firstName.charAt(0) + this.lastName.charAt(0);
+                return this.customInitials || (this.firstName.charAt(0) + this.lastName.charAt(0));
             },
             enumerable: true,
             configurable: true
@@ -150,7 +156,10 @@ var Shared;
                 _id: this._id,
                 firstName: this.firstName,
                 lastName: this.lastName,
-                nickname: this.nickname
+                nickname: this.nickname,
+                customInitials: this.customInitials,
+                duplicate: this.duplicate,
+                inactive: this.inactive
             };
             return player;
         };
@@ -232,7 +241,12 @@ var Shared;
                     output.push(player);
                 }
             });
-            return output;
+            var inactivePlayers = output.filter(function (player) {
+                return player.player.inactive;
+            });
+            return output.filter(function (player) {
+                return !player.player.inactive;
+            }).concat(inactivePlayers);
         };
     }
     Shared.PlayerSelectorFilter = PlayerSelectorFilter;

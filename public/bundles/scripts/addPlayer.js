@@ -6,9 +6,9 @@ var Players;
                 player: "=",
                 disableForm: "="
             },
-            templateUrl: '/areas/players/directives/PlayerFormTemplate.html',
-            controller: 'PlayerFormController',
-            controllerAs: 'ctrl',
+            templateUrl: "/areas/players/directives/PlayerFormTemplate.html",
+            controller: "PlayerFormController",
+            controllerAs: "ctrl",
             bindToController: true
         };
     }
@@ -82,9 +82,7 @@ var Players;
             });
         };
         AddPlayerController.prototype.resetForm = function () {
-            this.player.firstName = '';
-            this.player.lastName = '';
-            this.player.nickname = '';
+            this.player = new Shared.Player();
             if (this.addPlayerForm) {
                 this.addPlayerForm.$setPristine();
                 this.addPlayerForm.$setUntouched();

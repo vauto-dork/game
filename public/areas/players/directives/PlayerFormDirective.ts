@@ -5,9 +5,9 @@ module Players {
 				player: "=",
 				disableForm: "="
 			},
-			templateUrl: '/areas/players/directives/PlayerFormTemplate.html',
-			controller: 'PlayerFormController',
-			controllerAs: 'ctrl',
+			templateUrl: "/areas/players/directives/PlayerFormTemplate.html",
+			controller: "PlayerFormController",
+			controllerAs: "ctrl",
 			bindToController: true
 		};
     }

@@ -11,7 +11,6 @@ var DateHelper = require('./dateHelper');
  * @return List of players.
  */
 router.get('/', function (req, res, next) {
-	// TODO Make this return only Active players. At the time of writing there is no concept of 'Active' players.
 	PlayerModel.find(function (err, players) {
 		if (err) return next(err);
 		//sort
@@ -77,7 +76,6 @@ function getAllPlayersForNewGame(games, res, next) {
 		});
 	}
 	
-	// TODO Make this return only Active players. At the time of writing there is no concept of 'Active' players.
 	PlayerModel.find(function (err, players) {
 		if (err) return next(err);
 
@@ -320,6 +318,11 @@ function getRankedPlayers(req, next, success) {
 			var where = returnAllPlayers ? {} : { '_id': { $in: requestedPlayerIds } };
 			PlayerModel.find(where, function (err, players) {
 				if (err) return next(err);
+
+				// Remove inactive players
+				players = players.filter(function(player) {
+					return !player.inactive;
+				});
 
 				for (var i = 0; i < players.length; i++) {
 					var player = players[i];

@@ -51,8 +51,8 @@
             "bundles/pageModules/index.js"
         ],
         "playersList": [
-            "/areas/players/directives/PlayerFormDirective.js",
-            "/areas/players/directives/PlayersListDirective.js",
+            "areas/players/directives/PlayerFormDirective.js",
+            "areas/players/directives/PlayersListDirective.js",
             "bundles/pageModules/playersList.js"
         ],
         "rankingHistory": [

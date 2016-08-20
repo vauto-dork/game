@@ -10,9 +10,12 @@ module Shared {
 		public firstName: string;
 		public lastName: string;
 		public nickname: string;
+		public customInitials: string;
+		public duplicate: string;
+		public inactive: boolean;
 		
 		public get initials(): string {
-			return this.firstName.charAt(0) + this.lastName.charAt(0);
+			return this.customInitials || (this.firstName.charAt(0) + this.lastName.charAt(0));
 		}
 		
 		public get fullname(): string {
@@ -24,6 +27,9 @@ module Shared {
 				this.firstName = '';
 				this.lastName = '';
 				this.nickname = '';
+				this.customInitials = '';
+				this.duplicate = '';
+				this.inactive = false;
 				return;
 			}
 			
@@ -31,6 +37,9 @@ module Shared {
 			this.firstName = player.firstName;
 			this.lastName = player.lastName;
 			this.nickname = player.nickname;
+			this.customInitials = player.customInitials;
+			this.duplicate = player.duplicate;
+			this.inactive = player.inactive;
 		}
 		
 		public toPlayerViewModel(): IPlayerViewModel {
@@ -38,7 +47,10 @@ module Shared {
 				_id: this._id,
 				firstName: this.firstName,
 				lastName: this.lastName,
-				nickname: this.nickname
+				nickname: this.nickname,
+				customInitials: this.customInitials,
+				duplicate: this.duplicate,
+				inactive: this.inactive
 			}
 			
 			return player;

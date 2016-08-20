@@ -3,9 +3,9 @@ module Players {
         return {
 			scope: {
 			},
-			templateUrl: '/areas/players/directives/PlayersListTemplate.html',
-			controller: 'PlayersListController',
-			controllerAs: 'ctrl',
+			templateUrl: "/areas/players/directives/PlayersListTemplate.html",
+			controller: "PlayersListController",
+			controllerAs: "ctrl",
 			bindToController: true
         };
     }
@@ -20,7 +20,7 @@ module Players {
 	}
 
     export class PlayersListController {
-        public static $inject: string[] = ['apiService', 'alertsService'];
+        public static $inject: string[] = ["apiService", "alertsService"];
 
 		private disableControls: boolean = false;
 		private showError: boolean = false;
@@ -34,7 +34,7 @@ module Players {
 
 		private players: Shared.IPlayer[] = [];
 		private selectedPlayer: Shared.IPlayer;
-		private filter: string = '';
+		private filter: string = "";
 
         constructor(private apiService: Shared.ApiService, private alertsService: Shared.IAlertsService) {
 			this.changeState(State.Loading);
@@ -55,17 +55,19 @@ module Players {
 					this.alertsService.clearAlerts();
 					break;
 				case State.SavingPlayer:
-					this.savePlayer();
+					this.savePlayer(this.selectedPlayer, ()=>{
+						this.changeState(State.Saved);
+					});
 					break;
 				case State.Saved:
-					this.alertsService.addAlert('success', 'Player saved successfully!');
+					this.alertsService.addAlert("success", "Player saved successfully!");
 					this.changeState(State.Loading);
 					break;
 			}
 		}
 
 		private errorHandler(data: string, errorMessage: string): void {
-			this.alertsService.addAlert('danger', errorMessage);
+			this.alertsService.addAlert("danger", errorMessage);
 			console.error(data);
 			this.changeState(State.Error);
 		}
@@ -75,24 +77,31 @@ module Players {
 				this.players = data;
 				this.changeState(State.Ready);
 			}, (data) => {
-				this.errorHandler(data, 'Error fetching players!');
+				this.errorHandler(data, "Error fetching players!");
 			});
 		}
 
-		private savePlayer(): void {
-			this.apiService.saveExistingPlayer(this.selectedPlayer).then(() => {
-				this.changeState(State.Saved);
+		private toggleInactive(player: Shared.IPlayer): void {
+			player.inactive = !player.inactive;
+			this.savePlayer(player, null);
+		}
+
+		private savePlayer(player: Shared.IPlayer, callback: Function): void {
+			this.apiService.saveExistingPlayer(player).then(() => {
+				if(callback) {
+					callback();
+				}
 			}, (data: string) => {
-				this.errorHandler(data, 'Player save failure!');
+				this.errorHandler(data, "Player save failure!");
 			});
 		}
 
 		private removeFilter(): void {
-			this.filter = '';
+			this.filter = "";
 		}
         
 		private editPlayer(player: Shared.IPlayer): void {
-			this.selectedPlayer = player;
+			this.selectedPlayer = angular.copy(player);
 			this.changeState(State.EditPlayer);
 		}
 
