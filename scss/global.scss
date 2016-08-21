@@ -218,3 +218,34 @@ input.ng-touched.ng-invalid {
 		}
 	}
 }
+
+.text-input-container {
+	$container-padding: 1.6em;
+	margin: $standard-spacing 0;
+	padding: 0;
+	text-align: left;
+
+	.text-input-placeholder {
+		padding: 0 2px;
+		font-size: $font-normal-size;
+		height: $container-padding;
+		vertical-align: bottom;
+	}
+
+	.input-group {
+		width: 100%;
+
+		.form-control {
+			z-index: 5;
+		}
+	}
+
+	// overwrite bootstrap
+	.input-group-lg {
+		&>.form-control,
+		&>.input-group-addon,
+		&>.input-group-btn>.btn {
+			border-radius: 0;
+		}
+	}
+}

@@ -162,3 +162,21 @@ input.ng-touched.ng-invalid {
     .select-wrapper select:-moz-focusring {
       color: transparent;
       text-shadow: 0 0 0 #000; }
+
+.text-input-container {
+  margin: 0.5em 0;
+  padding: 0;
+  text-align: left; }
+  .text-input-container .text-input-placeholder {
+    padding: 0 2px;
+    font-size: 1em;
+    height: 1.6em;
+    vertical-align: bottom; }
+  .text-input-container .input-group {
+    width: 100%; }
+    .text-input-container .input-group .form-control {
+      z-index: 5; }
+  .text-input-container .input-group-lg > .form-control,
+  .text-input-container .input-group-lg > .input-group-addon,
+  .text-input-container .input-group-lg > .input-group-btn > .btn {
+    border-radius: 0; }

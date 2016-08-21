@@ -1097,17 +1097,12 @@ var Shared;
 var Shared;
 (function (Shared) {
     function NumericUpDownDirective($window) {
-        var _this = this;
         return {
             restrict: 'A',
             link: function (scope, element, attrs) {
                 element.on('click', function () {
                     if (!$window.getSelection().toString()) {
-                        try {
-                            _this.setSelectionRange(0, _this.value.length);
-                        }
-                        catch (ex) {
-                        }
+                        element.select();
                     }
                 });
                 element.on('keyup', function (event) {
@@ -1244,6 +1239,37 @@ var Shared;
     Shared.PlayerSelectorController = PlayerSelectorController;
 })(Shared || (Shared = {}));
 
+var Shared;
+(function (Shared) {
+    function TextInputDirective() {
+        return {
+            scope: {
+                name: "@",
+                placeholder: "@",
+                value: "=",
+                disabled: "=",
+                required: "=",
+                maxlength: "@",
+                showClearBtn: "="
+            },
+            templateUrl: "/shared/directives/TextInputTemplate.html",
+            controller: "TextInputController",
+            controllerAs: "ctrl",
+            bindToController: true
+        };
+    }
+    Shared.TextInputDirective = TextInputDirective;
+    var TextInputController = (function () {
+        function TextInputController() {
+        }
+        TextInputController.prototype.clearInput = function () {
+            this.value = "";
+        };
+        return TextInputController;
+    }());
+    Shared.TextInputController = TextInputController;
+})(Shared || (Shared = {}));
+
 var GameCardModule = angular.module('GameCardModule', []);
 GameCardModule.controller('GameCardController', Shared.GameCardController);
 GameCardModule.directive('gameCard', Shared.GameCardDirective);
@@ -1257,6 +1283,8 @@ var UxControlsModule = angular.module('UxControlsModule', ['ngAnimate', 'ui.boot
 UxControlsModule.service('dateTimeService', Shared.DateTimeService);
 UxControlsModule.service('monthYearQueryService', Shared.MonthYearQueryService);
 UxControlsModule.service('apiService', Shared.ApiService);
+UxControlsModule.controller('TextInputController', Shared.TextInputController);
+UxControlsModule.directive('textInput', Shared.TextInputDirective);
 UxControlsModule.controller('LoadSpinnerController', Shared.LoadSpinnerController);
 UxControlsModule.directive('loadSpinner', Shared.LoadSpinnerDirective);
 UxControlsModule.controller('DatePickerController', Shared.DatePickerController);

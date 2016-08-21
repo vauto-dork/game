@@ -12,15 +12,12 @@
     <load-spinner ng-show="ctrl.showLoading"></load-spinner>
 
 	<div class="player-selector-container" ng-show="ctrl.showPlayers">
-		<div class="form-group">
-			<div class="input-group">
-				<input type="text" class="form-control player-selector-filter" placeholder="Type name..." ng-model="ctrl.filter" autocomplete="off"
-				autofocus />
-				<div class="input-group-addon player-selector-filter-remove" ng-click="ctrl.removeFilter()">
-					<span class="glyphicon glyphicon-remove-sign"></span>
-				</div>
-			</div>
-		</div>
+		<text-input
+			name="nameFilter"
+			placeholder="Filter by player name"
+			value="ctrl.filter"
+			show-clear-btn="true">
+		</text-input>
 	</div>
 </div>
 

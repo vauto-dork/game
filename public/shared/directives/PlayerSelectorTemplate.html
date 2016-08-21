@@ -1,7 +1,7 @@
-<div class="form-group player-selector">
-	<div class="input-group">
+<div class="text-input-container player-selector-container">
+	<div class="input-group input-group-lg">
 		<input type="text"
-               class="form-control player-selector-filter"
+               class="form-control"
                placeholder="Type name..."
                ng-model="ctrl.filter"
                ng-disabled="ctrl.disabled"
@@ -10,13 +10,13 @@
                typeahead-focus-on-select="false"
                autocomplete="off"
                autofocus />
-		<span class="input-group-btn">
-		    <button type="button"
-                    class="btn btn-lg player-selector-remove-btn"
-                    ng-click="ctrl.removeFilter()"
-                    ng-disabled="ctrl.disabled">
-		        <span class="glyphicon glyphicon-remove-sign"></span>
-		    </button>
-		</span>
+        <span class="input-group-btn">
+            <button type="button"
+                class="btn btn-default"
+                ng-click="ctrl.removeFilter()"
+                ng-disabled="ctrl.disabled">
+                <span class="glyphicon glyphicon-remove-sign"></span>
+            </button>
+        </span>
 	</div>
 </div>

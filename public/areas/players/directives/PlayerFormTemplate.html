@@ -1,6 +1,28 @@
 <div ng-form="ctrl.playerForm" class="form-group">
-	<input class="form-control input-lg" type="text" name="firstName" placeholder="First Name" ng-model="ctrl.player.firstName" ng-disabled="ctrl.disableForm" autocomplete="off" ng-required="true" />
-	<input class="form-control input-lg" type="text" name="lastName" placeholder="Last Name" ng-model="ctrl.player.lastName" ng-disabled="ctrl.disableForm" autocomplete="off" ng-required="true" />
-	<input class="form-control input-lg" type="text" name="customInitials" placeholder="Custom Initials (Optional)" ng-model="ctrl.player.customInitials" ng-disabled="ctrl.disableForm" autocomplete="off" maxlength="2" />
-	<input class="form-control input-lg" type="text" name="nickName" placeholder="Nickname (Optional)" ng-model="ctrl.player.nickname" ng-disabled="ctrl.disableForm" autocomplete="off" />
+	<text-input name="firstName"
+		placeholder="First Name"
+		value="ctrl.player.firstName"
+		disabled="ctrl.disableForm"
+		required="true">
+	</text-input>
+
+	<text-input name="lastName"
+		placeholder="Last Name"
+		value="ctrl.player.lastName"
+		disabled="ctrl.disableForm"
+		required="true">
+	</text-input>
+
+	<text-input name="customInitials"
+		placeholder="Custom Initials (Optional)"
+		value="ctrl.player.customInitials"
+		disabled="ctrl.disableForm"
+		maxlength="2">
+	</text-input>
+
+	<text-input name="nickName"
+		placeholder="Nickname (Optional)"
+		value="ctrl.player.nickname"
+		disabled="ctrl.disableForm">
+	</text-input>
 </div>

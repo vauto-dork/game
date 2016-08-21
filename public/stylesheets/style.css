@@ -163,6 +163,24 @@ input.ng-touched.ng-invalid {
       color: transparent;
       text-shadow: 0 0 0 #000; }
 
+.text-input-container {
+  margin: 0.5em 0;
+  padding: 0;
+  text-align: left; }
+  .text-input-container .text-input-placeholder {
+    padding: 0 2px;
+    font-size: 1em;
+    height: 1.6em;
+    vertical-align: bottom; }
+  .text-input-container .input-group {
+    width: 100%; }
+    .text-input-container .input-group .form-control {
+      z-index: 5; }
+  .text-input-container .input-group-lg > .form-control,
+  .text-input-container .input-group-lg > .input-group-addon,
+  .text-input-container .input-group-lg > .input-group-btn > .btn {
+    border-radius: 0; }
+
 .animate-appear.ng-move,
 .animate-appear.ng-enter,
 .animate-appear.ng-leave {
@@ -525,17 +543,7 @@ input.ng-touched.ng-invalid {
   .selected-players-wrapper .selected-players {
     margin-bottom: 15px; }
 
-.player-selector .player-selector-filter {
-  padding: 0.25em;
-  width: 100%;
-  font-size: 2em;
-  line-height: 2em;
-  height: 2em; }
-
-.player-selector .player-selector-remove-btn {
-  border: 2px solid #ccc; }
-
-.player-selector .dropdown-menu {
+.player-selector-container .dropdown-menu {
   width: 100%;
   font-size: 2em;
   line-height: 2em; }
