@@ -48,6 +48,13 @@
 <form ng-submit="ctrl.save()" ng-show="ctrl.showPlayerEdit">
 	<div class="status-banner">
 		<player-form player="ctrl.selectedPlayer" disable-form="ctrl.disableControls"></player-form>
+		<div class="form-group">
+			<text-input name="duplicatePlayerId"
+				placeholder="Duplicate Player Id (Optional)"
+				value="ctrl.selectedPlayer.duplicate"
+				disabled="ctrl.disableForm">
+			</text-input>
+		</form>
 	</div>
 
 	<div class="btn-row">

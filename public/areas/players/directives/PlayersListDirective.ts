@@ -20,7 +20,7 @@ module Players {
 	}
 
     export class PlayersListController {
-        public static $inject: string[] = ["apiService", "alertsService"];
+        public static $inject: string[] = ["apiService", "alertsService", "playersListService"];
 
 		private disableControls: boolean = false;
 		private showError: boolean = false;
@@ -32,11 +32,16 @@ module Players {
             return this.alertsService.alerts;
         }
 
-		private players: Shared.IPlayer[] = [];
+		private get players(): Shared.IPlayer[] {
+			return this.playersListService.players;
+		}
+
 		private selectedPlayer: Shared.IPlayer;
 		private filter: string = "";
 
-        constructor(private apiService: Shared.ApiService, private alertsService: Shared.IAlertsService) {
+        constructor(private apiService: Shared.ApiService,
+			private alertsService: Shared.IAlertsService,
+			private playersListService: IPlayersListService){
 			this.changeState(State.Loading);
         }
 
@@ -73,10 +78,9 @@ module Players {
 		}
         
 		private loadPlayers(): void {
-			this.apiService.getAllPlayers().then((data: Shared.IPlayer[]) => {
-				this.players = data;
+			this.playersListService.loadPlayers().then(()=>{
 				this.changeState(State.Ready);
-			}, (data) => {
+			}, (data: string)=>{
 				this.errorHandler(data, "Error fetching players!");
 			});
 		}
@@ -87,11 +91,11 @@ module Players {
 		}
 
 		private savePlayer(player: Shared.IPlayer, callback: Function): void {
-			this.apiService.saveExistingPlayer(player).then(() => {
-				if(callback) {
+			this.playersListService.savePlayer(player).then(()=>{
+				if (callback) {
 					callback();
 				}
-			}, (data: string) => {
+			}, (data: string)=>{
 				this.errorHandler(data, "Player save failure!");
 			});
 		}

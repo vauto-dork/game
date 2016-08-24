@@ -1,5 +1,47 @@
 var Players;
 (function (Players) {
+    var PlayersListService = (function () {
+        function PlayersListService($q, apiService, playerSelectionService) {
+            this.$q = $q;
+            this.apiService = apiService;
+            this.playerSelectionService = playerSelectionService;
+            this.playerLoadPromise = this.loadPlayers();
+        }
+        Object.defineProperty(PlayersListService.prototype, "players", {
+            get: function () {
+                return this.allPlayers;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        PlayersListService.prototype.ready = function () {
+            return this.playerLoadPromise;
+        };
+        PlayersListService.prototype.loadPlayers = function () {
+            var _this = this;
+            return this.apiService.getAllPlayers().then(function (data) {
+                _this.allPlayers = data;
+                _this.$q.resolve();
+            }, function (data) {
+                _this.$q.reject(data);
+            });
+        };
+        PlayersListService.prototype.savePlayer = function (player) {
+            var _this = this;
+            return this.apiService.saveExistingPlayer(player).then(function () {
+                _this.$q.resolve();
+            }, function (data) {
+                _this.$q.reject(data);
+            });
+        };
+        PlayersListService.$inject = ['$q', 'apiService', 'playerSelectionService'];
+        return PlayersListService;
+    }());
+    Players.PlayersListService = PlayersListService;
+})(Players || (Players = {}));
+
+var Players;
+(function (Players) {
     function PlayerFormDirective() {
         return {
             scope: {
@@ -45,21 +87,28 @@ var Players;
         State[State["Saved"] = 5] = "Saved";
     })(State || (State = {}));
     var PlayersListController = (function () {
-        function PlayersListController(apiService, alertsService) {
+        function PlayersListController(apiService, alertsService, playersListService) {
             this.apiService = apiService;
             this.alertsService = alertsService;
+            this.playersListService = playersListService;
             this.disableControls = false;
             this.showError = false;
             this.showLoading = false;
             this.showPlayers = false;
             this.showPlayerEdit = false;
-            this.players = [];
             this.filter = "";
             this.changeState(State.Loading);
         }
         Object.defineProperty(PlayersListController.prototype, "alerts", {
             get: function () {
                 return this.alertsService.alerts;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(PlayersListController.prototype, "players", {
+            get: function () {
+                return this.playersListService.players;
             },
             enumerable: true,
             configurable: true
@@ -96,8 +145,7 @@ var Players;
         };
         PlayersListController.prototype.loadPlayers = function () {
             var _this = this;
-            this.apiService.getAllPlayers().then(function (data) {
-                _this.players = data;
+            this.playersListService.loadPlayers().then(function () {
                 _this.changeState(State.Ready);
             }, function (data) {
                 _this.errorHandler(data, "Error fetching players!");
@@ -109,7 +157,7 @@ var Players;
         };
         PlayersListController.prototype.savePlayer = function (player, callback) {
             var _this = this;
-            this.apiService.saveExistingPlayer(player).then(function () {
+            this.playersListService.savePlayer(player).then(function () {
                 if (callback) {
                     callback();
                 }
@@ -138,15 +186,16 @@ var Players;
         PlayersListController.prototype.closeAlert = function (index) {
             this.alertsService.closeAlert(index);
         };
-        PlayersListController.$inject = ["apiService", "alertsService"];
+        PlayersListController.$inject = ["apiService", "alertsService", "playersListService"];
         return PlayersListController;
     }());
     Players.PlayersListController = PlayersListController;
 })(Players || (Players = {}));
 
-var DorkModule = angular.module('DorkModule', ['UxControlsModule']);
+var DorkModule = angular.module('DorkModule', ['UxControlsModule', 'PlayerSelectorModule']);
 
 DorkModule.service('alertsService', Shared.AlertsService);
+DorkModule.service('playersListService', Players.PlayersListService);
 
 DorkModule.controller('PlayersListController', Players.PlayersListController);
 DorkModule.directive('playersList', Players.PlayersListDirective);
