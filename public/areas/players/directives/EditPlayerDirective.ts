@@ -2,11 +2,10 @@ module Players {
     export function EditPlayerDirective(): ng.IDirective {
         return {
 			scope: {
-				player: "=",
-				disableForm: "="
+				player: "="
 			},
-			templateUrl: "/areas/players/directives/PlayerFormTemplate.html",
-			controller: "PlayerFormController",
+			templateUrl: "/areas/players/directives/EditPlayerTemplate.html",
+			controller: "EditPlayerController",
 			controllerAs: "ctrl",
 			bindToController: true
 		};
@@ -15,15 +14,22 @@ module Players {
     export class EditPlayerController {
         public static $inject: string[] = ["playersListService"];
 		
-		private playerForm: ng.IFormController;
 		private player: Shared.IPlayer;
-		private disableForm: boolean = false;
+		private disabled: boolean = false;
 
         constructor(private playersListService: IPlayersListService) {
+			this.playersListService.subscribeEditOpen(()=>{
+				this.disabled = false;
+			});
         }
 
 		private save(): void {
-			this.playersListService.savePlayer(this.player);
+			this.disabled = true;
+			this.playersListService.savePlayer(this.player, true);
+		}
+
+		private cancel(): void {
+			this.playersListService.cancelEdit();
 		}
     }
 }

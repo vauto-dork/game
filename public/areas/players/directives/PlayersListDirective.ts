@@ -15,7 +15,6 @@ module Players {
 		Ready,
 		Error,
 		EditPlayer,
-		SavingPlayer,
 		Saved
 	}
 
@@ -43,13 +42,21 @@ module Players {
 			private alertsService: Shared.IAlertsService,
 			private playersListService: IPlayersListService){
 			this.changeState(State.Loading);
+
+			this.playersListService.subscribeEditSave(()=>{
+				this.changeState(State.Saved);
+			});
+
+			this.playersListService.subscribeEditCancel(()=>{
+				this.selectedPlayer = undefined;
+				this.changeState(State.Ready);
+			});
         }
 
 		private changeState(newState: State): void {
 			this.showLoading = newState === State.Loading;
 			this.showPlayers = newState === State.Ready;
-			this.showPlayerEdit = newState === State.EditPlayer || newState === State.SavingPlayer;
-			this.disableControls = newState === State.SavingPlayer;
+			this.showPlayerEdit = newState === State.EditPlayer;
 			this.showError = newState === State.Error;
 
 			switch (newState) {
@@ -57,12 +64,8 @@ module Players {
 					this.loadPlayers();
 					break;
 				case State.EditPlayer:
+					this.playersListService.openEdit();
 					this.alertsService.clearAlerts();
-					break;
-				case State.SavingPlayer:
-					this.savePlayer(this.selectedPlayer, ()=>{
-						this.changeState(State.Saved);
-					});
 					break;
 				case State.Saved:
 					this.alertsService.addAlert("success", "Player saved successfully!");
@@ -87,15 +90,7 @@ module Players {
 
 		private toggleInactive(player: Shared.IPlayer): void {
 			player.inactive = !player.inactive;
-			this.savePlayer(player, null);
-		}
-
-		private savePlayer(player: Shared.IPlayer, callback: Function): void {
-			this.playersListService.savePlayer(player).then(()=>{
-				if (callback) {
-					callback();
-				}
-			}, (data: string)=>{
+			this.playersListService.savePlayer(player, false).then(()=>{}, (data: string)=>{
 				this.errorHandler(data, "Player save failure!");
 			});
 		}
@@ -107,15 +102,6 @@ module Players {
 		private editPlayer(player: Shared.IPlayer): void {
 			this.selectedPlayer = angular.copy(player);
 			this.changeState(State.EditPlayer);
-		}
-
-		private cancelEdit(): void {
-			this.selectedPlayer = undefined;
-			this.changeState(State.Ready);
-		}
-
-		private save(): void {
-			this.changeState(State.SavingPlayer);
 		}
 
 		private reload() {
