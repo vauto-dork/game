@@ -33,7 +33,7 @@ module Players {
             $timeout: ng.ITimeoutService,
             private $q: ng.IQService,
             private apiService: Shared.IApiService,
-            private playerSelectionService: Shared.IPlayerSelectionService) {
+            private playerSelectionService: Component.IPlayerSelectionService) {
             super($timeout);
             this.playerLoadPromise = this.loadPlayers();
         }

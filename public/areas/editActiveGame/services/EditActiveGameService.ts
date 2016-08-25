@@ -71,7 +71,7 @@ module EditActiveGame {
         constructor(private $location: ng.ILocationService,
             private $q: ng.IQService,
             private apiService: Shared.IApiService,
-            private playerSelectionService: Shared.IPlayerSelectionService) {
+            private playerSelectionService: Component.IPlayerSelectionService) {
         }
 
         public toggleModifyPlaylist(): void {

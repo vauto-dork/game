@@ -1,35 +1,35 @@
-﻿module Shared {
+﻿module Component {
     export interface IPlayerSelectionService {
-        selectedPlayers: INewGamePlayer[];
-        unselectedPlayers: INewGamePlayer[];
+        selectedPlayers: Shared.INewGamePlayer[];
+        unselectedPlayers: Shared.INewGamePlayer[];
 
         reset(): void;
-        getPlayers(): ng.IPromise<INewGame>;
-        addPlayer(player: IPlayer): void;
-        removePlayer(player: IPlayer): void;
+        getPlayers(): ng.IPromise<Shared.INewGame>;
+        addPlayer(player: Shared.IPlayer): void;
+        removePlayer(player: Shared.IPlayer): void;
         curateNewPlayerList(): void;
 
         debugShowAllPlayersTable(): void;
         debugShowCuratedPlayersTable(): void;
-        debugPrintPlayersTable(players: INewGamePlayer[]): void;
+        debugPrintPlayersTable(players: Shared.INewGamePlayer[]): void;
     }
 
     export class PlayerSelectionService implements IPlayerSelectionService {
         public static $inject: string[] = ['$q', 'apiService'];
 
-        private allPlayers: INewGamePlayer[] = [];
-        private players: INewGamePlayer[] = [];
-        private unselectedPlayersList: INewGamePlayer[] = [];
+        private allPlayers: Shared.INewGamePlayer[] = [];
+        private players: Shared.INewGamePlayer[] = [];
+        private unselectedPlayersList: Shared.INewGamePlayer[] = [];
         
-        public get selectedPlayers(): INewGamePlayer[] {
+        public get selectedPlayers(): Shared.INewGamePlayer[] {
             return this.players;
         }
 
-        public get unselectedPlayers(): INewGamePlayer[] {
+        public get unselectedPlayers(): Shared.INewGamePlayer[] {
             return this.unselectedPlayersList;
         }
 
-        constructor(private $q: ng.IQService, private apiService: IApiService) {
+        constructor(private $q: ng.IQService, private apiService: Shared.IApiService) {
 
         }
         
@@ -37,7 +37,7 @@
             return this.players.map(p => { return p.playerId; }).indexOf(playerId);
         }
 
-        public addPlayer(player: IPlayer): void {
+        public addPlayer(player: Shared.IPlayer): void {
             var found = this.allPlayers.filter(p => { return p.playerId === player._id });
 
             if (found.length === 1) {
@@ -48,14 +48,14 @@
             }
         }
 
-        public removePlayer(player: IPlayer): void {
+        public removePlayer(player: Shared.IPlayer): void {
             var index = this.playerIndex(player._id);
             this.players.splice(index, 1);
             this.curateNewPlayerList();
         }
 
-        public getPlayers(): ng.IPromise<INewGame> {
-            var def = this.$q.defer<INewGame>();
+        public getPlayers(): ng.IPromise<Shared.INewGame> {
+            var def = this.$q.defer<Shared.INewGame>();
 
             this.apiService.getPlayersForNewGame().then(data => {
                 this.allPlayers = data.players;
@@ -93,7 +93,7 @@
             this.debugPrintPlayersTable(this.unselectedPlayers);
         }
 
-        public debugPrintPlayersTable(players: INewGamePlayer[]): void {
+        public debugPrintPlayersTable(players: Shared.INewGamePlayer[]): void {
             // Change "info" to "table" to show as table in browser debugger
             console.info(players.map((p) => {
                 return {
