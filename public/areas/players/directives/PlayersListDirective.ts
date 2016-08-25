@@ -15,12 +15,11 @@ module Players {
 		Ready,
 		Error,
 		EditPlayer,
-		SavingPlayer,
 		Saved
 	}
 
     export class PlayersListController {
-        public static $inject: string[] = ["apiService", "alertsService"];
+        public static $inject: string[] = ["apiService", "alertsService", "playersListService"];
 
 		private disableControls: boolean = false;
 		private showError: boolean = false;
@@ -32,19 +31,32 @@ module Players {
             return this.alertsService.alerts;
         }
 
-		private players: Shared.IPlayer[] = [];
+		private get players(): Shared.IPlayer[] {
+			return this.playersListService.players;
+		}
+
 		private selectedPlayer: Shared.IPlayer;
 		private filter: string = "";
 
-        constructor(private apiService: Shared.ApiService, private alertsService: Shared.IAlertsService) {
+        constructor(private apiService: Shared.ApiService,
+			private alertsService: Shared.IAlertsService,
+			private playersListService: IPlayersListService){
 			this.changeState(State.Loading);
+
+			this.playersListService.subscribeEditSave(()=>{
+				this.changeState(State.Saved);
+			});
+
+			this.playersListService.subscribeEditCancel(()=>{
+				this.selectedPlayer = undefined;
+				this.changeState(State.Ready);
+			});
         }
 
 		private changeState(newState: State): void {
 			this.showLoading = newState === State.Loading;
 			this.showPlayers = newState === State.Ready;
-			this.showPlayerEdit = newState === State.EditPlayer || newState === State.SavingPlayer;
-			this.disableControls = newState === State.SavingPlayer;
+			this.showPlayerEdit = newState === State.EditPlayer;
 			this.showError = newState === State.Error;
 
 			switch (newState) {
@@ -52,12 +64,8 @@ module Players {
 					this.loadPlayers();
 					break;
 				case State.EditPlayer:
+					this.playersListService.openEdit();
 					this.alertsService.clearAlerts();
-					break;
-				case State.SavingPlayer:
-					this.savePlayer(this.selectedPlayer, ()=>{
-						this.changeState(State.Saved);
-					});
 					break;
 				case State.Saved:
 					this.alertsService.addAlert("success", "Player saved successfully!");
@@ -73,25 +81,16 @@ module Players {
 		}
         
 		private loadPlayers(): void {
-			this.apiService.getAllPlayers().then((data: Shared.IPlayer[]) => {
-				this.players = data;
+			this.playersListService.loadPlayers().then(()=>{
 				this.changeState(State.Ready);
-			}, (data) => {
+			}, (data: string)=>{
 				this.errorHandler(data, "Error fetching players!");
 			});
 		}
 
 		private toggleInactive(player: Shared.IPlayer): void {
 			player.inactive = !player.inactive;
-			this.savePlayer(player, null);
-		}
-
-		private savePlayer(player: Shared.IPlayer, callback: Function): void {
-			this.apiService.saveExistingPlayer(player).then(() => {
-				if(callback) {
-					callback();
-				}
-			}, (data: string) => {
+			this.playersListService.savePlayer(player, false).then(()=>{}, (data: string)=>{
 				this.errorHandler(data, "Player save failure!");
 			});
 		}
@@ -103,15 +102,6 @@ module Players {
 		private editPlayer(player: Shared.IPlayer): void {
 			this.selectedPlayer = angular.copy(player);
 			this.changeState(State.EditPlayer);
-		}
-
-		private cancelEdit(): void {
-			this.selectedPlayer = undefined;
-			this.changeState(State.Ready);
-		}
-
-		private save(): void {
-			this.changeState(State.SavingPlayer);
 		}
 
 		private reload() {

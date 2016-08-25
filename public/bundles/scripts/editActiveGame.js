@@ -580,7 +580,6 @@ var EditActiveGame;
 
 var DorkModule = angular.module('DorkModule', ['UxControlsModule', 'PlayerSelectorModule']);
 
-DorkModule.service('playerSelectionService', Shared.PlayerSelectionService);
 DorkModule.service('alertsService', Shared.AlertsService);
 DorkModule.service('editActiveGameService', EditActiveGame.EditActiveGameService);
 

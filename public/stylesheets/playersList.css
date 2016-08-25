@@ -8,8 +8,14 @@
 
 .players-list-card {
   padding-bottom: 2em; }
+  .players-list-card .player-extra-info {
+    margin: 0.5em 0; }
+    .players-list-card .player-extra-info span {
+      vertical-align: middle; }
+    .players-list-card .player-extra-info .playerId {
+      margin-right: 0.5em; }
 
-.edit-player-btn {
-  margin: 0.5em 0; }
-  .edit-player-btn .btn {
-    padding-right: 1em; }
+.edit-player-btn-group {
+  margin: 1em 0; }
+  .edit-player-btn-group .btn {
+    padding-right: 2em; }

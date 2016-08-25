@@ -79,6 +79,10 @@ function getAllPlayersForNewGame(games, res, next) {
 	PlayerModel.find(function (err, players) {
 		if (err) return next(err);
 
+		players = players.filter(function(player) {
+			return !player.duplicate;
+		});
+
 		sortPlayersAlphabetically(players);
 
 		var orderNumber = 0;

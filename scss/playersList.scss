@@ -13,12 +13,24 @@
 
 .players-list-card {
 	padding-bottom: 2em;
+
+	.player-extra-info {
+		margin: $standard-spacing 0;
+
+		span {
+			vertical-align: middle;
+		}
+
+		.playerId {
+			margin-right: $standard-spacing;
+		}
+	}
 }
 
-.edit-player-btn {
-	margin: $standard-spacing 0;
-	
+.edit-player-btn-group {
+	margin: 1em 0;
+
 	.btn {
-		padding-right: 1em;
+		padding-right: 2em;
 	}
 }
