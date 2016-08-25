@@ -1,4 +1,4 @@
-var PlayerSelectorModule = angular.module('PlayerSelectorModule', []);
+var PlayerSelectorModule = angular.module('PlayerSelectorModule', ['PlayerFormModule']);
 
 PlayerSelectorModule.service('playerSelectionService', Components.PlayerSelectionService);
 PlayerSelectorModule.filter('playerSelectorFilter', Components.PlayerSelectorFilter);

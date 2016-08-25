@@ -8,6 +8,3 @@ DorkModule.directive('editPlayer', Players.EditPlayerDirective);
 
 DorkModule.controller('PlayersListController', Players.PlayersListController);
 DorkModule.directive('playersList', Players.PlayersListDirective);
-
-DorkModule.controller('PlayerFormController', Players.PlayerFormController);
-DorkModule.directive('playerForm', Players.PlayerFormDirective);

@@ -1,6 +1,10 @@
 {
     "sourceRootFilePath": "public",
     "components": {
+        "playerForm": [
+            "components/playerForm/directives/*.js",
+            "components/playerForm/modules/*.js"
+        ],
         "playerSelector": [
             "components/playerSelector/filters/*.js",
             "components/playerSelector/directives/*.js",
@@ -32,9 +36,11 @@
         },
         "addPlayer": {
             "files": [
-                "areas/players/directives/PlayerFormDirective.js",
                 "areas/players/directives/AddPlayerDirective.js",
                 "bundles/pageModules/addPlayer.js"
+            ],
+            "components": [
+                "playerForm"
             ]
         },
         "admin": {
@@ -51,6 +57,7 @@
                 "bundles/pageModules/createGame.js"
             ],
             "components": [
+                "playerForm",
                 "playerSelector"
             ]
         },
@@ -65,6 +72,7 @@
                 "bundles/pageModules/editActiveGame.js"
             ],
             "components": [
+                "playerForm",
                 "playerSelector"
             ]
         },
@@ -93,11 +101,11 @@
             "files": [
                 "areas/players/services/PlayersListService.js",
                 "areas/players/directives/EditPlayerDirective.js",
-                "areas/players/directives/PlayerFormDirective.js",
                 "areas/players/directives/PlayersListDirective.js",
                 "bundles/pageModules/playersList.js"
             ],
             "components": [
+                "playerForm",
                 "playerSelector"
             ]
         },

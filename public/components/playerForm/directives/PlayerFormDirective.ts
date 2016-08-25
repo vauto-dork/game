@@ -1,11 +1,11 @@
-module Players {
+module Components {
     export function PlayerFormDirective(): ng.IDirective {
         return {
 			scope: {
 				player: "=",
 				disableForm: "="
 			},
-			templateUrl: "/areas/players/directives/PlayerFormTemplate.html",
+			templateUrl: "/components/playerForm/directives/PlayerFormTemplate.html",
 			controller: "PlayerFormController",
 			controllerAs: "ctrl",
 			bindToController: true

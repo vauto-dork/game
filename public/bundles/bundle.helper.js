@@ -4,23 +4,21 @@ var bundleFiles = require('./bundle.files.json');
 var generatedFilePath = './' + bundleFiles.sourceRootFilePath + '/';
 
 //-----------------------------------------------------------------------------
-var getScriptsArray = function (scriptPathArray) {
-    return scriptPathArray.map(function (element) {
-        return generatedFilePath + element;
-    });
-};
-
 var squashScriptFiles = function(pageModuleName) {
     var scripts = bundleFiles.scripts[pageModuleName].files;
     var components = bundleFiles.scripts[pageModuleName].components;
 
     if (components) {
-        var newList;
+        var newList;        
         for (var i = 0; i < components.length; i++) {
+            var items = bundleFiles.components[components[i]];
+
             if (i === 0) {
-                newList = bundleFiles.components[components[i]];
+                newList = items;
             } else {
-                newList.concat(bundleFiles.components[components[i]]);
+                // concat doesn't work here.
+                // see: http://stackoverflow.com/questions/16679565/why-cant-i-concat-an-array-reference-in-javascript
+                newList.push.apply(newList, items);
             }
         }
         scripts = !newList ? scripts : newList.concat(scripts);
@@ -28,6 +26,13 @@ var squashScriptFiles = function(pageModuleName) {
 
     return scripts;
 }
+
+//-----------------------------------------------------------------------------
+var getScriptsArray = function (scriptPathArray) {
+    return scriptPathArray.map(function (element) {
+        return generatedFilePath + element;
+    });
+};
 
 //-----------------------------------------------------------------------------
 var getScriptConfig = function (pageModuleName) {
