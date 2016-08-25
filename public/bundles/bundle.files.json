@@ -6,6 +6,10 @@
             "components/playerSelector/directives/*.js",
             "components/playerSelector/services/*.js",
             "components/playerSelector/modules/*.js"
+        ],
+        "gameCard": [
+            "components/gameCard/directives/*.js",
+            "components/gameCard/modules/*.js"
         ]
     },
     "scripts": {
@@ -21,6 +25,9 @@
             "files": [
                 "areas/activeGame/directives/ActiveGamesDirective.js",
                 "bundles/pageModules/activeGames.js"
+            ],
+            "components": [
+                "gameCard"
             ]
         },
         "addPlayer": {
@@ -65,6 +72,9 @@
             "files": [
                 "areas/history/directives/GameHistoryDirective.js",
                 "bundles/pageModules/gameHistory.js"
+            ],
+            "components": [
+                "gameCard"
             ]
         },
         "index": {

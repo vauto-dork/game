@@ -1,4 +1,4 @@
-module Component {
+module Components {
     export function PlayerSelectorDirective(): ng.IDirective {
         return {
             scope: {

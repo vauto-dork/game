@@ -1,5 +1,5 @@
-var Component;
-(function (Component) {
+var Components;
+(function (Components) {
     function PlayerSelectorFilter() {
         return function (playersList, filter) {
             var caseInsensitiveMatch = function (value, filter) {
@@ -45,11 +45,11 @@ var Component;
             }).concat(inactivePlayers);
         };
     }
-    Component.PlayerSelectorFilter = PlayerSelectorFilter;
-})(Component || (Component = {}));
+    Components.PlayerSelectorFilter = PlayerSelectorFilter;
+})(Components || (Components = {}));
 
-var Component;
-(function (Component) {
+var Components;
+(function (Components) {
     function PlayerSelectorDirective() {
         return {
             scope: {
@@ -63,7 +63,7 @@ var Component;
             bindToController: true
         };
     }
-    Component.PlayerSelectorDirective = PlayerSelectorDirective;
+    Components.PlayerSelectorDirective = PlayerSelectorDirective;
     var PlayerSelectorController = (function () {
         function PlayerSelectorController($element, $timeout) {
             this.$element = $element;
@@ -81,11 +81,11 @@ var Component;
         PlayerSelectorController.$inject = ["$element", "$timeout"];
         return PlayerSelectorController;
     }());
-    Component.PlayerSelectorController = PlayerSelectorController;
-})(Component || (Component = {}));
+    Components.PlayerSelectorController = PlayerSelectorController;
+})(Components || (Components = {}));
 
-var Component;
-(function (Component) {
+var Components;
+(function (Components) {
     var PlayerSelectionService = (function () {
         function PlayerSelectionService($q, apiService) {
             this.$q = $q;
@@ -166,14 +166,14 @@ var Component;
         PlayerSelectionService.$inject = ['$q', 'apiService'];
         return PlayerSelectionService;
     }());
-    Component.PlayerSelectionService = PlayerSelectionService;
-})(Component || (Component = {}));
+    Components.PlayerSelectionService = PlayerSelectionService;
+})(Components || (Components = {}));
 
 var PlayerSelectorModule = angular.module('PlayerSelectorModule', []);
-PlayerSelectorModule.service('playerSelectionService', Component.PlayerSelectionService);
-PlayerSelectorModule.filter('playerSelectorFilter', Component.PlayerSelectorFilter);
-PlayerSelectorModule.controller('PlayerSelectorController', Component.PlayerSelectorController);
-PlayerSelectorModule.directive('playerSelector', Component.PlayerSelectorDirective);
+PlayerSelectorModule.service('playerSelectionService', Components.PlayerSelectionService);
+PlayerSelectorModule.filter('playerSelectorFilter', Components.PlayerSelectorFilter);
+PlayerSelectorModule.controller('PlayerSelectorController', Components.PlayerSelectorController);
+PlayerSelectorModule.directive('playerSelector', Components.PlayerSelectorDirective);
 
 var CreateGame;
 (function (CreateGame) {

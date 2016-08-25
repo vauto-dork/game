@@ -1,6 +1,6 @@
 var PlayerSelectorModule = angular.module('PlayerSelectorModule', []);
-PlayerSelectorModule.service('playerSelectionService', Component.PlayerSelectionService);
-PlayerSelectorModule.filter('playerSelectorFilter', Component.PlayerSelectorFilter);
-PlayerSelectorModule.controller('PlayerSelectorController', Component.PlayerSelectorController);
-PlayerSelectorModule.directive('playerSelector', Component.PlayerSelectorDirective);
+PlayerSelectorModule.service('playerSelectionService', Components.PlayerSelectionService);
+PlayerSelectorModule.filter('playerSelectorFilter', Components.PlayerSelectorFilter);
+PlayerSelectorModule.controller('PlayerSelectorController', Components.PlayerSelectorController);
+PlayerSelectorModule.directive('playerSelector', Components.PlayerSelectorDirective);
 //# sourceMappingURL=PlayerSelectorModule.js.map

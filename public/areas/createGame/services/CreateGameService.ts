@@ -61,7 +61,7 @@ module CreateGame {
 
         constructor(private $q: ng.IQService,
             private apiService: Shared.IApiService,
-            private playerSelectionService: Component.IPlayerSelectionService) {
+            private playerSelectionService: Components.IPlayerSelectionService) {
             this.playerLoadPromise = this.playerSelectionService.getPlayers().then((data) => {
                 this.initializeData(data.firstGameOfMonth);
                 this.$q.resolve();

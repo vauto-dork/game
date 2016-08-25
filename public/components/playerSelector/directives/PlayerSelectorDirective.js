@@ -1,5 +1,5 @@
-var Component;
-(function (Component) {
+var Components;
+(function (Components) {
     function PlayerSelectorDirective() {
         return {
             scope: {
@@ -13,7 +13,7 @@ var Component;
             bindToController: true
         };
     }
-    Component.PlayerSelectorDirective = PlayerSelectorDirective;
+    Components.PlayerSelectorDirective = PlayerSelectorDirective;
     var PlayerSelectorController = (function () {
         function PlayerSelectorController($element, $timeout) {
             this.$element = $element;
@@ -31,6 +31,6 @@ var Component;
         PlayerSelectorController.$inject = ["$element", "$timeout"];
         return PlayerSelectorController;
     }());
-    Component.PlayerSelectorController = PlayerSelectorController;
-})(Component || (Component = {}));
+    Components.PlayerSelectorController = PlayerSelectorController;
+})(Components || (Components = {}));
 //# sourceMappingURL=PlayerSelectorDirective.js.map

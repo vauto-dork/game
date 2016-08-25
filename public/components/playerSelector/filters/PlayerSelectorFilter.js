@@ -1,5 +1,5 @@
-var Component;
-(function (Component) {
+var Components;
+(function (Components) {
     function PlayerSelectorFilter() {
         return function (playersList, filter) {
             var caseInsensitiveMatch = function (value, filter) {
@@ -45,6 +45,6 @@ var Component;
             }).concat(inactivePlayers);
         };
     }
-    Component.PlayerSelectorFilter = PlayerSelectorFilter;
-})(Component || (Component = {}));
+    Components.PlayerSelectorFilter = PlayerSelectorFilter;
+})(Components || (Components = {}));
 //# sourceMappingURL=PlayerSelectorFilter.js.map

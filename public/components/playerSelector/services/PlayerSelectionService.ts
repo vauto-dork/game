@@ -1,4 +1,4 @@
-﻿module Component {
+﻿module Components {
     export interface IPlayerSelectionService {
         selectedPlayers: Shared.INewGamePlayer[];
         unselectedPlayers: Shared.INewGamePlayer[];

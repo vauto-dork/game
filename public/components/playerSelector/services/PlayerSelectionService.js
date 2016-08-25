@@ -1,5 +1,5 @@
-var Component;
-(function (Component) {
+var Components;
+(function (Components) {
     var PlayerSelectionService = (function () {
         function PlayerSelectionService($q, apiService) {
             this.$q = $q;
@@ -80,6 +80,6 @@ var Component;
         PlayerSelectionService.$inject = ['$q', 'apiService'];
         return PlayerSelectionService;
     }());
-    Component.PlayerSelectionService = PlayerSelectionService;
-})(Component || (Component = {}));
+    Components.PlayerSelectionService = PlayerSelectionService;
+})(Components || (Components = {}));
 //# sourceMappingURL=PlayerSelectionService.js.map
