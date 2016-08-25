@@ -176,6 +176,8 @@ input.ng-touched.ng-invalid {
     width: 100%; }
     .text-input-container .input-group .form-control {
       z-index: 5; }
+    .text-input-container .input-group .btn.focus, .text-input-container .input-group .btn:focus {
+      outline: none; }
   .text-input-container .input-group-lg > .form-control,
   .text-input-container .input-group-lg > .input-group-addon,
   .text-input-container .input-group-lg > .input-group-btn > .btn {

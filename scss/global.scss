@@ -238,6 +238,13 @@ input.ng-touched.ng-invalid {
 		.form-control {
 			z-index: 5;
 		}
+
+		.btn {
+			&.focus,
+			&:focus {
+				outline: none;
+			}
+		}
 	}
 
 	// overwrite bootstrap
