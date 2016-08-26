@@ -4,16 +4,61 @@ var bundleFiles = require('./bundle.files.json');
 var generatedFilePath = './' + bundleFiles.sourceRootFilePath + '/';
 
 //-----------------------------------------------------------------------------
+var recursiveComponents = function(componentsList) {
+    if(!componentsList) {
+        return componentsList;
+    }
+
+    var newList;
+
+    for(var i = 0; i < componentsList.length; i++) {
+        var componentName = componentsList[i];
+        var componentComponents = bundleFiles.components[componentName].components;
+        var recursiveResults = recursiveComponents(componentComponents);
+        
+        if(recursiveResults) {
+            if(!newList) {
+                newList = recursiveResults;
+            } else {
+                for(var j = 0; j < recursiveResults.length; j++) {
+                    var result = recursiveResults[j];
+                    var indexFound = newList.indexOf(result);
+
+                    if(indexFound === -1) {
+                        newList.push(result);
+                    }
+                }
+            }
+        }
+    }
+
+    for(var k = 0; k < componentsList.length; k++) {
+        var result = componentsList[k];
+
+        if(!newList) {
+            newList = [];
+            newList.push(result);
+        }
+        else if(newList.indexOf(result) === -1) {
+            newList.push(result);
+        }
+    }
+
+    return newList || componentsList;
+}
+
+//-----------------------------------------------------------------------------
 var squashScriptFiles = function(pageModuleName) {
     var scripts = bundleFiles.scripts[pageModuleName].files;
-    var components = bundleFiles.scripts[pageModuleName].components;
+    var componentsList = bundleFiles.scripts[pageModuleName].components;
+    var components = recursiveComponents(componentsList);
 
     if (components) {
         var newList;        
         for (var i = 0; i < components.length; i++) {
-            var items = bundleFiles.components[components[i]];
+            var items = bundleFiles.components[components[i]].files;
 
-            if (i === 0) {
+            if (!newList) {
                 newList = items;
             } else {
                 // concat doesn't work here.

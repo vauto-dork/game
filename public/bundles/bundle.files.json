@@ -1,20 +1,29 @@
 {
     "sourceRootFilePath": "public",
     "components": {
-        "playerForm": [
-            "components/playerForm/directives/*.js",
-            "components/playerForm/modules/*.js"
-        ],
-        "playerSelector": [
-            "components/playerSelector/filters/*.js",
-            "components/playerSelector/directives/*.js",
-            "components/playerSelector/services/*.js",
-            "components/playerSelector/modules/*.js"
-        ],
-        "gameCard": [
-            "components/gameCard/directives/*.js",
-            "components/gameCard/modules/*.js"
-        ]
+        "playerForm": {
+            "files": [
+                "components/playerForm/directives/*.js",
+                "components/playerForm/modules/*.js"
+            ]
+        },
+        "playerSelector": {
+            "files": [
+                "components/playerSelector/filters/*.js",
+                "components/playerSelector/directives/*.js",
+                "components/playerSelector/services/*.js",
+                "components/playerSelector/modules/*.js"
+            ],
+            "components": [
+                "playerForm"
+            ]
+        },
+        "gameCard": {
+            "files": [
+                "components/gameCard/directives/*.js",
+                "components/gameCard/modules/*.js"
+            ]
+        }
     },
     "scripts": {
         "shared": {
