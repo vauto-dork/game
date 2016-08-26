@@ -23,6 +23,7 @@
     
     <div class="player-selector-not-found alert alert-danger" ng-show="ctrl.noResults && !!ctrl.filter">
         <p class="player-selector-not-found-text">Cannot find player {{ctrl.filter}}</p>
+        <p ng-show="ctrl.possiblePlayersAdded().length > 0">Player may have been selected as:<br/>{{ctrl.possiblePlayersAdded().join(", ")}}</p>
         <p class="player-selector-add-player-btn">
             <button type="button" class="btn btn-primary">
                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add New Player 

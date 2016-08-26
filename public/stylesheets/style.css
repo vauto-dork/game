@@ -313,9 +313,8 @@ input.ng-touched.ng-invalid {
     text-align: center;
     margin: 1em;
     padding: 0.5em; }
-    .player-selector .player-selector-not-found .player-selector-not-found-text,
-    .player-selector .player-selector-not-found .player-selector-add-player-btn {
-      margin: 0.5em; }
+    .player-selector .player-selector-not-found p {
+      margin: 10px; }
     .player-selector .player-selector-not-found .player-selector-not-found-text {
       font-size: 1.4em; }
 

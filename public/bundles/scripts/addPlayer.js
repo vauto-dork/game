@@ -94,9 +94,11 @@ var Components;
     }
     Components.PlayerSelectorDirective = PlayerSelectorDirective;
     var PlayerSelectorController = (function () {
-        function PlayerSelectorController($element, $timeout) {
+        function PlayerSelectorController($element, $timeout, playerSelectionService, $filter) {
             this.$element = $element;
             this.$timeout = $timeout;
+            this.playerSelectionService = playerSelectionService;
+            this.$filter = $filter;
             this.filter = "";
         }
         PlayerSelectorController.prototype.removeFilter = function () {
@@ -107,7 +109,13 @@ var Components;
             this.onSelected({ data: item });
             this.removeFilter();
         };
-        PlayerSelectorController.$inject = ["$element", "$timeout"];
+        PlayerSelectorController.prototype.possiblePlayersAdded = function () {
+            return this.$filter("playerSelectorFilter")(this.playerSelectionService.selectedPlayers, this.filter)
+                .map(function (player) {
+                return player.player.fullname;
+            });
+        };
+        PlayerSelectorController.$inject = ["$element", "$timeout", "playerSelectionService", "$filter"];
         return PlayerSelectorController;
     }());
     Components.PlayerSelectorController = PlayerSelectorController;

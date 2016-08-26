@@ -14,7 +14,7 @@ module Components {
     }
 
     export class PlayerSelectorController {
-        public static $inject: string[] = ["$element", "$timeout"];
+        public static $inject: string[] = ["$element", "$timeout", "playerSelectionService", "$filter"];
 
 		private players: Shared.INewGamePlayer[];
         private onSelected: Function;
@@ -23,7 +23,7 @@ module Components {
 		
 		private filter: string = "";
 		
-        constructor(private $element: ng.IAugmentedJQuery, private $timeout: ng.ITimeoutService) {
+        constructor(private $element: ng.IAugmentedJQuery, private $timeout: ng.ITimeoutService, private playerSelectionService: IPlayerSelectionService, private $filter: any) {
 			
         }
 		
@@ -35,6 +35,13 @@ module Components {
 			this.$element.find("input").focus();
 			this.onSelected({ data: item });
 			this.removeFilter();
+		}
+
+		private possiblePlayersAdded(): string[] {
+			return this.$filter("playerSelectorFilter")(this.playerSelectionService.selectedPlayers, this.filter)
+				.map((player: Shared.INewGamePlayer) => {
+					return player.player.fullname;
+				});
 		}
     }
 }

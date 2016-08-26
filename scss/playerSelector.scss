@@ -21,9 +21,8 @@
 		margin: 1em;
 		padding: $standard-spacing;
 
-		.player-selector-not-found-text,
-		.player-selector-add-player-btn {
-			margin: $standard-spacing;
+		p {
+			margin: 10px;
 		}
 
 		.player-selector-not-found-text {
