@@ -32,19 +32,20 @@ var recursiveComponents = function(componentsList) {
         }
     }
 
-    for(var k = 0; k < componentsList.length; k++) {
-        var result = componentsList[k];
+    if(!newList) {
+        newList = componentsList;
+    } else {
+        newList = [];
+        for(var k = 0; k < componentsList.length; k++) {
+            var result = componentsList[k];
 
-        if(!newList) {
-            newList = [];
-            newList.push(result);
-        }
-        else if(newList.indexOf(result) === -1) {
-            newList.push(result);
+            if(newList.indexOf(result) === -1) {
+                newList.push(result);
+            }
         }
     }
 
-    return newList || componentsList;
+    return newList;
 }
 
 //-----------------------------------------------------------------------------
@@ -93,6 +94,7 @@ var getScriptConfig = function (pageModuleName) {
     };
 };
 
+//-----------------------------------------------------------------------------
 module.exports = {
     bundleFiles: bundleFiles,
     squashScriptFiles: squashScriptFiles,
