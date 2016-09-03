@@ -13,7 +13,7 @@ module Players {
     }
 
     export class PlayersListService extends Shared.PubSubServiceBase implements IPlayersListService {
-        public static $inject: string[] = ['$timeout', '$q', 'apiService', 'playerSelectionService'];
+        public static $inject: string[] = ['$timeout', '$q', 'apiService'];
 
         private playerLoadPromise: ng.IPromise<void>;
         private allPlayers: Shared.IPlayer[];
@@ -32,8 +32,7 @@ module Players {
         constructor(
             $timeout: ng.ITimeoutService,
             private $q: ng.IQService,
-            private apiService: Shared.IApiService,
-            private playerSelectionService: Components.IPlayerSelectionService) {
+            private apiService: Shared.IApiService) {
             super($timeout);
             this.playerLoadPromise = this.loadPlayers();
         }

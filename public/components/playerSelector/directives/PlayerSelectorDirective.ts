@@ -13,8 +13,13 @@ module Components {
         };
     }
 
+	interface IPossiblePlayers {
+		flatList: string;
+		hasPlayers: boolean;
+	}
+
     export class PlayerSelectorController {
-        public static $inject: string[] = ["$element", "$timeout", "playerSelectionService", "$filter"];
+        public static $inject: string[] = ["$element", "$timeout", "$filter", "playerSelectionService"];
 
 		private players: Shared.INewGamePlayer[];
         private onSelected: Function;
@@ -23,7 +28,10 @@ module Components {
 		
 		private filter: string = "";
 		
-        constructor(private $element: ng.IAugmentedJQuery, private $timeout: ng.ITimeoutService, private playerSelectionService: IPlayerSelectionService, private $filter: any) {
+        constructor(private $element: ng.IAugmentedJQuery,
+			private $timeout: ng.ITimeoutService,
+			private $filter: any,
+			private playerSelectionService: IPlayerSelectionService) {
 			
         }
 		
@@ -37,11 +45,16 @@ module Components {
 			this.removeFilter();
 		}
 
-		private possiblePlayersAdded(): string[] {
-			return this.$filter("playerSelectorFilter")(this.playerSelectionService.selectedPlayers, this.filter)
+		private possiblePlayersAdded(): IPossiblePlayers {
+			var list: string[] = this.$filter("playerSelectorFilter")(this.playerSelectionService.selectedPlayers, this.filter)
 				.map((player: Shared.INewGamePlayer) => {
 					return player.player.fullname;
 				});
+			
+			return <IPossiblePlayers> {
+				flatList: list.join(", "),
+				hasPlayers: list.length > 0
+			};
 		}
     }
 }

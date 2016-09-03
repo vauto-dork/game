@@ -1,4 +1,4 @@
-var DorkModule = angular.module('DorkModule', ['UxControlsModule', 'PlayerSelectorModule']);
+var DorkModule = angular.module('DorkModule', ['UxControlsModule', 'PlayerFormModule']);
 
 DorkModule.service('alertsService', Shared.AlertsService);
 DorkModule.service('playersListService', Players.PlayersListService);

@@ -1,34 +1,5 @@
 var Components;
 (function (Components) {
-    function PlayerFormDirective() {
-        return {
-            scope: {
-                player: "=",
-                disableForm: "="
-            },
-            templateUrl: "/components/playerForm/directives/PlayerFormTemplate.html",
-            controller: "PlayerFormController",
-            controllerAs: "ctrl",
-            bindToController: true
-        };
-    }
-    Components.PlayerFormDirective = PlayerFormDirective;
-    var PlayerFormController = (function () {
-        function PlayerFormController() {
-            this.disableForm = false;
-        }
-        PlayerFormController.$inject = [];
-        return PlayerFormController;
-    }());
-    Components.PlayerFormController = PlayerFormController;
-})(Components || (Components = {}));
-
-var PlayerFormModule = angular.module('PlayerFormModule', []);
-PlayerFormModule.controller('PlayerFormController', Components.PlayerFormController);
-PlayerFormModule.directive('playerForm', Components.PlayerFormDirective);
-
-var Components;
-(function (Components) {
     function PlayerSelectorFilter() {
         return function (playersList, filter) {
             var caseInsensitiveMatch = function (value, filter) {
@@ -94,11 +65,11 @@ var Components;
     }
     Components.PlayerSelectorDirective = PlayerSelectorDirective;
     var PlayerSelectorController = (function () {
-        function PlayerSelectorController($element, $timeout, playerSelectionService, $filter) {
+        function PlayerSelectorController($element, $timeout, $filter, playerSelectionService) {
             this.$element = $element;
             this.$timeout = $timeout;
-            this.playerSelectionService = playerSelectionService;
             this.$filter = $filter;
+            this.playerSelectionService = playerSelectionService;
             this.filter = "";
         }
         PlayerSelectorController.prototype.removeFilter = function () {
@@ -110,12 +81,16 @@ var Components;
             this.removeFilter();
         };
         PlayerSelectorController.prototype.possiblePlayersAdded = function () {
-            return this.$filter("playerSelectorFilter")(this.playerSelectionService.selectedPlayers, this.filter)
+            var list = this.$filter("playerSelectorFilter")(this.playerSelectionService.selectedPlayers, this.filter)
                 .map(function (player) {
                 return player.player.fullname;
             });
+            return {
+                flatList: list.join(", "),
+                hasPlayers: list.length > 0
+            };
         };
-        PlayerSelectorController.$inject = ["$element", "$timeout", "playerSelectionService", "$filter"];
+        PlayerSelectorController.$inject = ["$element", "$timeout", "$filter", "playerSelectionService"];
         return PlayerSelectorController;
     }());
     Components.PlayerSelectorController = PlayerSelectorController;
@@ -206,7 +181,7 @@ var Components;
     Components.PlayerSelectionService = PlayerSelectionService;
 })(Components || (Components = {}));
 
-var PlayerSelectorModule = angular.module('PlayerSelectorModule', ['PlayerFormModule']);
+var PlayerSelectorModule = angular.module('PlayerSelectorModule', []);
 PlayerSelectorModule.service('playerSelectionService', Components.PlayerSelectionService);
 PlayerSelectorModule.filter('playerSelectorFilter', Components.PlayerSelectorFilter);
 PlayerSelectorModule.controller('PlayerSelectorController', Components.PlayerSelectorController);

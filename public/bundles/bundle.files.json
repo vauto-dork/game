@@ -13,9 +13,6 @@
                 "components/playerSelector/directives/*.js",
                 "components/playerSelector/services/*.js",
                 "components/playerSelector/modules/*.js"
-            ],
-            "components": [
-                "playerForm"
             ]
         },
         "gameCard": {
@@ -66,7 +63,6 @@
                 "bundles/pageModules/createGame.js"
             ],
             "components": [
-                "playerForm",
                 "playerSelector"
             ]
         },
@@ -81,7 +77,6 @@
                 "bundles/pageModules/editActiveGame.js"
             ],
             "components": [
-                "playerForm",
                 "playerSelector"
             ]
         },
@@ -114,8 +109,7 @@
                 "bundles/pageModules/playersList.js"
             ],
             "components": [
-                "playerForm",
-                "playerSelector"
+                "playerForm"
             ]
         },
         "rankingHistory": {

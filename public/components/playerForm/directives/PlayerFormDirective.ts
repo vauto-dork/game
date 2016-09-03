@@ -3,7 +3,7 @@ module Components {
         return {
 			scope: {
 				player: "=",
-				disableForm: "="
+				disableForm: "=?"
 			},
 			templateUrl: "/components/playerForm/directives/PlayerFormTemplate.html",
 			controller: "PlayerFormController",
@@ -17,7 +17,7 @@ module Components {
 		
 		private playerForm: ng.IFormController;
 		private player: Shared.IPlayer;
-		private disableForm: boolean = false;
+		private disableForm: boolean;
 
         constructor() {
         }
