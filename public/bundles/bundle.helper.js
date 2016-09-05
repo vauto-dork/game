@@ -15,7 +15,7 @@ var recursiveComponents = function(componentsList) {
         var componentName = componentsList[i];
         var componentComponents = bundleFiles.components[componentName].components;
         var recursiveResults = recursiveComponents(componentComponents);
-        
+
         if(recursiveResults) {
             if(!newList) {
                 newList = recursiveResults;
@@ -32,20 +32,25 @@ var recursiveComponents = function(componentsList) {
         }
     }
 
+    var resultList = [];
+
     if(!newList) {
-        newList = componentsList;
+        resultList = componentsList;
     } else {
-        newList = [];
+        for(var k = 0; k < newList.length; k++) {
+            resultList.push(newList[k]);
+        }
+
         for(var k = 0; k < componentsList.length; k++) {
             var result = componentsList[k];
 
             if(newList.indexOf(result) === -1) {
-                newList.push(result);
+                resultList.push(result);
             }
         }
     }
 
-    return newList;
+    return resultList;
 }
 
 //-----------------------------------------------------------------------------
@@ -55,19 +60,16 @@ var squashScriptFiles = function(pageModuleName) {
     var components = recursiveComponents(componentsList);
 
     if (components) {
-        var newList;        
+        var newList = []; 
         for (var i = 0; i < components.length; i++) {
             var items = bundleFiles.components[components[i]].files;
 
-            if (!newList) {
-                newList = items;
-            } else {
-                // concat doesn't work here.
-                // see: http://stackoverflow.com/questions/16679565/why-cant-i-concat-an-array-reference-in-javascript
-                newList.push.apply(newList, items);
-            }
+            // concat doesn't work here.
+            // see: http://stackoverflow.com/questions/16679565/why-cant-i-concat-an-array-reference-in-javascript
+            newList.push.apply(newList, items);
         }
-        scripts = !newList ? scripts : newList.concat(scripts);
+        
+        scripts = !newList.length ? scripts : newList.concat(scripts);
     }
 
     return scripts;
