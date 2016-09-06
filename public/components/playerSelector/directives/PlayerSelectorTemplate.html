@@ -24,11 +24,6 @@
     <div class="player-selector-not-found alert alert-danger" ng-show="ctrl.noResults && !!ctrl.filter">
         <p class="player-selector-not-found-text">Cannot find player {{ctrl.filter}}</p>
         <p ng-show="ctrl.possiblePlayersAdded().hasPlayers">Player may have been selected as:<br/>{{ctrl.possiblePlayersAdded().flatList}}</p>
-        <p class="player-selector-add-player-btn">
-            <button type="button" class="btn btn-primary" ng-click="ctrl.isSelectorCollapsed = true">
-                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add New Player 
-            </button>
-        </p>
     </div>
 
     <div class="player-selector-instructions" ng-hide="ctrl.noResults && !!ctrl.filter">

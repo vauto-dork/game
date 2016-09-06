@@ -1,5 +1,33 @@
 var Components;
 (function (Components) {
+    function PlayerFormDirective() {
+        return {
+            scope: {
+                player: "=",
+                disableForm: "=?"
+            },
+            templateUrl: "/components/playerForm/directives/PlayerFormTemplate.html",
+            controller: "PlayerFormController",
+            controllerAs: "ctrl",
+            bindToController: true
+        };
+    }
+    Components.PlayerFormDirective = PlayerFormDirective;
+    var PlayerFormController = (function () {
+        function PlayerFormController() {
+        }
+        PlayerFormController.$inject = [];
+        return PlayerFormController;
+    }());
+    Components.PlayerFormController = PlayerFormController;
+})(Components || (Components = {}));
+
+var PlayerFormModule = angular.module('PlayerFormModule', []);
+PlayerFormModule.controller('PlayerFormController', Components.PlayerFormController);
+PlayerFormModule.directive('playerForm', Components.PlayerFormDirective);
+
+var Components;
+(function (Components) {
     function PlayerSelectorFilter() {
         return function (playersList, filter) {
             var caseInsensitiveMatch = function (value, filter) {
@@ -186,6 +214,81 @@ PlayerSelectorModule.service('playerSelectionService', Components.PlayerSelectio
 PlayerSelectorModule.filter('playerSelectorFilter', Components.PlayerSelectorFilter);
 PlayerSelectorModule.controller('PlayerSelectorController', Components.PlayerSelectorController);
 PlayerSelectorModule.directive('playerSelector', Components.PlayerSelectorDirective);
+
+var Components;
+(function (Components) {
+    function NewPlayerButtonDirective() {
+        return {
+            scope: {
+                click: "&",
+                disabled: "="
+            },
+            templateUrl: "/components/newPlayerPanel/directives/NewPlayerButtonTemplate.html",
+            controller: "NewPlayerButtonController",
+            controllerAs: "ctrl",
+            bindToController: true
+        };
+    }
+    Components.NewPlayerButtonDirective = NewPlayerButtonDirective;
+    var NewPlayerButtonController = (function () {
+        function NewPlayerButtonController() {
+        }
+        return NewPlayerButtonController;
+    }());
+    Components.NewPlayerButtonController = NewPlayerButtonController;
+})(Components || (Components = {}));
+
+var Components;
+(function (Components) {
+    function NewPlayerPanelDirective() {
+        return {
+            scope: {},
+            templateUrl: "/components/newPlayerPanel/directives/NewPlayerPanelTemplate.html",
+            controller: "NewPlayerPanelController",
+            controllerAs: "ctrl",
+            bindToController: true
+        };
+    }
+    Components.NewPlayerPanelDirective = NewPlayerPanelDirective;
+    var NewPlayerPanelController = (function () {
+        function NewPlayerPanelController($element, $timeout, $filter, playerSelectionService) {
+            this.$element = $element;
+            this.$timeout = $timeout;
+            this.$filter = $filter;
+            this.playerSelectionService = playerSelectionService;
+        }
+        NewPlayerPanelController.$inject = ["$element", "$timeout", "$filter", "playerSelectionService"];
+        return NewPlayerPanelController;
+    }());
+    Components.NewPlayerPanelController = NewPlayerPanelController;
+})(Components || (Components = {}));
+
+var newPlayerModule = angular.module('NewPlayerPanelModule', ['PlayerFormModule']);
+newPlayerModule.service('newPlayerPanelService', Components.NewPlayerPanelService);
+newPlayerModule.controller('NewPlayerButtonController', Components.NewPlayerButtonController);
+newPlayerModule.directive('newPlayerButton', Components.NewPlayerButtonDirective);
+newPlayerModule.controller('NewPlayerPanelController', Components.NewPlayerPanelController);
+newPlayerModule.directive('newPlayerPanel', Components.NewPlayerPanelDirective);
+
+var Components;
+(function (Components) {
+    var NewPlayerPanelService = (function () {
+        function NewPlayerPanelService($q, apiService, playerSelectionService) {
+            var _this = this;
+            this.$q = $q;
+            this.apiService = apiService;
+            this.playerSelectionService = playerSelectionService;
+            this.playerLoadPromise = this.playerSelectionService.getPlayers().then(function (data) {
+                _this.$q.resolve();
+            }, function () {
+                _this.$q.resolve();
+            });
+        }
+        NewPlayerPanelService.$inject = ["$q", "apiService", "playerSelectionService"];
+        return NewPlayerPanelService;
+    }());
+    Components.NewPlayerPanelService = NewPlayerPanelService;
+})(Components || (Components = {}));
 
 var CreateGame;
 (function (CreateGame) {
@@ -523,7 +626,7 @@ var CreateGame;
     CreateGame.CreateGameController = CreateGameController;
 })(CreateGame || (CreateGame = {}));
 
-var DorkModule = angular.module('DorkModule', ['UxControlsModule', 'PlayerSelectorModule']);
+var DorkModule = angular.module('DorkModule', ['UxControlsModule', 'PlayerSelectorModule', 'NewPlayerPanelModule']);
 
 DorkModule.service('createGameService', CreateGame.CreateGameService);
 

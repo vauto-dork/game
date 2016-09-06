@@ -11,6 +11,9 @@
             <div class="col-xs-12 col-md-7">
                 <div class="status-banner">
                     <player-selector players="ctrl.unselectedPlayers" on-selected="ctrl.addPlayer(data)"></player-selector>
+                    <p>
+                        <new-player-button></new-player-button>
+                    </p>
                 </div>
 
                 <buttons-panel class="visible-md-block visible-lg-block"
@@ -49,5 +52,7 @@
             </div>
         </div>
     </div>
+
+    <new-player-panel></new-player-panel>
     
 </div>

@@ -1,6 +1,16 @@
 {
     "sourceRootFilePath": "public",
     "components": {
+        "newPlayerPanel": {
+            "files": [
+                "components/newPlayerPanel/directives/*.js",
+                "components/newPlayerPanel/modules/*.js",
+                "components/newPlayerPanel/services/*.js"
+            ],
+            "components": [
+                "playerForm"
+            ]
+        },
         "playerForm": {
             "files": [
                 "components/playerForm/directives/*.js",
@@ -63,7 +73,8 @@
                 "bundles/pageModules/createGame.js"
             ],
             "components": [
-                "playerSelector"
+                "playerSelector",
+                "newPlayerPanel"
             ]
         },
         "editActiveGame": {

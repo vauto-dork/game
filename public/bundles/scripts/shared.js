@@ -348,7 +348,7 @@ var Shared;
             var def = this.$q.defer();
             this.$http.post('/players', player)
                 .success(function (data, status, headers, config) {
-                def.resolve();
+                def.resolve(new Shared.Player(data));
             }).error(function (data, status, headers, config) {
                 console.error('Cannot save player.');
                 def.reject(data);
