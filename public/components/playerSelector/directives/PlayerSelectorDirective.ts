@@ -6,7 +6,7 @@ module Components {
                 onSelected: "&",
                 disabled: "="
 			},
-			templateUrl: "/components/PlayerSelector/directives/PlayerSelectorTemplate.html",
+			templateUrl: "/components/playerSelector/directives/PlayerSelectorTemplate.html",
 			controller: "PlayerSelectorController",
 			controllerAs: "ctrl",
 			bindToController: true

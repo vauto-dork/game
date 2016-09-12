@@ -50,54 +50,6 @@ var Components;
 
 var Components;
 (function (Components) {
-    function PlayerSelectorDirective() {
-        return {
-            scope: {
-                players: "=",
-                onSelected: "&",
-                disabled: "="
-            },
-            templateUrl: "/components/PlayerSelector/directives/PlayerSelectorTemplate.html",
-            controller: "PlayerSelectorController",
-            controllerAs: "ctrl",
-            bindToController: true
-        };
-    }
-    Components.PlayerSelectorDirective = PlayerSelectorDirective;
-    var PlayerSelectorController = (function () {
-        function PlayerSelectorController($element, $timeout, $filter, playerSelectionService) {
-            this.$element = $element;
-            this.$timeout = $timeout;
-            this.$filter = $filter;
-            this.playerSelectionService = playerSelectionService;
-            this.filter = "";
-        }
-        PlayerSelectorController.prototype.removeFilter = function () {
-            this.filter = "";
-        };
-        PlayerSelectorController.prototype.selectPlayer = function (item, model, label) {
-            this.$element.find("input").focus();
-            this.onSelected({ data: item });
-            this.removeFilter();
-        };
-        PlayerSelectorController.prototype.possiblePlayersAdded = function () {
-            var list = this.$filter("playerSelectorFilter")(this.playerSelectionService.selectedPlayers, this.filter)
-                .map(function (player) {
-                return player.player.fullname;
-            });
-            return {
-                flatList: list.join(", "),
-                hasPlayers: list.length > 0
-            };
-        };
-        PlayerSelectorController.$inject = ["$element", "$timeout", "$filter", "playerSelectionService"];
-        return PlayerSelectorController;
-    }());
-    Components.PlayerSelectorController = PlayerSelectorController;
-})(Components || (Components = {}));
-
-var Components;
-(function (Components) {
     var PlayerSelectionService = (function () {
         function PlayerSelectionService($q, apiService) {
             this.$q = $q;
@@ -179,6 +131,54 @@ var Components;
         return PlayerSelectionService;
     }());
     Components.PlayerSelectionService = PlayerSelectionService;
+})(Components || (Components = {}));
+
+var Components;
+(function (Components) {
+    function PlayerSelectorDirective() {
+        return {
+            scope: {
+                players: "=",
+                onSelected: "&",
+                disabled: "="
+            },
+            templateUrl: "/components/playerSelector/directives/PlayerSelectorTemplate.html",
+            controller: "PlayerSelectorController",
+            controllerAs: "ctrl",
+            bindToController: true
+        };
+    }
+    Components.PlayerSelectorDirective = PlayerSelectorDirective;
+    var PlayerSelectorController = (function () {
+        function PlayerSelectorController($element, $timeout, $filter, playerSelectionService) {
+            this.$element = $element;
+            this.$timeout = $timeout;
+            this.$filter = $filter;
+            this.playerSelectionService = playerSelectionService;
+            this.filter = "";
+        }
+        PlayerSelectorController.prototype.removeFilter = function () {
+            this.filter = "";
+        };
+        PlayerSelectorController.prototype.selectPlayer = function (item, model, label) {
+            this.$element.find("input").focus();
+            this.onSelected({ data: item });
+            this.removeFilter();
+        };
+        PlayerSelectorController.prototype.possiblePlayersAdded = function () {
+            var list = this.$filter("playerSelectorFilter")(this.playerSelectionService.selectedPlayers, this.filter)
+                .map(function (player) {
+                return player.player.fullname;
+            });
+            return {
+                flatList: list.join(", "),
+                hasPlayers: list.length > 0
+            };
+        };
+        PlayerSelectorController.$inject = ["$element", "$timeout", "$filter", "playerSelectionService"];
+        return PlayerSelectorController;
+    }());
+    Components.PlayerSelectorController = PlayerSelectorController;
 })(Components || (Components = {}));
 
 var PlayerSelectorModule = angular.module('PlayerSelectorModule', []);

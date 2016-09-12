@@ -1,5 +1,32 @@
 <div class="add-player-panel">
+    <div ng-show="ctrl.showError" class="alert alert-danger">Error Saving Player</div>
+
     <form name="ctrl.addPlayerForm">
-        <player-form player="ctrl.player" disable-form="ctrl.disableControls"></player-form>
+        <player-form player="ctrl.player" disable-form="ctrl.disabled"></player-form>
+
+        <div class="btn-row">
+            <div class="btn-group btn-group-justified" role="group">
+                <div class="btn-group" role="group">
+                    <button
+                        type="button"
+                        class="btn btn-primary btn-lg"
+                        ng-click="ctrl.cancel()"
+                        ng-disabled="ctrl.disabled || ctrl.addPlayerForm.$pristine"
+                        aria-label="Cancel">
+                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Cancel
+                    </button>
+                </div>
+                <div class="btn-group" role="group">
+                    <button
+                        type="button"
+                        class="btn btn-success btn-lg"
+                        ng-click="ctrl.save()"
+                        ng-disabled="ctrl.disabled || ctrl.addPlayerForm.$invalid || ctrl.addPlayerForm.$pristine"
+                        aria-label="Save Player">
+                        <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Save
+                    </button>
+                </div>
+            </div>
+        </div>
     </form>
 </div>

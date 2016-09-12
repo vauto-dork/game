@@ -3,9 +3,9 @@
     "components": {
         "newPlayerPanel": {
             "files": [
+                "components/newPlayerPanel/services/*.js",
                 "components/newPlayerPanel/directives/*.js",
-                "components/newPlayerPanel/modules/*.js",
-                "components/newPlayerPanel/services/*.js"
+                "components/newPlayerPanel/modules/*.js"
             ],
             "components": [
                 "playerForm"
@@ -20,8 +20,8 @@
         "playerSelector": {
             "files": [
                 "components/playerSelector/filters/*.js",
-                "components/playerSelector/directives/*.js",
                 "components/playerSelector/services/*.js",
+                "components/playerSelector/directives/*.js",
                 "components/playerSelector/modules/*.js"
             ]
         },
