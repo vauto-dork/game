@@ -36,7 +36,7 @@ module Components {
 
         private cancel(): void {
             this.resetForm();
-            this.panelService.formActive = false;
+            this.panelService.cancelForm();
         }
 
         private save(): void {

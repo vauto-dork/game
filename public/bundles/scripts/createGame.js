@@ -229,28 +229,23 @@ var Components;
             this.$q = $q;
             this.apiService = apiService;
             this.event = {
+                formCancel: "formCancel",
                 newPlayerReady: "newPlayerReady"
             };
-            this.formActive = false;
         }
-        Object.defineProperty(NewPlayerPanelService.prototype, "formActive", {
-            get: function () {
-                return this.isActive;
-            },
-            set: function (value) {
-                this.isActive = value;
-            },
-            enumerable: true,
-            configurable: true
-        });
+        NewPlayerPanelService.prototype.subscribeFormCancel = function (callback) {
+            this.subscribe(this.event.formCancel, callback);
+        };
         NewPlayerPanelService.prototype.subscribeSavedPlayer = function (callback) {
             this.subscribe(this.event.newPlayerReady, callback);
+        };
+        NewPlayerPanelService.prototype.cancelForm = function () {
+            this.publish(this.event.formCancel, null);
         };
         NewPlayerPanelService.prototype.savePlayer = function (player) {
             var _this = this;
             return this.apiService.saveNewPlayer(player).then(function (data) {
                 _this.publish(_this.event.newPlayerReady, data);
-                _this.formActive = false;
                 _this.$q.resolve();
             }, function (data) {
                 _this.$q.reject(data);
@@ -302,9 +297,6 @@ var Components;
             this.panelService = panelService;
             this.player = new Shared.Player();
             this.resetForm();
-            this.panelService.subscribeSavedPlayer(function (player) {
-                console.log(player);
-            });
         }
         NewPlayerPanelController.prototype.resetForm = function () {
             this.player = new Shared.Player();
@@ -313,17 +305,22 @@ var Components;
                 this.addPlayerForm.$setUntouched();
             }
             this.disabled = false;
+            this.showError = false;
         };
         NewPlayerPanelController.prototype.cancel = function () {
             this.resetForm();
-            this.panelService.formActive = false;
+            this.panelService.cancelForm();
         };
         NewPlayerPanelController.prototype.save = function () {
             var _this = this;
+            this.showError = false;
             this.disabled = true;
             this.panelService.savePlayer(this.player).then(function () {
                 _this.resetForm();
-            }, function () {
+            }, function (data) {
+                console.error(data);
+                _this.showError = true;
+                _this.disabled = false;
             });
         };
         NewPlayerPanelController.$inject = ["newPlayerPanelService"];
@@ -347,11 +344,12 @@ var CreateGame;
     })(CreateGame.NewGameSort || (CreateGame.NewGameSort = {}));
     var NewGameSort = CreateGame.NewGameSort;
     var CreateGameService = (function () {
-        function CreateGameService($q, apiService, playerSelectionService) {
+        function CreateGameService($q, apiService, playerSelectionService, newPlayerPanelService) {
             var _this = this;
             this.$q = $q;
             this.apiService = apiService;
             this.playerSelectionService = playerSelectionService;
+            this.newPlayerPanelService = newPlayerPanelService;
             this.firstGameOfMonth = false;
             this.gameOrderSortedPlayers = [];
             this.sort = NewGameSort.Selected;
@@ -361,6 +359,11 @@ var CreateGame;
             }, function () {
                 _this.initializeData(true);
                 _this.$q.resolve();
+            });
+            this.newPlayerPanelService.subscribeSavedPlayer(function (event, player) {
+                _this.playerSelectionService.getPlayers().then(function () {
+                    _this.playerSelectionService.addPlayer(player);
+                });
             });
         }
         Object.defineProperty(CreateGameService.prototype, "players", {
@@ -489,7 +492,7 @@ var CreateGame;
         CreateGameService.prototype.debugShowSortedPlayersTable = function () {
             this.playerSelectionService.debugPrintPlayersTable(this.playersSorted);
         };
-        CreateGameService.$inject = ['$q', 'apiService', 'playerSelectionService'];
+        CreateGameService.$inject = ["$q", "apiService", "playerSelectionService", "newPlayerPanelService"];
         return CreateGameService;
     }());
     CreateGame.CreateGameService = CreateGameService;
