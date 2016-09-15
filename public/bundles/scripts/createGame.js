@@ -612,18 +612,28 @@ var CreateGame;
         State[State["CreatingGame"] = 3] = "CreatingGame";
     })(State || (State = {}));
     var CreateGameController = (function () {
-        function CreateGameController($window, createGameService) {
+        function CreateGameController($window, createGameService, newPlayerPanelService) {
             var _this = this;
             this.$window = $window;
             this.createGameService = createGameService;
+            this.newPlayerPanelService = newPlayerPanelService;
             this.showLoading = false;
             this.showErrorMessage = false;
             this.showForm = false;
+            this.collapsePlayerSelectorPanel = false;
+            this.collapseAddNewPlayerPanel = true;
             this.orderedPlayersLoaded = false;
             this.disableOrderedPlayers = false;
             this.datePlayed = null;
+            this.changeState(State.Loading);
             this.createGameService.init().then(function () {
                 _this.changeState(State.Loaded);
+            });
+            this.newPlayerPanelService.subscribeFormCancel(function () {
+                _this.disableAddNewPlayer();
+            });
+            this.newPlayerPanelService.subscribeSavedPlayer(function () {
+                _this.disableAddNewPlayer();
             });
         }
         Object.defineProperty(CreateGameController.prototype, "sortOrder", {
@@ -652,6 +662,18 @@ var CreateGame;
                     break;
             }
         };
+        CreateGameController.prototype.disablePlayerSelectorPanel = function () {
+            this.collapsePlayerSelectorPanel = true;
+        };
+        CreateGameController.prototype.enablePlayerSelectorPanel = function () {
+            this.collapsePlayerSelectorPanel = false;
+        };
+        CreateGameController.prototype.disableAddNewPlayer = function () {
+            this.collapseAddNewPlayerPanel = true;
+        };
+        CreateGameController.prototype.enableAddNewPlayer = function () {
+            this.collapseAddNewPlayerPanel = false;
+        };
         CreateGameController.prototype.addPlayer = function (data) {
             this.createGameService.addPlayer(data);
         };
@@ -672,7 +694,7 @@ var CreateGame;
         CreateGameController.prototype.useGameOrder = function () {
             this.createGameService.sortOrder = CreateGame.NewGameSort.Rating;
         };
-        CreateGameController.$inject = ['$window', 'createGameService'];
+        CreateGameController.$inject = ["$window", "createGameService", "newPlayerPanelService"];
         return CreateGameController;
     }());
     CreateGame.CreateGameController = CreateGameController;

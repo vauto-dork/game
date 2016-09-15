@@ -304,7 +304,8 @@ input.ng-touched.ng-invalid {
   padding-bottom: 1em; }
   .player-selector .player-selector-instructions {
     margin: 1em;
-    font-size: 1.4em; }
+    font-size: 1.4em;
+    text-align: center; }
   .player-selector .dropdown-menu {
     width: 100%;
     font-size: 2em;
@@ -506,6 +507,9 @@ input.ng-touched.ng-invalid {
   padding: 1em 0; }
   .btn-group-lg.game-rank-group > .btn {
     padding: 0.5em 1em; }
+
+.create-game-container .create-game-new-player-btn {
+  margin-bottom: 2.5em; }
 
 /* 
 .ranking-row,

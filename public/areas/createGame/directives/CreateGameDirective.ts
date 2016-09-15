@@ -18,12 +18,15 @@ module CreateGame {
 	}
 
     export class CreateGameController {
-        public static $inject: string[] = ['$window', 'createGameService'];
+        public static $inject: string[] = ["$window", "createGameService", "newPlayerPanelService"];
 
 		private showLoading: boolean = false;
 		private showErrorMessage: boolean = false;
 		private showForm: boolean = false;
-		
+
+		private collapsePlayerSelectorPanel: boolean = false;
+		private collapseAddNewPlayerPanel: boolean = true;
+
 		private orderedPlayersLoaded: boolean = false;
 		private disableOrderedPlayers: boolean = false;
 
@@ -41,10 +44,21 @@ module CreateGame {
 			return this.createGameService.unselectedPlayers;
 		}
         
-        constructor(private $window: ng.IWindowService, private createGameService: ICreateGameService) {
+        constructor(private $window: ng.IWindowService,
+			private createGameService: ICreateGameService,
+			private newPlayerPanelService: Components.INewPlayerPanelService) {
+			this.changeState(State.Loading);
             this.createGameService.init().then(() => {
                 this.changeState(State.Loaded);
             });
+
+			this.newPlayerPanelService.subscribeFormCancel(() => {
+				this.disableAddNewPlayer();
+			});
+
+			this.newPlayerPanelService.subscribeSavedPlayer(() => {
+				this.disableAddNewPlayer();
+			});
         }
 
 		private changeState(newState: State): void {
@@ -57,6 +71,22 @@ module CreateGame {
 					this.createNewActiveGame();
 					break;
 			}
+		}
+
+		private disablePlayerSelectorPanel(): void {
+			this.collapsePlayerSelectorPanel = true;
+		}
+
+		private enablePlayerSelectorPanel(): void {
+			this.collapsePlayerSelectorPanel = false;
+		}
+
+		private disableAddNewPlayer(): void {
+			this.collapseAddNewPlayerPanel = true;
+		}
+
+		private enableAddNewPlayer(): void {
+			this.collapseAddNewPlayerPanel = false;
 		}
 		
 		private addPlayer(data: Shared.INewGamePlayer): void {

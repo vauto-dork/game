@@ -3,7 +3,8 @@
   padding-bottom: 1em; }
   .player-selector .player-selector-instructions {
     margin: 1em;
-    font-size: 1.4em; }
+    font-size: 1.4em;
+    text-align: center; }
   .player-selector .dropdown-menu {
     width: 100%;
     font-size: 2em;
