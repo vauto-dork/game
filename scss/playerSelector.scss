@@ -1,0 +1,33 @@
+@import "variables";
+@import "mixins";
+
+.player-selector {
+	padding-top: 1em;
+	padding-bottom: 1em;
+
+	.player-selector-instructions {
+		margin: 1em;
+		font-size: $font-large;
+		text-align: center;
+	}
+
+	.dropdown-menu {
+	    width: 100%;
+	    font-size: $font-larger;
+	    line-height: 2em;
+    }
+
+	.player-selector-not-found {
+		text-align: center;
+		margin: 1em;
+		padding: $standard-spacing;
+
+		p {
+			margin: 10px;
+		}
+
+		.player-selector-not-found-text {
+			font-size: $font-large;
+		}
+	}
+}

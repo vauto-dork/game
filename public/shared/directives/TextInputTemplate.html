@@ -1,0 +1,22 @@
+<div class="text-input-container">
+    <div class="text-input-placeholder" ng-class="{'invisible': !ctrl.value}">{{ctrl.placeholder}}</div>
+    <div class="input-group input-group-lg">
+        <input type="text" 
+            class="form-control"
+            name="{{ctrl.name}}"
+            placeholder="{{ctrl.placeholder}}"
+            ng-model="ctrl.value"
+            ng-disabled="ctrl.disabled"
+            autocomplete="off"
+            maxlength="{{ctrl.maxlength}}"
+            ng-required="ctrl.required" />
+        <span class="input-group-btn" ng-if="ctrl.showClearBtn">
+            <button type="button"
+                class="btn btn-default"
+                ng-click="ctrl.clearInput()"
+                ng-disabled="ctrl.disabled">
+                <span class="glyphicon glyphicon-remove-sign"></span>
+            </button>
+        </span>
+    </div>
+</div>

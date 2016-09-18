@@ -163,6 +163,26 @@ input.ng-touched.ng-invalid {
       color: transparent;
       text-shadow: 0 0 0 #000; }
 
+.text-input-container {
+  margin: 0.5em 0;
+  padding: 0;
+  text-align: left; }
+  .text-input-container .text-input-placeholder {
+    padding: 0 2px;
+    font-size: 1em;
+    height: 1.6em;
+    vertical-align: bottom; }
+  .text-input-container .input-group {
+    width: 100%; }
+    .text-input-container .input-group .form-control {
+      z-index: 5; }
+    .text-input-container .input-group .btn.focus, .text-input-container .input-group .btn:focus {
+      outline: none; }
+  .text-input-container .input-group-lg > .form-control,
+  .text-input-container .input-group-lg > .input-group-addon,
+  .text-input-container .input-group-lg > .input-group-btn > .btn {
+    border-radius: 0; }
+
 .animate-appear.ng-move,
 .animate-appear.ng-enter,
 .animate-appear.ng-leave {
@@ -279,21 +299,39 @@ input.ng-touched.ng-invalid {
 .uib-datepicker .uib-day {
   padding: 2px; }
 
-.player-selector-container {
+.player-selector {
   padding-top: 1em;
   padding-bottom: 1em; }
-
-.add-player-status {
-  padding: 1em;
-  text-align: center; }
+  .player-selector .player-selector-instructions {
+    margin: 1em;
+    font-size: 1.4em;
+    text-align: center; }
+  .player-selector .dropdown-menu {
+    width: 100%;
+    font-size: 2em;
+    line-height: 2em; }
+  .player-selector .player-selector-not-found {
+    text-align: center;
+    margin: 1em;
+    padding: 0.5em; }
+    .player-selector .player-selector-not-found p {
+      margin: 10px; }
+    .player-selector .player-selector-not-found .player-selector-not-found-text {
+      font-size: 1.4em; }
 
 .players-list-card {
   padding-bottom: 2em; }
+  .players-list-card .player-extra-info {
+    margin: 0.5em 0; }
+    .players-list-card .player-extra-info span {
+      vertical-align: middle; }
+    .players-list-card .player-extra-info .playerId {
+      margin-right: 0.5em; }
 
-.edit-player-btn {
-  margin: 0.5em 0; }
-  .edit-player-btn .btn {
-    padding-right: 1em; }
+.edit-player-btn-group {
+  margin: 1em 0; }
+  .edit-player-btn-group .btn {
+    padding-right: 2em; }
 
 .player-move-panel-content {
   font-size: 2em;
@@ -383,12 +421,6 @@ input.ng-touched.ng-invalid {
     z-index: 24;
     transition: all 0.3s ease-in-out; }
 
-.add-player-panel {
-  position: fixed;
-  top: 1em;
-  width: 100%;
-  z-index: 25; }
-
 .panel-dotm {
   border: 4px solid #df6d2e;
   border-radius: 3px;
@@ -476,6 +508,9 @@ input.ng-touched.ng-invalid {
   .btn-group-lg.game-rank-group > .btn {
     padding: 0.5em 1em; }
 
+.create-game-container .create-game-new-player-btn {
+  margin-bottom: 2.5em; }
+
 /* 
 .ranking-row,
 .ranking-rank,
@@ -513,10 +548,6 @@ input.ng-touched.ng-invalid {
     margin-right: 0.5em;
     color: #7a8394; }
 
-.playlist-instructions {
-  padding: 0 1em 1em 1em;
-  font-size: 1.4em; }
-
 .selected-players-wrapper {
   padding: 0 15px;
   margin-bottom: 20px;
@@ -524,21 +555,6 @@ input.ng-touched.ng-invalid {
   border-radius: 5px; }
   .selected-players-wrapper .selected-players {
     margin-bottom: 15px; }
-
-.player-selector .player-selector-filter {
-  padding: 0.25em;
-  width: 100%;
-  font-size: 2em;
-  line-height: 2em;
-  height: 2em; }
-
-.player-selector .player-selector-remove-btn {
-  border: 2px solid #ccc; }
-
-.player-selector .dropdown-menu {
-  width: 100%;
-  font-size: 2em;
-  line-height: 2em; }
 
 .playlist-row {
   display: block;

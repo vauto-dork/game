@@ -19,7 +19,7 @@
 				<button type="button"
 						ng-click="ctrl.submit()"
 						class="btn btn-success btn-lg"
-						ng-disabled="ctrl.disableControls"
+						ng-disabled="ctrl.disableControls || ctrl.addPlayerForm.$invalid || ctrl.addPlayerForm.$pristine"
 						aria-label="Add Player">
 					<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add
 				</button>

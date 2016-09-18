@@ -4,6 +4,9 @@ UxControlsModule.service('dateTimeService', Shared.DateTimeService);
 UxControlsModule.service('monthYearQueryService', Shared.MonthYearQueryService);
 UxControlsModule.service('apiService', Shared.ApiService);
 
+UxControlsModule.controller('TextInputController', Shared.TextInputController);
+UxControlsModule.directive('textInput', Shared.TextInputDirective);
+
 UxControlsModule.controller('LoadSpinnerController', Shared.LoadSpinnerController);
 UxControlsModule.directive('loadSpinner', Shared.LoadSpinnerDirective);
 

@@ -61,9 +61,7 @@ module Players {
 		}
 
 		private resetForm(): void {
-			this.player.firstName = '';
-			this.player.lastName = '';
-			this.player.nickname = '';
+			this.player = new Shared.Player();
 
 			if (this.addPlayerForm) {
 				this.addPlayerForm.$setPristine();

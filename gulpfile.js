@@ -3,8 +3,9 @@ var sass = require("gulp-sass");
 var shell = require('gulp-shell')
 var bundle = require("gulp-bundle-assets");
 var fs = require("fs");
-
+ 
 var bundleFiles = require('./public/bundles/bundle.files.json');
+var bundleHelper = require('./public/bundles/bundle.helper.js')
 var bundlesFilePath = "./" + bundleFiles.sourceRootFilePath + "/bundles";
 
 //-----------------------------------------------------------------------------
@@ -14,19 +15,20 @@ var createScriptString = function(filepath) {
     return "<script src='/" + filepath + "' type='text/javascript'></script>";
 };
 
-gulp.task("debug-bundle", function () {
+gulp.task("debug-bundle", ["ts-build"], function () {
     var files = bundleFiles.scripts;
     var output = {};
 
     for (var key in files) {
         if (files.hasOwnProperty(key)) {
             var scriptString = "";
+            var bundledFiles = bundleHelper.squashScriptFiles(key);
 
             // For each throws an exception for some reason.
-            for(var i=0; i<files[key].length; i++) {
+            for(var i=0; i<bundledFiles.length; i++) {
 
                 // This is terrible code and I feel terrible.
-                var filepath = files[key][i];
+                var filepath = bundledFiles[i];
                 var starIndex = filepath.indexOf("*.js");
 
                 if(starIndex > 0){
@@ -83,7 +85,7 @@ gulp.task("sass-watch", ["sass-build"], function() {
     example.
 */
 
-gulp.task("bundle", ["ts-build", "debug-bundle"], function() { 
+gulp.task("bundle", ["debug-bundle"], function() { 
     var outputDir = bundlesFilePath + "/scripts";
     return gulp.src(bundlesFilePath +"/bundle.config.js")
         .pipe(bundle())
@@ -95,7 +97,7 @@ gulp.task("bundle", ["ts-build", "debug-bundle"], function() {
 });
 
 gulp.task("bundle-watch", ["bundle"], function() {
-    gulp.watch("*.ts", ["bundle"]);
+    gulp.watch("**/*.ts", ["bundle"]);
 });
 
 //-----------------------------------------------------------------------------

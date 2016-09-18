@@ -23,9 +23,12 @@ module Shared {
 	
 	export interface IPlayerViewModel {
 		_id?: string;
+		customInitials?: string;
 		nickname?: string;
 		lastName: string;
 		firstName: string;
+		duplicate?: string;
+		inactive?: boolean;
 	}
 	
 	export interface IDotmViewModel {

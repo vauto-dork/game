@@ -124,16 +124,22 @@ var Shared;
                 this.firstName = '';
                 this.lastName = '';
                 this.nickname = '';
+                this.customInitials = '';
+                this.duplicate = '';
+                this.inactive = false;
                 return;
             }
             this._id = player._id;
             this.firstName = player.firstName;
             this.lastName = player.lastName;
             this.nickname = player.nickname;
+            this.customInitials = player.customInitials;
+            this.duplicate = player.duplicate;
+            this.inactive = player.inactive;
         }
         Object.defineProperty(Player.prototype, "initials", {
             get: function () {
-                return this.firstName.charAt(0) + this.lastName.charAt(0);
+                return this.customInitials || (this.firstName.charAt(0) + this.lastName.charAt(0));
             },
             enumerable: true,
             configurable: true
@@ -150,7 +156,10 @@ var Shared;
                 _id: this._id,
                 firstName: this.firstName,
                 lastName: this.lastName,
-                nickname: this.nickname
+                nickname: this.nickname,
+                customInitials: this.customInitials,
+                duplicate: this.duplicate,
+                inactive: this.inactive
             };
             return player;
         };
@@ -191,51 +200,6 @@ var Shared;
         return RankedPlayer;
     }());
     Shared.RankedPlayer = RankedPlayer;
-})(Shared || (Shared = {}));
-
-var Shared;
-(function (Shared) {
-    function PlayerSelectorFilter() {
-        return function (playersList, filter) {
-            var caseInsensitiveMatch = function (value, filter) {
-                return value.toUpperCase().search(filter.toUpperCase()) >= 0;
-            };
-            var initials = playersList.filter(function (player) {
-                return caseInsensitiveMatch(player.player.initials, filter);
-            });
-            var nicknames = playersList.filter(function (player) {
-                return caseInsensitiveMatch(player.player.nickname, filter);
-            }).sort(function (a, b) {
-                if (a.player.nickname.length < b.player.nickname.length)
-                    return -1;
-                if (a.player.nickname.length > b.player.nickname.length)
-                    return 1;
-                return 0;
-            });
-            var fullname = playersList.filter(function (player) {
-                return caseInsensitiveMatch(player.player.fullname, filter);
-            });
-            var output = [];
-            var existsInOutput = function (playerId) {
-                return !output.length || output.map(function (p) { return p.playerId; }).indexOf(playerId) === -1;
-            };
-            initials.forEach(function (player) {
-                output.push(player);
-            });
-            nicknames.forEach(function (player) {
-                if (existsInOutput(player.playerId)) {
-                    output.push(player);
-                }
-            });
-            fullname.forEach(function (player) {
-                if (existsInOutput(player.playerId)) {
-                    output.push(player);
-                }
-            });
-            return output;
-        };
-    }
-    Shared.PlayerSelectorFilter = PlayerSelectorFilter;
 })(Shared || (Shared = {}));
 
 var Shared;
@@ -384,7 +348,7 @@ var Shared;
             var def = this.$q.defer();
             this.$http.post('/players', player)
                 .success(function (data, status, headers, config) {
-                def.resolve();
+                def.resolve(new Shared.Player(data));
             }).error(function (data, status, headers, config) {
                 console.error('Cannot save player.');
                 def.reject(data);
@@ -619,91 +583,6 @@ var Shared;
 
 var Shared;
 (function (Shared) {
-    var PlayerSelectionService = (function () {
-        function PlayerSelectionService($q, apiService) {
-            this.$q = $q;
-            this.apiService = apiService;
-            this.allPlayers = [];
-            this.players = [];
-            this.unselectedPlayersList = [];
-        }
-        Object.defineProperty(PlayerSelectionService.prototype, "selectedPlayers", {
-            get: function () {
-                return this.players;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(PlayerSelectionService.prototype, "unselectedPlayers", {
-            get: function () {
-                return this.unselectedPlayersList;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        PlayerSelectionService.prototype.playerIndex = function (playerId) {
-            return this.players.map(function (p) { return p.playerId; }).indexOf(playerId);
-        };
-        PlayerSelectionService.prototype.addPlayer = function (player) {
-            var found = this.allPlayers.filter(function (p) { return p.playerId === player._id; });
-            if (found.length === 1) {
-                this.players.push(found[0]);
-                this.curateNewPlayerList();
-            }
-            else {
-                console.error("Player not found.", player);
-            }
-        };
-        PlayerSelectionService.prototype.removePlayer = function (player) {
-            var index = this.playerIndex(player._id);
-            this.players.splice(index, 1);
-            this.curateNewPlayerList();
-        };
-        PlayerSelectionService.prototype.getPlayers = function () {
-            var _this = this;
-            var def = this.$q.defer();
-            this.apiService.getPlayersForNewGame().then(function (data) {
-                _this.allPlayers = data.players;
-                def.resolve(data);
-            }, function () {
-                _this.allPlayers = [];
-                def.reject();
-            });
-            return def.promise;
-        };
-        PlayerSelectionService.prototype.curateNewPlayerList = function () {
-            var currentPlayerIds = this.players.map(function (p) { return p.playerId; });
-            this.unselectedPlayersList = this.allPlayers.filter(function (player) {
-                return currentPlayerIds.indexOf(player.playerId) === -1;
-            });
-        };
-        PlayerSelectionService.prototype.reset = function () {
-            this.players = [];
-            this.curateNewPlayerList();
-        };
-        PlayerSelectionService.prototype.debugShowAllPlayersTable = function () {
-            this.debugPrintPlayersTable(this.allPlayers);
-        };
-        PlayerSelectionService.prototype.debugShowCuratedPlayersTable = function () {
-            this.debugPrintPlayersTable(this.unselectedPlayers);
-        };
-        PlayerSelectionService.prototype.debugPrintPlayersTable = function (players) {
-            console.info(players.map(function (p) {
-                return {
-                    orderNumber: p.orderNumber,
-                    rating: p.rating,
-                    name: p.player.fullname
-                };
-            }));
-        };
-        PlayerSelectionService.$inject = ['$q', 'apiService'];
-        return PlayerSelectionService;
-    }());
-    Shared.PlayerSelectionService = PlayerSelectionService;
-})(Shared || (Shared = {}));
-
-var Shared;
-(function (Shared) {
     var PubSubServiceBase = (function () {
         function PubSubServiceBase($timeout) {
             this.$timeout = $timeout;
@@ -833,105 +712,6 @@ var Shared;
         return DatePickerController;
     }());
     Shared.DatePickerController = DatePickerController;
-})(Shared || (Shared = {}));
-
-var Shared;
-(function (Shared) {
-    function GameCardDirective() {
-        return {
-            scope: {
-                game: "=",
-                showModifyButtons: "=",
-                reload: "&"
-            },
-            templateUrl: '/shared/directives/GameCardTemplate.html',
-            controller: 'GameCardController',
-            controllerAs: 'ctrl',
-            bindToController: true
-        };
-    }
-    Shared.GameCardDirective = GameCardDirective;
-    var State;
-    (function (State) {
-        State[State["Ready"] = 0] = "Ready";
-        State[State["DeleteWarning"] = 1] = "DeleteWarning";
-        State[State["Deleting"] = 2] = "Deleting";
-        State[State["Deleted"] = 3] = "Deleted";
-        State[State["Copy"] = 4] = "Copy";
-        State[State["Error"] = 5] = "Error";
-    })(State || (State = {}));
-    var GameCardController = (function () {
-        function GameCardController($http, $window, apiService) {
-            this.$http = $http;
-            this.$window = $window;
-            this.apiService = apiService;
-            this.showOverlay = false;
-            this.showLoadBar = false;
-            this.showDeleteWarning = false;
-            this.showDeleted = false;
-            this.showError = false;
-            this.changeState(State.Ready);
-        }
-        GameCardController.prototype.changeState = function (newState) {
-            this.showOverlay = newState !== State.Ready;
-            this.showLoadBar = newState === State.Deleting || newState === State.Copy;
-            this.showDeleteWarning = newState === State.DeleteWarning;
-            this.showError = newState === State.Error;
-            this.showDeleted = newState === State.Deleted;
-            switch (newState) {
-                case State.Ready:
-                    break;
-                case State.Copy:
-                    this.copy();
-                    break;
-                case State.Deleting:
-                    this.delete();
-                    break;
-            }
-        };
-        GameCardController.prototype.errorHandler = function (data, errorMessage) {
-            this.errorMessage = errorMessage;
-            console.error(data);
-            this.changeState(State.Error);
-        };
-        GameCardController.prototype.delete = function () {
-            var _this = this;
-            this.apiService.deleteActiveGame(this.game.getIdAsPath()).then(function () {
-                _this.changeState(State.Deleted);
-            }, function (data) {
-                _this.errorHandler(data, 'Error deleting game!');
-            });
-        };
-        GameCardController.prototype.copy = function () {
-            var _this = this;
-            var newGame = new Shared.Game();
-            newGame.players = this.game.players.map(function (player) {
-                var gamePlayer = new Shared.GamePlayer();
-                gamePlayer.player = player.player;
-                return gamePlayer;
-            });
-            this.apiService.createActiveGame(newGame).then(function (editUrl) {
-                _this.$window.location.href = editUrl;
-            }, function (data) {
-                _this.errorHandler(data, 'Error copying game!');
-            });
-        };
-        GameCardController.prototype.warnDelete = function () {
-            this.changeState(State.DeleteWarning);
-        };
-        GameCardController.prototype.dismissOverlay = function () {
-            this.changeState(State.Ready);
-        };
-        GameCardController.prototype.deleteGame = function (game) {
-            this.changeState(State.Deleting);
-        };
-        GameCardController.prototype.copyGame = function (game) {
-            this.changeState(State.Copy);
-        };
-        GameCardController.$inject = ['$http', '$window', 'apiService'];
-        return GameCardController;
-    }());
-    Shared.GameCardController = GameCardController;
 })(Shared || (Shared = {}));
 
 var Shared;
@@ -1083,17 +863,12 @@ var Shared;
 var Shared;
 (function (Shared) {
     function NumericUpDownDirective($window) {
-        var _this = this;
         return {
             restrict: 'A',
             link: function (scope, element, attrs) {
                 element.on('click', function () {
                     if (!$window.getSelection().toString()) {
-                        try {
-                            _this.setSelectionRange(0, _this.value.length);
-                        }
-                        catch (ex) {
-                        }
+                        element.select();
                     }
                 });
                 element.on('keyup', function (event) {
@@ -1196,53 +971,41 @@ var Shared;
 
 var Shared;
 (function (Shared) {
-    function PlayerSelectorDirective() {
+    function TextInputDirective() {
         return {
             scope: {
-                players: '=',
-                onSelected: '&',
-                disabled: '='
+                name: "@",
+                placeholder: "@",
+                value: "=",
+                disabled: "=",
+                required: "=",
+                maxlength: "@",
+                showClearBtn: "="
             },
-            templateUrl: '/shared/directives/PlayerSelectorTemplate.html',
-            controller: 'PlayerSelectorController',
-            controllerAs: 'ctrl',
+            templateUrl: "/shared/directives/TextInputTemplate.html",
+            controller: "TextInputController",
+            controllerAs: "ctrl",
             bindToController: true
         };
     }
-    Shared.PlayerSelectorDirective = PlayerSelectorDirective;
-    var PlayerSelectorController = (function () {
-        function PlayerSelectorController($element, $timeout) {
-            this.$element = $element;
-            this.$timeout = $timeout;
-            this.filter = '';
+    Shared.TextInputDirective = TextInputDirective;
+    var TextInputController = (function () {
+        function TextInputController() {
         }
-        PlayerSelectorController.prototype.removeFilter = function () {
-            this.filter = '';
+        TextInputController.prototype.clearInput = function () {
+            this.value = "";
         };
-        PlayerSelectorController.prototype.selectPlayer = function (item, model, label) {
-            this.$element.find("input").focus();
-            this.onSelected({ data: item });
-            this.removeFilter();
-        };
-        PlayerSelectorController.$inject = ['$element', '$timeout'];
-        return PlayerSelectorController;
+        return TextInputController;
     }());
-    Shared.PlayerSelectorController = PlayerSelectorController;
+    Shared.TextInputController = TextInputController;
 })(Shared || (Shared = {}));
-
-var GameCardModule = angular.module('GameCardModule', []);
-GameCardModule.controller('GameCardController', Shared.GameCardController);
-GameCardModule.directive('gameCard', Shared.GameCardDirective);
-
-var PlayerSelectorModule = angular.module('PlayerSelectorModule', []);
-PlayerSelectorModule.filter('playerSelectorFilter', Shared.PlayerSelectorFilter);
-PlayerSelectorModule.controller('PlayerSelectorController', Shared.PlayerSelectorController);
-PlayerSelectorModule.directive('playerSelector', Shared.PlayerSelectorDirective);
 
 var UxControlsModule = angular.module('UxControlsModule', ['ngAnimate', 'ui.bootstrap']);
 UxControlsModule.service('dateTimeService', Shared.DateTimeService);
 UxControlsModule.service('monthYearQueryService', Shared.MonthYearQueryService);
 UxControlsModule.service('apiService', Shared.ApiService);
+UxControlsModule.controller('TextInputController', Shared.TextInputController);
+UxControlsModule.directive('textInput', Shared.TextInputDirective);
 UxControlsModule.controller('LoadSpinnerController', Shared.LoadSpinnerController);
 UxControlsModule.directive('loadSpinner', Shared.LoadSpinnerDirective);
 UxControlsModule.controller('DatePickerController', Shared.DatePickerController);

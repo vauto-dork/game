@@ -10,9 +10,12 @@ var Schema = mongoose.Schema;
  */
 
 var PlayerSchema = new Schema({
-  firstName: { type: String, default: '', required: true},
-  lastName: { type: String, default: '', required: true},
-  nickname: { type: String, default: '' }
+  firstName: { type: String, default: '', required: true },
+  lastName: { type: String, default: '', required: true },
+  nickname: { type: String, default: '' },
+  customInitials: { type: String, default: '' },
+  duplicate: { type: String, default: '' },
+  inactive: { type: Boolean, default: false }
 });
 
 /**

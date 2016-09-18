@@ -1,8 +1,8 @@
-var DorkModule = angular.module('DorkModule', ['UxControlsModule', 'PlayerSelectorModule']);
+var DorkModule = angular.module('DorkModule', ['UxControlsModule', 'PlayerSelectorModule', 'NewPlayerPanelModule']);
 
-DorkModule.service('playerSelectionService', Shared.PlayerSelectionService);
 DorkModule.service('alertsService', Shared.AlertsService);
 DorkModule.service('editActiveGameService', EditActiveGame.EditActiveGameService);
+DorkModule.service('editActiveGameCollapseService', EditActiveGame.EditActiveGameCollapseService);
 
 DorkModule.controller('EditActiveGameController', EditActiveGame.EditActiveGameController);
 DorkModule.directive('editActiveGame', EditActiveGame.EditActiveGameDirective);

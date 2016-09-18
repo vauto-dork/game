@@ -19,7 +19,7 @@ module CreateGame {
 	}
 
 	export class CreateGameService implements ICreateGameService {
-        public static $inject: string[] = ['$q', 'apiService', 'playerSelectionService'];
+        public static $inject: string[] = ["$q", "apiService", "playerSelectionService", "newPlayerPanelService"];
 		private firstGameOfMonth: boolean = false;
 		private gameOrderSortedPlayers: Shared.INewGamePlayer[] = [];
         
@@ -61,13 +61,24 @@ module CreateGame {
 
         constructor(private $q: ng.IQService,
             private apiService: Shared.IApiService,
-            private playerSelectionService: Shared.IPlayerSelectionService) {
+            private playerSelectionService: Components.IPlayerSelectionService,
+            private newPlayerPanelService: Components.INewPlayerPanelService) {
             this.playerLoadPromise = this.playerSelectionService.getPlayers().then((data) => {
                 this.initializeData(data.firstGameOfMonth);
                 this.$q.resolve();
             }, () => {
                 this.initializeData(true);
                 this.$q.resolve();
+            });
+
+            this.newPlayerPanelService.subscribeSavedPlayer((event, player: Shared.IPlayer)=>{
+                this.playerSelectionService.getPlayers().then(() => {
+                    var newPlayer = new Shared.NewGamePlayer();
+                    newPlayer.player = player;
+                    newPlayer.orderNumber = 0;
+                    newPlayer.rating = 0;
+                    this.addPlayer(newPlayer);
+                });
             });
         }
         

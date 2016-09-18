@@ -1,6 +1,6 @@
-module Shared {
+module Components {
     export function PlayerSelectorFilter() {
-        return (playersList: INewGamePlayer[], filter: string): INewGamePlayer[] => {
+        return (playersList: Shared.INewGamePlayer[], filter: string): Shared.INewGamePlayer[] => {
             var caseInsensitiveMatch = (value: string, filter: string) => {
                 return value.toUpperCase().search(filter.toUpperCase()) >= 0;
             };
@@ -25,7 +25,7 @@ module Shared {
                 return caseInsensitiveMatch(player.player.fullname, filter);
             });
 
-            var output: INewGamePlayer[] = [];
+            var output: Shared.INewGamePlayer[] = [];
             var existsInOutput = (playerId: string) => {
                 return !output.length || output.map(p => { return p.playerId; }).indexOf(playerId) === -1;
             };
@@ -46,7 +46,13 @@ module Shared {
                 }
             });
 
-            return output;
+            var inactivePlayers = output.filter(player => {
+                return player.player.inactive;
+            });
+
+            return output.filter(player => {
+                return !player.player.inactive;
+            }).concat(inactivePlayers);
         };
     }
 }

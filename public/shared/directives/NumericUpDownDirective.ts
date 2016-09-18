@@ -3,15 +3,12 @@ module Shared {
         return {
             restrict: 'A',
             link: (scope: ng.IScope, element: ng.IAugmentedJQuery, attrs: ng.IAttributes) => {
+
                 element.on('click', () => {
                     if (!$window.getSelection().toString()) {
-                        try {
-                            // Required for mobile Safari
-                            this.setSelectionRange(0, this.value.length);
-                        }
-                        catch (ex) {
-                            // Supress in Chrome
-                        }
+                        // Works in all browsers except mobile Safari. SetSelectionRange() is
+                        // too much of a bear to get working properly with Angular and Typescript.
+                        element.select();
                     }
                 });
 

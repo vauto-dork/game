@@ -1,7 +1,4 @@
-var DorkModule = angular.module('DorkModule', ['UxControlsModule']);
+var DorkModule = angular.module('DorkModule', ['UxControlsModule', 'PlayerFormModule']);
 
 DorkModule.controller('AddPlayerController', Players.AddPlayerController);
 DorkModule.directive('addPlayer', Players.AddPlayerDirective);
-
-DorkModule.controller('PlayerFormController', Players.PlayerFormController);
-DorkModule.directive('playerForm', Players.PlayerFormDirective);

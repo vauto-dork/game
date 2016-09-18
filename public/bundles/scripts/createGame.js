@@ -1,3 +1,388 @@
+var Components;
+(function (Components) {
+    function PlayerFormDirective() {
+        return {
+            scope: {
+                player: "=",
+                disableForm: "=?"
+            },
+            templateUrl: "/components/playerForm/directives/PlayerFormTemplate.html",
+            controller: "PlayerFormController",
+            controllerAs: "ctrl",
+            bindToController: true
+        };
+    }
+    Components.PlayerFormDirective = PlayerFormDirective;
+    var PlayerFormController = (function () {
+        function PlayerFormController() {
+        }
+        PlayerFormController.$inject = [];
+        return PlayerFormController;
+    }());
+    Components.PlayerFormController = PlayerFormController;
+})(Components || (Components = {}));
+
+var PlayerFormModule = angular.module('PlayerFormModule', []);
+PlayerFormModule.controller('PlayerFormController', Components.PlayerFormController);
+PlayerFormModule.directive('playerForm', Components.PlayerFormDirective);
+
+var Components;
+(function (Components) {
+    function PlayerSelectorFilter() {
+        return function (playersList, filter) {
+            var caseInsensitiveMatch = function (value, filter) {
+                return value.toUpperCase().search(filter.toUpperCase()) >= 0;
+            };
+            var initials = playersList.filter(function (player) {
+                return caseInsensitiveMatch(player.player.initials, filter);
+            });
+            var nicknames = playersList.filter(function (player) {
+                return caseInsensitiveMatch(player.player.nickname, filter);
+            }).sort(function (a, b) {
+                if (a.player.nickname.length < b.player.nickname.length)
+                    return -1;
+                if (a.player.nickname.length > b.player.nickname.length)
+                    return 1;
+                return 0;
+            });
+            var fullname = playersList.filter(function (player) {
+                return caseInsensitiveMatch(player.player.fullname, filter);
+            });
+            var output = [];
+            var existsInOutput = function (playerId) {
+                return !output.length || output.map(function (p) { return p.playerId; }).indexOf(playerId) === -1;
+            };
+            initials.forEach(function (player) {
+                output.push(player);
+            });
+            nicknames.forEach(function (player) {
+                if (existsInOutput(player.playerId)) {
+                    output.push(player);
+                }
+            });
+            fullname.forEach(function (player) {
+                if (existsInOutput(player.playerId)) {
+                    output.push(player);
+                }
+            });
+            var inactivePlayers = output.filter(function (player) {
+                return player.player.inactive;
+            });
+            return output.filter(function (player) {
+                return !player.player.inactive;
+            }).concat(inactivePlayers);
+        };
+    }
+    Components.PlayerSelectorFilter = PlayerSelectorFilter;
+})(Components || (Components = {}));
+
+var Components;
+(function (Components) {
+    var PlayerSelectionService = (function () {
+        function PlayerSelectionService($q, apiService) {
+            this.$q = $q;
+            this.apiService = apiService;
+            this.localFilter = "";
+            this.allPlayers = [];
+            this.players = [];
+            this.unselectedPlayersList = [];
+        }
+        Object.defineProperty(PlayerSelectionService.prototype, "selectedPlayers", {
+            get: function () {
+                return this.players;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(PlayerSelectionService.prototype, "unselectedPlayers", {
+            get: function () {
+                return this.unselectedPlayersList;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(PlayerSelectionService.prototype, "filter", {
+            get: function () {
+                return this.localFilter;
+            },
+            set: function (value) {
+                this.localFilter = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        PlayerSelectionService.prototype.playerIndex = function (playerId) {
+            return this.players.map(function (p) { return p.playerId; }).indexOf(playerId);
+        };
+        PlayerSelectionService.prototype.removeFilter = function () {
+            this.filter = "";
+        };
+        PlayerSelectionService.prototype.addPlayer = function (player) {
+            var found = this.allPlayers.filter(function (p) { return p.playerId === player._id; });
+            if (found.length === 1) {
+                this.players.push(found[0]);
+                this.curateNewPlayerList();
+            }
+            else {
+                console.error("Player not found.", player);
+            }
+        };
+        PlayerSelectionService.prototype.removePlayer = function (player) {
+            var index = this.playerIndex(player._id);
+            this.players.splice(index, 1);
+            this.curateNewPlayerList();
+        };
+        PlayerSelectionService.prototype.getPlayers = function () {
+            var _this = this;
+            var def = this.$q.defer();
+            this.apiService.getPlayersForNewGame().then(function (data) {
+                _this.allPlayers = data.players;
+                def.resolve(data);
+            }, function () {
+                _this.allPlayers = [];
+                def.reject();
+            });
+            return def.promise;
+        };
+        PlayerSelectionService.prototype.curateNewPlayerList = function () {
+            var currentPlayerIds = this.players.map(function (p) { return p.playerId; });
+            this.unselectedPlayersList = this.allPlayers.filter(function (player) {
+                return currentPlayerIds.indexOf(player.playerId) === -1;
+            });
+        };
+        PlayerSelectionService.prototype.reset = function () {
+            this.players = [];
+            this.curateNewPlayerList();
+        };
+        PlayerSelectionService.prototype.debugShowAllPlayersTable = function () {
+            this.debugPrintPlayersTable(this.allPlayers);
+        };
+        PlayerSelectionService.prototype.debugShowCuratedPlayersTable = function () {
+            this.debugPrintPlayersTable(this.unselectedPlayers);
+        };
+        PlayerSelectionService.prototype.debugPrintPlayersTable = function (players) {
+            console.info(players.map(function (p) {
+                return {
+                    orderNumber: p.orderNumber,
+                    rating: p.rating,
+                    name: p.player.fullname
+                };
+            }));
+        };
+        PlayerSelectionService.$inject = ["$q", "apiService"];
+        return PlayerSelectionService;
+    }());
+    Components.PlayerSelectionService = PlayerSelectionService;
+})(Components || (Components = {}));
+
+var Components;
+(function (Components) {
+    function PlayerSelectorDirective() {
+        return {
+            scope: {
+                players: "=",
+                onSelected: "&",
+                disabled: "="
+            },
+            templateUrl: "/components/playerSelector/directives/PlayerSelectorTemplate.html",
+            controller: "PlayerSelectorController",
+            controllerAs: "ctrl",
+            bindToController: true
+        };
+    }
+    Components.PlayerSelectorDirective = PlayerSelectorDirective;
+    var PlayerSelectorController = (function () {
+        function PlayerSelectorController($element, $timeout, $filter, playerSelectionService) {
+            this.$element = $element;
+            this.$timeout = $timeout;
+            this.$filter = $filter;
+            this.playerSelectionService = playerSelectionService;
+        }
+        Object.defineProperty(PlayerSelectorController.prototype, "filter", {
+            get: function () {
+                return this.playerSelectionService.filter;
+            },
+            set: function (value) {
+                this.playerSelectionService.filter = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        PlayerSelectorController.prototype.removeFilter = function () {
+            this.playerSelectionService.removeFilter();
+        };
+        PlayerSelectorController.prototype.selectPlayer = function (item, model, label) {
+            this.$element.find("input").focus();
+            this.onSelected({ data: item });
+            this.removeFilter();
+        };
+        PlayerSelectorController.prototype.possiblePlayersAdded = function () {
+            var list = this.$filter("playerSelectorFilter")(this.playerSelectionService.selectedPlayers, this.filter)
+                .map(function (player) {
+                return player.player.fullname;
+            });
+            return {
+                flatList: list.join(", "),
+                hasPlayers: list.length > 0
+            };
+        };
+        PlayerSelectorController.$inject = ["$element", "$timeout", "$filter", "playerSelectionService"];
+        return PlayerSelectorController;
+    }());
+    Components.PlayerSelectorController = PlayerSelectorController;
+})(Components || (Components = {}));
+
+var PlayerSelectorModule = angular.module('PlayerSelectorModule', []);
+PlayerSelectorModule.service('playerSelectionService', Components.PlayerSelectionService);
+PlayerSelectorModule.filter('playerSelectorFilter', Components.PlayerSelectorFilter);
+PlayerSelectorModule.controller('PlayerSelectorController', Components.PlayerSelectorController);
+PlayerSelectorModule.directive('playerSelector', Components.PlayerSelectorDirective);
+
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var Components;
+(function (Components) {
+    var NewPlayerPanelService = (function (_super) {
+        __extends(NewPlayerPanelService, _super);
+        function NewPlayerPanelService($timeout, $q, apiService) {
+            _super.call(this, $timeout);
+            this.$q = $q;
+            this.apiService = apiService;
+            this.event = {
+                formCancel: "formCancel",
+                newPlayerReady: "newPlayerReady"
+            };
+        }
+        NewPlayerPanelService.prototype.subscribeFormCancel = function (callback) {
+            this.subscribe(this.event.formCancel, callback);
+        };
+        NewPlayerPanelService.prototype.subscribeSavedPlayer = function (callback) {
+            this.subscribe(this.event.newPlayerReady, callback);
+        };
+        NewPlayerPanelService.prototype.cancelForm = function () {
+            this.publish(this.event.formCancel, null);
+        };
+        NewPlayerPanelService.prototype.savePlayer = function (player) {
+            var _this = this;
+            return this.apiService.saveNewPlayer(player).then(function (data) {
+                _this.publish(_this.event.newPlayerReady, data);
+                _this.$q.resolve();
+            }, function (data) {
+                _this.$q.reject(data);
+            });
+        };
+        NewPlayerPanelService.$inject = ["$timeout", "$q", "apiService"];
+        return NewPlayerPanelService;
+    }(Shared.PubSubServiceBase));
+    Components.NewPlayerPanelService = NewPlayerPanelService;
+})(Components || (Components = {}));
+
+var Components;
+(function (Components) {
+    function NewPlayerButtonDirective() {
+        return {
+            scope: {
+                click: "&",
+                disabled: "="
+            },
+            templateUrl: "/components/newPlayerPanel/directives/NewPlayerButtonTemplate.html",
+            controller: "NewPlayerButtonController",
+            controllerAs: "ctrl",
+            bindToController: true
+        };
+    }
+    Components.NewPlayerButtonDirective = NewPlayerButtonDirective;
+    var NewPlayerButtonController = (function () {
+        function NewPlayerButtonController() {
+        }
+        return NewPlayerButtonController;
+    }());
+    Components.NewPlayerButtonController = NewPlayerButtonController;
+})(Components || (Components = {}));
+
+var Components;
+(function (Components) {
+    var NewPlayerPanelBase = (function () {
+        function NewPlayerPanelBase() {
+            this.collapsePlayerSelectorPanel = false;
+            this.collapseAddNewPlayerPanel = true;
+        }
+        NewPlayerPanelBase.prototype.disablePlayerSelectorPanel = function () {
+            this.collapsePlayerSelectorPanel = true;
+        };
+        NewPlayerPanelBase.prototype.enablePlayerSelectorPanel = function () {
+            this.collapsePlayerSelectorPanel = false;
+        };
+        NewPlayerPanelBase.prototype.disableAddNewPlayer = function () {
+            this.collapseAddNewPlayerPanel = true;
+        };
+        NewPlayerPanelBase.prototype.enableAddNewPlayer = function () {
+            this.collapseAddNewPlayerPanel = false;
+        };
+        return NewPlayerPanelBase;
+    }());
+    Components.NewPlayerPanelBase = NewPlayerPanelBase;
+})(Components || (Components = {}));
+
+var Components;
+(function (Components) {
+    function NewPlayerPanelDirective() {
+        return {
+            scope: {},
+            templateUrl: "/components/newPlayerPanel/directives/NewPlayerPanelTemplate.html",
+            controller: "NewPlayerPanelController",
+            controllerAs: "ctrl",
+            bindToController: true
+        };
+    }
+    Components.NewPlayerPanelDirective = NewPlayerPanelDirective;
+    var NewPlayerPanelController = (function () {
+        function NewPlayerPanelController(panelService) {
+            this.panelService = panelService;
+            this.player = new Shared.Player();
+            this.resetForm();
+        }
+        NewPlayerPanelController.prototype.resetForm = function () {
+            this.player = new Shared.Player();
+            if (this.addPlayerForm) {
+                this.addPlayerForm.$setPristine();
+                this.addPlayerForm.$setUntouched();
+            }
+            this.disabled = false;
+            this.showError = false;
+        };
+        NewPlayerPanelController.prototype.cancel = function () {
+            this.resetForm();
+            this.panelService.cancelForm();
+        };
+        NewPlayerPanelController.prototype.save = function () {
+            var _this = this;
+            this.showError = false;
+            this.disabled = true;
+            this.panelService.savePlayer(this.player).then(function () {
+                _this.resetForm();
+            }, function (data) {
+                console.error(data);
+                _this.showError = true;
+                _this.disabled = false;
+            });
+        };
+        NewPlayerPanelController.$inject = ["newPlayerPanelService"];
+        return NewPlayerPanelController;
+    }());
+    Components.NewPlayerPanelController = NewPlayerPanelController;
+})(Components || (Components = {}));
+
+var newPlayerModule = angular.module('NewPlayerPanelModule', ['PlayerFormModule']);
+newPlayerModule.service('newPlayerPanelService', Components.NewPlayerPanelService);
+newPlayerModule.controller('NewPlayerButtonController', Components.NewPlayerButtonController);
+newPlayerModule.directive('newPlayerButton', Components.NewPlayerButtonDirective);
+newPlayerModule.controller('NewPlayerPanelController', Components.NewPlayerPanelController);
+newPlayerModule.directive('newPlayerPanel', Components.NewPlayerPanelDirective);
+
 var CreateGame;
 (function (CreateGame) {
     (function (NewGameSort) {
@@ -6,11 +391,12 @@ var CreateGame;
     })(CreateGame.NewGameSort || (CreateGame.NewGameSort = {}));
     var NewGameSort = CreateGame.NewGameSort;
     var CreateGameService = (function () {
-        function CreateGameService($q, apiService, playerSelectionService) {
+        function CreateGameService($q, apiService, playerSelectionService, newPlayerPanelService) {
             var _this = this;
             this.$q = $q;
             this.apiService = apiService;
             this.playerSelectionService = playerSelectionService;
+            this.newPlayerPanelService = newPlayerPanelService;
             this.firstGameOfMonth = false;
             this.gameOrderSortedPlayers = [];
             this.sort = NewGameSort.Selected;
@@ -20,6 +406,15 @@ var CreateGame;
             }, function () {
                 _this.initializeData(true);
                 _this.$q.resolve();
+            });
+            this.newPlayerPanelService.subscribeSavedPlayer(function (event, player) {
+                _this.playerSelectionService.getPlayers().then(function () {
+                    var newPlayer = new Shared.NewGamePlayer();
+                    newPlayer.player = player;
+                    newPlayer.orderNumber = 0;
+                    newPlayer.rating = 0;
+                    _this.addPlayer(newPlayer);
+                });
             });
         }
         Object.defineProperty(CreateGameService.prototype, "players", {
@@ -148,7 +543,7 @@ var CreateGame;
         CreateGameService.prototype.debugShowSortedPlayersTable = function () {
             this.playerSelectionService.debugPrintPlayersTable(this.playersSorted);
         };
-        CreateGameService.$inject = ['$q', 'apiService', 'playerSelectionService'];
+        CreateGameService.$inject = ["$q", "apiService", "playerSelectionService", "newPlayerPanelService"];
         return CreateGameService;
     }());
     CreateGame.CreateGameService = CreateGameService;
@@ -248,6 +643,11 @@ var CreateGame;
     CreateGame.SelectedPlayersController = SelectedPlayersController;
 })(CreateGame || (CreateGame = {}));
 
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var CreateGame;
 (function (CreateGame) {
     function CreateGameDirective() {
@@ -267,19 +667,28 @@ var CreateGame;
         State[State["Loaded"] = 2] = "Loaded";
         State[State["CreatingGame"] = 3] = "CreatingGame";
     })(State || (State = {}));
-    var CreateGameController = (function () {
-        function CreateGameController($window, createGameService) {
+    var CreateGameController = (function (_super) {
+        __extends(CreateGameController, _super);
+        function CreateGameController($window, createGameService, playerSelectionService, newPlayerPanelService) {
             var _this = this;
+            _super.call(this);
             this.$window = $window;
             this.createGameService = createGameService;
+            this.playerSelectionService = playerSelectionService;
+            this.newPlayerPanelService = newPlayerPanelService;
             this.showLoading = false;
             this.showErrorMessage = false;
             this.showForm = false;
-            this.orderedPlayersLoaded = false;
-            this.disableOrderedPlayers = false;
             this.datePlayed = null;
+            this.changeState(State.Loading);
             this.createGameService.init().then(function () {
                 _this.changeState(State.Loaded);
+            });
+            this.newPlayerPanelService.subscribeFormCancel(function () {
+                _this.disableAddNewPlayer();
+            });
+            this.newPlayerPanelService.subscribeSavedPlayer(function () {
+                _this.disableAddNewPlayer();
             });
         }
         Object.defineProperty(CreateGameController.prototype, "sortOrder", {
@@ -328,15 +737,18 @@ var CreateGame;
         CreateGameController.prototype.useGameOrder = function () {
             this.createGameService.sortOrder = CreateGame.NewGameSort.Rating;
         };
-        CreateGameController.$inject = ['$window', 'createGameService'];
+        CreateGameController.prototype.enablePlayerSelectorPanel = function () {
+            this.playerSelectionService.removeFilter();
+            _super.prototype.enablePlayerSelectorPanel.call(this);
+        };
+        CreateGameController.$inject = ["$window", "createGameService", "playerSelectionService", "newPlayerPanelService"];
         return CreateGameController;
-    }());
+    }(Components.NewPlayerPanelBase));
     CreateGame.CreateGameController = CreateGameController;
 })(CreateGame || (CreateGame = {}));
 
-var DorkModule = angular.module('DorkModule', ['UxControlsModule', 'PlayerSelectorModule']);
+var DorkModule = angular.module('DorkModule', ['UxControlsModule', 'PlayerSelectorModule', 'NewPlayerPanelModule']);
 
-DorkModule.service('playerSelectionService', Shared.PlayerSelectionService);
 DorkModule.service('createGameService', CreateGame.CreateGameService);
 
 DorkModule.controller('ButtonsPanelController', CreateGame.ButtonsPanelController);
