@@ -1,3 +1,31 @@
+var Components;
+(function (Components) {
+    function PlayerFormDirective() {
+        return {
+            scope: {
+                player: "=",
+                disableForm: "=?"
+            },
+            templateUrl: "/components/playerForm/directives/PlayerFormTemplate.html",
+            controller: "PlayerFormController",
+            controllerAs: "ctrl",
+            bindToController: true
+        };
+    }
+    Components.PlayerFormDirective = PlayerFormDirective;
+    var PlayerFormController = (function () {
+        function PlayerFormController() {
+        }
+        PlayerFormController.$inject = [];
+        return PlayerFormController;
+    }());
+    Components.PlayerFormController = PlayerFormController;
+})(Components || (Components = {}));
+
+var PlayerFormModule = angular.module('PlayerFormModule', []);
+PlayerFormModule.controller('PlayerFormController', Components.PlayerFormController);
+PlayerFormModule.directive('playerForm', Components.PlayerFormDirective);
+
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -7,11 +35,10 @@ var Players;
 (function (Players) {
     var PlayersListService = (function (_super) {
         __extends(PlayersListService, _super);
-        function PlayersListService($timeout, $q, apiService, playerSelectionService) {
+        function PlayersListService($timeout, $q, apiService) {
             _super.call(this, $timeout);
             this.$q = $q;
             this.apiService = apiService;
-            this.playerSelectionService = playerSelectionService;
             this.event = {
                 editOpen: "editOpen",
                 editCancel: "editCancel",
@@ -64,7 +91,7 @@ var Players;
         PlayersListService.prototype.openEdit = function () {
             this.publish(this.event.editOpen, null);
         };
-        PlayersListService.$inject = ['$timeout', '$q', 'apiService', 'playerSelectionService'];
+        PlayersListService.$inject = ['$timeout', '$q', 'apiService'];
         return PlayersListService;
     }(Shared.PubSubServiceBase));
     Players.PlayersListService = PlayersListService;
@@ -104,31 +131,6 @@ var Players;
         return EditPlayerController;
     }());
     Players.EditPlayerController = EditPlayerController;
-})(Players || (Players = {}));
-
-var Players;
-(function (Players) {
-    function PlayerFormDirective() {
-        return {
-            scope: {
-                player: "=",
-                disableForm: "="
-            },
-            templateUrl: "/areas/players/directives/PlayerFormTemplate.html",
-            controller: "PlayerFormController",
-            controllerAs: "ctrl",
-            bindToController: true
-        };
-    }
-    Players.PlayerFormDirective = PlayerFormDirective;
-    var PlayerFormController = (function () {
-        function PlayerFormController() {
-            this.disableForm = false;
-        }
-        PlayerFormController.$inject = [];
-        return PlayerFormController;
-    }());
-    Players.PlayerFormController = PlayerFormController;
 })(Players || (Players = {}));
 
 var Players;
@@ -245,7 +247,7 @@ var Players;
     Players.PlayersListController = PlayersListController;
 })(Players || (Players = {}));
 
-var DorkModule = angular.module('DorkModule', ['UxControlsModule', 'PlayerSelectorModule']);
+var DorkModule = angular.module('DorkModule', ['UxControlsModule', 'PlayerFormModule']);
 
 DorkModule.service('alertsService', Shared.AlertsService);
 DorkModule.service('playersListService', Players.PlayersListService);
@@ -256,6 +258,4 @@ DorkModule.directive('editPlayer', Players.EditPlayerDirective);
 DorkModule.controller('PlayersListController', Players.PlayersListController);
 DorkModule.directive('playersList', Players.PlayersListDirective);
 
-DorkModule.controller('PlayerFormController', Players.PlayerFormController);
-DorkModule.directive('playerForm', Players.PlayerFormDirective);
 //# sourceMappingURL=maps/playersList.js.map

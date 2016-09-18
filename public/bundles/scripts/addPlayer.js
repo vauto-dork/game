@@ -1,27 +1,30 @@
-var Players;
-(function (Players) {
+var Components;
+(function (Components) {
     function PlayerFormDirective() {
         return {
             scope: {
                 player: "=",
-                disableForm: "="
+                disableForm: "=?"
             },
-            templateUrl: "/areas/players/directives/PlayerFormTemplate.html",
+            templateUrl: "/components/playerForm/directives/PlayerFormTemplate.html",
             controller: "PlayerFormController",
             controllerAs: "ctrl",
             bindToController: true
         };
     }
-    Players.PlayerFormDirective = PlayerFormDirective;
+    Components.PlayerFormDirective = PlayerFormDirective;
     var PlayerFormController = (function () {
         function PlayerFormController() {
-            this.disableForm = false;
         }
         PlayerFormController.$inject = [];
         return PlayerFormController;
     }());
-    Players.PlayerFormController = PlayerFormController;
-})(Players || (Players = {}));
+    Components.PlayerFormController = PlayerFormController;
+})(Components || (Components = {}));
+
+var PlayerFormModule = angular.module('PlayerFormModule', []);
+PlayerFormModule.controller('PlayerFormController', Components.PlayerFormController);
+PlayerFormModule.directive('playerForm', Components.PlayerFormDirective);
 
 var Players;
 (function (Players) {
@@ -103,12 +106,9 @@ var Players;
     Players.AddPlayerController = AddPlayerController;
 })(Players || (Players = {}));
 
-var DorkModule = angular.module('DorkModule', ['UxControlsModule']);
+var DorkModule = angular.module('DorkModule', ['UxControlsModule', 'PlayerFormModule']);
 
 DorkModule.controller('AddPlayerController', Players.AddPlayerController);
 DorkModule.directive('addPlayer', Players.AddPlayerDirective);
-
-DorkModule.controller('PlayerFormController', Players.PlayerFormController);
-DorkModule.directive('playerForm', Players.PlayerFormDirective);
 
 //# sourceMappingURL=maps/addPlayer.js.map

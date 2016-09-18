@@ -17,15 +17,12 @@ module CreateGame {
 		CreatingGame
 	}
 
-    export class CreateGameController {
-        public static $inject: string[] = ['$window', 'createGameService'];
+    export class CreateGameController extends Components.NewPlayerPanelBase {
+        public static $inject: string[] = ["$window", "createGameService", "playerSelectionService", "newPlayerPanelService"];
 
 		private showLoading: boolean = false;
 		private showErrorMessage: boolean = false;
 		private showForm: boolean = false;
-		
-		private orderedPlayersLoaded: boolean = false;
-		private disableOrderedPlayers: boolean = false;
 
 		private datePlayed: Date = null;
 		
@@ -41,10 +38,24 @@ module CreateGame {
 			return this.createGameService.unselectedPlayers;
 		}
         
-        constructor(private $window: ng.IWindowService, private createGameService: ICreateGameService) {
+        constructor(private $window: ng.IWindowService,
+			private createGameService: ICreateGameService,
+			private playerSelectionService: Components.IPlayerSelectionService,
+			private newPlayerPanelService: Components.INewPlayerPanelService) {
+			super();
+
+			this.changeState(State.Loading);
             this.createGameService.init().then(() => {
                 this.changeState(State.Loaded);
             });
+
+			this.newPlayerPanelService.subscribeFormCancel(() => {
+				this.disableAddNewPlayer();
+			});
+
+			this.newPlayerPanelService.subscribeSavedPlayer(() => {
+				this.disableAddNewPlayer();
+			});
         }
 
 		private changeState(newState: State): void {
@@ -81,6 +92,11 @@ module CreateGame {
         
         private useGameOrder(): void {
 			this.createGameService.sortOrder = NewGameSort.Rating;
+		}
+
+		protected enablePlayerSelectorPanel(): void {
+			this.playerSelectionService.removeFilter();
+			super.enablePlayerSelectorPanel();
 		}
     }
 }

@@ -1,42 +1,18 @@
-var bundleFiles = require('./bundle.files.json');
-
-// Paths for file generation
-var generatedFilePath = './' + bundleFiles.sourceRootFilePath + '/';
-
-//-----------------------------------------------------------------------------
-var getScriptsArray = function(scriptPathArray) {
-  return scriptPathArray.map(function(element) {
-    return generatedFilePath + element;
-  });
-};
-
-//-----------------------------------------------------------------------------
-var getScriptConfig = function(pageModuleName) {
-  var scripts = bundleFiles.scripts[pageModuleName];
-
-  return {
-    scripts: getScriptsArray(scripts),
-    options: {
-      useMin: false,
-      uglify: false,
-      rev: false
-    }
-  };
-};
+var bundleHelper = require('./bundle.helper.js');
 
 //-----------------------------------------------------------------------------
 // Scripts must be listed in the order it should be concatenated.
 module.exports = {
   bundle: {
-    shared: getScriptConfig('shared'),
-    activeGames: getScriptConfig('activeGames'),
-    addPlayer: getScriptConfig('addPlayer'),
-    admin: getScriptConfig('admin'),
-    createGame: getScriptConfig('createGame'),
-    editActiveGame: getScriptConfig('editActiveGame'),
-    gameHistory: getScriptConfig('gameHistory'),
-    index: getScriptConfig('index'),
-    playersList: getScriptConfig('playersList'),
-    rankingHistory: getScriptConfig('rankingHistory')
+    shared: bundleHelper.getScriptConfig('shared'),
+    activeGames: bundleHelper.getScriptConfig('activeGames'),
+    addPlayer: bundleHelper.getScriptConfig('addPlayer'),
+    admin: bundleHelper.getScriptConfig('admin'),
+    createGame: bundleHelper.getScriptConfig('createGame'),
+    editActiveGame: bundleHelper.getScriptConfig('editActiveGame'),
+    gameHistory: bundleHelper.getScriptConfig('gameHistory'),
+    index: bundleHelper.getScriptConfig('index'),
+    playersList: bundleHelper.getScriptConfig('playersList'),
+    rankingHistory: bundleHelper.getScriptConfig('rankingHistory')
   }
 };

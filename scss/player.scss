@@ -117,13 +117,6 @@
 	}
 }
 
-.add-player-panel {
-	position: fixed;
-	top: 1em;
-	width: 100%;
-	z-index: 25;
-}
-
 .panel-dotm {
 	@include round-box;
 	background-color: transparent;

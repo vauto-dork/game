@@ -3,9 +3,9 @@ module EditActiveGame {
         return {
             scope: {
             },
-            templateUrl: '/areas/editActiveGame/directives/EditActiveGameTemplate.html',
-            controller: 'EditActiveGameController',
-            controllerAs: 'ctrl',
+            templateUrl: "/areas/editActiveGame/directives/EditActiveGameTemplate.html",
+            controller: "EditActiveGameController",
+            controllerAs: "ctrl",
             bindToController: true
         };
     }
@@ -20,7 +20,7 @@ module EditActiveGame {
     };
 
     export class EditActiveGameController {
-        public static $inject: string[] = ['$window', 'editActiveGameService', 'alertsService'];
+        public static $inject: string[] = ["$window", "editActiveGameService", "alertsService", "editActiveGameCollapseService"];
 
         private showLoading: boolean = false;
         private showError: boolean = false;
@@ -32,13 +32,18 @@ module EditActiveGame {
             return this.alertsService.alerts;
         }
 
-        private get showModifyPlaylist(): boolean {
-            return this.editActiveGameService.showModifyPlaylist;
+        private get collapseScoreForm(): boolean {
+            return this.editActiveGameCollapseService.collapseScoreForm;
+        }
+
+        private get collapseModifyPlayers(): boolean {
+            return this.editActiveGameCollapseService.collapseModifyPlayers;
         }
 
         constructor(private $window: ng.IWindowService,
             private editActiveGameService: IEditActiveGameService,
-            private alertsService: Shared.IAlertsService) {
+            private alertsService: Shared.IAlertsService,
+            private editActiveGameCollapseService: IEditActiveGameCollapseService) {
             this.changeState(State.Init);
         }
 
@@ -81,14 +86,14 @@ module EditActiveGame {
         }
 
         private ready(): void {
-            if (this.showModifyPlaylist) {
-                this.toggleModifyPlaylist();
+            if (this.collapseScoreForm) {
+                this.editActiveGameCollapseService.enableScoreForm();
             }
             this.alertsService.scrollToTop();
         }
 
         private errorHandler(data: string, errorMessage: string) {
-            this.alertsService.addAlert('danger', errorMessage);
+            this.alertsService.addAlert("danger", errorMessage);
             console.error(data);
             this.changeState(State.Error);
         }
@@ -98,7 +103,7 @@ module EditActiveGame {
                 this.changeState(State.Ready);
                 this.datePlayed = this.editActiveGameService.datePlayed;
             }, () => {
-                this.errorHandler('Cannot get active game.', 'Cannot load game');
+                this.errorHandler("Cannot get active game.", "Cannot load game");
             });
         }
 
@@ -107,7 +112,7 @@ module EditActiveGame {
             this.editActiveGameService.datePlayed = this.datePlayed;
 
             this.editActiveGameService.save().then(() => {
-                this.alertsService.addAlert('success', 'Game saved successfully!');
+                this.alertsService.addAlert("success", "Game saved successfully!");
                 this.changeState(State.Ready);
             }, () => {
                 this.saveReject();
@@ -116,7 +121,7 @@ module EditActiveGame {
 
         public finalizeGame(): void {
             this.editActiveGameService.finalize(true).then(() => {
-                this.$window.location.href = '/GameHistory';
+                this.$window.location.href = "/GameHistory";
             }, () => {
                 this.saveReject();
             });
@@ -125,7 +130,7 @@ module EditActiveGame {
         private saveReject(): void {
             // get error messages and display alerts
             this.alertsService.clearAlerts();
-            this.editActiveGameService.errorMessages.forEach(msg => { this.alertsService.addAlert('danger', msg); });
+            this.editActiveGameService.errorMessages.forEach(msg => { this.alertsService.addAlert("danger", msg); });
             this.changeState(State.Ready);
         }
         
@@ -147,8 +152,16 @@ module EditActiveGame {
             this.changeState(State.Loading);
         }
 
-        private toggleModifyPlaylist(): void {
-            this.editActiveGameService.toggleModifyPlaylist();
+        private enableScoreForm(): void {
+            this.editActiveGameCollapseService.enableScoreForm();
+        }
+
+        private disableScoreForm(): void {
+            this.editActiveGameCollapseService.disableScoreForm();
+        }
+
+        private enableModifyPlayers(): void {
+            this.editActiveGameCollapseService.enableModifyPlayers();
         }
     }
 }

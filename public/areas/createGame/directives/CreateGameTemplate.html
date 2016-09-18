@@ -1,58 +1,67 @@
-<load-spinner ng-show="ctrl.showLoading"></load-spinner>
+<div class="create-game-container">
+    <load-spinner ng-show="ctrl.showLoading"></load-spinner>
 
-<div class="text-center" ng-if="ctrl.showErrorMessage">
-    <h2>An error occured.</h2></div>
+    <div class="text-center" ng-if="ctrl.showErrorMessage">
+        <h2>An error occured.</h2>
+    </div>
 
-<div ng-if="ctrl.showForm">
+    <div ng-if="ctrl.showForm">
 
-    <div class="container">
-        <div class="row">
+        <div class="container">
+            <div class="row">
 
-            <div class="col-xs-12 col-md-7">
-                <div class="status-banner">
-                    <player-selector players="ctrl.unselectedPlayers" on-selected="ctrl.addPlayer(data)"></player-selector>
-                </div>
+                <div class="col-xs-12 col-md-7 text-center">
+                    <div uib-collapse="ctrl.collapsePlayerSelectorPanel" collapsed="ctrl.enableAddNewPlayer()">
+                        <player-selector players="ctrl.unselectedPlayers" on-selected="ctrl.addPlayer(data)"></player-selector>
 
-                <div class="playlist-instructions">
-                    Select players by typing initials, full name, or nickname into textbox. Remove players by
-                    unchecking name from playlist.
-                </div>
-
-                <buttons-panel class="visible-md-block visible-lg-block"
-                               date-played="ctrl.datePlayed"
-                               create="ctrl.createGame()"></buttons-panel>
-
-            </div>
-
-            <div class="col-xs-12 col-md-5">
-
-                <div class="selected-players-wrapper">
-                    <div class="btn-row">
-                        <!-- Sort Buttons -->
-
-                        <div class="btn-group btn-group-justified" role="group">
-
-                            <label class="btn btn-info"
-                                   ng-model="ctrl.sortOrder"
-                                   uib-btn-radio="'Selected'"
-                                   ng-click="ctrl.useThisOrder()">Selected Order</label>
-
-                            <label class="btn btn-info"
-                                   ng-model="ctrl.sortOrder"
-                                   uib-btn-radio="'Rating'"
-                                   ng-click="ctrl.useGameOrder()">Game Order</label>
-
+                        <div class="create-game-new-player-btn">
+                            <new-player-button click="ctrl.disablePlayerSelectorPanel()"></new-player-button>
                         </div>
+
+                        <buttons-panel class="visible-md-block visible-lg-block"
+                                date-played="ctrl.datePlayed"
+                                create="ctrl.createGame()">
+                        </buttons-panel>
                     </div>
 
-                    <selected-players></selected-players>
+                    <div uib-collapse="ctrl.collapseAddNewPlayerPanel" collapsed="ctrl.enablePlayerSelectorPanel()">
+                        <new-player-panel></new-player-panel>
+                    </div>
                 </div>
 
-                <buttons-panel class="visible-xs-block visible-sm-block"
-                               date-played="ctrl.datePlayed"
-                               create="ctrl.createGame()"></buttons-panel>
+                <div class="col-xs-12 col-md-5">
+
+                    <div class="selected-players-wrapper">
+                        <div class="btn-row">
+                            <!-- Sort Buttons -->
+
+                            <div class="btn-group btn-group-justified" role="group">
+
+                                <label class="btn btn-info"
+                                    ng-model="ctrl.sortOrder"
+                                    uib-btn-radio="'Selected'"
+                                    ng-click="ctrl.useThisOrder()">Selected Order</label>
+
+                                <label class="btn btn-info"
+                                    ng-model="ctrl.sortOrder"
+                                    uib-btn-radio="'Rating'"
+                                    ng-click="ctrl.useGameOrder()">Game Order</label>
+
+                            </div>
+                        </div>
+
+                        <selected-players></selected-players>
+                    </div>
+
+                    <div uib-collapse="ctrl.collapsePlayerSelectorPanel"
+                        collapsed="ctrl.enableAddNewPlayer()">
+                        <buttons-panel class="visible-xs-block visible-sm-block"
+                            date-played="ctrl.datePlayed"
+                            create="ctrl.createGame()">
+                        </buttons-panel>
+                    </div>
+                </div>
             </div>
-        </div>
+        </div>    
     </div>
-    
 </div>

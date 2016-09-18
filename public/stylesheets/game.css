@@ -70,3 +70,6 @@
   padding: 1em 0; }
   .btn-group-lg.game-rank-group > .btn {
     padding: 0.5em 1em; }
+
+.create-game-container .create-game-new-player-btn {
+  margin-bottom: 2.5em; }

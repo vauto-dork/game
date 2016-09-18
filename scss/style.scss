@@ -5,6 +5,7 @@
 @import "animation";
 @import "admin";
 @import "datePicker";
+@import "playerSelector";
 @import "playersList";
 @import "player";
 @import "game";
@@ -51,11 +52,6 @@
 	}
 }
 
-.playlist-instructions {
-	padding: 0 1em 1em 1em;
-	font-size: $font-large;
-}
-
 .selected-players-wrapper {
     padding: 0 15px;
     margin-bottom: 20px;
@@ -64,14 +60,6 @@
 
     .selected-players {
         margin-bottom: 15px;
-    }
-}
-
-.player-selector-container {
-    .dropdown-menu {
-	    width: 100%;
-	    font-size: $font-larger;
-	    line-height: 2em;
     }
 }
 

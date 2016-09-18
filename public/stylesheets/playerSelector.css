@@ -1,0 +1,19 @@
+.player-selector {
+  padding-top: 1em;
+  padding-bottom: 1em; }
+  .player-selector .player-selector-instructions {
+    margin: 1em;
+    font-size: 1.4em;
+    text-align: center; }
+  .player-selector .dropdown-menu {
+    width: 100%;
+    font-size: 2em;
+    line-height: 2em; }
+  .player-selector .player-selector-not-found {
+    text-align: center;
+    margin: 1em;
+    padding: 0.5em; }
+    .player-selector .player-selector-not-found p {
+      margin: 10px; }
+    .player-selector .player-selector-not-found .player-selector-not-found-text {
+      font-size: 1.4em; }

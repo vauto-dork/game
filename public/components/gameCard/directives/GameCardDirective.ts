@@ -1,4 +1,4 @@
-module Shared {
+module Components {
 	export function GameCardDirective(): ng.IDirective {
 		return {
 			scope: {
@@ -6,7 +6,7 @@ module Shared {
 				showModifyButtons: "=",
 				reload: "&"
 			},
-			templateUrl: '/shared/directives/GameCardTemplate.html',
+			templateUrl: '/components/gameCard/directives/GameCardTemplate.html',
 			controller: 'GameCardController',
 			controllerAs: 'ctrl',
 			bindToController: true
@@ -31,10 +31,10 @@ module Shared {
 		private showDeleted: boolean = false;
 		private showError: boolean = false;
 		
-		private game: IGame;
+		private game: Shared.IGame;
 		private errorMessage: string;
 		
-		constructor(private $http: ng.IHttpService, private $window: ng.IWindowService, private apiService: IApiService) {
+		constructor(private $http: ng.IHttpService, private $window: ng.IWindowService, private apiService: Shared.IApiService) {
 			this.changeState(State.Ready);
 		}
 
@@ -74,10 +74,10 @@ module Shared {
 	
 		// Dont call directly. Change state to "Copy" instead.
 		private copy(): void {
-			var newGame: IGame = new Game();
+			var newGame: Shared.IGame = new Shared.Game();
 			
 			newGame.players = this.game.players.map((player) => {
-				var gamePlayer = new GamePlayer();
+				var gamePlayer = new Shared.GamePlayer();
 				gamePlayer.player = player.player;
 				return gamePlayer;
 			});
@@ -97,11 +97,11 @@ module Shared {
 			this.changeState(State.Ready);
 		}
 
-		private deleteGame(game: IGameViewModel): void {
+		private deleteGame(game: Shared.IGameViewModel): void {
 			this.changeState(State.Deleting);
 		}
 
-		private copyGame(game: IGameViewModel): void {
+		private copyGame(game: Shared.IGameViewModel): void {
 			this.changeState(State.Copy);
 		}
 	}

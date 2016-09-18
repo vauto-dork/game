@@ -1,4 +1,4 @@
-<div class="text-input-container player-selector-container">
+<div class="text-input-container player-selector">
 	<div class="input-group input-group-lg">
 		<input type="text"
                class="form-control"
@@ -8,6 +8,7 @@
                uib-typeahead="p as p.player.fullname for p in ctrl.players | playerSelectorFilter:$viewValue | limitTo:6"
                typeahead-on-select="ctrl.selectPlayer($item, $model, $label)"
                typeahead-focus-on-select="false"
+               typeahead-no-results="ctrl.noResults"
                autocomplete="off"
                autofocus />
         <span class="input-group-btn">
@@ -19,4 +20,13 @@
             </button>
         </span>
 	</div>
+    
+    <div class="player-selector-not-found alert alert-danger" ng-show="ctrl.noResults && !!ctrl.filter">
+        <p class="player-selector-not-found-text">Cannot find player {{ctrl.filter}}</p>
+        <p ng-show="ctrl.possiblePlayersAdded().hasPlayers">Player may have been selected as:<br/>{{ctrl.possiblePlayersAdded().flatList}}</p>
+    </div>
+
+    <div class="player-selector-instructions" ng-hide="ctrl.noResults && !!ctrl.filter">
+        Select players by typing initials, full name, or nickname into textbox.
+    </div>
 </div>
