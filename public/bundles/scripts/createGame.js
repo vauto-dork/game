@@ -282,6 +282,30 @@ var Components;
 
 var Components;
 (function (Components) {
+    var NewPlayerPanelBase = (function () {
+        function NewPlayerPanelBase() {
+            this.collapsePlayerSelectorPanel = false;
+            this.collapseAddNewPlayerPanel = true;
+        }
+        NewPlayerPanelBase.prototype.disablePlayerSelectorPanel = function () {
+            this.collapsePlayerSelectorPanel = true;
+        };
+        NewPlayerPanelBase.prototype.enablePlayerSelectorPanel = function () {
+            this.collapsePlayerSelectorPanel = false;
+        };
+        NewPlayerPanelBase.prototype.disableAddNewPlayer = function () {
+            this.collapseAddNewPlayerPanel = true;
+        };
+        NewPlayerPanelBase.prototype.enableAddNewPlayer = function () {
+            this.collapseAddNewPlayerPanel = false;
+        };
+        return NewPlayerPanelBase;
+    }());
+    Components.NewPlayerPanelBase = NewPlayerPanelBase;
+})(Components || (Components = {}));
+
+var Components;
+(function (Components) {
     function NewPlayerPanelDirective() {
         return {
             scope: {},
@@ -362,7 +386,11 @@ var CreateGame;
             });
             this.newPlayerPanelService.subscribeSavedPlayer(function (event, player) {
                 _this.playerSelectionService.getPlayers().then(function () {
-                    _this.playerSelectionService.addPlayer(player);
+                    var newPlayer = new Shared.NewGamePlayer();
+                    newPlayer.player = player;
+                    newPlayer.orderNumber = 0;
+                    newPlayer.rating = 0;
+                    _this.addPlayer(newPlayer);
                 });
             });
         }
@@ -592,6 +620,11 @@ var CreateGame;
     CreateGame.SelectedPlayersController = SelectedPlayersController;
 })(CreateGame || (CreateGame = {}));
 
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var CreateGame;
 (function (CreateGame) {
     function CreateGameDirective() {
@@ -611,19 +644,17 @@ var CreateGame;
         State[State["Loaded"] = 2] = "Loaded";
         State[State["CreatingGame"] = 3] = "CreatingGame";
     })(State || (State = {}));
-    var CreateGameController = (function () {
+    var CreateGameController = (function (_super) {
+        __extends(CreateGameController, _super);
         function CreateGameController($window, createGameService, newPlayerPanelService) {
             var _this = this;
+            _super.call(this);
             this.$window = $window;
             this.createGameService = createGameService;
             this.newPlayerPanelService = newPlayerPanelService;
             this.showLoading = false;
             this.showErrorMessage = false;
             this.showForm = false;
-            this.collapsePlayerSelectorPanel = false;
-            this.collapseAddNewPlayerPanel = true;
-            this.orderedPlayersLoaded = false;
-            this.disableOrderedPlayers = false;
             this.datePlayed = null;
             this.changeState(State.Loading);
             this.createGameService.init().then(function () {
@@ -662,18 +693,6 @@ var CreateGame;
                     break;
             }
         };
-        CreateGameController.prototype.disablePlayerSelectorPanel = function () {
-            this.collapsePlayerSelectorPanel = true;
-        };
-        CreateGameController.prototype.enablePlayerSelectorPanel = function () {
-            this.collapsePlayerSelectorPanel = false;
-        };
-        CreateGameController.prototype.disableAddNewPlayer = function () {
-            this.collapseAddNewPlayerPanel = true;
-        };
-        CreateGameController.prototype.enableAddNewPlayer = function () {
-            this.collapseAddNewPlayerPanel = false;
-        };
         CreateGameController.prototype.addPlayer = function (data) {
             this.createGameService.addPlayer(data);
         };
@@ -696,7 +715,7 @@ var CreateGame;
         };
         CreateGameController.$inject = ["$window", "createGameService", "newPlayerPanelService"];
         return CreateGameController;
-    }());
+    }(Components.NewPlayerPanelBase));
     CreateGame.CreateGameController = CreateGameController;
 })(CreateGame || (CreateGame = {}));
 

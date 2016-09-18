@@ -73,7 +73,11 @@ module CreateGame {
 
             this.newPlayerPanelService.subscribeSavedPlayer((event, player: Shared.IPlayer)=>{
                 this.playerSelectionService.getPlayers().then(() => {
-                    this.playerSelectionService.addPlayer(player);
+                    var newPlayer = new Shared.NewGamePlayer();
+                    newPlayer.player = player;
+                    newPlayer.orderNumber = 0;
+                    newPlayer.rating = 0;
+                    this.addPlayer(newPlayer);
                 });
             });
         }

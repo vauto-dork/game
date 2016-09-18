@@ -80,6 +80,7 @@
         "editActiveGame": {
             "files": [
                 "areas/editActiveGame/services/EditActiveGameService.js",
+                "areas/editActiveGame/services/EditActiveGameCollapseService.js",
                 "areas/editActiveGame/directives/EditScoresDirective.js",
                 "areas/editActiveGame/directives/ReorderPlayersDirective.js",
                 "areas/editActiveGame/directives/ModifyPlayersDirective.js",
@@ -88,7 +89,8 @@
                 "bundles/pageModules/editActiveGame.js"
             ],
             "components": [
-                "playerSelector"
+                "playerSelector",
+                "newPlayerPanel"
             ]
         },
         "gameHistory": {

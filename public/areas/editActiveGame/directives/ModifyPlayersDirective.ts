@@ -3,15 +3,15 @@
         return {
             scope: {
             },
-            templateUrl: '/areas/editActiveGame/directives/ModifyPlayersTemplate.html',
-            controller: 'ModifyPlayersController',
-            controllerAs: 'ctrl',
+            templateUrl: "/areas/editActiveGame/directives/ModifyPlayersTemplate.html",
+            controller: "ModifyPlayersController",
+            controllerAs: "ctrl",
             bindToController: true
         };
     }
 
-    export class ModifyPlayersController {
-        public static $inject: string[] = ['editActiveGameService'];
+    export class ModifyPlayersController extends Components.NewPlayerPanelBase {
+        public static $inject: string[] = ["editActiveGameService", "newPlayerPanelService", "editActiveGameCollapseService"];
         
         private get unselectedPlayers(): Shared.INewGamePlayer[] {
             return this.editActiveGameService.unselectedPlayers;
@@ -21,7 +21,19 @@
             return this.editActiveGameService.movePlayerActive;
         }
         
-        constructor(private editActiveGameService: IEditActiveGameService) {
+        constructor(
+            private editActiveGameService: IEditActiveGameService,
+            private newPlayerPanelService: Components.INewPlayerPanelService,
+            private editActiveGameCollapseService: IEditActiveGameCollapseService) {
+            super();
+
+            this.newPlayerPanelService.subscribeFormCancel(() => {
+				this.disableAddNewPlayer();
+			});
+
+			this.newPlayerPanelService.subscribeSavedPlayer(() => {
+				this.disableAddNewPlayer();
+			});
         }
 
         private onSelected(data: Shared.INewGamePlayer): void {
@@ -30,7 +42,7 @@
         }
 
         private back(): void {
-            this.editActiveGameService.toggleModifyPlaylist();
+            this.editActiveGameCollapseService.disableModifyPlayers();
         }
     }
 }

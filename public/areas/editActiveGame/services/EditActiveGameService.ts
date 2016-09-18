@@ -3,7 +3,6 @@ module EditActiveGame {
         datePlayed: Date;
         players: Shared.IGamePlayer[];
         unselectedPlayers: Shared.INewGamePlayer[];
-        showModifyPlaylist: boolean;
         movePlayerActive: boolean;
         errorMessages: string[];
 
@@ -11,18 +10,16 @@ module EditActiveGame {
         removePlayer(player: Shared.IGamePlayer): void;
         movePlayer(selectedPlayerId: string, destinationPlayer: Shared.IGamePlayer): void;
         playerIndex(playerId: string): number;
-        toggleModifyPlaylist(): void;
         getActiveGame(): ng.IPromise<void>;
         save(): ng.IPromise<void>;
         finalize(addBonusPoints?: boolean): ng.IPromise<void>;
     }
 
     export class EditActiveGameService implements IEditActiveGameService {
-        public static $inject: string[] = ['$location', '$q', 'apiService', 'playerSelectionService'];
+        public static $inject: string[] = ["$location", "$q", "apiService", "playerSelectionService", "newPlayerPanelService"];
         private imLoading: ng.IPromise<void>;
         private gameIdPath: string;
         private activeGame: Shared.IGame;
-        private showModifyPlaylistScreen: boolean;
         private isMovePlayerActive: boolean;
         private errorMessageList: string[] = [];
 
@@ -48,10 +45,6 @@ module EditActiveGame {
             this.isMovePlayerActive = value;
         }
 
-        public get showModifyPlaylist(): boolean {
-            return this.showModifyPlaylistScreen;
-        }
-
         public get errorMessages(): string[] {
             return this.errorMessageList;
         }
@@ -71,11 +64,18 @@ module EditActiveGame {
         constructor(private $location: ng.ILocationService,
             private $q: ng.IQService,
             private apiService: Shared.IApiService,
-            private playerSelectionService: Components.IPlayerSelectionService) {
-        }
-
-        public toggleModifyPlaylist(): void {
-            this.showModifyPlaylistScreen = !this.showModifyPlaylistScreen;
+            private playerSelectionService: Components.IPlayerSelectionService,
+            private newPlayerPanelService: Components.INewPlayerPanelService) {
+            
+            this.newPlayerPanelService.subscribeSavedPlayer((event, player: Shared.IPlayer)=>{
+                this.playerSelectionService.getPlayers().then(() => {
+                    var newPlayer = new Shared.GamePlayer();
+                    newPlayer.player = player;
+                    newPlayer.points = 0;
+                    newPlayer.rank = 0;
+                    this.addPlayer(newPlayer);
+                });
+            });
         }
 
         public getActiveGame(): ng.IPromise<void> {
