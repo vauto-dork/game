@@ -26,7 +26,13 @@ module Components {
         private disabled: boolean;
 		private noResults: boolean;
 		
-		private filter: string = "";
+		private get filter(): string {
+			return this.playerSelectionService.filter;
+		}
+
+		private set filter(value: string) {
+			this.playerSelectionService.filter = value;
+		}
 		
         constructor(private $element: ng.IAugmentedJQuery,
 			private $timeout: ng.ITimeoutService,
@@ -36,7 +42,7 @@ module Components {
         }
 		
 		private removeFilter(): void {
-			this.filter = "";
+			this.playerSelectionService.removeFilter();
 		}
 
 		private selectPlayer(item: Shared.IPlayer, model, label): void {

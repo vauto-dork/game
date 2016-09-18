@@ -1,9 +1,11 @@
 ﻿module Components {
     export interface IPlayerSelectionService {
+        filter: string;
         selectedPlayers: Shared.INewGamePlayer[];
         unselectedPlayers: Shared.INewGamePlayer[];
 
         reset(): void;
+        removeFilter(): void;
         getPlayers(): ng.IPromise<Shared.INewGame>;
         addPlayer(player: Shared.IPlayer): void;
         removePlayer(player: Shared.IPlayer): void;
@@ -15,8 +17,9 @@
     }
 
     export class PlayerSelectionService implements IPlayerSelectionService {
-        public static $inject: string[] = ['$q', 'apiService'];
+        public static $inject: string[] = ["$q", "apiService"];
 
+        private localFilter: string = "";
         private allPlayers: Shared.INewGamePlayer[] = [];
         private players: Shared.INewGamePlayer[] = [];
         private unselectedPlayersList: Shared.INewGamePlayer[] = [];
@@ -29,12 +32,24 @@
             return this.unselectedPlayersList;
         }
 
+        public get filter(): string{
+            return this.localFilter;
+        }
+
+        public set filter(value: string) {
+            this.localFilter = value;
+        }
+
         constructor(private $q: ng.IQService, private apiService: Shared.IApiService) {
 
         }
         
         private playerIndex(playerId: string): number {
             return this.players.map(p => { return p.playerId; }).indexOf(playerId);
+        }
+
+        public removeFilter(): void {
+            this.filter = "";
         }
 
         public addPlayer(player: Shared.IPlayer): void {

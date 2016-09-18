@@ -82,6 +82,7 @@ var Components;
         function PlayerSelectionService($q, apiService) {
             this.$q = $q;
             this.apiService = apiService;
+            this.localFilter = "";
             this.allPlayers = [];
             this.players = [];
             this.unselectedPlayersList = [];
@@ -100,8 +101,21 @@ var Components;
             enumerable: true,
             configurable: true
         });
+        Object.defineProperty(PlayerSelectionService.prototype, "filter", {
+            get: function () {
+                return this.localFilter;
+            },
+            set: function (value) {
+                this.localFilter = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
         PlayerSelectionService.prototype.playerIndex = function (playerId) {
             return this.players.map(function (p) { return p.playerId; }).indexOf(playerId);
+        };
+        PlayerSelectionService.prototype.removeFilter = function () {
+            this.filter = "";
         };
         PlayerSelectionService.prototype.addPlayer = function (player) {
             var found = this.allPlayers.filter(function (p) { return p.playerId === player._id; });
@@ -155,7 +169,7 @@ var Components;
                 };
             }));
         };
-        PlayerSelectionService.$inject = ['$q', 'apiService'];
+        PlayerSelectionService.$inject = ["$q", "apiService"];
         return PlayerSelectionService;
     }());
     Components.PlayerSelectionService = PlayerSelectionService;
@@ -183,10 +197,19 @@ var Components;
             this.$timeout = $timeout;
             this.$filter = $filter;
             this.playerSelectionService = playerSelectionService;
-            this.filter = "";
         }
+        Object.defineProperty(PlayerSelectorController.prototype, "filter", {
+            get: function () {
+                return this.playerSelectionService.filter;
+            },
+            set: function (value) {
+                this.playerSelectionService.filter = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
         PlayerSelectorController.prototype.removeFilter = function () {
-            this.filter = "";
+            this.playerSelectionService.removeFilter();
         };
         PlayerSelectorController.prototype.selectPlayer = function (item, model, label) {
             this.$element.find("input").focus();
@@ -762,10 +785,11 @@ var EditActiveGame;
     EditActiveGame.ModifyPlayersDirective = ModifyPlayersDirective;
     var ModifyPlayersController = (function (_super) {
         __extends(ModifyPlayersController, _super);
-        function ModifyPlayersController(editActiveGameService, newPlayerPanelService, editActiveGameCollapseService) {
+        function ModifyPlayersController(editActiveGameService, playerSelectionService, newPlayerPanelService, editActiveGameCollapseService) {
             var _this = this;
             _super.call(this);
             this.editActiveGameService = editActiveGameService;
+            this.playerSelectionService = playerSelectionService;
             this.newPlayerPanelService = newPlayerPanelService;
             this.editActiveGameCollapseService = editActiveGameCollapseService;
             this.newPlayerPanelService.subscribeFormCancel(function () {
@@ -796,7 +820,11 @@ var EditActiveGame;
         ModifyPlayersController.prototype.back = function () {
             this.editActiveGameCollapseService.disableModifyPlayers();
         };
-        ModifyPlayersController.$inject = ["editActiveGameService", "newPlayerPanelService", "editActiveGameCollapseService"];
+        ModifyPlayersController.prototype.enablePlayerSelectorPanel = function () {
+            this.playerSelectionService.removeFilter();
+            _super.prototype.enablePlayerSelectorPanel.call(this);
+        };
+        ModifyPlayersController.$inject = ["editActiveGameService", "playerSelectionService", "newPlayerPanelService", "editActiveGameCollapseService"];
         return ModifyPlayersController;
     }(Components.NewPlayerPanelBase));
     EditActiveGame.ModifyPlayersController = ModifyPlayersController;

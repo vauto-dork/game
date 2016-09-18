@@ -11,7 +11,7 @@
     }
 
     export class ModifyPlayersController extends Components.NewPlayerPanelBase {
-        public static $inject: string[] = ["editActiveGameService", "newPlayerPanelService", "editActiveGameCollapseService"];
+        public static $inject: string[] = ["editActiveGameService", "playerSelectionService", "newPlayerPanelService", "editActiveGameCollapseService"];
         
         private get unselectedPlayers(): Shared.INewGamePlayer[] {
             return this.editActiveGameService.unselectedPlayers;
@@ -23,6 +23,7 @@
         
         constructor(
             private editActiveGameService: IEditActiveGameService,
+            private playerSelectionService: Components.IPlayerSelectionService,
             private newPlayerPanelService: Components.INewPlayerPanelService,
             private editActiveGameCollapseService: IEditActiveGameCollapseService) {
             super();
@@ -44,5 +45,10 @@
         private back(): void {
             this.editActiveGameCollapseService.disableModifyPlayers();
         }
+
+        protected enablePlayerSelectorPanel(): void {
+			this.playerSelectionService.removeFilter();
+			super.enablePlayerSelectorPanel();
+		}
     }
 }

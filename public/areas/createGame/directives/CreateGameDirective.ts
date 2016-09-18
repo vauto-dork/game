@@ -18,7 +18,7 @@ module CreateGame {
 	}
 
     export class CreateGameController extends Components.NewPlayerPanelBase {
-        public static $inject: string[] = ["$window", "createGameService", "newPlayerPanelService"];
+        public static $inject: string[] = ["$window", "createGameService", "playerSelectionService", "newPlayerPanelService"];
 
 		private showLoading: boolean = false;
 		private showErrorMessage: boolean = false;
@@ -40,6 +40,7 @@ module CreateGame {
         
         constructor(private $window: ng.IWindowService,
 			private createGameService: ICreateGameService,
+			private playerSelectionService: Components.IPlayerSelectionService,
 			private newPlayerPanelService: Components.INewPlayerPanelService) {
 			super();
 
@@ -91,6 +92,11 @@ module CreateGame {
         
         private useGameOrder(): void {
 			this.createGameService.sortOrder = NewGameSort.Rating;
+		}
+
+		protected enablePlayerSelectorPanel(): void {
+			this.playerSelectionService.removeFilter();
+			super.enablePlayerSelectorPanel();
 		}
     }
 }
