@@ -91,9 +91,9 @@ var Components;
         GameCardController.prototype.copyGame = function (game) {
             this.changeState(State.Copy);
         };
-        GameCardController.$inject = ['$http', '$window', 'apiService'];
         return GameCardController;
     }());
+    GameCardController.$inject = ['$http', '$window', 'apiService'];
     Components.GameCardController = GameCardController;
 })(Components || (Components = {}));
 
@@ -162,9 +162,9 @@ var ActiveGame;
         ActiveGamesController.prototype.reload = function () {
             this.changeState(State.Loading);
         };
-        ActiveGamesController.$inject = ['apiService'];
         return ActiveGamesController;
     }());
+    ActiveGamesController.$inject = ['apiService'];
     ActiveGame.ActiveGamesController = ActiveGamesController;
 })(ActiveGame || (ActiveGame = {}));
 

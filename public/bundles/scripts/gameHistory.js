@@ -91,9 +91,9 @@ var Components;
         GameCardController.prototype.copyGame = function (game) {
             this.changeState(State.Copy);
         };
-        GameCardController.$inject = ['$http', '$window', 'apiService'];
         return GameCardController;
     }());
+    GameCardController.$inject = ['$http', '$window', 'apiService'];
     Components.GameCardController = GameCardController;
 })(Components || (Components = {}));
 
@@ -192,9 +192,9 @@ var DorkHistory;
         GameHistoryController.prototype.reload = function () {
             this.changeState(State.Loading);
         };
-        GameHistoryController.$inject = ['$timeout', 'dateTimeService', 'monthYearQueryService', 'apiService'];
         return GameHistoryController;
     }());
+    GameHistoryController.$inject = ['$timeout', 'dateTimeService', 'monthYearQueryService', 'apiService'];
     DorkHistory.GameHistoryController = GameHistoryController;
 })(DorkHistory || (DorkHistory = {}));
 

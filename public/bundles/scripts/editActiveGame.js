@@ -16,9 +16,9 @@ var Components;
     var PlayerFormController = (function () {
         function PlayerFormController() {
         }
-        PlayerFormController.$inject = [];
         return PlayerFormController;
     }());
+    PlayerFormController.$inject = [];
     Components.PlayerFormController = PlayerFormController;
 })(Components || (Components = {}));
 
@@ -169,9 +169,9 @@ var Components;
                 };
             }));
         };
-        PlayerSelectionService.$inject = ["$q", "apiService"];
         return PlayerSelectionService;
     }());
+    PlayerSelectionService.$inject = ["$q", "apiService"];
     Components.PlayerSelectionService = PlayerSelectionService;
 })(Components || (Components = {}));
 
@@ -226,9 +226,9 @@ var Components;
                 hasPlayers: list.length > 0
             };
         };
-        PlayerSelectorController.$inject = ["$element", "$timeout", "$filter", "playerSelectionService"];
         return PlayerSelectorController;
     }());
+    PlayerSelectorController.$inject = ["$element", "$timeout", "$filter", "playerSelectionService"];
     Components.PlayerSelectorController = PlayerSelectorController;
 })(Components || (Components = {}));
 
@@ -248,13 +248,14 @@ var Components;
     var NewPlayerPanelService = (function (_super) {
         __extends(NewPlayerPanelService, _super);
         function NewPlayerPanelService($timeout, $q, apiService) {
-            _super.call(this, $timeout);
-            this.$q = $q;
-            this.apiService = apiService;
-            this.event = {
+            var _this = _super.call(this, $timeout) || this;
+            _this.$q = $q;
+            _this.apiService = apiService;
+            _this.event = {
                 formCancel: "formCancel",
                 newPlayerReady: "newPlayerReady"
             };
+            return _this;
         }
         NewPlayerPanelService.prototype.subscribeFormCancel = function (callback) {
             this.subscribe(this.event.formCancel, callback);
@@ -274,9 +275,9 @@ var Components;
                 _this.$q.reject(data);
             });
         };
-        NewPlayerPanelService.$inject = ["$timeout", "$q", "apiService"];
         return NewPlayerPanelService;
     }(Shared.PubSubServiceBase));
+    NewPlayerPanelService.$inject = ["$timeout", "$q", "apiService"];
     Components.NewPlayerPanelService = NewPlayerPanelService;
 })(Components || (Components = {}));
 
@@ -370,9 +371,9 @@ var Components;
                 _this.disabled = false;
             });
         };
-        NewPlayerPanelController.$inject = ["newPlayerPanelService"];
         return NewPlayerPanelController;
     }());
+    NewPlayerPanelController.$inject = ["newPlayerPanelService"];
     Components.NewPlayerPanelController = NewPlayerPanelController;
 })(Components || (Components = {}));
 
@@ -599,9 +600,9 @@ var EditActiveGame;
             }
             return hasRanks;
         };
-        EditActiveGameService.$inject = ["$location", "$q", "apiService", "playerSelectionService", "newPlayerPanelService"];
         return EditActiveGameService;
     }());
+    EditActiveGameService.$inject = ["$location", "$q", "apiService", "playerSelectionService", "newPlayerPanelService"];
     EditActiveGame.EditActiveGameService = EditActiveGameService;
 })(EditActiveGame || (EditActiveGame = {}));
 
@@ -681,9 +682,9 @@ var EditActiveGame;
                 player.points = (points + 1 <= this.pointsMax) ? points + 1 : points;
             }
         };
-        EditScoresController.$inject = ['editActiveGameService'];
         return EditScoresController;
     }());
+    EditScoresController.$inject = ['editActiveGameService'];
     EditActiveGame.EditScoresController = EditScoresController;
 })(EditActiveGame || (EditActiveGame = {}));
 
@@ -760,9 +761,9 @@ var EditActiveGame;
         ReorderPlayersController.prototype.removePlayer = function (player) {
             this.editActiveGameService.removePlayer(player);
         };
-        ReorderPlayersController.$inject = ['editActiveGameService'];
         return ReorderPlayersController;
     }());
+    ReorderPlayersController.$inject = ['editActiveGameService'];
     EditActiveGame.ReorderPlayersController = ReorderPlayersController;
 })(EditActiveGame || (EditActiveGame = {}));
 
@@ -786,18 +787,18 @@ var EditActiveGame;
     var ModifyPlayersController = (function (_super) {
         __extends(ModifyPlayersController, _super);
         function ModifyPlayersController(editActiveGameService, playerSelectionService, newPlayerPanelService, editActiveGameCollapseService) {
-            var _this = this;
-            _super.call(this);
-            this.editActiveGameService = editActiveGameService;
-            this.playerSelectionService = playerSelectionService;
-            this.newPlayerPanelService = newPlayerPanelService;
-            this.editActiveGameCollapseService = editActiveGameCollapseService;
-            this.newPlayerPanelService.subscribeFormCancel(function () {
+            var _this = _super.call(this) || this;
+            _this.editActiveGameService = editActiveGameService;
+            _this.playerSelectionService = playerSelectionService;
+            _this.newPlayerPanelService = newPlayerPanelService;
+            _this.editActiveGameCollapseService = editActiveGameCollapseService;
+            _this.newPlayerPanelService.subscribeFormCancel(function () {
                 _this.disableAddNewPlayer();
             });
-            this.newPlayerPanelService.subscribeSavedPlayer(function () {
+            _this.newPlayerPanelService.subscribeSavedPlayer(function () {
                 _this.disableAddNewPlayer();
             });
+            return _this;
         }
         Object.defineProperty(ModifyPlayersController.prototype, "unselectedPlayers", {
             get: function () {
@@ -824,9 +825,9 @@ var EditActiveGame;
             this.playerSelectionService.removeFilter();
             _super.prototype.enablePlayerSelectorPanel.call(this);
         };
-        ModifyPlayersController.$inject = ["editActiveGameService", "playerSelectionService", "newPlayerPanelService", "editActiveGameCollapseService"];
         return ModifyPlayersController;
     }(Components.NewPlayerPanelBase));
+    ModifyPlayersController.$inject = ["editActiveGameService", "playerSelectionService", "newPlayerPanelService", "editActiveGameCollapseService"];
     EditActiveGame.ModifyPlayersController = ModifyPlayersController;
 })(EditActiveGame || (EditActiveGame = {}));
 
@@ -858,9 +859,9 @@ var EditActiveGame;
             enumerable: true,
             configurable: true
         });
-        RevertFinalizeController.$inject = ['editActiveGameService'];
         return RevertFinalizeController;
     }());
+    RevertFinalizeController.$inject = ['editActiveGameService'];
     EditActiveGame.RevertFinalizeController = RevertFinalizeController;
 })(EditActiveGame || (EditActiveGame = {}));
 
@@ -1017,9 +1018,9 @@ var EditActiveGame;
         EditActiveGameController.prototype.enableModifyPlayers = function () {
             this.editActiveGameCollapseService.enableModifyPlayers();
         };
-        EditActiveGameController.$inject = ["$window", "editActiveGameService", "alertsService", "editActiveGameCollapseService"];
         return EditActiveGameController;
     }());
+    EditActiveGameController.$inject = ["$window", "editActiveGameService", "alertsService", "editActiveGameCollapseService"];
     EditActiveGame.EditActiveGameController = EditActiveGameController;
 })(EditActiveGame || (EditActiveGame = {}));
 

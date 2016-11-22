@@ -14,7 +14,7 @@ module Shared {
     }
 
     export class DatePickerController {
-        public static $inject: string[] = ['$element', '$timeout', 'dateTimeService'];
+        public static $inject: string[] = ['$element', '$window', '$timeout', 'dateTimeService'];
 		
 		private date: Date;
 		private showNowButton: boolean;
@@ -38,12 +38,26 @@ module Shared {
 		}
 
         constructor(private $element: ng.IAugmentedJQuery,
+			private $window: ng.IWindowService,
 			private $timeout: ng.ITimeoutService,
 			private dateTimeService: IDateTimeService) {
 			$timeout(() => {
 				this.resizeTimePickerDropdown();
+				this.markInputSelectOnClick(".hours");
+				this.markInputSelectOnClick(".minutes");
 			}, 0);
         }
+
+		private markInputSelectOnClick(className: string): void {
+			var element = this.$element.find(".uib-time" + className).find("input"); 
+			element.on('click', () => {
+				if (!this.$window.getSelection().toString()) {
+					// Works in all browsers except mobile Safari. SetSelectionRange() is
+					// too much of a bear to get working properly with Angular and Typescript.
+					element.select();
+				}
+			});
+		}
 	
 		private openDatePicker(): void {
 			this.datePickerOpened = !this.datePickerOpened;
