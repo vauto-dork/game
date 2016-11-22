@@ -328,6 +328,11 @@ function getRankedPlayers(req, next, success) {
 					return !player.inactive;
 				});
 
+				// Remove duplicate players
+				players = players.filter(function(player) {
+					return !player.duplicate;
+				});
+
 				for (var i = 0; i < players.length; i++) {
 					var player = players[i];
 					// If the player is not ranked then add it as an unranked player.
