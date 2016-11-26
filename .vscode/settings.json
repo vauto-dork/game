@@ -8,4 +8,6 @@
         "**/*.js.map": true,
         "**/*.css.map": true
     }
+,
+"typescript.check.workspaceVersion": false
 }
