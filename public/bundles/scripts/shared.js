@@ -657,9 +657,10 @@ var Shared;
     }
     Shared.DatePickerDirective = DatePickerDirective;
     var DatePickerController = (function () {
-        function DatePickerController($element, $timeout, dateTimeService) {
+        function DatePickerController($element, $window, $timeout, dateTimeService) {
             var _this = this;
             this.$element = $element;
+            this.$window = $window;
             this.$timeout = $timeout;
             this.dateTimeService = dateTimeService;
             this.format = 'MMMM dd, yyyy';
@@ -675,6 +676,8 @@ var Shared;
             };
             $timeout(function () {
                 _this.resizeTimePickerDropdown();
+                _this.markInputSelectOnClick(".hours");
+                _this.markInputSelectOnClick(".minutes");
             }, 0);
         }
         Object.defineProperty(DatePickerController.prototype, "prettyDate", {
@@ -684,6 +687,15 @@ var Shared;
             enumerable: true,
             configurable: true
         });
+        DatePickerController.prototype.markInputSelectOnClick = function (className) {
+            var _this = this;
+            var element = this.$element.find(".uib-time" + className).find("input");
+            element.on('click', function () {
+                if (!_this.$window.getSelection().toString()) {
+                    element.select();
+                }
+            });
+        };
         DatePickerController.prototype.openDatePicker = function () {
             this.datePickerOpened = !this.datePickerOpened;
         };
@@ -708,7 +720,7 @@ var Shared;
         DatePickerController.prototype.useCurrentTime = function () {
             this.date = new Date();
         };
-        DatePickerController.$inject = ['$element', '$timeout', 'dateTimeService'];
+        DatePickerController.$inject = ['$element', '$window', '$timeout', 'dateTimeService'];
         return DatePickerController;
     }());
     Shared.DatePickerController = DatePickerController;
