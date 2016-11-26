@@ -16,9 +16,9 @@ var Components;
     var PlayerFormController = (function () {
         function PlayerFormController() {
         }
+        PlayerFormController.$inject = [];
         return PlayerFormController;
     }());
-    PlayerFormController.$inject = [];
     Components.PlayerFormController = PlayerFormController;
 })(Components || (Components = {}));
 
@@ -36,16 +36,15 @@ var Players;
     var PlayersListService = (function (_super) {
         __extends(PlayersListService, _super);
         function PlayersListService($timeout, $q, apiService) {
-            var _this = _super.call(this, $timeout) || this;
-            _this.$q = $q;
-            _this.apiService = apiService;
-            _this.event = {
+            _super.call(this, $timeout);
+            this.$q = $q;
+            this.apiService = apiService;
+            this.event = {
                 editOpen: "editOpen",
                 editCancel: "editCancel",
                 editSave: "editSave"
             };
-            _this.playerLoadPromise = _this.loadPlayers();
-            return _this;
+            this.playerLoadPromise = this.loadPlayers();
         }
         Object.defineProperty(PlayersListService.prototype, "players", {
             get: function () {
@@ -92,9 +91,9 @@ var Players;
         PlayersListService.prototype.openEdit = function () {
             this.publish(this.event.editOpen, null);
         };
+        PlayersListService.$inject = ['$timeout', '$q', 'apiService'];
         return PlayersListService;
     }(Shared.PubSubServiceBase));
-    PlayersListService.$inject = ['$timeout', '$q', 'apiService'];
     Players.PlayersListService = PlayersListService;
 })(Players || (Players = {}));
 
@@ -128,9 +127,9 @@ var Players;
         EditPlayerController.prototype.cancel = function () {
             this.playersListService.cancelEdit();
         };
+        EditPlayerController.$inject = ["playersListService"];
         return EditPlayerController;
     }());
-    EditPlayerController.$inject = ["playersListService"];
     Players.EditPlayerController = EditPlayerController;
 })(Players || (Players = {}));
 
@@ -242,9 +241,9 @@ var Players;
         PlayersListController.prototype.closeAlert = function (index) {
             this.alertsService.closeAlert(index);
         };
+        PlayersListController.$inject = ["apiService", "alertsService", "playersListService"];
         return PlayersListController;
     }());
-    PlayersListController.$inject = ["apiService", "alertsService", "playersListService"];
     Players.PlayersListController = PlayersListController;
 })(Players || (Players = {}));
 

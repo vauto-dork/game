@@ -238,9 +238,9 @@ var Shared;
                 _this.$window.scrollTo(0, 100000);
             });
         };
+        AlertsService.$inject = ['$timeout', '$window'];
         return AlertsService;
     }());
-    AlertsService.$inject = ['$timeout', '$window'];
     Shared.AlertsService = AlertsService;
 })(Shared || (Shared = {}));
 
@@ -469,9 +469,9 @@ var Shared;
             });
             return def.promise;
         };
+        ApiService.$inject = ['$http', '$q'];
         return ApiService;
     }());
-    ApiService.$inject = ['$http', '$q'];
     Shared.ApiService = ApiService;
 })(Shared || (Shared = {}));
 
@@ -575,9 +575,9 @@ var Shared;
             this.$location.search('year', year);
             this.$location.replace();
         };
+        MonthYearQueryService.$inject = ['$location'];
         return MonthYearQueryService;
     }());
-    MonthYearQueryService.$inject = ['$location'];
     Shared.MonthYearQueryService = MonthYearQueryService;
 })(Shared || (Shared = {}));
 
@@ -720,9 +720,9 @@ var Shared;
         DatePickerController.prototype.useCurrentTime = function () {
             this.date = new Date();
         };
+        DatePickerController.$inject = ['$element', '$window', '$timeout', 'dateTimeService'];
         return DatePickerController;
     }());
-    DatePickerController.$inject = ['$element', '$window', '$timeout', 'dateTimeService'];
     Shared.DatePickerController = DatePickerController;
 })(Shared || (Shared = {}));
 
@@ -747,9 +747,9 @@ var Shared;
                 this.sidebarOpen = false;
             }
         };
+        GlobalNavController.$inject = [];
         return GlobalNavController;
     }());
-    GlobalNavController.$inject = [];
     Shared.GlobalNavController = GlobalNavController;
 })(Shared || (Shared = {}));
 
@@ -768,9 +768,9 @@ var Shared;
     var LoadSpinnerController = (function () {
         function LoadSpinnerController() {
         }
+        LoadSpinnerController.$inject = [];
         return LoadSpinnerController;
     }());
-    LoadSpinnerController.$inject = [];
     Shared.LoadSpinnerController = LoadSpinnerController;
 })(Shared || (Shared = {}));
 
@@ -866,9 +866,9 @@ var Shared;
                 this.change();
             }
         };
+        MonthYearPickerController.$inject = ['dateTimeService'];
         return MonthYearPickerController;
     }());
-    MonthYearPickerController.$inject = ['dateTimeService'];
     Shared.MonthYearPickerController = MonthYearPickerController;
 })(Shared || (Shared = {}));
 
@@ -920,9 +920,9 @@ var Shared;
     var PlayerBonusPanelController = (function () {
         function PlayerBonusPanelController() {
         }
+        PlayerBonusPanelController.$inject = [];
         return PlayerBonusPanelController;
     }());
-    PlayerBonusPanelController.$inject = [];
     Shared.PlayerBonusPanelController = PlayerBonusPanelController;
 })(Shared || (Shared = {}));
 
@@ -943,9 +943,9 @@ var Shared;
     var PlayerNametagController = (function () {
         function PlayerNametagController() {
         }
+        PlayerNametagController.$inject = [];
         return PlayerNametagController;
     }());
-    PlayerNametagController.$inject = [];
     Shared.PlayerNametagController = PlayerNametagController;
 })(Shared || (Shared = {}));
 
@@ -975,9 +975,9 @@ var Shared;
             enumerable: true,
             configurable: true
         });
+        PlayerScoretagController.$inject = [];
         return PlayerScoretagController;
     }());
-    PlayerScoretagController.$inject = [];
     Shared.PlayerScoretagController = PlayerScoretagController;
 })(Shared || (Shared = {}));
 
