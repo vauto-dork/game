@@ -36,9 +36,9 @@ var Dotm;
                 console.error("Cannot get DOTM.");
             });
         };
-        DotmController.$inject = ['$scope', 'apiService'];
         return DotmController;
     }());
+    DotmController.$inject = ['$scope', 'apiService'];
     Dotm.DotmController = DotmController;
 })(Dotm || (Dotm = {}));
 
@@ -113,9 +113,9 @@ var Rankings;
             });
             return selectedPlayers;
         };
-        RankingsService.$inject = ['$q', 'apiService'];
         return RankingsService;
     }());
+    RankingsService.$inject = ['$q', 'apiService'];
     Rankings.RankingsService = RankingsService;
 })(Rankings || (Rankings = {}));
 
@@ -136,9 +136,9 @@ var Rankings;
     var RankingsCardController = (function () {
         function RankingsCardController() {
         }
-        RankingsCardController.$inject = [];
         return RankingsCardController;
     }());
+    RankingsCardController.$inject = [];
     Rankings.RankingsCardController = RankingsCardController;
 })(Rankings || (Rankings = {}));
 
@@ -230,9 +230,9 @@ var Rankings;
         RankingsController.prototype.toggleUnrankedPlayers = function () {
             this.showUnrankedPlayers = !this.showUnrankedPlayers;
         };
-        RankingsController.$inject = ['$scope', 'rankingsService'];
         return RankingsController;
     }());
+    RankingsController.$inject = ['$scope', 'rankingsService'];
     Rankings.RankingsController = RankingsController;
 })(Rankings || (Rankings = {}));
 
@@ -278,9 +278,9 @@ var Rankings;
                 console.error("Cannot get last game played.");
             });
         };
-        LeaderboardController.$inject = ['dateTimeService', 'apiService'];
         return LeaderboardController;
     }());
+    LeaderboardController.$inject = ['dateTimeService', 'apiService'];
     Rankings.LeaderboardController = LeaderboardController;
 })(Rankings || (Rankings = {}));
 
