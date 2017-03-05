@@ -25,5 +25,13 @@ module EnterScores {
         constructor(private enterScoresService: IEnterScoresService) {
 
         }
+
+        private addPlayer(data: Shared.INewGamePlayer): void {
+			this.enterScoresService.addPlayer(data);
+		}
+
+        private get unselectedPlayers(): Shared.INewGamePlayer[] {
+			return this.enterScoresService.unselectedPlayers;
+		}
     }
 }

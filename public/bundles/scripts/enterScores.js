@@ -396,6 +396,13 @@ var EnterScores;
             console.info("enter scores service started");
             this.currentState = ScoreFormState.DateSelect;
         }
+        Object.defineProperty(EnterScoresService.prototype, "unselectedPlayers", {
+            get: function () {
+                return [];
+            },
+            enumerable: true,
+            configurable: true
+        });
         Object.defineProperty(EnterScoresService.prototype, "state", {
             get: function () {
                 return this.currentState;
@@ -416,9 +423,11 @@ var EnterScores;
         EnterScoresService.prototype.createGame = function () {
             this.currentState = ScoreFormState.ScoreEntry;
         };
+        EnterScoresService.prototype.addPlayer = function (data) {
+        };
         return EnterScoresService;
     }());
-    EnterScoresService.$inject = [];
+    EnterScoresService.$inject = ["$q", "apiService", "playerSelectionService", "newPlayerPanelService"];
     EnterScores.EnterScoresService = EnterScoresService;
 })(EnterScores || (EnterScores = {}));
 
@@ -492,6 +501,16 @@ var EnterScores;
             },
             set: function (value) {
                 this.enterScoresService.datePlayed = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        ScoreFormPanelController.prototype.addPlayer = function (data) {
+            this.enterScoresService.addPlayer(data);
+        };
+        Object.defineProperty(ScoreFormPanelController.prototype, "unselectedPlayers", {
+            get: function () {
+                return this.enterScoresService.unselectedPlayers;
             },
             enumerable: true,
             configurable: true
