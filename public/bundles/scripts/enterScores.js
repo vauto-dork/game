@@ -386,10 +386,36 @@ newPlayerModule.directive('newPlayerPanel', Components.NewPlayerPanelDirective);
 
 var EnterScores;
 (function (EnterScores) {
+    var ScoreFormState;
+    (function (ScoreFormState) {
+        ScoreFormState[ScoreFormState["DateSelect"] = 0] = "DateSelect";
+        ScoreFormState[ScoreFormState["ScoreEntry"] = 1] = "ScoreEntry";
+    })(ScoreFormState = EnterScores.ScoreFormState || (EnterScores.ScoreFormState = {}));
     var EnterScoresService = (function () {
         function EnterScoresService() {
             console.info("enter scores service started");
+            this.currentState = ScoreFormState.DateSelect;
         }
+        Object.defineProperty(EnterScoresService.prototype, "state", {
+            get: function () {
+                return this.currentState;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(EnterScoresService.prototype, "datePlayed", {
+            get: function () {
+                return this.localDatePlayed;
+            },
+            set: function (value) {
+                this.localDatePlayed = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        EnterScoresService.prototype.createGame = function () {
+            this.currentState = ScoreFormState.ScoreEntry;
+        };
         return EnterScoresService;
     }());
     EnterScoresService.$inject = [];
@@ -400,10 +426,7 @@ var EnterScores;
 (function (EnterScores) {
     function GameTimePanelDirective() {
         return {
-            scope: {
-                datePlayed: "=",
-                create: "&"
-            },
+            scope: {},
             templateUrl: '/areas/enterScores/directives/GametimePanelTemplate.html',
             controller: 'GameTimePanelController',
             controllerAs: 'ctrl',
@@ -412,20 +435,20 @@ var EnterScores;
     }
     EnterScores.GameTimePanelDirective = GameTimePanelDirective;
     var GameTimePanelController = (function () {
-        function GameTimePanelController() {
-            this.localDatePlayed = null;
+        function GameTimePanelController(enterScoresService) {
+            this.enterScoresService = enterScoresService;
         }
         Object.defineProperty(GameTimePanelController.prototype, "datePlayed", {
             get: function () {
-                return this.localDatePlayed;
+                return this.enterScoresService.datePlayed;
             },
             set: function (value) {
-                if (!this.localDatePlayed && !!value) {
-                    this.localDatePlayed = value;
-                    this.localDatePlayed.setHours(12);
+                if (!this.enterScoresService.datePlayed && !!value) {
+                    this.enterScoresService.datePlayed = value;
+                    this.enterScoresService.datePlayed.setHours(12);
                 }
                 else {
-                    this.localDatePlayed = value;
+                    this.enterScoresService.datePlayed = value;
                 }
             },
             enumerable: true,
@@ -438,10 +461,45 @@ var EnterScores;
             enumerable: true,
             configurable: true
         });
+        GameTimePanelController.prototype.create = function () {
+            this.enterScoresService.createGame();
+        };
         return GameTimePanelController;
     }());
-    GameTimePanelController.$inject = [];
+    GameTimePanelController.$inject = ["enterScoresService"];
     EnterScores.GameTimePanelController = GameTimePanelController;
+})(EnterScores || (EnterScores = {}));
+
+var EnterScores;
+(function (EnterScores) {
+    function ScoreFormPanelDirective() {
+        return {
+            scope: {},
+            templateUrl: "/areas/enterScores/directives/ScoreFormPanelTemplate.html",
+            controller: "ScoreFormPanelController",
+            controllerAs: "ctrl",
+            bindToController: true
+        };
+    }
+    EnterScores.ScoreFormPanelDirective = ScoreFormPanelDirective;
+    var ScoreFormPanelController = (function () {
+        function ScoreFormPanelController(enterScoresService) {
+            this.enterScoresService = enterScoresService;
+        }
+        Object.defineProperty(ScoreFormPanelController.prototype, "datePlayed", {
+            get: function () {
+                return this.enterScoresService.datePlayed;
+            },
+            set: function (value) {
+                this.enterScoresService.datePlayed = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        return ScoreFormPanelController;
+    }());
+    ScoreFormPanelController.$inject = ["enterScoresService"];
+    EnterScores.ScoreFormPanelController = ScoreFormPanelController;
 })(EnterScores || (EnterScores = {}));
 
 var EnterScores;
@@ -460,9 +518,20 @@ var EnterScores;
         function EnterScoresController(enterScoresService) {
             this.enterScoresService = enterScoresService;
         }
-        EnterScoresController.prototype.createGame = function () {
-            console.info("creating game");
-        };
+        Object.defineProperty(EnterScoresController.prototype, "showGameTimePanel", {
+            get: function () {
+                return this.enterScoresService.state === EnterScores.ScoreFormState.DateSelect;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(EnterScoresController.prototype, "showScoreFormPanel", {
+            get: function () {
+                return this.enterScoresService.state === EnterScores.ScoreFormState.ScoreEntry;
+            },
+            enumerable: true,
+            configurable: true
+        });
         return EnterScoresController;
     }());
     EnterScoresController.$inject = ["enterScoresService"];
@@ -475,6 +544,9 @@ DorkModule.service('enterScoresService', EnterScores.EnterScoresService);
 
 DorkModule.controller('GameTimePanelController', EnterScores.GameTimePanelController);
 DorkModule.directive('gameTimePanel', EnterScores.GameTimePanelDirective);
+
+DorkModule.controller('ScoreFormPanelController', EnterScores.ScoreFormPanelController);
+DorkModule.directive('scoreFormPanel', EnterScores.ScoreFormPanelDirective);
 
 DorkModule.controller('EnterScoresController', EnterScores.EnterScoresController);
 DorkModule.directive('enterScores', EnterScores.EnterScoresDirective);

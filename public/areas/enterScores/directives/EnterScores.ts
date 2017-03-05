@@ -13,14 +13,16 @@ module EnterScores {
     export class EnterScoresController {
         public static $inject: string[] = ["enterScoresService"];
 
-        private datePlayed: Date;
+        private get showGameTimePanel(): boolean {
+            return this.enterScoresService.state === ScoreFormState.DateSelect;
+        }
+
+        private get showScoreFormPanel(): boolean {
+            return this.enterScoresService.state === ScoreFormState.ScoreEntry;
+        }
 
         constructor(private enterScoresService: IEnterScoresService) {
 
-        }
-
-        private createGame(): void {
-            console.info("creating game");
         }
     }
 }

@@ -2,8 +2,6 @@ module EnterScores {
     export function GameTimePanelDirective(): ng.IDirective {
         return {
             scope: {
-                datePlayed: "=",
-                create: "&"
             },
             templateUrl: '/areas/enterScores/directives/GametimePanelTemplate.html',
             controller: 'GameTimePanelController',
@@ -13,22 +11,20 @@ module EnterScores {
     }
 
     export class GameTimePanelController {
-        public static $inject: string[] = [];
-        private localDatePlayed: Date = null;
-        private create: Function;
+        public static $inject: string[] = ["enterScoresService"];
 
         private get datePlayed(): Date {
-            return this.localDatePlayed;
+            return this.enterScoresService.datePlayed;
         }
 
         private set datePlayed(value: Date) {
             // Once a date is selected, set it to noon to
             // default it to PM for convenience
-            if(!this.localDatePlayed && !!value) {
-                this.localDatePlayed = value;
-                this.localDatePlayed.setHours(12);
+            if(!this.enterScoresService.datePlayed && !!value) {
+                this.enterScoresService.datePlayed = value;
+                this.enterScoresService.datePlayed.setHours(12);
             } else {
-                this.localDatePlayed = value;
+                this.enterScoresService.datePlayed = value;
             }
         }
 
@@ -36,8 +32,12 @@ module EnterScores {
             return this.datePlayed !== null && this.datePlayed !== undefined && this.datePlayed.toISOString() !== "";
         }
         
-        constructor() {
+        constructor(private enterScoresService: IEnterScoresService) {
             
+        }
+
+        private create(): void {
+            this.enterScoresService.createGame();
         }
     }
 }

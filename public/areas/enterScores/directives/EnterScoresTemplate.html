@@ -2,7 +2,8 @@
     <div class="container">
         <div class="row">
             <div class="col-xs-12 col-md-5">
-                <game-time-panel date-played="ctrl.datePlayed" create="ctrl.createGame()"></game-time-panel>
+                <game-time-panel ng-show="ctrl.showGameTimePanel"></game-time-panel>
+                <score-form-panel ng-show="ctrl.showScoreFormPanel"></score-form-panel>
             </div>
         </div>
     </div>

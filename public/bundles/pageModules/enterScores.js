@@ -5,5 +5,8 @@ DorkModule.service('enterScoresService', EnterScores.EnterScoresService);
 DorkModule.controller('GameTimePanelController', EnterScores.GameTimePanelController);
 DorkModule.directive('gameTimePanel', EnterScores.GameTimePanelDirective);
 
+DorkModule.controller('ScoreFormPanelController', EnterScores.ScoreFormPanelController);
+DorkModule.directive('scoreFormPanel', EnterScores.ScoreFormPanelDirective);
+
 DorkModule.controller('EnterScoresController', EnterScores.EnterScoresController);
 DorkModule.directive('enterScores', EnterScores.EnterScoresDirective);

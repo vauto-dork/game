@@ -81,6 +81,7 @@
             "files": [
                 "areas/enterScores/services/EnterScoresService.js",
                 "areas/enterScores/directives/GameTimePanel.js",
+                "areas/enterScores/directives/ScoreFormPanel.js",
                 "areas/enterScores/directives/EnterScores.js",
                 "bundles/pageModules/enterScores.js"
             ],
