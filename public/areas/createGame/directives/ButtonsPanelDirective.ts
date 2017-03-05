@@ -13,7 +13,7 @@
     }
 
     export class ButtonsPanelController {
-        public static $inject: string[] = ['$window', 'createGameService'];
+        public static $inject: string[] = ['createGameService'];
         private datePlayed: Date = null;
         private create: Function;
 
@@ -25,16 +25,12 @@
             return this.createGameService.numPlayers > 0;
         }
 
-        constructor(private $window: ng.IWindowService, private createGameService: ICreateGameService) {
+        constructor(private createGameService: ICreateGameService) {
         }
 
         private reset(): void {
             this.datePlayed = null;
             this.createGameService.reset();
-        }
-
-        private useCurrentDateTime(): void {
-            this.datePlayed = new Date();
         }
 
         private get disableGameCreation(): boolean {

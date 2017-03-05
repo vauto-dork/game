@@ -387,223 +387,61 @@ newPlayerModule.directive('newPlayerPanel', Components.NewPlayerPanelDirective);
 var EnterScores;
 (function (EnterScores) {
     var EnterScoresService = (function () {
-        function EnterScoresService($location, $q, apiService, playerSelectionService, newPlayerPanelService) {
-            var _this = this;
-            this.$location = $location;
-            this.$q = $q;
-            this.apiService = apiService;
-            this.playerSelectionService = playerSelectionService;
-            this.newPlayerPanelService = newPlayerPanelService;
-            this.errorMessageList = [];
-            this.newPlayerPanelService.subscribeSavedPlayer(function (event, player) {
-                _this.playerSelectionService.getPlayers().then(function () {
-                    var newPlayer = new Shared.GamePlayer();
-                    newPlayer.player = player;
-                    newPlayer.points = 0;
-                    newPlayer.rank = 0;
-                    _this.addPlayer(newPlayer);
-                });
-            });
+        function EnterScoresService() {
+            console.info("enter scores service started");
         }
-        Object.defineProperty(EnterScoresService.prototype, "datePlayed", {
-            get: function () {
-                if (this.activeGame && this.activeGame.datePlayed) {
-                    return new Date(this.activeGame.datePlayed);
-                }
-                return null;
-            },
-            set: function (value) {
-                if (this.activeGame) {
-                    this.activeGame.datePlayed = value.toISOString();
-                }
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(EnterScoresService.prototype, "movePlayerActive", {
-            get: function () {
-                return this.isMovePlayerActive;
-            },
-            set: function (value) {
-                this.isMovePlayerActive = value;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(EnterScoresService.prototype, "errorMessages", {
-            get: function () {
-                return this.errorMessageList;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(EnterScoresService.prototype, "players", {
-            get: function () {
-                return this.activeGame.players;
-            },
-            set: function (value) {
-                this.activeGame.players = value;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(EnterScoresService.prototype, "unselectedPlayers", {
-            get: function () {
-                return this.playerSelectionService.unselectedPlayers;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        EnterScoresService.prototype.getActiveGame = function () {
-            var _this = this;
-            var def = this.$q.defer();
-            if (this.$location.path() !== undefined || this.$location.path() !== '') {
-                this.gameIdPath = this.$location.path();
-            }
-            var allPlayersPromise = this.playerSelectionService.getPlayers();
-            var activeGamePromise = this.apiService.getActiveGame(this.gameIdPath);
-            activeGamePromise.then(function (game) {
-                _this.activeGame = game;
-                def.resolve();
-            }, function () {
-                _this.addErrorMessage('Cannot get active game.');
-                def.reject();
-            });
-            this.$q.all([allPlayersPromise, activeGamePromise]).then(function () {
-                _this.players.forEach(function (p) {
-                    _this.playerSelectionService.addPlayer(p.player);
-                });
-            });
-            return def.promise;
-        };
-        EnterScoresService.prototype.playerIndex = function (playerId) {
-            return this.players.map(function (p) { return p.playerId; }).indexOf(playerId);
-        };
-        EnterScoresService.prototype.addPlayer = function (player) {
-            this.players.push(player);
-            this.playerSelectionService.addPlayer(player.player);
-        };
-        EnterScoresService.prototype.removePlayer = function (player) {
-            var index = this.playerIndex(player.playerId);
-            this.players.splice(index, 1);
-            this.playerSelectionService.removePlayer(player.player);
-        };
-        EnterScoresService.prototype.movePlayer = function (selectedPlayerId, destinationPlayer) {
-            var selectedPlayer = this.players.filter(function (p) {
-                return p.playerId === selectedPlayerId;
-            });
-            if (selectedPlayer.length === 1) {
-                var selectedPlayerIndex = this.playerIndex(selectedPlayerId);
-                this.players.splice(selectedPlayerIndex, 1);
-                var dropIndex = this.playerIndex(destinationPlayer.playerId);
-                if (selectedPlayerIndex <= dropIndex) {
-                    dropIndex += 1;
-                }
-                this.players.splice(dropIndex, 0, selectedPlayer[0]);
-            }
-            else {
-                console.error("Cannot find player: ", selectedPlayerId);
-            }
-        };
-        EnterScoresService.prototype.save = function () {
-            var _this = this;
-            var def = this.$q.defer();
-            if (this.filterRemovedPlayers()) {
-                this.apiService.saveActiveGame(this.gameIdPath, this.activeGame).then(function () {
-                    def.resolve();
-                }, function () {
-                    _this.addErrorMessage('Cannot save active game.');
-                    def.reject();
-                });
-            }
-            else {
-                def.reject();
-            }
-            return def.promise;
-        };
-        EnterScoresService.prototype.finalize = function (addBonusPoints) {
-            var _this = this;
-            var def = this.$q.defer();
-            if (this.filterRemovedPlayers() && this.hasRanks()) {
-                if (addBonusPoints) {
-                    this.addBonusPoints();
-                }
-                this.apiService.finalizeGame(this.activeGame).then(function () {
-                    _this.apiService.deleteActiveGame(_this.gameIdPath).then(function () {
-                        def.resolve();
-                    }, function () {
-                        _this.addErrorMessage('Cannot delete active game.');
-                        def.reject();
-                    });
-                }, function () {
-                    _this.addErrorMessage('Cannot finalize active game.');
-                    def.reject();
-                });
-            }
-            else {
-                def.reject();
-            }
-            return def.promise;
-        };
-        EnterScoresService.prototype.addBonusPoints = function () {
-            var numPlayers = this.players.length;
-            this.players.forEach(function (player) {
-                if (player.rank === 1) {
-                    player.points += numPlayers - 1;
-                }
-                if (player.rank === 2) {
-                    player.points += numPlayers - 2;
-                }
-                if (player.rank === 3) {
-                    player.points += numPlayers - 3;
-                }
-            });
-        };
-        EnterScoresService.prototype.addErrorMessage = function (message, clear) {
-            if (clear === void 0) { clear = true; }
-            if (clear) {
-                this.clearerrorMessageList();
-            }
-            this.errorMessageList.push(message);
-        };
-        EnterScoresService.prototype.clearerrorMessageList = function () {
-            this.errorMessageList = [];
-        };
-        EnterScoresService.prototype.filterRemovedPlayers = function () {
-            if (this.players.length < 3) {
-                this.addErrorMessage('Game cannot have less than three players.');
-                return false;
-            }
-            this.players.forEach(function (player) {
-                player.points = !player.points ? 0 : player.points;
-            });
-            return true;
-        };
-        EnterScoresService.prototype.hasRanks = function () {
-            this.clearerrorMessageList();
-            var rank1 = this.players.filter(function (value) { return value.rank === 1; }).length;
-            var rank2 = this.players.filter(function (value) { return value.rank === 2; }).length;
-            var rank3 = this.players.filter(function (value) { return value.rank === 3; }).length;
-            if (rank1 !== 1) {
-                this.addErrorMessage('No winner selected.', false);
-            }
-            if (rank2 !== 1) {
-                this.addErrorMessage('No second place selected.', false);
-            }
-            if (rank3 !== 1) {
-                this.addErrorMessage('No third place selected.', false);
-            }
-            var hasRanks = (rank1 === 1 && rank2 === 1 && rank3 === 1);
-            if (hasRanks) {
-                var winner = this.players.filter(function (player) { return player.rank === 1; });
-                this.activeGame.winner = winner[0].player;
-            }
-            return hasRanks;
-        };
         return EnterScoresService;
     }());
-    EnterScoresService.$inject = ["$location", "$q", "apiService", "playerSelectionService", "newPlayerPanelService"];
+    EnterScoresService.$inject = [];
     EnterScores.EnterScoresService = EnterScoresService;
+})(EnterScores || (EnterScores = {}));
+
+var EnterScores;
+(function (EnterScores) {
+    function GameTimePanelDirective() {
+        return {
+            scope: {
+                datePlayed: "=",
+                create: "&"
+            },
+            templateUrl: '/areas/enterScores/directives/GametimePanelTemplate.html',
+            controller: 'GameTimePanelController',
+            controllerAs: 'ctrl',
+            bindToController: true
+        };
+    }
+    EnterScores.GameTimePanelDirective = GameTimePanelDirective;
+    var GameTimePanelController = (function () {
+        function GameTimePanelController() {
+            this.localDatePlayed = null;
+        }
+        Object.defineProperty(GameTimePanelController.prototype, "datePlayed", {
+            get: function () {
+                return this.localDatePlayed;
+            },
+            set: function (value) {
+                if (!this.localDatePlayed && !!value) {
+                    this.localDatePlayed = value;
+                    this.localDatePlayed.setHours(12);
+                }
+                else {
+                    this.localDatePlayed = value;
+                }
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(GameTimePanelController.prototype, "hasDate", {
+            get: function () {
+                return this.datePlayed !== null && this.datePlayed !== undefined && this.datePlayed.toISOString() !== "";
+            },
+            enumerable: true,
+            configurable: true
+        });
+        return GameTimePanelController;
+    }());
+    GameTimePanelController.$inject = [];
+    EnterScores.GameTimePanelController = GameTimePanelController;
 })(EnterScores || (EnterScores = {}));
 
 var EnterScores;
@@ -622,6 +460,9 @@ var EnterScores;
         function EnterScoresController(enterScoresService) {
             this.enterScoresService = enterScoresService;
         }
+        EnterScoresController.prototype.createGame = function () {
+            console.info("creating game");
+        };
         return EnterScoresController;
     }());
     EnterScoresController.$inject = ["enterScoresService"];
@@ -631,6 +472,9 @@ var EnterScores;
 var DorkModule = angular.module('DorkModule', ['UxControlsModule', 'PlayerSelectorModule', 'NewPlayerPanelModule']);
 
 DorkModule.service('enterScoresService', EnterScores.EnterScoresService);
+
+DorkModule.controller('GameTimePanelController', EnterScores.GameTimePanelController);
+DorkModule.directive('gameTimePanel', EnterScores.GameTimePanelDirective);
 
 DorkModule.controller('EnterScoresController', EnterScores.EnterScoresController);
 DorkModule.directive('enterScores', EnterScores.EnterScoresDirective);

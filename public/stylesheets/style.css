@@ -607,15 +607,20 @@ input.ng-touched.ng-invalid {
   padding: 1em 0.5em;
   margin: auto; }
 
+.enter-scores-container,
 .edit-active-game {
   padding-top: 2em; }
+  .enter-scores-container .modify-players-button,
   .edit-active-game .modify-players-button {
     margin-bottom: 20px; }
+  .enter-scores-container .bonus-points-notice,
   .edit-active-game .bonus-points-notice {
     margin-top: 15px; }
+  .enter-scores-container .bonus-points-table,
   .edit-active-game .bonus-points-table {
     font-size: 14px;
     margin-bottom: 0; }
+  .enter-scores-container .datepicker-filler,
   .edit-active-game .datepicker-filler {
     padding-bottom: 20px; }
 

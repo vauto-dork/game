@@ -13,8 +13,14 @@ module EnterScores {
     export class EnterScoresController {
         public static $inject: string[] = ["enterScoresService"];
 
+        private datePlayed: Date;
+
         constructor(private enterScoresService: IEnterScoresService) {
 
+        }
+
+        private createGame(): void {
+            console.info("creating game");
         }
     }
 }

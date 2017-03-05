@@ -566,8 +566,7 @@ var CreateGame;
     }
     CreateGame.ButtonsPanelDirective = ButtonsPanelDirective;
     var ButtonsPanelController = (function () {
-        function ButtonsPanelController($window, createGameService) {
-            this.$window = $window;
+        function ButtonsPanelController(createGameService) {
             this.createGameService = createGameService;
             this.datePlayed = null;
         }
@@ -589,9 +588,6 @@ var CreateGame;
             this.datePlayed = null;
             this.createGameService.reset();
         };
-        ButtonsPanelController.prototype.useCurrentDateTime = function () {
-            this.datePlayed = new Date();
-        };
         Object.defineProperty(ButtonsPanelController.prototype, "disableGameCreation", {
             get: function () {
                 return !this.hasDate || !this.createGameService.hasMinimumPlayers;
@@ -601,7 +597,7 @@ var CreateGame;
         });
         return ButtonsPanelController;
     }());
-    ButtonsPanelController.$inject = ['$window', 'createGameService'];
+    ButtonsPanelController.$inject = ['createGameService'];
     CreateGame.ButtonsPanelController = ButtonsPanelController;
 })(CreateGame || (CreateGame = {}));
 
