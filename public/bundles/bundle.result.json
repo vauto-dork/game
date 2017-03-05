@@ -14,6 +14,9 @@
   "createGame": {
     "scripts": "<script src='/bundles/scripts/createGame.js' type='text/javascript'></script>"
   },
+  "enterScores": {
+    "scripts": "<script src='/bundles/scripts/enterScores.js' type='text/javascript'></script>"
+  },
   "editActiveGame": {
     "scripts": "<script src='/bundles/scripts/editActiveGame.js' type='text/javascript'></script>"
   },

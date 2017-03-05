@@ -12,6 +12,11 @@ router.get('/CreateGame', function(req, res, next) {
   res.render('createGame', { title: 'Create Game', scripts: bundler.scripts('createGame')});
 });
 
+/* GET new game page. */
+router.get('/EnterScores', function(req, res, next) {
+  res.render('enterScores', { title: 'Enter Scores', scripts: bundler.scripts('enterScores')});
+});
+
 /* GET game history page. */
 router.get('/GameHistory', function(req, res, next) {
   res.render('gameHistory', { title: 'Game History', scripts: bundler.scripts('gameHistory')});

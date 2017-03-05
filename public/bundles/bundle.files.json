@@ -77,6 +77,17 @@
                 "newPlayerPanel"
             ]
         },
+        "enterScores": {
+            "files": [
+                "areas/enterScores/services/EnterScoresService.js",
+                "areas/enterScores/directives/EnterScores.js",
+                "bundles/pageModules/enterScores.js"
+            ],
+            "components": [
+                "playerSelector",
+                "newPlayerPanel"
+            ]
+        },
         "editActiveGame": {
             "files": [
                 "areas/editActiveGame/services/EditActiveGameService.js",
