@@ -1,15 +1,13 @@
-<div class="score-form-panel-container">
-    <div class="datepicker-filler">
-        <date-picker date="ctrl.datePlayed"></date-picker>
+<div class="score-form-panel-container row">
+    <div class="col-xs-12 col-md-6 col-lg-5">
+        <div class="datepicker-filler">
+            <date-picker date="ctrl.datePlayed"></date-picker>
+        </div>
     </div>
 
-    <player-selector players="ctrl.unselectedPlayers" on-selected="ctrl.addPlayer(data)"></player-selector>
-
-    <div ng-repeat="player in ctrl.players">
-        {{player.playerId}}<br>
-        {{player.player.firstName}} {{player.player.lastName}}<br>
-        Rank: {{player.rank}}<br>
-        Points: {{player.points}}<br>
-        <hr>
+    <div class="col-xs-12 col-md-6 col-lg-7">
+        <player-selector players="ctrl.unselectedPlayers" on-selected="ctrl.addPlayer(data)"></player-selector>
+    
+        <edit-scores-panel></edit-scores-panel>
     </div>
 </div>

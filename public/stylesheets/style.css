@@ -443,6 +443,7 @@ input.ng-touched.ng-invalid {
   vertical-align: middle; }
 
 .game-column-player {
+  text-align: left;
   width: 22em; }
 
 .game-column-rank {

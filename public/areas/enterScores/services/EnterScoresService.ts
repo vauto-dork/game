@@ -112,10 +112,7 @@ module EnterScores {
         }
 
         public addPlayer(player: Shared.INewGamePlayer): void {
-            var gamePlayer = new Shared.GamePlayer();
-            gamePlayer.player = player.player;
-
-            this.players.push(gamePlayer);
+            this.players.push(player.toGamePlayer());
             this.playerSelectionService.addPlayer(player.player);
         }
 

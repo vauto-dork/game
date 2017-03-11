@@ -111,6 +111,13 @@ var Shared;
             };
             return player;
         };
+        NewGamePlayer.prototype.toGamePlayer = function () {
+            var gamePlayer = new Shared.GamePlayer();
+            gamePlayer.player = this.player;
+            gamePlayer.points = 0;
+            gamePlayer.rank = 0;
+            return gamePlayer;
+        };
         return NewGamePlayer;
     }());
     Shared.NewGamePlayer = NewGamePlayer;

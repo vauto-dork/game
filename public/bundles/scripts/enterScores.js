@@ -478,9 +478,7 @@ var EnterScores;
             });
         };
         EnterScoresService.prototype.addPlayer = function (player) {
-            var gamePlayer = new Shared.GamePlayer();
-            gamePlayer.player = player.player;
-            this.players.push(gamePlayer);
+            this.players.push(player.toGamePlayer());
             this.playerSelectionService.addPlayer(player.player);
         };
         EnterScoresService.prototype.removePlayer = function (player) {
@@ -492,6 +490,64 @@ var EnterScores;
     }());
     EnterScoresService.$inject = ["$q", "apiService", "playerSelectionService", "newPlayerPanelService"];
     EnterScores.EnterScoresService = EnterScoresService;
+})(EnterScores || (EnterScores = {}));
+
+var EnterScores;
+(function (EnterScores) {
+    function EditScoresPanelDirective() {
+        return {
+            scope: {
+                disabled: '='
+            },
+            templateUrl: '/areas/enterScores/directives/EditScoresPanelTemplate.html',
+            controller: 'EditScoresPanelController',
+            controllerAs: 'ctrl',
+            bindToController: true
+        };
+    }
+    EnterScores.EditScoresPanelDirective = EditScoresPanelDirective;
+    var EditScoresPanelController = (function () {
+        function EditScoresPanelController(enterScoresService) {
+            this.enterScoresService = enterScoresService;
+            this.pointsMin = -4;
+            this.pointsMax = 99;
+        }
+        Object.defineProperty(EditScoresPanelController.prototype, "players", {
+            get: function () {
+                return this.enterScoresService.players;
+            },
+            set: function (value) {
+                this.enterScoresService.players = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        EditScoresPanelController.prototype.rankHandler = function (player) {
+            player.rank = player.rank === null ? 0 : player.rank;
+            this.players.forEach(function (p) {
+                if (p.playerId !== player.playerId) {
+                    if (player.rank > 0 && p.rank === player.rank) {
+                        p.rank = 0;
+                    }
+                }
+            });
+        };
+        EditScoresPanelController.prototype.decrementScore = function (player) {
+            if (!this.disabled) {
+                var points = player.points;
+                player.points = (points - 1 >= this.pointsMin) ? points - 1 : points;
+            }
+        };
+        EditScoresPanelController.prototype.incrementScore = function (player) {
+            if (!this.disabled) {
+                var points = player.points;
+                player.points = (points + 1 <= this.pointsMax) ? points + 1 : points;
+            }
+        };
+        return EditScoresPanelController;
+    }());
+    EditScoresPanelController.$inject = ['enterScoresService'];
+    EnterScores.EditScoresPanelController = EditScoresPanelController;
 })(EnterScores || (EnterScores = {}));
 
 var EnterScores;
@@ -630,6 +686,9 @@ var EnterScores;
 var DorkModule = angular.module('DorkModule', ['UxControlsModule', 'PlayerSelectorModule', 'NewPlayerPanelModule']);
 
 DorkModule.service('enterScoresService', EnterScores.EnterScoresService);
+
+DorkModule.controller('EditScoresPanelController', EnterScores.EditScoresPanelController);
+DorkModule.directive('editScoresPanel', EnterScores.EditScoresPanelDirective);
 
 DorkModule.controller('GameTimePanelController', EnterScores.GameTimePanelController);
 DorkModule.directive('gameTimePanel', EnterScores.GameTimePanelDirective);

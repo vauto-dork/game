@@ -5,6 +5,7 @@ module Shared {
 		rating: number;
 		orderNumber?: number;
 		toGamePlayerViewModel(): IGamePlayerViewModel;
+		toGamePlayer(): IGamePlayer;
 	}
 	
 	export class NewGamePlayer implements INewGamePlayer {
@@ -33,6 +34,14 @@ module Shared {
 			}
 			
 			return player;
+		}
+
+		public toGamePlayer(): IGamePlayer {
+			var gamePlayer = new Shared.GamePlayer();
+            gamePlayer.player = this.player;
+            gamePlayer.points = 0;
+            gamePlayer.rank = 0;
+			return gamePlayer;
 		}
 	}
 }

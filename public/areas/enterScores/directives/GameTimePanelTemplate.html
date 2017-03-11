@@ -1,15 +1,19 @@
-<div class="text-center datepicker-filler">
-    <date-picker date="ctrl.datePlayed" show-now-button="true"></date-picker>
-</div>
-
-<div class="btn-row">
-    <div class="btn-group btn-group-justified" role="group">
-
-        <div class="btn-group" role="group">
-            <button type="button" class="btn btn-success btn-lg" ng-click="ctrl.create()" ng-disabled="!ctrl.hasDate">
-                Next <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
-            </button>
+<div class="row">
+    <div class="col-xs-12 col-md-6 col-lg-7">
+        <div class="text-center datepicker-filler">
+            <date-picker date="ctrl.datePlayed" show-now-button="true"></date-picker>
         </div>
 
+        <div class="btn-row">
+            <div class="btn-group btn-group-justified" role="group">
+
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-success btn-lg" ng-click="ctrl.create()" ng-disabled="!ctrl.hasDate">
+                        Next <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+                    </button>
+                </div>
+
+            </div>
+        </div>
     </div>
 </div>
