@@ -109,8 +109,7 @@
         }
 
         public debugPrintPlayersTable(players: Shared.INewGamePlayer[]): void {
-            // Change "info" to "table" to show as table in browser debugger
-            console.info(players.map((p) => {
+            console.table(players.map((p) => {
                 return {
                     orderNumber: p.orderNumber,
                     rating: p.rating,

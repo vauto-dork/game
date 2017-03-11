@@ -22,6 +22,10 @@ module EnterScores {
             this.enterScoresService.datePlayed = value;
         }
 
+        public get players(): Shared.IGamePlayer[] {
+            return this.enterScoresService.players;
+        }
+
         constructor(private enterScoresService: IEnterScoresService) {
 
         }

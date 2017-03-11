@@ -4,4 +4,12 @@
     </div>
 
     <player-selector players="ctrl.unselectedPlayers" on-selected="ctrl.addPlayer(data)"></player-selector>
+
+    <div ng-repeat="player in ctrl.players">
+        {{player.playerId}}<br>
+        {{player.player.firstName}} {{player.player.lastName}}<br>
+        Rank: {{player.rank}}<br>
+        Points: {{player.points}}<br>
+        <hr>
+    </div>
 </div>

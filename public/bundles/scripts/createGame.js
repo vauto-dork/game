@@ -161,7 +161,7 @@ var Components;
             this.debugPrintPlayersTable(this.unselectedPlayers);
         };
         PlayerSelectionService.prototype.debugPrintPlayersTable = function (players) {
-            console.info(players.map(function (p) {
+            console.table(players.map(function (p) {
                 return {
                     orderNumber: p.orderNumber,
                     rating: p.rating,

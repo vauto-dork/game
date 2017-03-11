@@ -161,7 +161,7 @@ var Components;
             this.debugPrintPlayersTable(this.unselectedPlayers);
         };
         PlayerSelectionService.prototype.debugPrintPlayersTable = function (players) {
-            console.info(players.map(function (p) {
+            console.table(players.map(function (p) {
                 return {
                     orderNumber: p.orderNumber,
                     rating: p.rating,
@@ -392,13 +392,45 @@ var EnterScores;
         ScoreFormState[ScoreFormState["ScoreEntry"] = 1] = "ScoreEntry";
     })(ScoreFormState = EnterScores.ScoreFormState || (EnterScores.ScoreFormState = {}));
     var EnterScoresService = (function () {
-        function EnterScoresService() {
-            console.info("enter scores service started");
+        function EnterScoresService($q, apiService, playerSelectionService, newPlayerPanelService) {
+            var _this = this;
+            this.$q = $q;
+            this.apiService = apiService;
+            this.playerSelectionService = playerSelectionService;
+            this.newPlayerPanelService = newPlayerPanelService;
+            this.firstGameOfMonth = false;
             this.currentState = ScoreFormState.DateSelect;
+            this.players = [];
+            this.playerLoadPromise = this.playerSelectionService.getPlayers().then(function (data) {
+                _this.initializeData(data.firstGameOfMonth);
+                _this.$q.resolve();
+            }, function () {
+                _this.initializeData(true);
+                _this.$q.resolve();
+            });
+            this.newPlayerPanelService.subscribeSavedPlayer(function (event, player) {
+                _this.playerSelectionService.getPlayers().then(function () {
+                    var newPlayer = new Shared.NewGamePlayer();
+                    newPlayer.player = player;
+                    newPlayer.orderNumber = 0;
+                    newPlayer.rating = 0;
+                    _this.addPlayer(newPlayer);
+                });
+            });
         }
         Object.defineProperty(EnterScoresService.prototype, "unselectedPlayers", {
             get: function () {
-                return [];
+                return this.playerSelectionService.unselectedPlayers;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(EnterScoresService.prototype, "players", {
+            get: function () {
+                return this.localPlayers;
+            },
+            set: function (value) {
+                this.localPlayers = value;
             },
             enumerable: true,
             configurable: true
@@ -420,10 +452,41 @@ var EnterScores;
             enumerable: true,
             configurable: true
         });
+        EnterScoresService.prototype.initializeData = function (firstGameOfMonth) {
+            this.firstGameOfMonth = firstGameOfMonth;
+            this.reset();
+        };
+        EnterScoresService.prototype.init = function () {
+            return this.playerLoadPromise;
+        };
+        EnterScoresService.prototype.reset = function () {
+            this.playerSelectionService.reset();
+        };
+        EnterScoresService.prototype.playerIndex = function (playerId) {
+            return this.players.map(function (p) { return p.playerId; }).indexOf(playerId);
+        };
         EnterScoresService.prototype.createGame = function () {
             this.currentState = ScoreFormState.ScoreEntry;
         };
-        EnterScoresService.prototype.addPlayer = function (data) {
+        EnterScoresService.prototype.createNewActiveGame = function (datePlayed) {
+            var _this = this;
+            var game = new Shared.Game();
+            game.datePlayed = datePlayed.toISOString();
+            game.players = this.players;
+            this.apiService.createActiveGame(game).then(function (editUrl) {
+                _this.gameId = editUrl;
+            });
+        };
+        EnterScoresService.prototype.addPlayer = function (player) {
+            var gamePlayer = new Shared.GamePlayer();
+            gamePlayer.player = player.player;
+            this.players.push(gamePlayer);
+            this.playerSelectionService.addPlayer(player.player);
+        };
+        EnterScoresService.prototype.removePlayer = function (player) {
+            var index = this.playerIndex(player.playerId);
+            this.players.splice(index, 1);
+            this.playerSelectionService.removePlayer(player.player);
         };
         return EnterScoresService;
     }());
@@ -501,6 +564,13 @@ var EnterScores;
             },
             set: function (value) {
                 this.enterScoresService.datePlayed = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(ScoreFormPanelController.prototype, "players", {
+            get: function () {
+                return this.enterScoresService.players;
             },
             enumerable: true,
             configurable: true
