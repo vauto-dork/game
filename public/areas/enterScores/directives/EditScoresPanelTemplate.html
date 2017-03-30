@@ -1,13 +1,13 @@
-<div class="playlist-scores-row" ng-repeat="player in ctrl.players">
-    <div class="panel panel-default">
-        <div class="panel-heading">
+<div class="playlist-scores-row score-row-compact" ng-repeat="player in ctrl.players">
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-4">
             <h3 class="panel-title">
                 <player-nametag player="player.player"></player-nametag>
             </h3>
         </div>
 
-        <div class="panel-body text-center">
-
+        <div class="col-xs-12 col-sm-8 text-right">
             <div class="game-column-rank">
                 <div class="btn-group btn-group-lg game-rank-group">
                     <button class="btn btn-default" ng-model="player.rank" ng-change="ctrl.rankHandler(player)" uib-btn-radio="1" ng-disabled="ctrl.disabled" uncheckable>1</button>
@@ -25,8 +25,8 @@
                 </div>
 
                 <input class="form-control input-lg game-score-numeric-input" type="number" pattern="-?[0-9]*"
-                       step="1" min="{{ctrl.pointsMin}}" max="{{ctrl.pointsMax}}" ng-model="player.points"
-                       ng-disabled="ctrl.disabled" numeric-up-down required />
+                        step="1" min="{{ctrl.pointsMin}}" max="{{ctrl.pointsMax}}" ng-model="player.points"
+                        ng-disabled="ctrl.disabled" numeric-up-down required />
 
                 <div class="game-score-modifier-icons">
                     <a class="btn btn-link btn-lg" ng-class="{ disabled: ctrl.disabled }" ng-click="ctrl.incrementScore(player)">
@@ -35,7 +35,6 @@
                 </div>
 
             </div>
-
         </div>
     </div>
 

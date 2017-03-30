@@ -593,6 +593,12 @@ input.ng-touched.ng-invalid {
   padding: 1em 0;
   padding: 0 0.5em;
   margin: auto; }
+  .playlist-scores-row.score-row-compact {
+    border-bottom: 1px solid #7a8394; }
+    .playlist-scores-row.score-row-compact .panel-title {
+      padding-top: 0.5em; }
+    .playlist-scores-row.score-row-compact:first-child {
+      border-top: 1px solid #7a8394; }
 
 .dotm-row {
   display: block;

@@ -108,6 +108,18 @@
 	@include row;
 	padding: 0 $standard-spacing;
 	margin: auto;
+
+	&.score-row-compact {
+		border-bottom: 1px solid $gray;
+
+		.panel-title {
+			padding-top: 0.5em;
+		}
+
+		&:first-child {
+			border-top: 1px solid $gray;
+		}
+	}
 }
 
 .dotm-row {
