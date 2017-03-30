@@ -646,3 +646,12 @@ input.ng-touched.ng-invalid {
     .month-year-picker .myp-month select,
     .month-year-picker .myp-year select {
       font-size: 18px; }
+
+.temp-player-panel {
+  padding: 1em;
+  margin-bottom: 1em;
+  border: 1px solid #7a8394; }
+  .temp-player-panel .modifier-controls {
+    padding-top: 0.25em; }
+    .temp-player-panel .modifier-controls .btn-group {
+      margin-left: 1em; }

@@ -7,8 +7,9 @@ module EnterScores {
 
         init(): ng.IPromise<void>;
         reset(): void;
-		addPlayer(player: Shared.INewGamePlayer): void;
-        removePlayer(player: Shared.INewGamePlayer): void;
+		addPlayer(player: Shared.IGamePlayer): void;
+        removePlayer(player: Shared.IGamePlayer): void;
+        changePlayerPoints(playerId: string, points: number): void;
         createGame(): void;
     }
 
@@ -111,15 +112,26 @@ module EnterScores {
 			});
         }
 
-        public addPlayer(player: Shared.INewGamePlayer): void {
-            this.players.push(player.toGamePlayer());
+        public addPlayer(player: Shared.IGamePlayer): void {
+            this.players.push(player);
             this.playerSelectionService.addPlayer(player.player);
         }
 
-        public removePlayer(player: Shared.INewGamePlayer): void {
+        public removePlayer(player: Shared.IGamePlayer): void {
             var index = this.playerIndex(player.playerId);
             this.players.splice(index, 1);
             this.playerSelectionService.removePlayer(player.player);
+        }
+
+        public changePlayerPoints(playerId: string, points: number): void {
+            this.players.some((p) => {
+                if(p.playerId === playerId) {
+                    p.points = points;
+                    return true;
+                }
+
+                return false;
+            });
         }
     }
 }

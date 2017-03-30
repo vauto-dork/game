@@ -180,3 +180,17 @@
 		}
 	}
 }
+
+.temp-player-panel {
+	padding: 1em;
+	margin-bottom: 1em;
+	border: 1px solid $gray;
+
+	.modifier-controls {
+		padding-top: 0.25em;
+
+		.btn-group {
+			margin-left: 1em;
+		}
+	}
+}

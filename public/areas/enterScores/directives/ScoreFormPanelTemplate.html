@@ -6,8 +6,19 @@
     </div>
 
     <div class="col-xs-12 col-lg-8 col-lg-offset-2">
-        <player-selector players="ctrl.unselectedPlayers" on-selected="ctrl.addPlayer(data)"></player-selector>
+        <player-selector
+            players="ctrl.unselectedPlayers"
+            on-selected="ctrl.playerSelect(data)"
+            ng-show="!ctrl.showTempPlayerPanel">
+        </player-selector>
     
+        <temp-player-panel
+            player="ctrl.tempPlayer"
+            add="ctrl.addPlayer()"
+            cancel="ctrl.closeTempPlayerPanel()"
+            ng-show="ctrl.showTempPlayerPanel">
+        </temp-player-panel>
+
         <edit-scores-panel></edit-scores-panel>
     </div>
 </div>

@@ -80,6 +80,7 @@
         "enterScores": {
             "files": [
                 "areas/enterScores/services/EnterScoresService.js",
+                "areas/enterScores/directives/TempPlayerPanel.js",
                 "areas/enterScores/directives/EditScoresPanel.js",
                 "areas/enterScores/directives/GameTimePanel.js",
                 "areas/enterScores/directives/ScoreFormPanel.js",

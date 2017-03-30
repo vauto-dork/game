@@ -2,6 +2,9 @@ var DorkModule = angular.module('DorkModule', ['UxControlsModule', 'PlayerSelect
 
 DorkModule.service('enterScoresService', EnterScores.EnterScoresService);
 
+DorkModule.controller('TempPlayerPanelController', EnterScores.TempPlayerPanelController);
+DorkModule.directive('tempPlayerPanel', EnterScores.TempPlayerPanelDirective);
+
 DorkModule.controller('EditScoresPanelController', EnterScores.EditScoresPanelController);
 DorkModule.directive('editScoresPanel', EnterScores.EditScoresPanelDirective);
 

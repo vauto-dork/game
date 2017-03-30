@@ -22,7 +22,10 @@ module EnterScores {
             // default it to PM for convenience
             if(!this.enterScoresService.datePlayed && !!value) {
                 this.enterScoresService.datePlayed = value;
-                this.enterScoresService.datePlayed.setHours(12);
+
+                if(value.getHours() === 0) {
+                    this.enterScoresService.datePlayed.setHours(12);
+                }
             } else {
                 this.enterScoresService.datePlayed = value;
             }

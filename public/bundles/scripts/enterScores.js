@@ -478,7 +478,7 @@ var EnterScores;
             });
         };
         EnterScoresService.prototype.addPlayer = function (player) {
-            this.players.push(player.toGamePlayer());
+            this.players.push(player);
             this.playerSelectionService.addPlayer(player.player);
         };
         EnterScoresService.prototype.removePlayer = function (player) {
@@ -486,10 +486,72 @@ var EnterScores;
             this.players.splice(index, 1);
             this.playerSelectionService.removePlayer(player.player);
         };
+        EnterScoresService.prototype.changePlayerPoints = function (playerId, points) {
+            this.players.some(function (p) {
+                if (p.playerId === playerId) {
+                    p.points = points;
+                    return true;
+                }
+                return false;
+            });
+        };
         return EnterScoresService;
     }());
     EnterScoresService.$inject = ["$q", "apiService", "playerSelectionService", "newPlayerPanelService"];
     EnterScores.EnterScoresService = EnterScoresService;
+})(EnterScores || (EnterScores = {}));
+
+var EnterScores;
+(function (EnterScores) {
+    function TempPlayerPanelDirective() {
+        return {
+            scope: {
+                player: "=",
+                cancel: "&",
+                add: "&"
+            },
+            templateUrl: '/areas/enterScores/directives/TempPlayerPanelTemplate.html',
+            controller: 'TempPlayerPanelController',
+            controllerAs: 'ctrl',
+            bindToController: true
+        };
+    }
+    EnterScores.TempPlayerPanelDirective = TempPlayerPanelDirective;
+    var TempPlayerPanelController = (function () {
+        function TempPlayerPanelController($element, $timeout) {
+            this.$element = $element;
+            this.$timeout = $timeout;
+            this.pointsMin = -4;
+            this.pointsMax = 99;
+        }
+        Object.defineProperty(TempPlayerPanelController.prototype, "player", {
+            get: function () {
+                return this.gamePlayer;
+            },
+            set: function (value) {
+                var _this = this;
+                this.gamePlayer = value;
+                if (this.$element) {
+                    this.$timeout(function () {
+                        _this.$element.find(".game-score-numeric-input").click();
+                    });
+                }
+            },
+            enumerable: true,
+            configurable: true
+        });
+        TempPlayerPanelController.prototype.decrementScore = function (player) {
+            var points = player.points;
+            player.points = (points - 1 >= this.pointsMin) ? points - 1 : points;
+        };
+        TempPlayerPanelController.prototype.incrementScore = function (player) {
+            var points = player.points;
+            player.points = (points + 1 <= this.pointsMax) ? points + 1 : points;
+        };
+        return TempPlayerPanelController;
+    }());
+    TempPlayerPanelController.$inject = ["$element", "$timeout"];
+    EnterScores.TempPlayerPanelController = TempPlayerPanelController;
 })(EnterScores || (EnterScores = {}));
 
 var EnterScores;
@@ -573,7 +635,9 @@ var EnterScores;
             set: function (value) {
                 if (!this.enterScoresService.datePlayed && !!value) {
                     this.enterScoresService.datePlayed = value;
-                    this.enterScoresService.datePlayed.setHours(12);
+                    if (value.getHours() === 0) {
+                        this.enterScoresService.datePlayed.setHours(12);
+                    }
                 }
                 else {
                     this.enterScoresService.datePlayed = value;
@@ -611,8 +675,11 @@ var EnterScores;
     }
     EnterScores.ScoreFormPanelDirective = ScoreFormPanelDirective;
     var ScoreFormPanelController = (function () {
-        function ScoreFormPanelController(enterScoresService) {
+        function ScoreFormPanelController($timeout, $element, enterScoresService) {
+            this.$timeout = $timeout;
+            this.$element = $element;
             this.enterScoresService = enterScoresService;
+            this.showTempPlayerPanel = false;
         }
         Object.defineProperty(ScoreFormPanelController.prototype, "datePlayed", {
             get: function () {
@@ -631,8 +698,22 @@ var EnterScores;
             enumerable: true,
             configurable: true
         });
-        ScoreFormPanelController.prototype.addPlayer = function (data) {
-            this.enterScoresService.addPlayer(data);
+        ScoreFormPanelController.prototype.playerSelect = function (data) {
+            this.tempPlayer = data.toGamePlayer();
+            this.showTempPlayerPanel = true;
+        };
+        ScoreFormPanelController.prototype.closeTempPlayerPanel = function () {
+            var _this = this;
+            this.showTempPlayerPanel = false;
+            this.tempPlayer = null;
+            this.$timeout(function () {
+                _this.$element.find(".player-selector").find("input").focus();
+            });
+        };
+        ScoreFormPanelController.prototype.addPlayer = function () {
+            this.enterScoresService.addPlayer(this.tempPlayer);
+            this.enterScoresService.changePlayerPoints(this.tempPlayer.playerId, this.tempPlayer.points);
+            this.closeTempPlayerPanel();
         };
         Object.defineProperty(ScoreFormPanelController.prototype, "unselectedPlayers", {
             get: function () {
@@ -643,7 +724,7 @@ var EnterScores;
         });
         return ScoreFormPanelController;
     }());
-    ScoreFormPanelController.$inject = ["enterScoresService"];
+    ScoreFormPanelController.$inject = ["$timeout", "$element", "enterScoresService"];
     EnterScores.ScoreFormPanelController = ScoreFormPanelController;
 })(EnterScores || (EnterScores = {}));
 
@@ -686,6 +767,9 @@ var EnterScores;
 var DorkModule = angular.module('DorkModule', ['UxControlsModule', 'PlayerSelectorModule', 'NewPlayerPanelModule']);
 
 DorkModule.service('enterScoresService', EnterScores.EnterScoresService);
+
+DorkModule.controller('TempPlayerPanelController', EnterScores.TempPlayerPanelController);
+DorkModule.directive('tempPlayerPanel', EnterScores.TempPlayerPanelDirective);
 
 DorkModule.controller('EditScoresPanelController', EnterScores.EditScoresPanelController);
 DorkModule.directive('editScoresPanel', EnterScores.EditScoresPanelDirective);
