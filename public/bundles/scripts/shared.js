@@ -431,6 +431,19 @@ var Shared;
             });
             return def.promise;
         };
+        ApiService.prototype.getFinalizeGame = function (id) {
+            var def = this.$q.defer();
+            var path = '/Games/' + id;
+            this.$http.get(path).success(function (data, status, headers, config) {
+                var game = new Shared.Game(data);
+                def.resolve(game);
+            })
+                .error(function (data, status, headers, config) {
+                console.error('Cannot get games played.');
+                def.reject(data);
+            });
+            return def.promise;
+        };
         ApiService.prototype.getGames = function (month, year) {
             var def = this.$q.defer();
             var path = '/Games?month=' + month + '&year=' + year;

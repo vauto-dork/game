@@ -386,6 +386,11 @@ newPlayerModule.directive('newPlayerPanel', Components.NewPlayerPanelDirective);
 
 var EditActiveGame;
 (function (EditActiveGame) {
+    var FinalizeGameType;
+    (function (FinalizeGameType) {
+        FinalizeGameType[FinalizeGameType["ActiveGame"] = 0] = "ActiveGame";
+        FinalizeGameType[FinalizeGameType["FinalizedGame"] = 1] = "FinalizedGame";
+    })(FinalizeGameType = EditActiveGame.FinalizeGameType || (EditActiveGame.FinalizeGameType = {}));
     var EditActiveGameService = (function () {
         function EditActiveGameService($location, $q, apiService, playerSelectionService, newPlayerPanelService) {
             var _this = this;
@@ -476,6 +481,28 @@ var EditActiveGame;
             });
             return def.promise;
         };
+        EditActiveGameService.prototype.getFinializedGame = function () {
+            var _this = this;
+            var def = this.$q.defer();
+            if (this.$location.path() !== undefined || this.$location.path() !== '') {
+                this.gameIdPath = this.$location.path();
+            }
+            var allPlayersPromise = this.playerSelectionService.getPlayers();
+            var finalizedGamePromise = this.apiService.getFinalizeGame(this.gameIdPath);
+            finalizedGamePromise.then(function (game) {
+                _this.activeGame = game;
+                def.resolve();
+            }, function () {
+                _this.addErrorMessage('Cannot get active game.');
+                def.reject();
+            });
+            this.$q.all([allPlayersPromise, finalizedGamePromise]).then(function () {
+                _this.players.forEach(function (p) {
+                    _this.playerSelectionService.addPlayer(p.player);
+                });
+            });
+            return def.promise;
+        };
         EditActiveGameService.prototype.playerIndex = function (playerId) {
             return this.players.map(function (p) { return p.playerId; }).indexOf(playerId);
         };
@@ -521,20 +548,25 @@ var EditActiveGame;
             }
             return def.promise;
         };
-        EditActiveGameService.prototype.finalize = function (addBonusPoints) {
+        EditActiveGameService.prototype.finalize = function (gameType) {
             var _this = this;
             var def = this.$q.defer();
             if (this.filterRemovedPlayers() && this.hasRanks()) {
-                if (addBonusPoints) {
+                if (gameType === FinalizeGameType.ActiveGame) {
                     this.addBonusPoints();
                 }
                 this.apiService.finalizeGame(this.activeGame).then(function () {
-                    _this.apiService.deleteActiveGame(_this.gameIdPath).then(function () {
+                    if (gameType === FinalizeGameType.ActiveGame) {
+                        _this.apiService.deleteActiveGame(_this.gameIdPath).then(function () {
+                            def.resolve();
+                        }, function () {
+                            _this.addErrorMessage('Cannot delete active game.');
+                            def.reject();
+                        });
+                    }
+                    else {
                         def.resolve();
-                    }, function () {
-                        _this.addErrorMessage('Cannot delete active game.');
-                        def.reject();
-                    });
+                    }
                 }, function () {
                     _this.addErrorMessage('Cannot finalize active game.');
                     def.reject();
@@ -985,7 +1017,7 @@ var EditActiveGame;
         };
         EditActiveGameController.prototype.finalizeGame = function () {
             var _this = this;
-            this.editActiveGameService.finalize(true).then(function () {
+            this.editActiveGameService.finalize(EditActiveGame.FinalizeGameType.ActiveGame).then(function () {
                 _this.$window.location.href = "/GameHistory";
             }, function () {
                 _this.saveReject();
@@ -1024,27 +1056,23 @@ var EditActiveGame;
     EditActiveGame.EditActiveGameController = EditActiveGameController;
 })(EditActiveGame || (EditActiveGame = {}));
 
-var DorkModule = angular.module('DorkModule', ['UxControlsModule', 'PlayerSelectorModule', 'NewPlayerPanelModule']);
+var EditActiveGameModule = angular.module('EditActiveGameModule', ['UxControlsModule', 'PlayerSelectorModule', 'NewPlayerPanelModule']);
+EditActiveGameModule.service('alertsService', Shared.AlertsService);
+EditActiveGameModule.service('editActiveGameService', EditActiveGame.EditActiveGameService);
+EditActiveGameModule.service('editActiveGameCollapseService', EditActiveGame.EditActiveGameCollapseService);
+EditActiveGameModule.controller('EditActiveGameController', EditActiveGame.EditActiveGameController);
+EditActiveGameModule.directive('editActiveGame', EditActiveGame.EditActiveGameDirective);
+EditActiveGameModule.controller('EditScoresController', EditActiveGame.EditScoresController);
+EditActiveGameModule.directive('editScores', EditActiveGame.EditScoresDirective);
+EditActiveGameModule.controller('ReorderPlayersController', EditActiveGame.ReorderPlayersController);
+EditActiveGameModule.directive('reorderPlayers', EditActiveGame.ReorderPlayersDirective);
+EditActiveGameModule.controller('ModifyPlayersController', EditActiveGame.ModifyPlayersController);
+EditActiveGameModule.directive('modifyPlayers', EditActiveGame.ModifyPlayersDirective);
+EditActiveGameModule.controller('RevertFinalizeController', EditActiveGame.RevertFinalizeController);
+EditActiveGameModule.directive('revertFinalize', EditActiveGame.RevertFinalizeDirective);
+EditActiveGameModule.controller('PlayerBonusPanelController', Shared.PlayerBonusPanelController);
+EditActiveGameModule.directive('playerBonusPanel', Shared.PlayerBonusPanelDirective);
 
-DorkModule.service('alertsService', Shared.AlertsService);
-DorkModule.service('editActiveGameService', EditActiveGame.EditActiveGameService);
-DorkModule.service('editActiveGameCollapseService', EditActiveGame.EditActiveGameCollapseService);
+var DorkModule = angular.module('DorkModule', ['EditActiveGameModule']);
 
-DorkModule.controller('EditActiveGameController', EditActiveGame.EditActiveGameController);
-DorkModule.directive('editActiveGame', EditActiveGame.EditActiveGameDirective);
-
-DorkModule.controller('EditScoresController', EditActiveGame.EditScoresController);
-DorkModule.directive('editScores', EditActiveGame.EditScoresDirective);
-
-DorkModule.controller('ReorderPlayersController', EditActiveGame.ReorderPlayersController);
-DorkModule.directive('reorderPlayers', EditActiveGame.ReorderPlayersDirective);
-
-DorkModule.controller('ModifyPlayersController', EditActiveGame.ModifyPlayersController);
-DorkModule.directive('modifyPlayers', EditActiveGame.ModifyPlayersDirective);
-
-DorkModule.controller('RevertFinalizeController', EditActiveGame.RevertFinalizeController);
-DorkModule.directive('revertFinalize', EditActiveGame.RevertFinalizeDirective);
-
-DorkModule.controller('PlayerBonusPanelController', Shared.PlayerBonusPanelController);
-DorkModule.directive('playerBonusPanel', Shared.PlayerBonusPanelDirective);
 //# sourceMappingURL=maps/editActiveGame.js.map

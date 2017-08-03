@@ -120,7 +120,7 @@ module EditActiveGame {
         }
 
         public finalizeGame(): void {
-            this.editActiveGameService.finalize(true).then(() => {
+            this.editActiveGameService.finalize(FinalizeGameType.ActiveGame).then(() => {
                 this.$window.location.href = "/GameHistory";
             }, () => {
                 this.saveReject();

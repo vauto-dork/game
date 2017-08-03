@@ -86,6 +86,7 @@
                 "areas/editActiveGame/directives/ModifyPlayersDirective.js",
                 "areas/editActiveGame/directives/RevertFinalizeDirective.js",
                 "areas/editActiveGame/directives/EditActiveGameDirective.js",
+                "areas/editActiveGame/modules/EditActiveGameModule.js",
                 "bundles/pageModules/editActiveGame.js"
             ],
             "components": [
