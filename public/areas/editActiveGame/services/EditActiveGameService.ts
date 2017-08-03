@@ -1,5 +1,6 @@
 module EditActiveGame {
     export interface IEditActiveGameService {
+        gameType: FinalizeGameType;
         datePlayed: Date;
         players: Shared.IGamePlayer[];
         unselectedPlayers: Shared.INewGamePlayer[];
@@ -10,10 +11,9 @@ module EditActiveGame {
         removePlayer(player: Shared.IGamePlayer): void;
         movePlayer(selectedPlayerId: string, destinationPlayer: Shared.IGamePlayer): void;
         playerIndex(playerId: string): number;
-        getActiveGame(): ng.IPromise<void>;
-        getFinializedGame(): ng.IPromise<void>;
+        getGame(gameType: FinalizeGameType): ng.IPromise<void>;
         save(): ng.IPromise<void>;
-        finalize(gameType: FinalizeGameType): ng.IPromise<void>;
+        finalize(): ng.IPromise<void>;
     }
 
     export enum FinalizeGameType {
@@ -23,12 +23,14 @@ module EditActiveGame {
 
     export class EditActiveGameService implements IEditActiveGameService {
         public static $inject: string[] = ["$location", "$q", "apiService", "playerSelectionService", "newPlayerPanelService"];
+                
         private imLoading: ng.IPromise<void>;
         private gameIdPath: string;
         private activeGame: Shared.IGame;
         private isMovePlayerActive: boolean;
         private errorMessageList: string[] = [];
-
+        private localGameType: FinalizeGameType;
+        
         public get datePlayed(): Date {
             if (this.activeGame && this.activeGame.datePlayed) {
                 return new Date(this.activeGame.datePlayed);
@@ -67,6 +69,10 @@ module EditActiveGame {
             return this.playerSelectionService.unselectedPlayers;
         }
 
+        public get gameType(): FinalizeGameType {
+            return this.localGameType;
+        }
+
         constructor(private $location: ng.ILocationService,
             private $q: ng.IQService,
             private apiService: Shared.IApiService,
@@ -84,7 +90,8 @@ module EditActiveGame {
             });
         }
 
-        public getActiveGame(): ng.IPromise<void> {
+        public getGame(gameType: FinalizeGameType): ng.IPromise<void> {
+            this.localGameType = gameType;
             var def = this.$q.defer<void>();
 
             if (this.$location.path() !== undefined || this.$location.path() !== '') {
@@ -93,8 +100,11 @@ module EditActiveGame {
 
             var allPlayersPromise = this.playerSelectionService.getPlayers();
 
-            var activeGamePromise = this.apiService.getActiveGame(this.gameIdPath);
-            activeGamePromise.then((game) => {
+            var gamePromise = gameType === FinalizeGameType.ActiveGame
+                ? this.apiService.getActiveGame(this.gameIdPath)
+                : this.apiService.getFinalizeGame(this.gameIdPath);
+
+            gamePromise.then((game) => {
                 this.activeGame = game;
                 def.resolve();
             }, () => {
@@ -102,34 +112,7 @@ module EditActiveGame {
                 def.reject();
             });
 
-            this.$q.all([allPlayersPromise, activeGamePromise]).then(() => {
-                this.players.forEach(p => {
-                    this.playerSelectionService.addPlayer(p.player);
-                });
-            });
-
-            return def.promise;
-        }
-
-        public getFinializedGame(): ng.IPromise<void> {
-            var def = this.$q.defer<void>();
-
-            if (this.$location.path() !== undefined || this.$location.path() !== '') {
-                this.gameIdPath = this.$location.path();
-            }
-
-            var allPlayersPromise = this.playerSelectionService.getPlayers();
-
-            var finalizedGamePromise = this.apiService.getFinalizeGame(this.gameIdPath);
-            finalizedGamePromise.then((game) => {
-                this.activeGame = game;
-                def.resolve();
-            }, () => {
-                this.addErrorMessage('Cannot get active game.');
-                def.reject();
-            });
-
-            this.$q.all([allPlayersPromise, finalizedGamePromise]).then(() => {
+            this.$q.all([allPlayersPromise, gamePromise]).then(() => {
                 this.players.forEach(p => {
                     this.playerSelectionService.addPlayer(p.player);
                 });
@@ -190,16 +173,16 @@ module EditActiveGame {
             return def.promise;
         }
 
-        public finalize(gameType: FinalizeGameType): ng.IPromise<void> {
+        public finalize(): ng.IPromise<void> {
             var def = this.$q.defer<void>();
 
             if (this.filterRemovedPlayers() && this.hasRanks()) {
-                if (gameType === FinalizeGameType.ActiveGame) {
+                if (this.gameType === FinalizeGameType.ActiveGame) {
                     this.addBonusPoints();
                 }
 
                 this.apiService.finalizeGame(this.activeGame).then(() => {
-                    if(gameType === FinalizeGameType.ActiveGame){
+                    if(this.gameType === FinalizeGameType.ActiveGame){
                         this.apiService.deleteActiveGame(this.gameIdPath).then(() => {
                             def.resolve();
                         }, () => {

@@ -459,44 +459,32 @@ var EditActiveGame;
             enumerable: true,
             configurable: true
         });
-        EditActiveGameService.prototype.getActiveGame = function () {
+        Object.defineProperty(EditActiveGameService.prototype, "gameType", {
+            get: function () {
+                return this.localGameType;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        EditActiveGameService.prototype.getGame = function (gameType) {
             var _this = this;
+            this.localGameType = gameType;
             var def = this.$q.defer();
             if (this.$location.path() !== undefined || this.$location.path() !== '') {
                 this.gameIdPath = this.$location.path();
             }
             var allPlayersPromise = this.playerSelectionService.getPlayers();
-            var activeGamePromise = this.apiService.getActiveGame(this.gameIdPath);
-            activeGamePromise.then(function (game) {
+            var gamePromise = gameType === FinalizeGameType.ActiveGame
+                ? this.apiService.getActiveGame(this.gameIdPath)
+                : this.apiService.getFinalizeGame(this.gameIdPath);
+            gamePromise.then(function (game) {
                 _this.activeGame = game;
                 def.resolve();
             }, function () {
                 _this.addErrorMessage('Cannot get active game.');
                 def.reject();
             });
-            this.$q.all([allPlayersPromise, activeGamePromise]).then(function () {
-                _this.players.forEach(function (p) {
-                    _this.playerSelectionService.addPlayer(p.player);
-                });
-            });
-            return def.promise;
-        };
-        EditActiveGameService.prototype.getFinializedGame = function () {
-            var _this = this;
-            var def = this.$q.defer();
-            if (this.$location.path() !== undefined || this.$location.path() !== '') {
-                this.gameIdPath = this.$location.path();
-            }
-            var allPlayersPromise = this.playerSelectionService.getPlayers();
-            var finalizedGamePromise = this.apiService.getFinalizeGame(this.gameIdPath);
-            finalizedGamePromise.then(function (game) {
-                _this.activeGame = game;
-                def.resolve();
-            }, function () {
-                _this.addErrorMessage('Cannot get active game.');
-                def.reject();
-            });
-            this.$q.all([allPlayersPromise, finalizedGamePromise]).then(function () {
+            this.$q.all([allPlayersPromise, gamePromise]).then(function () {
                 _this.players.forEach(function (p) {
                     _this.playerSelectionService.addPlayer(p.player);
                 });
@@ -548,15 +536,15 @@ var EditActiveGame;
             }
             return def.promise;
         };
-        EditActiveGameService.prototype.finalize = function (gameType) {
+        EditActiveGameService.prototype.finalize = function () {
             var _this = this;
             var def = this.$q.defer();
             if (this.filterRemovedPlayers() && this.hasRanks()) {
-                if (gameType === FinalizeGameType.ActiveGame) {
+                if (this.gameType === FinalizeGameType.ActiveGame) {
                     this.addBonusPoints();
                 }
                 this.apiService.finalizeGame(this.activeGame).then(function () {
-                    if (gameType === FinalizeGameType.ActiveGame) {
+                    if (_this.gameType === FinalizeGameType.ActiveGame) {
                         _this.apiService.deleteActiveGame(_this.gameIdPath).then(function () {
                             def.resolve();
                         }, function () {
@@ -901,7 +889,9 @@ var EditActiveGame;
 (function (EditActiveGame) {
     function EditActiveGameDirective() {
         return {
-            scope: {},
+            scope: {
+                isFinalizedGame: '='
+            },
             templateUrl: "/areas/editActiveGame/directives/EditActiveGameTemplate.html",
             controller: "EditActiveGameController",
             controllerAs: "ctrl",
@@ -968,7 +958,7 @@ var EditActiveGame;
                     this.changeState(State.Loading);
                     break;
                 case State.Loading:
-                    this.getActiveGame();
+                    this.getGame();
                     break;
                 case State.Error:
                     this.alertsService.scrollToTop();
@@ -995,9 +985,10 @@ var EditActiveGame;
             console.error(data);
             this.changeState(State.Error);
         };
-        EditActiveGameController.prototype.getActiveGame = function () {
+        EditActiveGameController.prototype.getGame = function () {
             var _this = this;
-            this.editActiveGameService.getActiveGame().then(function () {
+            var gameType = this.isFinalizedGame ? EditActiveGame.FinalizeGameType.FinalizedGame : EditActiveGame.FinalizeGameType.ActiveGame;
+            this.editActiveGameService.getGame(gameType).then(function () {
                 _this.changeState(State.Ready);
                 _this.datePlayed = _this.editActiveGameService.datePlayed;
             }, function () {
@@ -1017,7 +1008,7 @@ var EditActiveGame;
         };
         EditActiveGameController.prototype.finalizeGame = function () {
             var _this = this;
-            this.editActiveGameService.finalize(EditActiveGame.FinalizeGameType.ActiveGame).then(function () {
+            this.editActiveGameService.finalize().then(function () {
                 _this.$window.location.href = "/GameHistory";
             }, function () {
                 _this.saveReject();

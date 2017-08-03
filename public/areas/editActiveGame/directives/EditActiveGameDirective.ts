@@ -2,7 +2,7 @@ module EditActiveGame {
     export function EditActiveGameDirective(): ng.IDirective {
         return {
             scope: {
-                finalizedGame: '='
+                isFinalizedGame: '='
             },
             templateUrl: "/areas/editActiveGame/directives/EditActiveGameTemplate.html",
             controller: "EditActiveGameController",
@@ -23,7 +23,7 @@ module EditActiveGame {
     export class EditActiveGameController {
         public static $inject: string[] = ["$window", "editActiveGameService", "alertsService", "editActiveGameCollapseService"];
 
-        public finalizedGame: boolean;
+        public isFinalizedGame: boolean;
 
         private showLoading: boolean = false;
         private showError: boolean = false;
@@ -102,11 +102,9 @@ module EditActiveGame {
         }
 
         private getGame(): void {
-            var promise = this.finalizedGame
-                ? this.editActiveGameService.getFinializedGame()
-                : this.editActiveGameService.getActiveGame();
+            var gameType = this.isFinalizedGame ? FinalizeGameType.FinalizedGame : FinalizeGameType.ActiveGame;
 
-            promise.then(() => {
+            this.editActiveGameService.getGame(gameType).then(() => {
                 this.changeState(State.Ready);
                 this.datePlayed = this.editActiveGameService.datePlayed;
             }, () => {
@@ -127,9 +125,7 @@ module EditActiveGame {
         }
 
         public finalizeGame(): void {
-            var gameType = this.finalizedGame ? FinalizeGameType.FinalizedGame : FinalizeGameType.ActiveGame;
-
-            this.editActiveGameService.finalize(gameType).then(() => {
+            this.editActiveGameService.finalize().then(() => {
                 this.$window.location.href = "/GameHistory";
             }, () => {
                 this.saveReject();
