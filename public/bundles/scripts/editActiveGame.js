@@ -879,6 +879,13 @@ var EditActiveGame;
             enumerable: true,
             configurable: true
         });
+        Object.defineProperty(RevertFinalizeController.prototype, "isFinalizedGame", {
+            get: function () {
+                return this.editActiveGameService.gameType === EditActiveGame.FinalizeGameType.FinalizedGame;
+            },
+            enumerable: true,
+            configurable: true
+        });
         return RevertFinalizeController;
     }());
     RevertFinalizeController.$inject = ['editActiveGameService'];

@@ -26,6 +26,10 @@
             return this.editActiveGameService.players.length;
         }
 
+        private get isFinalizedGame(): boolean {
+            return this.editActiveGameService.gameType === FinalizeGameType.FinalizedGame;
+        }
+
         constructor(private editActiveGameService: IEditActiveGameService) {
             
         }

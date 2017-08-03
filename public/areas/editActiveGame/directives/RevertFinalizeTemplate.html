@@ -1,29 +1,41 @@
-﻿<div class="btn-row">
-    <p>
-        <button type="button" class="btn btn-success btn-lg btn-block" ng-click="ctrl.save()" ng-disabled="ctrl.disabled" aria-label="Save Game">
-            <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Save
-        </button>
-    </p>
-
-    <div class="btn-group btn-group-justified" role="group">
-        <div class="btn-group" role="group">
-            <button type="button" class="btn btn-danger btn-lg btn-block" ng-click="ctrl.revert()" ng-disabled="ctrl.disabled" aria-label="Revert Changes">
-                <span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span> Revert
+﻿<div ng-if="ctrl.isFinalizedGame">
+    <div class="btn-row">
+        <p>
+            <button type="button" class="btn btn-success btn-lg btn-block" ng-click="ctrl.finalize()" ng-disabled="ctrl.disabled" aria-label="Save Game">
+                <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Save
             </button>
-        </div>
-        <div class="btn-group" role="group">
-            <button type="button" class="btn btn-warning btn-lg btn-block" ng-click="ctrl.finalize()" ng-disabled="ctrl.disabled" aria-label="Finalize Game">
-                <span class="glyphicon glyphicon-saved" aria-hidden="true"></span> Finalize
-            </button>
-        </div>
+        </p>
     </div>
 </div>
 
-<div class="alert alert-warning bonus-points-notice">
-    Hitting "Finalize" will automatically add bonus points to the top players. See table below for bonus
-    points structure.
-</div>
+<div ng-if="!ctrl.isFinalizedGame">
+    <div class="btn-row">
+        <p>
+            <button type="button" class="btn btn-success btn-lg btn-block" ng-click="ctrl.save()" ng-disabled="ctrl.disabled" aria-label="Save Game">
+                <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Save
+            </button>
+        </p>
 
-<player-bonus-panel class="playlist-scores-row"
-                    num-players="ctrl.numPlayers">
-</player-bonus-panel>
+        <div class="btn-group btn-group-justified" role="group">
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-danger btn-lg btn-block" ng-click="ctrl.revert()" ng-disabled="ctrl.disabled" aria-label="Revert Changes">
+                    <span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span> Revert
+                </button>
+            </div>
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-warning btn-lg btn-block" ng-click="ctrl.finalize()" ng-disabled="ctrl.disabled" aria-label="Finalize Game">
+                    <span class="glyphicon glyphicon-saved" aria-hidden="true"></span> Finalize
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="alert alert-warning bonus-points-notice">
+        Hitting "Finalize" will automatically add bonus points to the top players. See table below for bonus
+        points structure.
+    </div>
+
+    <player-bonus-panel class="playlist-scores-row"
+                        num-players="ctrl.numPlayers">
+    </player-bonus-panel>
+</div>

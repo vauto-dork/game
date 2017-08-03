@@ -1,1 +1,0 @@
-var EditFinalizedGameModule = angular.module('EditFinalizedGameModule', ['EditActiveGameModule']);
