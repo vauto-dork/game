@@ -16,6 +16,20 @@ var Shared;
         Game.prototype.getIdAsPath = function () {
             return "/" + this._id;
         };
+        Game.prototype.removeBonusPoints = function () {
+            var numPlayers = this.players.length;
+            this.players.forEach(function (player) {
+                if (player.rank === 1) {
+                    player.points -= numPlayers - 1;
+                }
+                if (player.rank === 2) {
+                    player.points -= numPlayers - 2;
+                }
+                if (player.rank === 3) {
+                    player.points -= numPlayers - 3;
+                }
+            });
+        };
         Game.prototype.toGameViewModel = function () {
             var game = {
                 _id: this._id,
@@ -255,7 +269,10 @@ var Shared;
             return '/ActiveGames/json' + gameIdPath;
         };
         ApiService.prototype.getEditActiveGamePath = function (gameId) {
-            return '/activeGames/edit/#/' + gameId;
+            return '/ActiveGames/edit/#/' + gameId;
+        };
+        ApiService.prototype.getEditFinalizedGamePath = function (gameId) {
+            return '/GameHistory/edit/#/' + gameId;
         };
         ApiService.prototype.getAllActiveGames = function () {
             var def = this.$q.defer();
@@ -431,11 +448,12 @@ var Shared;
             });
             return def.promise;
         };
-        ApiService.prototype.getFinalizeGame = function (id) {
+        ApiService.prototype.getFinalizedGame = function (id) {
             var def = this.$q.defer();
             var path = '/Games/' + id;
             this.$http.get(path).success(function (data, status, headers, config) {
                 var game = new Shared.Game(data);
+                game.removeBonusPoints();
                 def.resolve(game);
             })
                 .error(function (data, status, headers, config) {
@@ -462,6 +480,17 @@ var Shared;
         ApiService.prototype.finalizeGame = function (game) {
             var def = this.$q.defer();
             this.$http.post('/games', game.toGameViewModel()).success(function (data, status, headers, config) {
+                def.resolve();
+            })
+                .error(function (data, status, headers, config) {
+                console.error("Cannot finalize game. Status code: " + status + ".");
+                def.reject(data);
+            });
+            return def.promise;
+        };
+        ApiService.prototype.updateFinalizeGame = function (game) {
+            var def = this.$q.defer();
+            this.$http.put('/games/' + game._id, game.toGameViewModel()).success(function (data, status, headers, config) {
                 def.resolve();
             })
                 .error(function (data, status, headers, config) {

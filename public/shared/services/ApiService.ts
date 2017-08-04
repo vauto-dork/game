@@ -12,9 +12,10 @@ module Shared {
 		getRankedPlayers(month: number, year: number, hideUnranked: boolean): ng.IPromise<IRankedPlayer[]>;
 		getDotm(month: number, year: number): ng.IPromise<IDotmViewModel>;
 		getLastPlayedGame(): ng.IPromise<IGame>;
-		getFinalizeGame(id: string): ng.IPromise<IGame>;
+		getFinalizedGame(id: string): ng.IPromise<IGame>;
 		getGames(month: number, year: number): ng.IPromise<IGame[]>;
 		finalizeGame(game: IGame): ng.IPromise<void>;
+		updateFinalizeGame(game: IGame): ng.IPromise<void>;
 		deleteGame(gameIdPath: string): ng.IPromise<void>;
 	}
 
@@ -33,7 +34,11 @@ module Shared {
 		}
 		
 		private getEditActiveGamePath(gameId: string): string {
-			return '/activeGames/edit/#/' + gameId;
+			return '/ActiveGames/edit/#/' + gameId;
+		}
+
+		private getEditFinalizedGamePath(gameId: string): string {
+			return '/GameHistory/edit/#/' + gameId;
 		}
 		
 		public getAllActiveGames(): ng.IPromise<IGame[]> {
@@ -261,12 +266,13 @@ module Shared {
 			return def.promise;
 		}
 
-		public getFinalizeGame(id: string): ng.IPromise<IGame> {
+		public getFinalizedGame(id: string): ng.IPromise<IGame> {
 			var def = this.$q.defer<IGame>();
 			var path = '/Games/' + id;
 
 			this.$http.get(path).success((data: IGameViewModel, status, headers, config) => {
-				var game: IGame = new Game(data);				
+				var game: IGame = new Game(data);
+				game.removeBonusPoints();
 				def.resolve(game);
 			})
 			.error((data, status, headers, config) => {
@@ -304,6 +310,20 @@ module Shared {
 			})
 				.error((data, status, headers, config) => {
 					console.error(`Cannot finalize game. Status code: ${status}.`);
+					def.reject(data);
+				});
+
+			return def.promise;
+		}
+
+		public updateFinalizeGame(game: IGame): ng.IPromise<void> {
+			var def = this.$q.defer<void>();
+
+			this.$http.put('/games' + game.getIdAsPath, game.toGameViewModel()).success((data, status, headers, config) => {
+				def.resolve();
+			})
+				.error((data, status, headers, config) => {
+					console.error(`Cannot update finalized game. Status code: ${status}.`);
 					def.reject(data);
 				});
 

@@ -5,6 +5,7 @@
                 save: "&",
                 revert: "&",
                 finalize: "&",
+                update: "&",
                 disabled: "="
             },
             templateUrl: '/areas/editActiveGame/directives/RevertFinalizeTemplate.html',
@@ -20,6 +21,7 @@
         private save: Function;
         private revert: Function;
         private finalize: Function;
+        private update: Function;
         private disabled: boolean;
 
         private get numPlayers(): number {

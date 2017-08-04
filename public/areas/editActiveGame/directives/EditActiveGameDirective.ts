@@ -132,6 +132,14 @@ module EditActiveGame {
             });
         }
 
+        public updateFinalizedGame(): void {
+            this.editActiveGameService.updateFinalizedGame().then(() => {
+                this.$window.location.href = "/GameHistory";
+            }, () => {
+                this.saveReject();
+            });
+        }
+
         private saveReject(): void {
             // get error messages and display alerts
             this.alertsService.clearAlerts();

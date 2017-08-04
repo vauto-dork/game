@@ -16,6 +16,7 @@
                                      save="ctrl.save()"
                                      revert="ctrl.revert()"
                                      finalize="ctrl.finalize()"
+                                     update="ctrl.updateFinalizedGame()"
                                      disabled="ctrl.disabled">
                     </revert-finalize>
                 </div>
@@ -36,6 +37,7 @@
                                      save="ctrl.save()"
                                      revert="ctrl.revert()"
                                      finalize="ctrl.finalize()"
+                                     update="ctrl.updateFinalizedGame()"
                                      disabled="ctrl.disabled">
                     </revert-finalize>
                 </div>
@@ -49,8 +51,12 @@
 
     <div ng-if="ctrl.showError">
         <div class="btn-row">
-            <a type="button" class="btn btn-danger btn-block btn-lg" href="/ActiveGames">
+            <a type="button" class="btn btn-danger btn-block btn-lg" href="/ActiveGames" ng-if="!ctrl.isFinalizedGame">
                 Return to Active Games
+            </a>
+
+            <a type="button" class="btn btn-danger btn-block btn-lg" href="/GameHistory" ng-if="ctrl.isFinalizedGame">
+                Return to Game History
             </a>
         </div>
     </div>

@@ -5,6 +5,8 @@ module Shared {
 		datePlayed?: string;
 		winner?: IPlayer;
 		getIdAsPath(): string;
+		addBonusPoints(): void;
+		removeBonusPoints(): void;
 		toGameViewModel(): IGameViewModel;
 	}
 	
@@ -30,6 +32,36 @@ module Shared {
 		
 		public getIdAsPath(): string {
 			return `/${this._id}`;
+		}
+
+		public addBonusPoints(): void {
+            var numPlayers = this.players.length;
+            this.players.forEach(player => {
+                if (player.rank === 1) {
+                    player.points += numPlayers - 1;
+                }
+                if (player.rank === 2) {
+                    player.points += numPlayers - 2;
+                }
+                if (player.rank === 3) {
+                    player.points += numPlayers - 3;
+                }
+            });
+        }
+
+		public removeBonusPoints(): void {
+			var numPlayers = this.players.length;
+            this.players.forEach(player => {
+                if (player.rank === 1) {
+                    player.points -= numPlayers - 1;
+                }
+                if (player.rank === 2) {
+                    player.points -= numPlayers - 2;
+                }
+                if (player.rank === 3) {
+                    player.points -= numPlayers - 3;
+                }
+            });
 		}
 		
 		public toGameViewModel(): IGameViewModel {

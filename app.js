@@ -14,6 +14,7 @@ var admin = require('./routes/admin');
 var players = require('./routes/players');
 var games = require('./routes/games');
 var activeGames = require('./routes/activeGames');
+var gameHistory = require('./routes/gameHistory');
 
 var app = express();
 
@@ -38,6 +39,7 @@ app.use('/', admin);
 app.use('/games', games);
 app.use('/players', players);
 app.use('/activeGames', activeGames);
+app.use('/gameHistory', gameHistory);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

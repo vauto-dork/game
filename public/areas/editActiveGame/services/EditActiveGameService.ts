@@ -14,6 +14,7 @@ module EditActiveGame {
         getGame(gameType: FinalizeGameType): ng.IPromise<void>;
         save(): ng.IPromise<void>;
         finalize(): ng.IPromise<void>;
+        updateFinalizedGame(): ng.IPromise<void>;
     }
 
     export enum FinalizeGameType {
@@ -102,7 +103,7 @@ module EditActiveGame {
 
             var gamePromise = gameType === FinalizeGameType.ActiveGame
                 ? this.apiService.getActiveGame(this.gameIdPath)
-                : this.apiService.getFinalizeGame(this.gameIdPath);
+                : this.apiService.getFinalizedGame(this.gameIdPath);
 
             gamePromise.then((game) => {
                 this.activeGame = game;
@@ -177,21 +178,16 @@ module EditActiveGame {
             var def = this.$q.defer<void>();
 
             if (this.filterRemovedPlayers() && this.hasRanks()) {
-                if (this.gameType === FinalizeGameType.ActiveGame) {
-                    this.addBonusPoints();
-                }
+                this.activeGame.addBonusPoints();
 
                 this.apiService.finalizeGame(this.activeGame).then(() => {
-                    if(this.gameType === FinalizeGameType.ActiveGame){
-                        this.apiService.deleteActiveGame(this.gameIdPath).then(() => {
-                            def.resolve();
-                        }, () => {
-                            this.addErrorMessage('Cannot delete active game.');
-                            def.reject();
-                        });
-                    } else {
+                    this.apiService.deleteActiveGame(this.gameIdPath).then(() => {
                         def.resolve();
-                    }
+                    }, () => {
+                        this.activeGame.removeBonusPoints();
+                        this.addErrorMessage('Cannot delete active game.');
+                        def.reject();
+                    });
                 }, () => {
                     this.addErrorMessage('Cannot finalize active game.');
                     def.reject();
@@ -203,20 +199,25 @@ module EditActiveGame {
             return def.promise;
         }
 
-        private addBonusPoints(): void {
-            var numPlayers = this.players.length;
-            this.players.forEach(player => {
-                if (player.rank === 1) {
-                    player.points += numPlayers - 1;
-                }
-                if (player.rank === 2) {
-                    player.points += numPlayers - 2;
-                }
-                if (player.rank === 3) {
-                    player.points += numPlayers - 3;
-                }
-            });
-        }
+        public updateFinalizedGame(): ng.IPromise<void> {
+            var def = this.$q.defer<void>();
+
+            if (this.filterRemovedPlayers() && this.hasRanks()) {
+                this.activeGame.addBonusPoints();
+
+                this.apiService.updateFinalizeGame(this.activeGame).then(() => {
+                    def.resolve();
+                }, () => {
+                    this.activeGame.removeBonusPoints();
+                    this.addErrorMessage('Cannot update finalized game.');
+                    def.reject();
+                });
+            } else {
+                def.reject();
+            }
+
+            return def.promise;
+        }        
 
         private addErrorMessage(message: string, clear: boolean = true) {
             if (clear) {

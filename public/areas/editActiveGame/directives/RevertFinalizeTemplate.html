@@ -1,10 +1,15 @@
 ﻿<div ng-if="ctrl.isFinalizedGame">
     <div class="btn-row">
         <p>
-            <button type="button" class="btn btn-success btn-lg btn-block" ng-click="ctrl.finalize()" ng-disabled="ctrl.disabled" aria-label="Save Game">
-                <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Save
+            <button type="button" class="btn btn-success btn-lg btn-block" ng-click="ctrl.update()" ng-disabled="ctrl.disabled" aria-label="Update Game">
+                <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Update Game
             </button>
         </p>
+    </div>
+
+    <div class="alert alert-warning bonus-points-notice">
+        Hitting "Update Game" will automatically add bonus points to the top players. See table below for bonus
+        points structure.
     </div>
 </div>
 
@@ -34,8 +39,8 @@
         Hitting "Finalize" will automatically add bonus points to the top players. See table below for bonus
         points structure.
     </div>
-
-    <player-bonus-panel class="playlist-scores-row"
-                        num-players="ctrl.numPlayers">
-    </player-bonus-panel>
 </div>
+
+<player-bonus-panel class="playlist-scores-row"
+                    num-players="ctrl.numPlayers">
+</player-bonus-panel>

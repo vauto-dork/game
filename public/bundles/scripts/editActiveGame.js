@@ -476,7 +476,7 @@ var EditActiveGame;
             var allPlayersPromise = this.playerSelectionService.getPlayers();
             var gamePromise = gameType === FinalizeGameType.ActiveGame
                 ? this.apiService.getActiveGame(this.gameIdPath)
-                : this.apiService.getFinalizeGame(this.gameIdPath);
+                : this.apiService.getFinalizedGame(this.gameIdPath);
             gamePromise.then(function (game) {
                 _this.activeGame = game;
                 def.resolve();
@@ -540,23 +540,33 @@ var EditActiveGame;
             var _this = this;
             var def = this.$q.defer();
             if (this.filterRemovedPlayers() && this.hasRanks()) {
-                if (this.gameType === FinalizeGameType.ActiveGame) {
-                    this.addBonusPoints();
-                }
+                this.addBonusPoints();
                 this.apiService.finalizeGame(this.activeGame).then(function () {
-                    if (_this.gameType === FinalizeGameType.ActiveGame) {
-                        _this.apiService.deleteActiveGame(_this.gameIdPath).then(function () {
-                            def.resolve();
-                        }, function () {
-                            _this.addErrorMessage('Cannot delete active game.');
-                            def.reject();
-                        });
-                    }
-                    else {
+                    _this.apiService.deleteActiveGame(_this.gameIdPath).then(function () {
                         def.resolve();
-                    }
+                    }, function () {
+                        _this.addErrorMessage('Cannot delete active game.');
+                        def.reject();
+                    });
                 }, function () {
                     _this.addErrorMessage('Cannot finalize active game.');
+                    def.reject();
+                });
+            }
+            else {
+                def.reject();
+            }
+            return def.promise;
+        };
+        EditActiveGameService.prototype.updateFinalizedGame = function () {
+            var _this = this;
+            var def = this.$q.defer();
+            if (this.filterRemovedPlayers() && this.hasRanks()) {
+                this.addBonusPoints();
+                this.apiService.updateFinalizeGame(this.activeGame).then(function () {
+                    def.resolve();
+                }, function () {
+                    _this.addErrorMessage('Cannot update finalized game.');
                     def.reject();
                 });
             }
@@ -859,6 +869,7 @@ var EditActiveGame;
                 save: "&",
                 revert: "&",
                 finalize: "&",
+                update: "&",
                 disabled: "="
             },
             templateUrl: '/areas/editActiveGame/directives/RevertFinalizeTemplate.html',
@@ -1016,6 +1027,14 @@ var EditActiveGame;
         EditActiveGameController.prototype.finalizeGame = function () {
             var _this = this;
             this.editActiveGameService.finalize().then(function () {
+                _this.$window.location.href = "/GameHistory";
+            }, function () {
+                _this.saveReject();
+            });
+        };
+        EditActiveGameController.prototype.updateFinalizedGame = function () {
+            var _this = this;
+            this.editActiveGameService.updateFinalizedGame().then(function () {
                 _this.$window.location.href = "/GameHistory";
             }, function () {
                 _this.saveReject();
