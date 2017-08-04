@@ -513,15 +513,20 @@ var Shared;
         ApiService.prototype.getFinalizedGame = function (id) {
             var def = this.$q.defer();
             var path = '/Games/' + id;
-            this.$http.get(path).success(function (data, status, headers, config) {
-                var game = new Shared.Game(data);
-                game.removeBonusPoints();
-                def.resolve(game);
-            })
-                .error(function (data, status, headers, config) {
-                console.error('Cannot get games played.');
-                def.reject(data);
-            });
+            if (!id) {
+                def.reject();
+            }
+            else {
+                this.$http.get(path).success(function (data, status, headers, config) {
+                    var game = new Shared.Game(data);
+                    game.removeBonusPoints();
+                    def.resolve(game);
+                })
+                    .error(function (data, status, headers, config) {
+                    console.error('Cannot get games played.');
+                    def.reject(data);
+                });
+            }
             return def.promise;
         };
         ApiService.prototype.getGames = function (month, year) {

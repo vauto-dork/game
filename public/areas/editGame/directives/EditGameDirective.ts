@@ -1,11 +1,11 @@
-module EditActiveGame {
-    export function EditActiveGameDirective(): ng.IDirective {
+module EditGame {
+    export function EditGameDirective(): ng.IDirective {
         return {
             scope: {
                 isFinalizedGame: '='
             },
-            templateUrl: "/areas/editActiveGame/directives/EditActiveGameTemplate.html",
-            controller: "EditActiveGameController",
+            templateUrl: "/areas/editGame/directives/EditGameTemplate.html",
+            controller: "EditGameController",
             controllerAs: "ctrl",
             bindToController: true
         };
@@ -20,8 +20,8 @@ module EditActiveGame {
         Finalizing
     };
 
-    export class EditActiveGameController {
-        public static $inject: string[] = ["$window", "editActiveGameService", "alertsService", "editActiveGameCollapseService"];
+    export class EditGameController {
+        public static $inject: string[] = ["$window", "editGameService", "alertsService", "editGameCollapseService"];
 
         public isFinalizedGame: boolean;
 
@@ -36,17 +36,17 @@ module EditActiveGame {
         }
 
         private get collapseScoreForm(): boolean {
-            return this.editActiveGameCollapseService.collapseScoreForm;
+            return this.editGameCollapseService.collapseScoreForm;
         }
 
         private get collapseModifyPlayers(): boolean {
-            return this.editActiveGameCollapseService.collapseModifyPlayers;
+            return this.editGameCollapseService.collapseModifyPlayers;
         }
 
         constructor(private $window: ng.IWindowService,
-            private editActiveGameService: IEditActiveGameService,
+            private editGameService: IEditGameService,
             private alertsService: Shared.IAlertsService,
-            private editActiveGameCollapseService: IEditActiveGameCollapseService) {
+            private editGameCollapseService: IEditGameCollapseService) {
             this.changeState(State.Init);
         }
 
@@ -90,7 +90,7 @@ module EditActiveGame {
 
         private ready(): void {
             if (this.collapseScoreForm) {
-                this.editActiveGameCollapseService.enableScoreForm();
+                this.editGameCollapseService.enableScoreForm();
             }
             this.alertsService.scrollToTop();
         }
@@ -102,11 +102,11 @@ module EditActiveGame {
         }
 
         private getGame(): void {
-            var gameType = this.isFinalizedGame ? FinalizeGameType.FinalizedGame : FinalizeGameType.ActiveGame;
+            var gameType = this.isFinalizedGame ? EditGameType.FinalizedGame : EditGameType.ActiveGame;
 
-            this.editActiveGameService.getGame(gameType).then(() => {
+            this.editGameService.getGame(gameType).then(() => {
                 this.changeState(State.Ready);
-                this.datePlayed = this.editActiveGameService.datePlayed;
+                this.datePlayed = this.editGameService.datePlayed;
             }, () => {
                 this.errorHandler("Cannot get active game.", "Cannot load game");
             });
@@ -114,9 +114,9 @@ module EditActiveGame {
 
         public saveGame(): void {
             this.alertsService.clearAlerts();
-            this.editActiveGameService.datePlayed = this.datePlayed;
+            this.editGameService.datePlayed = this.datePlayed;
 
-            this.editActiveGameService.save().then(() => {
+            this.editGameService.save().then(() => {
                 this.alertsService.addAlert("success", "Game saved successfully!");
                 this.changeState(State.Ready);
             }, () => {
@@ -125,7 +125,7 @@ module EditActiveGame {
         }
 
         public finalizeGame(): void {
-            this.editActiveGameService.finalize().then(() => {
+            this.editGameService.finalize().then(() => {
                 this.$window.location.href = "/GameHistory";
             }, () => {
                 this.saveReject();
@@ -133,7 +133,7 @@ module EditActiveGame {
         }
 
         public updateFinalizedGame(): void {
-            this.editActiveGameService.updateFinalizedGame().then(() => {
+            this.editGameService.updateFinalizedGame().then(() => {
                 this.$window.location.href = "/GameHistory";
             }, () => {
                 this.saveReject();
@@ -143,7 +143,7 @@ module EditActiveGame {
         private saveReject(): void {
             // get error messages and display alerts
             this.alertsService.clearAlerts();
-            this.editActiveGameService.errorMessages.forEach(msg => { this.alertsService.addAlert("danger", msg); });
+            this.editGameService.errorMessages.forEach(msg => { this.alertsService.addAlert("danger", msg); });
             this.changeState(State.Ready);
         }
         
@@ -166,15 +166,15 @@ module EditActiveGame {
         }
 
         private enableScoreForm(): void {
-            this.editActiveGameCollapseService.enableScoreForm();
+            this.editGameCollapseService.enableScoreForm();
         }
 
         private disableScoreForm(): void {
-            this.editActiveGameCollapseService.disableScoreForm();
+            this.editGameCollapseService.disableScoreForm();
         }
 
         private enableModifyPlayers(): void {
-            this.editActiveGameCollapseService.enableModifyPlayers();
+            this.editGameCollapseService.enableModifyPlayers();
         }
     }
 }

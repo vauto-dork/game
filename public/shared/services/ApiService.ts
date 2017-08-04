@@ -36,10 +36,6 @@ module Shared {
 		private getEditActiveGamePath(gameId: string): string {
 			return '/ActiveGames/edit/#/' + gameId;
 		}
-
-		private getEditFinalizedGamePath(gameId: string): string {
-			return '/GameHistory/edit/#/' + gameId;
-		}
 		
 		public getAllActiveGames(): ng.IPromise<IGame[]> {
 			var def = this.$q.defer<IGame[]>();
@@ -270,16 +266,20 @@ module Shared {
 			var def = this.$q.defer<IGame>();
 			var path = '/Games/' + id;
 
-			this.$http.get(path).success((data: IGameViewModel, status, headers, config) => {
-				var game: IGame = new Game(data);
-				game.removeBonusPoints();
-				def.resolve(game);
-			})
-			.error((data, status, headers, config) => {
-				console.error('Cannot get games played.');
-				def.reject(data);
-			});
-			
+			if(!id) {
+				def.reject();
+			} else {
+				this.$http.get(path).success((data: IGameViewModel, status, headers, config) => {
+					var game: IGame = new Game(data);
+					game.removeBonusPoints();
+					def.resolve(game);
+				})
+				.error((data, status, headers, config) => {
+					console.error('Cannot get games played.');
+					def.reject(data);
+				});
+			}
+
 			return def.promise;
 		}
 		

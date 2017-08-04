@@ -77,17 +77,17 @@
                 "newPlayerPanel"
             ]
         },
-        "editActiveGame": {
+        "editGame": {
             "files": [
-                "areas/editActiveGame/services/EditActiveGameService.js",
-                "areas/editActiveGame/services/EditActiveGameCollapseService.js",
-                "areas/editActiveGame/directives/EditScoresDirective.js",
-                "areas/editActiveGame/directives/ReorderPlayersDirective.js",
-                "areas/editActiveGame/directives/ModifyPlayersDirective.js",
-                "areas/editActiveGame/directives/RevertFinalizeDirective.js",
-                "areas/editActiveGame/directives/EditActiveGameDirective.js",
-                "areas/editActiveGame/modules/EditActiveGameModule.js",
-                "bundles/pageModules/editActiveGame.js"
+                "areas/editGame/services/EditGameService.js",
+                "areas/editGame/services/EditGameCollapseService.js",
+                "areas/editGame/directives/EditScoresDirective.js",
+                "areas/editGame/directives/ReorderPlayersDirective.js",
+                "areas/editGame/directives/ModifyPlayersDirective.js",
+                "areas/editGame/directives/RevertFinalizeDirective.js",
+                "areas/editGame/directives/EditGameDirective.js",
+                "areas/editGame/modules/EditGameModule.js",
+                "bundles/pageModules/editGame.js"
             ],
             "components": [
                 "playerSelector",

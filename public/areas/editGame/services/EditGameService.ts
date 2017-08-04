@@ -1,6 +1,6 @@
-module EditActiveGame {
-    export interface IEditActiveGameService {
-        gameType: FinalizeGameType;
+module EditGame {
+    export interface IEditGameService {
+        gameType: EditGameType;
         datePlayed: Date;
         players: Shared.IGamePlayer[];
         unselectedPlayers: Shared.INewGamePlayer[];
@@ -11,18 +11,18 @@ module EditActiveGame {
         removePlayer(player: Shared.IGamePlayer): void;
         movePlayer(selectedPlayerId: string, destinationPlayer: Shared.IGamePlayer): void;
         playerIndex(playerId: string): number;
-        getGame(gameType: FinalizeGameType): ng.IPromise<void>;
+        getGame(gameType: EditGameType): ng.IPromise<void>;
         save(): ng.IPromise<void>;
         finalize(): ng.IPromise<void>;
         updateFinalizedGame(): ng.IPromise<void>;
     }
 
-    export enum FinalizeGameType {
+    export enum EditGameType {
         ActiveGame,
         FinalizedGame
     }
 
-    export class EditActiveGameService implements IEditActiveGameService {
+    export class EditGameService implements IEditGameService {
         public static $inject: string[] = ["$location", "$q", "apiService", "playerSelectionService", "newPlayerPanelService"];
                 
         private imLoading: ng.IPromise<void>;
@@ -30,7 +30,7 @@ module EditActiveGame {
         private activeGame: Shared.IGame;
         private isMovePlayerActive: boolean;
         private errorMessageList: string[] = [];
-        private localGameType: FinalizeGameType;
+        private localGameType: EditGameType;
         
         public get datePlayed(): Date {
             if (this.activeGame && this.activeGame.datePlayed) {
@@ -70,7 +70,7 @@ module EditActiveGame {
             return this.playerSelectionService.unselectedPlayers;
         }
 
-        public get gameType(): FinalizeGameType {
+        public get gameType(): EditGameType {
             return this.localGameType;
         }
 
@@ -91,7 +91,7 @@ module EditActiveGame {
             });
         }
 
-        public getGame(gameType: FinalizeGameType): ng.IPromise<void> {
+        public getGame(gameType: EditGameType): ng.IPromise<void> {
             this.localGameType = gameType;
             var def = this.$q.defer<void>();
 
@@ -101,7 +101,7 @@ module EditActiveGame {
 
             var allPlayersPromise = this.playerSelectionService.getPlayers();
 
-            var gamePromise = gameType === FinalizeGameType.ActiveGame
+            var gamePromise = gameType === EditGameType.ActiveGame
                 ? this.apiService.getActiveGame(this.gameIdPath)
                 : this.apiService.getFinalizedGame(this.gameIdPath);
 

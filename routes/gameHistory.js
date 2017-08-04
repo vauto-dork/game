@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) {
 
 /* GET game history page. */
 router.get('/edit', function(req, res, next) {
-  res.render('editFinalizedGame', { title: 'Edit Finalized Game', scripts: bundler.scripts('editActiveGame')});
+  res.render('editFinalizedGame', { title: 'Edit Finalized Game', scripts: bundler.scripts('editGame')});
 });
 
 module.exports = router;

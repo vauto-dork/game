@@ -1,10 +1,10 @@
-module EditActiveGame {
+module EditGame {
     export function EditScoresDirective(): ng.IDirective {
         return {
             scope: {
                 disabled: '='
             },
-            templateUrl: '/areas/editActiveGame/directives/EditScoresTemplate.html',
+            templateUrl: '/areas/editGame/directives/EditScoresTemplate.html',
             controller: 'EditScoresController',
             controllerAs: 'ctrl',
             bindToController: true
@@ -12,7 +12,7 @@ module EditActiveGame {
     }
 
     export class EditScoresController {
-        public static $inject: string[] = ['editActiveGameService'];
+        public static $inject: string[] = ['editGameService'];
 
         private disabled: boolean;
 
@@ -20,14 +20,14 @@ module EditActiveGame {
         private pointsMax: number = 99;
 
         private get players(): Shared.IGamePlayer[] {
-            return this.editActiveGameService.players;
+            return this.editGameService.players;
         }
 
         private set players(value: Shared.IGamePlayer[]) {
-            this.editActiveGameService.players = value;
+            this.editGameService.players = value;
         }
 
-        constructor(private editActiveGameService: IEditActiveGameService) {
+        constructor(private editGameService: IEditGameService) {
         }
 
         public rankHandler(player: Shared.IGamePlayer): void {

@@ -1,4 +1,4 @@
-﻿module EditActiveGame {
+﻿module EditGame {
     export function RevertFinalizeDirective(): ng.IDirective {
         return {
             scope: {
@@ -8,7 +8,7 @@
                 update: "&",
                 disabled: "="
             },
-            templateUrl: '/areas/editActiveGame/directives/RevertFinalizeTemplate.html',
+            templateUrl: '/areas/editGame/directives/RevertFinalizeTemplate.html',
             controller: 'RevertFinalizeController',
             controllerAs: 'ctrl',
             bindToController: true
@@ -16,7 +16,7 @@
     }
 
     export class RevertFinalizeController {
-        public static $inject: string[] = ['editActiveGameService'];
+        public static $inject: string[] = ['editGameService'];
 
         private save: Function;
         private revert: Function;
@@ -25,14 +25,14 @@
         private disabled: boolean;
 
         private get numPlayers(): number {
-            return this.editActiveGameService.players.length;
+            return this.editGameService.players.length;
         }
 
         private get isFinalizedGame(): boolean {
-            return this.editActiveGameService.gameType === FinalizeGameType.FinalizedGame;
+            return this.editGameService.gameType === EditGameType.FinalizedGame;
         }
 
-        constructor(private editActiveGameService: IEditActiveGameService) {
+        constructor(private editGameService: IEditGameService) {
             
         }
     }
