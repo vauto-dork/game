@@ -16,6 +16,63 @@ var Shared;
         Game.prototype.getIdAsPath = function () {
             return "/" + this._id;
         };
+        Game.prototype.getPlayerIndex = function (playerId) {
+            return this.players.map(function (p) { return p.playerId; }).indexOf(playerId);
+        };
+        Game.prototype.addPlayer = function (player) {
+            this.players.push(player);
+        };
+        Game.prototype.removePlayer = function (player) {
+            var index = this.getPlayerIndex(player.playerId);
+            this.players.splice(index, 1);
+        };
+        Game.prototype.movePlayer = function (selectedPlayerId, destinationPlayer) {
+            var selectedPlayer = this.players.filter(function (p) {
+                return p.playerId === selectedPlayerId;
+            });
+            if (selectedPlayer.length === 1) {
+                var selectedPlayerIndex = this.getPlayerIndex(selectedPlayerId);
+                this.players.splice(selectedPlayerIndex, 1);
+                var dropIndex = this.getPlayerIndex(destinationPlayer.playerId);
+                if (selectedPlayerIndex <= dropIndex) {
+                    dropIndex += 1;
+                }
+                this.players.splice(dropIndex, 0, selectedPlayer[0]);
+                return true;
+            }
+            return false;
+        };
+        Game.prototype.hasFirstPlace = function () {
+            return this.players.filter(function (value) { return value.rank === 1; }).length === 1;
+        };
+        Game.prototype.hasSecondPlace = function () {
+            return this.players.filter(function (value) { return value.rank === 2; }).length === 1;
+        };
+        Game.prototype.hasThirdPlace = function () {
+            return this.players.filter(function (value) { return value.rank === 3; }).length === 1;
+        };
+        Game.prototype.declareWinner = function () {
+            var hasRanks = this.hasFirstPlace() && this.hasSecondPlace() && this.hasThirdPlace();
+            if (hasRanks) {
+                var winner = this.players.filter(function (player) { return player.rank === 1; });
+                this.winner = winner[0].player;
+            }
+            return hasRanks;
+        };
+        Game.prototype.addBonusPoints = function () {
+            var numPlayers = this.players.length;
+            this.players.forEach(function (player) {
+                if (player.rank === 1) {
+                    player.points += numPlayers - 1;
+                }
+                if (player.rank === 2) {
+                    player.points += numPlayers - 2;
+                }
+                if (player.rank === 3) {
+                    player.points += numPlayers - 3;
+                }
+            });
+        };
         Game.prototype.removeBonusPoints = function () {
             var numPlayers = this.players.length;
             this.players.forEach(function (player) {
@@ -28,6 +85,11 @@ var Shared;
                 if (player.rank === 3) {
                     player.points -= numPlayers - 3;
                 }
+            });
+        };
+        Game.prototype.convertNullPointsToZero = function () {
+            this.players.forEach(function (player) {
+                player.points = !player.points ? 0 : player.points;
             });
         };
         Game.prototype.toGameViewModel = function () {
@@ -490,11 +552,11 @@ var Shared;
         };
         ApiService.prototype.updateFinalizeGame = function (game) {
             var def = this.$q.defer();
-            this.$http.put('/games/' + game._id, game.toGameViewModel()).success(function (data, status, headers, config) {
+            this.$http.put('/games' + game.getIdAsPath, game.toGameViewModel()).success(function (data, status, headers, config) {
                 def.resolve();
             })
                 .error(function (data, status, headers, config) {
-                console.error("Cannot finalize game. Status code: " + status + ".");
+                console.error("Cannot update finalized game. Status code: " + status + ".");
                 def.reject(data);
             });
             return def.promise;

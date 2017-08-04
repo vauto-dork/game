@@ -123,37 +123,23 @@ module EditActiveGame {
         }
         
         public playerIndex(playerId: string): number {
-            return this.players.map(p => { return p.playerId; }).indexOf(playerId);
+            return this.activeGame.getPlayerIndex(playerId);
         }
 
         public addPlayer(player: Shared.IGamePlayer): void {
-            this.players.push(player);
+            this.activeGame.addPlayer(player);
             this.playerSelectionService.addPlayer(player.player);
         }
 
         public removePlayer(player: Shared.IGamePlayer): void {
-            var index = this.playerIndex(player.playerId);
-            this.players.splice(index, 1);
+            this.activeGame.removePlayer(player);
             this.playerSelectionService.removePlayer(player.player);
         }
 
         public movePlayer(selectedPlayerId: string, destinationPlayer: Shared.IGamePlayer): void {
-            var selectedPlayer = this.players.filter(p => {
-                return p.playerId === selectedPlayerId;
-            });
-
-            if (selectedPlayer.length === 1) {
-                var selectedPlayerIndex = this.playerIndex(selectedPlayerId);
-                this.players.splice(selectedPlayerIndex, 1);
-
-                var dropIndex = this.playerIndex(destinationPlayer.playerId);
-
-                if (selectedPlayerIndex <= dropIndex) {
-                    dropIndex += 1;
-                }
-
-                this.players.splice(dropIndex, 0, selectedPlayer[0]);
-            } else {
+            var isSuccess = this.activeGame.movePlayer(selectedPlayerId, destinationPlayer);
+            
+            if(!isSuccess) {
                 console.error("Cannot find player: ", selectedPlayerId);
             }
         }
@@ -237,10 +223,7 @@ module EditActiveGame {
                 return false;
             }
 
-            // Convert blank points to zeroes.
-            this.players.forEach((player) => {
-                player.points = !player.points ? 0 : player.points;
-            });
+            this.activeGame.convertNullPointsToZero();
 
             return true;
         }
@@ -248,30 +231,19 @@ module EditActiveGame {
         private hasRanks(): boolean {
             this.clearerrorMessageList();
 
-            var rank1 = this.players.filter(value => { return value.rank === 1; }).length;
-            var rank2 = this.players.filter(value => { return value.rank === 2; }).length;
-            var rank3 = this.players.filter(value => { return value.rank === 3; }).length;
-
-            if (rank1 !== 1) {
+            if (!this.activeGame.hasFirstPlace()) {
                 this.addErrorMessage('No winner selected.', false);
             }
 
-            if (rank2 !== 1) {
+            if (!this.activeGame.hasSecondPlace()) {
                 this.addErrorMessage('No second place selected.', false);
             }
 
-            if (rank3 !== 1) {
+            if (!this.activeGame.hasThirdPlace()) {
                 this.addErrorMessage('No third place selected.', false);
             }
 
-            var hasRanks = (rank1 === 1 && rank2 === 1 && rank3 === 1);
-
-            if (hasRanks) {
-                var winner = this.players.filter((player) => { return player.rank === 1; });
-                this.activeGame.winner = winner[0].player;
-            }
-
-            return hasRanks;
+            return this.activeGame.declareWinner();
         }
     }
 }

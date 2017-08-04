@@ -4,9 +4,19 @@ module Shared {
 		players: IGamePlayer[];
 		datePlayed?: string;
 		winner?: IPlayer;
+		
 		getIdAsPath(): string;
+		getPlayerIndex(playerId: string): number;
+		addPlayer(player: IGamePlayer): void;
+		removePlayer(player: Shared.IGamePlayer): void;
+		movePlayer(selectedPlayerId: string, destinationPlayer: Shared.IGamePlayer): boolean;
+		hasFirstPlace(): boolean;
+		hasSecondPlace(): boolean;
+		hasThirdPlace(): boolean;
+		declareWinner(): boolean;
 		addBonusPoints(): void;
 		removeBonusPoints(): void;
+		convertNullPointsToZero(): void;
 		toGameViewModel(): IGameViewModel;
 	}
 	
@@ -32,6 +42,64 @@ module Shared {
 		
 		public getIdAsPath(): string {
 			return `/${this._id}`;
+		}
+
+		public getPlayerIndex(playerId: string): number {
+			return this.players.map(p => { return p.playerId; }).indexOf(playerId);
+		}
+
+		public addPlayer(player: IGamePlayer): void {
+			this.players.push(player);
+		}
+
+		public removePlayer(player: Shared.IGamePlayer): void {
+			var index = this.getPlayerIndex(player.playerId);
+            this.players.splice(index, 1);
+		}
+
+		public movePlayer(selectedPlayerId: string, destinationPlayer: Shared.IGamePlayer): boolean {
+            var selectedPlayer = this.players.filter(p => {
+                return p.playerId === selectedPlayerId;
+            });
+
+            if (selectedPlayer.length === 1) {
+                var selectedPlayerIndex = this.getPlayerIndex(selectedPlayerId);
+                this.players.splice(selectedPlayerIndex, 1);
+
+                var dropIndex = this.getPlayerIndex(destinationPlayer.playerId);
+
+                if (selectedPlayerIndex <= dropIndex) {
+                    dropIndex += 1;
+                }
+
+                this.players.splice(dropIndex, 0, selectedPlayer[0]);
+				return true;
+            }
+
+			return false
+        }
+
+		public hasFirstPlace(): boolean {
+			return this.players.filter(value => { return value.rank === 1; }).length === 1;
+		}
+
+		public hasSecondPlace(): boolean {
+			return this.players.filter(value => { return value.rank === 2; }).length === 1;
+		}
+
+		public hasThirdPlace(): boolean {
+			return this.players.filter(value => { return value.rank === 3; }).length === 1;
+		}
+
+		public declareWinner(): boolean {
+			var hasRanks = this.hasFirstPlace() && this.hasSecondPlace() && this.hasThirdPlace();
+
+			if(hasRanks) {
+				var winner = this.players.filter((player) => { return player.rank === 1; });
+        		this.winner = winner[0].player;
+			}
+
+			return hasRanks;
 		}
 
 		public addBonusPoints(): void {
@@ -61,6 +129,12 @@ module Shared {
                 if (player.rank === 3) {
                     player.points -= numPlayers - 3;
                 }
+            });
+		}
+
+		public convertNullPointsToZero(): void {
+            this.players.forEach((player) => {
+                player.points = !player.points ? 0 : player.points;
             });
 		}
 		

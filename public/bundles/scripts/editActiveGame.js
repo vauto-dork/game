@@ -492,31 +492,19 @@ var EditActiveGame;
             return def.promise;
         };
         EditActiveGameService.prototype.playerIndex = function (playerId) {
-            return this.players.map(function (p) { return p.playerId; }).indexOf(playerId);
+            return this.activeGame.getPlayerIndex(playerId);
         };
         EditActiveGameService.prototype.addPlayer = function (player) {
-            this.players.push(player);
+            this.activeGame.addPlayer(player);
             this.playerSelectionService.addPlayer(player.player);
         };
         EditActiveGameService.prototype.removePlayer = function (player) {
-            var index = this.playerIndex(player.playerId);
-            this.players.splice(index, 1);
+            this.activeGame.removePlayer(player);
             this.playerSelectionService.removePlayer(player.player);
         };
         EditActiveGameService.prototype.movePlayer = function (selectedPlayerId, destinationPlayer) {
-            var selectedPlayer = this.players.filter(function (p) {
-                return p.playerId === selectedPlayerId;
-            });
-            if (selectedPlayer.length === 1) {
-                var selectedPlayerIndex = this.playerIndex(selectedPlayerId);
-                this.players.splice(selectedPlayerIndex, 1);
-                var dropIndex = this.playerIndex(destinationPlayer.playerId);
-                if (selectedPlayerIndex <= dropIndex) {
-                    dropIndex += 1;
-                }
-                this.players.splice(dropIndex, 0, selectedPlayer[0]);
-            }
-            else {
+            var isSuccess = this.activeGame.movePlayer(selectedPlayerId, destinationPlayer);
+            if (!isSuccess) {
                 console.error("Cannot find player: ", selectedPlayerId);
             }
         };
@@ -540,11 +528,12 @@ var EditActiveGame;
             var _this = this;
             var def = this.$q.defer();
             if (this.filterRemovedPlayers() && this.hasRanks()) {
-                this.addBonusPoints();
+                this.activeGame.addBonusPoints();
                 this.apiService.finalizeGame(this.activeGame).then(function () {
                     _this.apiService.deleteActiveGame(_this.gameIdPath).then(function () {
                         def.resolve();
                     }, function () {
+                        _this.activeGame.removeBonusPoints();
                         _this.addErrorMessage('Cannot delete active game.');
                         def.reject();
                     });
@@ -562,10 +551,11 @@ var EditActiveGame;
             var _this = this;
             var def = this.$q.defer();
             if (this.filterRemovedPlayers() && this.hasRanks()) {
-                this.addBonusPoints();
+                this.activeGame.addBonusPoints();
                 this.apiService.updateFinalizeGame(this.activeGame).then(function () {
                     def.resolve();
                 }, function () {
+                    _this.activeGame.removeBonusPoints();
                     _this.addErrorMessage('Cannot update finalized game.');
                     def.reject();
                 });
@@ -574,20 +564,6 @@ var EditActiveGame;
                 def.reject();
             }
             return def.promise;
-        };
-        EditActiveGameService.prototype.addBonusPoints = function () {
-            var numPlayers = this.players.length;
-            this.players.forEach(function (player) {
-                if (player.rank === 1) {
-                    player.points += numPlayers - 1;
-                }
-                if (player.rank === 2) {
-                    player.points += numPlayers - 2;
-                }
-                if (player.rank === 3) {
-                    player.points += numPlayers - 3;
-                }
-            });
         };
         EditActiveGameService.prototype.addErrorMessage = function (message, clear) {
             if (clear === void 0) { clear = true; }
@@ -604,31 +580,21 @@ var EditActiveGame;
                 this.addErrorMessage('Game cannot have less than three players.');
                 return false;
             }
-            this.players.forEach(function (player) {
-                player.points = !player.points ? 0 : player.points;
-            });
+            this.activeGame.convertNullPointsToZero();
             return true;
         };
         EditActiveGameService.prototype.hasRanks = function () {
             this.clearerrorMessageList();
-            var rank1 = this.players.filter(function (value) { return value.rank === 1; }).length;
-            var rank2 = this.players.filter(function (value) { return value.rank === 2; }).length;
-            var rank3 = this.players.filter(function (value) { return value.rank === 3; }).length;
-            if (rank1 !== 1) {
+            if (!this.activeGame.hasFirstPlace()) {
                 this.addErrorMessage('No winner selected.', false);
             }
-            if (rank2 !== 1) {
+            if (!this.activeGame.hasSecondPlace()) {
                 this.addErrorMessage('No second place selected.', false);
             }
-            if (rank3 !== 1) {
+            if (!this.activeGame.hasThirdPlace()) {
                 this.addErrorMessage('No third place selected.', false);
             }
-            var hasRanks = (rank1 === 1 && rank2 === 1 && rank3 === 1);
-            if (hasRanks) {
-                var winner = this.players.filter(function (player) { return player.rank === 1; });
-                this.activeGame.winner = winner[0].player;
-            }
-            return hasRanks;
+            return this.activeGame.declareWinner();
         };
         return EditActiveGameService;
     }());
