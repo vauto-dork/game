@@ -1,4 +1,6 @@
 ﻿module EditGame {
+    import EditGameType = Shared.EditGameType;
+    
     export function RevertFinalizeDirective(): ng.IDirective {
         return {
             scope: {

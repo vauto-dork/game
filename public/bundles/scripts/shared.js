@@ -142,6 +142,15 @@ var Shared;
     Shared.GamePlayer = GamePlayer;
 })(Shared || (Shared = {}));
 
+var Shared;
+(function (Shared) {
+    var EditGameType;
+    (function (EditGameType) {
+        EditGameType[EditGameType["ActiveGame"] = 0] = "ActiveGame";
+        EditGameType[EditGameType["FinalizedGame"] = 1] = "FinalizedGame";
+    })(EditGameType = Shared.EditGameType || (Shared.EditGameType = {}));
+})(Shared || (Shared = {}));
+
 
 var Shared;
 (function (Shared) {
@@ -332,9 +341,6 @@ var Shared;
         };
         ApiService.prototype.getEditActiveGamePath = function (gameId) {
             return '/ActiveGames/edit/#/' + gameId;
-        };
-        ApiService.prototype.getEditFinalizedGamePath = function (gameId) {
-            return '/GameHistory/edit/#/' + gameId;
         };
         ApiService.prototype.getAllActiveGames = function () {
             var def = this.$q.defer();
@@ -557,7 +563,7 @@ var Shared;
         };
         ApiService.prototype.updateFinalizeGame = function (game) {
             var def = this.$q.defer();
-            this.$http.put('/games' + game.getIdAsPath, game.toGameViewModel()).success(function (data, status, headers, config) {
+            this.$http.put('/games' + game.getIdAsPath(), game.toGameViewModel()).success(function (data, status, headers, config) {
                 def.resolve();
             })
                 .error(function (data, status, headers, config) {

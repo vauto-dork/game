@@ -12,6 +12,10 @@
 			<h3 ng-bind="ctrl.errorMessage"></h3>
 		</div>
 		
-		<game-card ng-repeat="game in ctrl.games" game="game" game-path="ctrl.gamePath" reload="ctrl.reload()"></game-card>
+		<game-card ng-repeat="game in ctrl.games"
+			game="game"
+			game-path="ctrl.gamePath"
+			show-modify-buttons="ctrl.isFinalizedGame"
+			reload="ctrl.reload()"></game-card>
 	</div>
 </div>

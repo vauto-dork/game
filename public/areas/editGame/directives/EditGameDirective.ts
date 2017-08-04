@@ -1,4 +1,6 @@
 module EditGame {
+    import EditGameType = Shared.EditGameType;
+    
     export function EditGameDirective(): ng.IDirective {
         return {
             scope: {
@@ -134,7 +136,7 @@ module EditGame {
 
         public updateFinalizedGame(): void {
             this.editGameService.updateFinalizedGame().then(() => {
-                this.$window.location.href = "/GameHistory";
+                this.$window.location.href = "/GameHistory/Admin";
             }, () => {
                 this.saveReject();
             });

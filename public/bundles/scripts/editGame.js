@@ -386,11 +386,7 @@ newPlayerModule.directive('newPlayerPanel', Components.NewPlayerPanelDirective);
 
 var EditGame;
 (function (EditGame) {
-    var EditGameType;
-    (function (EditGameType) {
-        EditGameType[EditGameType["ActiveGame"] = 0] = "ActiveGame";
-        EditGameType[EditGameType["FinalizedGame"] = 1] = "FinalizedGame";
-    })(EditGameType = EditGame.EditGameType || (EditGame.EditGameType = {}));
+    var EditGameType = Shared.EditGameType;
     var EditGameService = (function () {
         function EditGameService($location, $q, apiService, playerSelectionService, newPlayerPanelService) {
             var _this = this;
@@ -829,6 +825,7 @@ var EditGame;
 
 var EditGame;
 (function (EditGame) {
+    var EditGameType = Shared.EditGameType;
     function RevertFinalizeDirective() {
         return {
             scope: {
@@ -858,7 +855,7 @@ var EditGame;
         });
         Object.defineProperty(RevertFinalizeController.prototype, "isFinalizedGame", {
             get: function () {
-                return this.editGameService.gameType === EditGame.EditGameType.FinalizedGame;
+                return this.editGameService.gameType === EditGameType.FinalizedGame;
             },
             enumerable: true,
             configurable: true
@@ -871,6 +868,7 @@ var EditGame;
 
 var EditGame;
 (function (EditGame) {
+    var EditGameType = Shared.EditGameType;
     function EditGameDirective() {
         return {
             scope: {
@@ -971,7 +969,7 @@ var EditGame;
         };
         EditGameController.prototype.getGame = function () {
             var _this = this;
-            var gameType = this.isFinalizedGame ? EditGame.EditGameType.FinalizedGame : EditGame.EditGameType.ActiveGame;
+            var gameType = this.isFinalizedGame ? EditGameType.FinalizedGame : EditGameType.ActiveGame;
             this.editGameService.getGame(gameType).then(function () {
                 _this.changeState(State.Ready);
                 _this.datePlayed = _this.editGameService.datePlayed;
@@ -1001,7 +999,7 @@ var EditGame;
         EditGameController.prototype.updateFinalizedGame = function () {
             var _this = this;
             this.editGameService.updateFinalizedGame().then(function () {
-                _this.$window.location.href = "/GameHistory";
+                _this.$window.location.href = "/GameHistory/Admin";
             }, function () {
                 _this.saveReject();
             });

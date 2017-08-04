@@ -319,7 +319,7 @@ module Shared {
 		public updateFinalizeGame(game: IGame): ng.IPromise<void> {
 			var def = this.$q.defer<void>();
 
-			this.$http.put('/games' + game.getIdAsPath, game.toGameViewModel()).success((data, status, headers, config) => {
+			this.$http.put('/games' + game.getIdAsPath(), game.toGameViewModel()).success((data, status, headers, config) => {
 				def.resolve();
 			})
 				.error((data, status, headers, config) => {

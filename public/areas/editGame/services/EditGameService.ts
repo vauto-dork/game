@@ -1,4 +1,6 @@
 module EditGame {
+    import EditGameType = Shared.EditGameType;
+    
     export interface IEditGameService {
         gameType: EditGameType;
         datePlayed: Date;
@@ -15,11 +17,6 @@ module EditGame {
         save(): ng.IPromise<void>;
         finalize(): ng.IPromise<void>;
         updateFinalizedGame(): ng.IPromise<void>;
-    }
-
-    export enum EditGameType {
-        ActiveGame,
-        FinalizedGame
     }
 
     export class EditGameService implements IEditGameService {

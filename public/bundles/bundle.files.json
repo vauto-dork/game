@@ -27,6 +27,7 @@
         },
         "gameCard": {
             "files": [
+                "components/gameCard/services/*.js",
                 "components/gameCard/directives/*.js",
                 "components/gameCard/modules/*.js"
             ]

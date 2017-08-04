@@ -19,28 +19,31 @@ module Components {
 		Deleting,
 		Deleted,
 		Copy,
+		Edit,
 		Error
 	}
 
 	export class GameCardController {
-		public static $inject: string[] = ['$http', '$window', 'apiService'];
+		public static $inject: string[] = ['gameCardService', 'apiService'];
+
+		public game: Shared.IGame;
+		public showModifyButtons: boolean;
+		public reload: Function;
 
 		private showOverlay: boolean = false;
 		private showLoadBar: boolean = false;
 		private showDeleteWarning: boolean = false;
 		private showDeleted: boolean = false;
-		private showError: boolean = false;
-		
-		private game: Shared.IGame;
+		private showError: boolean = false;				
 		private errorMessage: string;
 		
-		constructor(private $http: ng.IHttpService, private $window: ng.IWindowService, private apiService: Shared.IApiService) {
+		constructor(private gameCardService: IGameCardService, private apiService: Shared.IApiService) {
 			this.changeState(State.Ready);
 		}
 
 		private changeState(newState: State): void {
 			this.showOverlay = newState !== State.Ready;
-			this.showLoadBar = newState === State.Deleting || newState === State.Copy;
+			this.showLoadBar = newState === State.Deleting || newState === State.Copy || newState === State.Edit;
 			this.showDeleteWarning = newState === State.DeleteWarning;
 			this.showError = newState === State.Error;
 			this.showDeleted = newState === State.Deleted;
@@ -50,6 +53,9 @@ module Components {
 					break;
 				case State.Copy:
 					this.copy();
+					break;
+				case State.Edit:
+					this.gameCardService.edit(this.game);
 					break;
 				case State.Deleting:
 					this.delete();
@@ -65,7 +71,7 @@ module Components {
 	
 		// Dont call directly. Change state to "Deleting" instead.
 		private delete(): void {
-			this.apiService.deleteActiveGame(this.game.getIdAsPath()).then(() => {
+			this.gameCardService.delete(this.game).then(()=>{
 				this.changeState(State.Deleted);
 			}, (data) => {
 				this.errorHandler(data, 'Error deleting game!');
@@ -74,19 +80,13 @@ module Components {
 	
 		// Dont call directly. Change state to "Copy" instead.
 		private copy(): void {
-			var newGame: Shared.IGame = new Shared.Game();
-			
-			newGame.players = this.game.players.map((player) => {
-				var gamePlayer = new Shared.GamePlayer();
-				gamePlayer.player = player.player;
-				return gamePlayer;
-			});
-			
-			this.apiService.createActiveGame(newGame).then(editUrl => {
-				this.$window.location.href = editUrl;
-			}, (data) => {
+			this.gameCardService.copy(this.game).then(()=>{}, (data)=>{
 				this.errorHandler(data, 'Error copying game!');
 			});
+		}
+
+		private edit(): void {
+			this.changeState(State.Edit);
 		}
 
 		private warnDelete(): void {
