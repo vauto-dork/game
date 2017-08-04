@@ -26,7 +26,7 @@ module Players {
 		private showLoading: boolean = false;
 		private showPlayers: boolean = false;
 		private showPlayerEdit: boolean = false;
-
+		
         private get alerts(): Shared.IAlert[] {
             return this.alertsService.alerts;
         }
@@ -37,6 +37,7 @@ module Players {
 
 		private selectedPlayer: Shared.IPlayer;
 		private filter: string = "";
+		private activity: string = "Both";
 
         constructor(private apiService: Shared.ApiService,
 			private alertsService: Shared.IAlertsService,
@@ -102,6 +103,16 @@ module Players {
 		private editPlayer(player: Shared.IPlayer): void {
 			this.selectedPlayer = angular.copy(player);
 			this.changeState(State.EditPlayer);
+		}
+
+		private isPlayerVisible(player: Shared.IPlayer): boolean {
+			if(this.activity === "Both")
+				return true;
+
+			if(this.activity === "Active")
+				return !player.inactive;
+			
+			return player.inactive;
 		}
 
 		private reload() {

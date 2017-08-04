@@ -166,6 +166,7 @@ var Players;
             this.showPlayers = false;
             this.showPlayerEdit = false;
             this.filter = "";
+            this.activity = "Both";
             this.changeState(State.Loading);
             this.playersListService.subscribeEditSave(function () {
                 _this.changeState(State.Saved);
@@ -234,6 +235,13 @@ var Players;
         PlayersListController.prototype.editPlayer = function (player) {
             this.selectedPlayer = angular.copy(player);
             this.changeState(State.EditPlayer);
+        };
+        PlayersListController.prototype.isPlayerVisible = function (player) {
+            if (this.activity === "Both")
+                return true;
+            if (this.activity === "Active")
+                return !player.inactive;
+            return player.inactive;
         };
         PlayersListController.prototype.reload = function () {
             this.alertsService.clearAlerts();
