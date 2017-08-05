@@ -27,6 +27,7 @@
         },
         "gameCard": {
             "files": [
+                "components/gameCard/services/*.js",
                 "components/gameCard/directives/*.js",
                 "components/gameCard/modules/*.js"
             ]
@@ -77,16 +78,12 @@
                 "newPlayerPanel"
             ]
         },
-        "editActiveGame": {
+        "editGame": {
             "files": [
-                "areas/editActiveGame/services/EditActiveGameService.js",
-                "areas/editActiveGame/services/EditActiveGameCollapseService.js",
-                "areas/editActiveGame/directives/EditScoresDirective.js",
-                "areas/editActiveGame/directives/ReorderPlayersDirective.js",
-                "areas/editActiveGame/directives/ModifyPlayersDirective.js",
-                "areas/editActiveGame/directives/RevertFinalizeDirective.js",
-                "areas/editActiveGame/directives/EditActiveGameDirective.js",
-                "bundles/pageModules/editActiveGame.js"
+                "areas/editGame/services/*.js",
+                "areas/editGame/directives/*.js",
+                "areas/editGame/modules/*.js",
+                "bundles/pageModules/editGame.js"
             ],
             "components": [
                 "playerSelector",

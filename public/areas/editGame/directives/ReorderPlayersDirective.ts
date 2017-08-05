@@ -1,9 +1,9 @@
-﻿module EditActiveGame {
+﻿module EditGame {
     export function ReorderPlayersDirective(): ng.IDirective {
         return {
             scope: {
             },
-            templateUrl: '/areas/editActiveGame/directives/ReorderPlayersTemplate.html',
+            templateUrl: '/areas/editGame/directives/ReorderPlayersTemplate.html',
             controller: 'ReorderPlayersController',
             controllerAs: 'ctrl',
             bindToController: true
@@ -11,27 +11,27 @@
     }
 
     export class ReorderPlayersController {
-        public static $inject: string[] = ['editActiveGameService'];
+        public static $inject: string[] = ['editGameService'];
         
         private selectedPlayerId: string;
 
         private get dropZoneActive(): boolean {
-            return this.editActiveGameService.movePlayerActive;
+            return this.editGameService.movePlayerActive;
         }
 
         private set dropZoneActive(value: boolean) {
-            this.editActiveGameService.movePlayerActive = value;
+            this.editGameService.movePlayerActive = value;
         }
 
         private get players(): Shared.IGamePlayer[] {
-            return this.editActiveGameService.players;
+            return this.editGameService.players;
         }
 
         private set players(value: Shared.IGamePlayer[]) {
-            this.editActiveGameService.players = value;
+            this.editGameService.players = value;
         }
 
-        constructor(private editActiveGameService: IEditActiveGameService) {
+        constructor(private editGameService: IEditGameService) {
             this.unselect();
         }
         
@@ -61,20 +61,16 @@
             this.selectedPlayerId = null;
         }
 
-        private playerIndex(playerId: string): number {
-            return this.editActiveGameService.playerIndex(playerId);
-        }
-
         private dropPlayerHere(destinationPlayer: Shared.IGamePlayer): void {
             if (!!this.selectedPlayerId) {
-                this.editActiveGameService.movePlayer(this.selectedPlayerId, destinationPlayer);
+                this.editGameService.movePlayer(this.selectedPlayerId, destinationPlayer);
             }
 
             this.unselect();
         }
 
         public removePlayer(player: Shared.IGamePlayer): void {
-            this.editActiveGameService.removePlayer(player);
+            this.editGameService.removePlayer(player);
         }
     }
 }

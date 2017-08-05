@@ -12,7 +12,7 @@ router.get('/', function(req, res, next) {
 
 /* GET edit active game page. */
 router.get('/edit', function(req, res, next) {
-  res.render('editActiveGame', { title: 'Edit Game', scripts: bundler.scripts('editActiveGame')});
+  res.render('editActiveGame', { title: 'Edit Game', scripts: bundler.scripts('editGame')});
 });
 
 /* GET games listing. */

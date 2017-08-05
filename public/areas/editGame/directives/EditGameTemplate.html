@@ -1,4 +1,4 @@
-<div class="edit-active-game">
+<div class="edit-game">
     <uib-alert ng-repeat="alert in ctrl.alerts" type="{{alert.type}}" close="ctrl.closeAlert($index)">{{alert.msg}}</uib-alert>
     
     <load-spinner ng-show="ctrl.showLoading"></load-spinner>
@@ -12,12 +12,7 @@
                         <date-picker date="ctrl.datePlayed" disabled="ctrl.disabled"></date-picker>
                     </div>
                     
-                    <revert-finalize class="visible-md-block visible-lg-block"
-                                     save="ctrl.save()"
-                                     revert="ctrl.revert()"
-                                     finalize="ctrl.finalize()"
-                                     disabled="ctrl.disabled">
-                    </revert-finalize>
+                    <revert-finalize class="visible-md-block visible-lg-block"></revert-finalize>
                 </div>
 
                 <div class="col-xs-12 col-md-6 col-lg-7">
@@ -32,25 +27,24 @@
 
                     <edit-scores disabled="ctrl.disabled"></edit-scores>
 
-                    <revert-finalize class="visible-xs-block visible-sm-block"
-                                     save="ctrl.save()"
-                                     revert="ctrl.revert()"
-                                     finalize="ctrl.finalize()"
-                                     disabled="ctrl.disabled">
-                    </revert-finalize>
+                    <revert-finalize class="visible-xs-block visible-sm-block"></revert-finalize>
                 </div>
             </div>
         </div>
 
         <div uib-collapse="ctrl.collapseModifyPlayers" collapsed="ctrl.enableScoreForm()">
-            <modify-players save="ctrl.save()"></modify-players>
+            <modify-players></modify-players>
         </div>
     </div>
 
     <div ng-if="ctrl.showError">
         <div class="btn-row">
-            <a type="button" class="btn btn-danger btn-block btn-lg" href="/ActiveGames">
+            <a type="button" class="btn btn-danger btn-block btn-lg" href="/ActiveGames" ng-if="!ctrl.isFinalizedGame">
                 Return to Active Games
+            </a>
+
+            <a type="button" class="btn btn-danger btn-block btn-lg" href="/GameHistory" ng-if="ctrl.isFinalizedGame">
+                Return to Game History
             </a>
         </div>
     </div>

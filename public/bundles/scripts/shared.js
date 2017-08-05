@@ -16,6 +16,86 @@ var Shared;
         Game.prototype.getIdAsPath = function () {
             return "/" + this._id;
         };
+        Game.prototype.getPlayerIndex = function (playerId) {
+            return this.players.map(function (p) { return p.playerId; }).indexOf(playerId);
+        };
+        Game.prototype.addPlayer = function (player) {
+            this.players.push(player);
+        };
+        Game.prototype.removePlayer = function (player) {
+            var index = this.getPlayerIndex(player.playerId);
+            this.players.splice(index, 1);
+        };
+        Game.prototype.movePlayer = function (selectedPlayerId, destinationPlayer) {
+            var selectedPlayer = this.players.filter(function (p) {
+                return p.playerId === selectedPlayerId;
+            });
+            if (selectedPlayer.length === 1) {
+                var selectedPlayerIndex = this.getPlayerIndex(selectedPlayerId);
+                this.players.splice(selectedPlayerIndex, 1);
+                var dropIndex = this.getPlayerIndex(destinationPlayer.playerId);
+                if (selectedPlayerIndex <= dropIndex) {
+                    dropIndex += 1;
+                }
+                this.players.splice(dropIndex, 0, selectedPlayer[0]);
+                return true;
+            }
+            return false;
+        };
+        Game.prototype.cleanRanks = function (playerChanged) {
+            this.players.forEach(function (p) {
+                if (p.playerId !== playerChanged.playerId) {
+                    if (playerChanged.rank > 0 && p.rank === playerChanged.rank) {
+                        p.rank = 0;
+                    }
+                }
+            });
+        };
+        Game.prototype.hasFirstPlace = function () {
+            return this.players.filter(function (value) { return value.rank === 1; }).length === 1;
+        };
+        Game.prototype.hasSecondPlace = function () {
+            return this.players.filter(function (value) { return value.rank === 2; }).length === 1;
+        };
+        Game.prototype.hasThirdPlace = function () {
+            return this.players.filter(function (value) { return value.rank === 3; }).length === 1;
+        };
+        Game.prototype.declareWinner = function () {
+            var hasRanks = this.hasFirstPlace() && this.hasSecondPlace() && this.hasThirdPlace();
+            if (hasRanks) {
+                var winner = this.players.filter(function (player) { return player.rank === 1; });
+                this.winner = winner[0].player;
+            }
+            return hasRanks;
+        };
+        Game.prototype.addBonusPoints = function () {
+            var numPlayers = this.players.length;
+            this.players.forEach(function (player) {
+                if (player.rank === 1) {
+                    player.points += numPlayers - 1;
+                }
+                if (player.rank === 2) {
+                    player.points += numPlayers - 2;
+                }
+                if (player.rank === 3) {
+                    player.points += numPlayers - 3;
+                }
+            });
+        };
+        Game.prototype.removeBonusPoints = function () {
+            var numPlayers = this.players.length;
+            this.players.forEach(function (player) {
+                if (player.rank === 1) {
+                    player.points -= numPlayers - 1;
+                }
+                if (player.rank === 2) {
+                    player.points -= numPlayers - 2;
+                }
+                if (player.rank === 3) {
+                    player.points -= numPlayers - 3;
+                }
+            });
+        };
         Game.prototype.toGameViewModel = function () {
             var game = {
                 _id: this._id,
@@ -52,18 +132,47 @@ var Shared;
             enumerable: true,
             configurable: true
         });
+        GamePlayer.prototype.decrementScore = function () {
+            var points = this.points || 0;
+            this.points = (points - 1 >= Shared.GamePointsRange.min) ? points - 1 : points;
+        };
+        GamePlayer.prototype.incrementScore = function () {
+            var points = this.points || 0;
+            this.points = (points + 1 <= Shared.GamePointsRange.max) ? points + 1 : points;
+        };
         GamePlayer.prototype.toGamePlayerViewModel = function () {
             var player = {
                 _id: this._id,
                 player: this.player.toPlayerViewModel(),
-                rank: this.rank,
-                points: this.points
+                rank: this.rank || 0,
+                points: this.points || 0
             };
             return player;
         };
         return GamePlayer;
     }());
     Shared.GamePlayer = GamePlayer;
+})(Shared || (Shared = {}));
+
+var Shared;
+(function (Shared) {
+    var GamePointsRange = (function () {
+        function GamePointsRange() {
+        }
+        GamePointsRange.min = -4;
+        GamePointsRange.max = 99;
+        return GamePointsRange;
+    }());
+    Shared.GamePointsRange = GamePointsRange;
+})(Shared || (Shared = {}));
+
+var Shared;
+(function (Shared) {
+    var EditGameType;
+    (function (EditGameType) {
+        EditGameType[EditGameType["ActiveGame"] = 0] = "ActiveGame";
+        EditGameType[EditGameType["FinalizedGame"] = 1] = "FinalizedGame";
+    })(EditGameType = Shared.EditGameType || (Shared.EditGameType = {}));
 })(Shared || (Shared = {}));
 
 
@@ -170,6 +279,74 @@ var Shared;
 
 var Shared;
 (function (Shared) {
+    var PlayerStats = (function () {
+        function PlayerStats(games, ranking) {
+            this.gamesData = games;
+            this.ranking = ranking;
+            this.calculateData();
+        }
+        Object.defineProperty(PlayerStats.prototype, "player", {
+            get: function () {
+                return !this.ranking ? null : this.ranking.player;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(PlayerStats.prototype, "rating", {
+            get: function () {
+                return !this.ranking ? 0 : this.ranking.rating;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(PlayerStats.prototype, "points", {
+            get: function () {
+                return !this.ranking ? 0 : this.ranking.totalPoints;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(PlayerStats.prototype, "gamesPlayed", {
+            get: function () {
+                return !this.ranking ? 0 : this.ranking.gamesPlayed;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        PlayerStats.prototype.calculateData = function () {
+            var _this = this;
+            this.games = [];
+            this.previousPoints = 0;
+            this.previousRating = 0;
+            if (this.gamesData.length <= 0) {
+                return;
+            }
+            var tally = this.ranking.totalPoints;
+            var games = this.gamesData.forEach(function (game, index) {
+                var player = game.players.filter(function (player) {
+                    return player.playerId === _this.player._id;
+                })[0];
+                if (index > 0) {
+                    _this.previousPoints += player.points;
+                }
+                _this.games.push({
+                    gameIndex: index,
+                    datePlayed: new Date(game.datePlayed),
+                    tally: tally,
+                    points: player.points,
+                    rank: player.rank
+                });
+                tally -= player.points;
+            });
+            this.previousRating = this.previousPoints / (this.gamesData.length - 1);
+        };
+        return PlayerStats;
+    }());
+    Shared.PlayerStats = PlayerStats;
+})(Shared || (Shared = {}));
+
+var Shared;
+(function (Shared) {
     var RankedPlayer = (function () {
         function RankedPlayer(player) {
             if (!player) {
@@ -238,9 +415,9 @@ var Shared;
                 _this.$window.scrollTo(0, 100000);
             });
         };
+        AlertsService.$inject = ['$timeout', '$window'];
         return AlertsService;
     }());
-    AlertsService.$inject = ['$timeout', '$window'];
     Shared.AlertsService = AlertsService;
 })(Shared || (Shared = {}));
 
@@ -255,7 +432,7 @@ var Shared;
             return '/ActiveGames/json' + gameIdPath;
         };
         ApiService.prototype.getEditActiveGamePath = function (gameId) {
-            return '/activeGames/edit/#/' + gameId;
+            return '/ActiveGames/edit/#/' + gameId;
         };
         ApiService.prototype.getAllActiveGames = function () {
             var def = this.$q.defer();
@@ -431,6 +608,25 @@ var Shared;
             });
             return def.promise;
         };
+        ApiService.prototype.getFinalizedGame = function (id) {
+            var def = this.$q.defer();
+            var path = '/Games/' + id;
+            if (!id) {
+                def.reject();
+            }
+            else {
+                this.$http.get(path).success(function (data, status, headers, config) {
+                    var game = new Shared.Game(data);
+                    game.removeBonusPoints();
+                    def.resolve(game);
+                })
+                    .error(function (data, status, headers, config) {
+                    console.error('Cannot get games played.');
+                    def.reject(data);
+                });
+            }
+            return def.promise;
+        };
         ApiService.prototype.getGames = function (month, year) {
             var def = this.$q.defer();
             var path = '/Games?month=' + month + '&year=' + year;
@@ -457,6 +653,17 @@ var Shared;
             });
             return def.promise;
         };
+        ApiService.prototype.updateFinalizeGame = function (game) {
+            var def = this.$q.defer();
+            this.$http.put('/games' + game.getIdAsPath(), game.toGameViewModel()).success(function (data, status, headers, config) {
+                def.resolve();
+            })
+                .error(function (data, status, headers, config) {
+                console.error("Cannot update finalized game. Status code: " + status + ".");
+                def.reject(data);
+            });
+            return def.promise;
+        };
         ApiService.prototype.deleteGame = function (gameIdPath) {
             var def = this.$q.defer();
             this.$http.delete("/games" + gameIdPath)
@@ -469,9 +676,9 @@ var Shared;
             });
             return def.promise;
         };
+        ApiService.$inject = ['$http', '$q'];
         return ApiService;
     }());
-    ApiService.$inject = ['$http', '$q'];
     Shared.ApiService = ApiService;
 })(Shared || (Shared = {}));
 
@@ -575,9 +782,9 @@ var Shared;
             this.$location.search('year', year);
             this.$location.replace();
         };
+        MonthYearQueryService.$inject = ['$location'];
         return MonthYearQueryService;
     }());
-    MonthYearQueryService.$inject = ['$location'];
     Shared.MonthYearQueryService = MonthYearQueryService;
 })(Shared || (Shared = {}));
 
@@ -720,9 +927,9 @@ var Shared;
         DatePickerController.prototype.useCurrentTime = function () {
             this.date = new Date();
         };
+        DatePickerController.$inject = ['$element', '$window', '$timeout', 'dateTimeService'];
         return DatePickerController;
     }());
-    DatePickerController.$inject = ['$element', '$window', '$timeout', 'dateTimeService'];
     Shared.DatePickerController = DatePickerController;
 })(Shared || (Shared = {}));
 
@@ -747,9 +954,9 @@ var Shared;
                 this.sidebarOpen = false;
             }
         };
+        GlobalNavController.$inject = [];
         return GlobalNavController;
     }());
-    GlobalNavController.$inject = [];
     Shared.GlobalNavController = GlobalNavController;
 })(Shared || (Shared = {}));
 
@@ -768,9 +975,9 @@ var Shared;
     var LoadSpinnerController = (function () {
         function LoadSpinnerController() {
         }
+        LoadSpinnerController.$inject = [];
         return LoadSpinnerController;
     }());
-    LoadSpinnerController.$inject = [];
     Shared.LoadSpinnerController = LoadSpinnerController;
 })(Shared || (Shared = {}));
 
@@ -866,9 +1073,9 @@ var Shared;
                 this.change();
             }
         };
+        MonthYearPickerController.$inject = ['dateTimeService'];
         return MonthYearPickerController;
     }());
-    MonthYearPickerController.$inject = ['dateTimeService'];
     Shared.MonthYearPickerController = MonthYearPickerController;
 })(Shared || (Shared = {}));
 
@@ -920,9 +1127,9 @@ var Shared;
     var PlayerBonusPanelController = (function () {
         function PlayerBonusPanelController() {
         }
+        PlayerBonusPanelController.$inject = [];
         return PlayerBonusPanelController;
     }());
-    PlayerBonusPanelController.$inject = [];
     Shared.PlayerBonusPanelController = PlayerBonusPanelController;
 })(Shared || (Shared = {}));
 
@@ -943,9 +1150,9 @@ var Shared;
     var PlayerNametagController = (function () {
         function PlayerNametagController() {
         }
+        PlayerNametagController.$inject = [];
         return PlayerNametagController;
     }());
-    PlayerNametagController.$inject = [];
     Shared.PlayerNametagController = PlayerNametagController;
 })(Shared || (Shared = {}));
 
@@ -975,9 +1182,9 @@ var Shared;
             enumerable: true,
             configurable: true
         });
+        PlayerScoretagController.$inject = [];
         return PlayerScoretagController;
     }());
-    PlayerScoretagController.$inject = [];
     Shared.PlayerScoretagController = PlayerScoretagController;
 })(Shared || (Shared = {}));
 

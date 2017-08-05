@@ -16,9 +16,9 @@ var Components;
     var PlayerFormController = (function () {
         function PlayerFormController() {
         }
+        PlayerFormController.$inject = [];
         return PlayerFormController;
     }());
-    PlayerFormController.$inject = [];
     Components.PlayerFormController = PlayerFormController;
 })(Components || (Components = {}));
 
@@ -100,9 +100,9 @@ var Players;
                 this.changeState(State.Saving);
             }
         };
+        AddPlayerController.$inject = ['$timeout', 'apiService'];
         return AddPlayerController;
     }());
-    AddPlayerController.$inject = ['$timeout', 'apiService'];
     Players.AddPlayerController = AddPlayerController;
 })(Players || (Players = {}));
 

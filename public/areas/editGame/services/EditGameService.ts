@@ -1,28 +1,34 @@
-module EditActiveGame {
-    export interface IEditActiveGameService {
+module EditGame {
+    import EditGameType = Shared.EditGameType;
+    
+    export interface IEditGameService {
+        gameType: EditGameType;
         datePlayed: Date;
         players: Shared.IGamePlayer[];
         unselectedPlayers: Shared.INewGamePlayer[];
         movePlayerActive: boolean;
         errorMessages: string[];
 
+        cleanRanks(playerChanged: Shared.IGamePlayer): void;
         addPlayer(player: Shared.IGamePlayer): void;
         removePlayer(player: Shared.IGamePlayer): void;
         movePlayer(selectedPlayerId: string, destinationPlayer: Shared.IGamePlayer): void;
-        playerIndex(playerId: string): number;
-        getActiveGame(): ng.IPromise<void>;
+        getGame(gameType: EditGameType): ng.IPromise<void>;
         save(): ng.IPromise<void>;
-        finalize(addBonusPoints?: boolean): ng.IPromise<void>;
+        finalize(): ng.IPromise<void>;
+        updateFinalizedGame(): ng.IPromise<void>;
     }
 
-    export class EditActiveGameService implements IEditActiveGameService {
+    export class EditGameService implements IEditGameService {
         public static $inject: string[] = ["$location", "$q", "apiService", "playerSelectionService", "newPlayerPanelService"];
+                
         private imLoading: ng.IPromise<void>;
         private gameIdPath: string;
         private activeGame: Shared.IGame;
         private isMovePlayerActive: boolean;
         private errorMessageList: string[] = [];
-
+        private localGameType: EditGameType;
+        
         public get datePlayed(): Date {
             if (this.activeGame && this.activeGame.datePlayed) {
                 return new Date(this.activeGame.datePlayed);
@@ -61,6 +67,10 @@ module EditActiveGame {
             return this.playerSelectionService.unselectedPlayers;
         }
 
+        public get gameType(): EditGameType {
+            return this.localGameType;
+        }
+
         constructor(private $location: ng.ILocationService,
             private $q: ng.IQService,
             private apiService: Shared.IApiService,
@@ -78,7 +88,8 @@ module EditActiveGame {
             });
         }
 
-        public getActiveGame(): ng.IPromise<void> {
+        public getGame(gameType: EditGameType): ng.IPromise<void> {
+            this.localGameType = gameType;
             var def = this.$q.defer<void>();
 
             if (this.$location.path() !== undefined || this.$location.path() !== '') {
@@ -87,8 +98,11 @@ module EditActiveGame {
 
             var allPlayersPromise = this.playerSelectionService.getPlayers();
 
-            var activeGamePromise = this.apiService.getActiveGame(this.gameIdPath);
-            activeGamePromise.then((game) => {
+            var gamePromise = gameType === EditGameType.ActiveGame
+                ? this.apiService.getActiveGame(this.gameIdPath)
+                : this.apiService.getFinalizedGame(this.gameIdPath);
+
+            gamePromise.then((game) => {
                 this.activeGame = game;
                 def.resolve();
             }, () => {
@@ -96,7 +110,7 @@ module EditActiveGame {
                 def.reject();
             });
 
-            this.$q.all([allPlayersPromise, activeGamePromise]).then(() => {
+            this.$q.all([allPlayersPromise, gamePromise]).then(() => {
                 this.players.forEach(p => {
                     this.playerSelectionService.addPlayer(p.player);
                 });
@@ -104,41 +118,27 @@ module EditActiveGame {
 
             return def.promise;
         }
-        
-        public playerIndex(playerId: string): number {
-            return this.players.map(p => { return p.playerId; }).indexOf(playerId);
-        }
 
         public addPlayer(player: Shared.IGamePlayer): void {
-            this.players.push(player);
+            this.activeGame.addPlayer(player);
             this.playerSelectionService.addPlayer(player.player);
         }
 
         public removePlayer(player: Shared.IGamePlayer): void {
-            var index = this.playerIndex(player.playerId);
-            this.players.splice(index, 1);
+            this.activeGame.removePlayer(player);
             this.playerSelectionService.removePlayer(player.player);
         }
 
         public movePlayer(selectedPlayerId: string, destinationPlayer: Shared.IGamePlayer): void {
-            var selectedPlayer = this.players.filter(p => {
-                return p.playerId === selectedPlayerId;
-            });
-
-            if (selectedPlayer.length === 1) {
-                var selectedPlayerIndex = this.playerIndex(selectedPlayerId);
-                this.players.splice(selectedPlayerIndex, 1);
-
-                var dropIndex = this.playerIndex(destinationPlayer.playerId);
-
-                if (selectedPlayerIndex <= dropIndex) {
-                    dropIndex += 1;
-                }
-
-                this.players.splice(dropIndex, 0, selectedPlayer[0]);
-            } else {
+            var isSuccess = this.activeGame.movePlayer(selectedPlayerId, destinationPlayer);
+            
+            if(!isSuccess) {
                 console.error("Cannot find player: ", selectedPlayerId);
             }
+        }
+
+        public cleanRanks(playerChanged: Shared.IGamePlayer): void {
+            this.activeGame.cleanRanks(playerChanged);
         }
 
         public save(): ng.IPromise<void> {
@@ -157,18 +157,17 @@ module EditActiveGame {
             return def.promise;
         }
 
-        public finalize(addBonusPoints?: boolean): ng.IPromise<void> {
+        public finalize(): ng.IPromise<void> {
             var def = this.$q.defer<void>();
 
             if (this.filterRemovedPlayers() && this.hasRanks()) {
-                if (addBonusPoints) {
-                    this.addBonusPoints();
-                }
+                this.activeGame.addBonusPoints();
 
                 this.apiService.finalizeGame(this.activeGame).then(() => {
                     this.apiService.deleteActiveGame(this.gameIdPath).then(() => {
                         def.resolve();
                     }, () => {
+                        this.activeGame.removeBonusPoints();
                         this.addErrorMessage('Cannot delete active game.');
                         def.reject();
                     });
@@ -183,20 +182,25 @@ module EditActiveGame {
             return def.promise;
         }
 
-        private addBonusPoints(): void {
-            var numPlayers = this.players.length;
-            this.players.forEach(player => {
-                if (player.rank === 1) {
-                    player.points += numPlayers - 1;
-                }
-                if (player.rank === 2) {
-                    player.points += numPlayers - 2;
-                }
-                if (player.rank === 3) {
-                    player.points += numPlayers - 3;
-                }
-            });
-        }
+        public updateFinalizedGame(): ng.IPromise<void> {
+            var def = this.$q.defer<void>();
+
+            if (this.filterRemovedPlayers() && this.hasRanks()) {
+                this.activeGame.addBonusPoints();
+
+                this.apiService.updateFinalizeGame(this.activeGame).then(() => {
+                    def.resolve();
+                }, () => {
+                    this.activeGame.removeBonusPoints();
+                    this.addErrorMessage('Cannot update finalized game.');
+                    def.reject();
+                });
+            } else {
+                def.reject();
+            }
+
+            return def.promise;
+        }        
 
         private addErrorMessage(message: string, clear: boolean = true) {
             if (clear) {
@@ -216,41 +220,25 @@ module EditActiveGame {
                 return false;
             }
 
-            // Convert blank points to zeroes.
-            this.players.forEach((player) => {
-                player.points = !player.points ? 0 : player.points;
-            });
-
             return true;
         }
 
         private hasRanks(): boolean {
             this.clearerrorMessageList();
 
-            var rank1 = this.players.filter(value => { return value.rank === 1; }).length;
-            var rank2 = this.players.filter(value => { return value.rank === 2; }).length;
-            var rank3 = this.players.filter(value => { return value.rank === 3; }).length;
-
-            if (rank1 !== 1) {
+            if (!this.activeGame.hasFirstPlace()) {
                 this.addErrorMessage('No winner selected.', false);
             }
 
-            if (rank2 !== 1) {
+            if (!this.activeGame.hasSecondPlace()) {
                 this.addErrorMessage('No second place selected.', false);
             }
 
-            if (rank3 !== 1) {
+            if (!this.activeGame.hasThirdPlace()) {
                 this.addErrorMessage('No third place selected.', false);
             }
 
-            var hasRanks = (rank1 === 1 && rank2 === 1 && rank3 === 1);
-
-            if (hasRanks) {
-                var winner = this.players.filter((player) => { return player.rank === 1; });
-                this.activeGame.winner = winner[0].player;
-            }
-
-            return hasRanks;
+            return this.activeGame.declareWinner();
         }
     }
 }

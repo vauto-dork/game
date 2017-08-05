@@ -16,9 +16,9 @@ var Components;
     var PlayerFormController = (function () {
         function PlayerFormController() {
         }
+        PlayerFormController.$inject = [];
         return PlayerFormController;
     }());
-    PlayerFormController.$inject = [];
     Components.PlayerFormController = PlayerFormController;
 })(Components || (Components = {}));
 
@@ -26,11 +26,16 @@ var PlayerFormModule = angular.module('PlayerFormModule', []);
 PlayerFormModule.controller('PlayerFormController', Components.PlayerFormController);
 PlayerFormModule.directive('playerForm', Components.PlayerFormDirective);
 
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var Players;
 (function (Players) {
     var PlayersListService = (function (_super) {
@@ -92,9 +97,9 @@ var Players;
         PlayersListService.prototype.openEdit = function () {
             this.publish(this.event.editOpen, null);
         };
+        PlayersListService.$inject = ['$timeout', '$q', 'apiService'];
         return PlayersListService;
     }(Shared.PubSubServiceBase));
-    PlayersListService.$inject = ['$timeout', '$q', 'apiService'];
     Players.PlayersListService = PlayersListService;
 })(Players || (Players = {}));
 
@@ -128,9 +133,9 @@ var Players;
         EditPlayerController.prototype.cancel = function () {
             this.playersListService.cancelEdit();
         };
+        EditPlayerController.$inject = ["playersListService"];
         return EditPlayerController;
     }());
-    EditPlayerController.$inject = ["playersListService"];
     Players.EditPlayerController = EditPlayerController;
 })(Players || (Players = {}));
 
@@ -166,6 +171,7 @@ var Players;
             this.showPlayers = false;
             this.showPlayerEdit = false;
             this.filter = "";
+            this.activity = "Both";
             this.changeState(State.Loading);
             this.playersListService.subscribeEditSave(function () {
                 _this.changeState(State.Saved);
@@ -235,6 +241,13 @@ var Players;
             this.selectedPlayer = angular.copy(player);
             this.changeState(State.EditPlayer);
         };
+        PlayersListController.prototype.isPlayerVisible = function (player) {
+            if (this.activity === "Both")
+                return true;
+            if (this.activity === "Active")
+                return !player.inactive;
+            return player.inactive;
+        };
         PlayersListController.prototype.reload = function () {
             this.alertsService.clearAlerts();
             this.changeState(State.Loading);
@@ -242,9 +255,9 @@ var Players;
         PlayersListController.prototype.closeAlert = function (index) {
             this.alertsService.closeAlert(index);
         };
+        PlayersListController.$inject = ["apiService", "alertsService", "playersListService"];
         return PlayersListController;
     }());
-    PlayersListController.$inject = ["apiService", "alertsService", "playersListService"];
     Players.PlayersListController = PlayersListController;
 })(Players || (Players = {}));
 

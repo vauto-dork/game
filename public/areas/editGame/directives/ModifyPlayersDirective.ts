@@ -1,9 +1,9 @@
-﻿module EditActiveGame {
+﻿module EditGame {
     export function ModifyPlayersDirective(): ng.IDirective {
         return {
             scope: {
             },
-            templateUrl: "/areas/editActiveGame/directives/ModifyPlayersTemplate.html",
+            templateUrl: "/areas/editGame/directives/ModifyPlayersTemplate.html",
             controller: "ModifyPlayersController",
             controllerAs: "ctrl",
             bindToController: true
@@ -11,21 +11,21 @@
     }
 
     export class ModifyPlayersController extends Components.NewPlayerPanelBase {
-        public static $inject: string[] = ["editActiveGameService", "playerSelectionService", "newPlayerPanelService", "editActiveGameCollapseService"];
+        public static $inject: string[] = ["editGameService", "playerSelectionService", "newPlayerPanelService", "editGameCollapseService"];
         
         private get unselectedPlayers(): Shared.INewGamePlayer[] {
-            return this.editActiveGameService.unselectedPlayers;
+            return this.editGameService.unselectedPlayers;
         }
 
         private get movePlayerActive(): boolean {
-            return this.editActiveGameService.movePlayerActive;
+            return this.editGameService.movePlayerActive;
         }
         
         constructor(
-            private editActiveGameService: IEditActiveGameService,
+            private editGameService: IEditGameService,
             private playerSelectionService: Components.IPlayerSelectionService,
             private newPlayerPanelService: Components.INewPlayerPanelService,
-            private editActiveGameCollapseService: IEditActiveGameCollapseService) {
+            private editGameCollapseService: IEditGameCollapseService) {
             super();
 
             this.newPlayerPanelService.subscribeFormCancel(() => {
@@ -39,11 +39,11 @@
 
         private onSelected(data: Shared.INewGamePlayer): void {
             var player = new Shared.GamePlayer(data.toGamePlayerViewModel());
-            this.editActiveGameService.addPlayer(player);
+            this.editGameService.addPlayer(player);
         }
 
         private back(): void {
-            this.editActiveGameCollapseService.disableModifyPlayers();
+            this.editGameCollapseService.disableModifyPlayers();
         }
 
         protected enablePlayerSelectorPanel(): void {

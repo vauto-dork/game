@@ -1,5 +1,5 @@
-module EditActiveGame {
-    export interface IEditActiveGameCollapseService {
+module EditGame {
+    export interface IEditGameCollapseService {
         collapseScoreForm: boolean;
         collapseModifyPlayers: boolean;
 
@@ -10,7 +10,7 @@ module EditActiveGame {
         enableModifyPlayers(): void;
     }
 
-    export class EditActiveGameCollapseService implements IEditActiveGameCollapseService {
+    export class EditGameCollapseService implements IEditGameCollapseService {
         public collapseScoreForm: boolean = false;
         public collapseModifyPlayers: boolean = true;
 
