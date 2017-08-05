@@ -9,7 +9,7 @@ module.exports = {
     addPlayer: bundleHelper.getScriptConfig('addPlayer'),
     admin: bundleHelper.getScriptConfig('admin'),
     createGame: bundleHelper.getScriptConfig('createGame'),
-    editActiveGame: bundleHelper.getScriptConfig('editActiveGame'),
+    editGame: bundleHelper.getScriptConfig('editGame'),
     gameHistory: bundleHelper.getScriptConfig('gameHistory'),
     index: bundleHelper.getScriptConfig('index'),
     playersList: bundleHelper.getScriptConfig('playersList'),

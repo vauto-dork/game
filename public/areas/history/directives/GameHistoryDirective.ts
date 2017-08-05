@@ -1,7 +1,10 @@
 module DorkHistory {
+	import EditGameType = Shared.EditGameType;
+
     export function GameHistoryDirective(): ng.IDirective {
         return {
 			scope: {
+				isFinalizedGame: '='
 			},
 			templateUrl: '/areas/history/directives/GameHistoryTemplate.html',
 			controller: 'GameHistoryController',
@@ -20,7 +23,9 @@ module DorkHistory {
 	};
 
     export class GameHistoryController {
-        public static $inject: string[] = ['$timeout', 'dateTimeService', 'monthYearQueryService', 'apiService'];
+        public static $inject: string[] = ['$timeout', 'dateTimeService', 'monthYearQueryService', 'apiService', 'gameCardService'];
+
+		public isFinalizedGame: boolean;
 
 		private month: number;
 		private year: number;
@@ -35,7 +40,12 @@ module DorkHistory {
 			private $timeout: ng.ITimeoutService,
 			private dateTimeService: Shared.IDateTimeService,
 			private monthYearQueryService: Shared.IMonthYearQueryService,
-			private apiService: Shared.IApiService) {
+			private apiService: Shared.IApiService,
+			private gameCardService: Components.IGameCardService) {
+
+			this.gameCardService.gameType = this.isFinalizedGame
+				? EditGameType.FinalizedGame
+				: EditGameType.ActiveGame;
 			
 			this.month = dateTimeService.currentMonthValue();
 			this.year = dateTimeService.currentYear();

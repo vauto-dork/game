@@ -1,5 +1,45 @@
 var Components;
 (function (Components) {
+    var EditGameType = Shared.EditGameType;
+    var GameCardService = (function () {
+        function GameCardService($window, apiService) {
+            this.$window = $window;
+            this.apiService = apiService;
+            this.gameType = EditGameType.ActiveGame;
+        }
+        GameCardService.prototype.copy = function (game) {
+            var _this = this;
+            var newGame = new Shared.Game();
+            newGame.players = game.players.map(function (player) {
+                var gamePlayer = new Shared.GamePlayer();
+                gamePlayer.player = player.player;
+                return gamePlayer;
+            });
+            var promise = this.apiService.createActiveGame(newGame);
+            promise.then(function (editUrl) {
+                _this.$window.location.href = editUrl;
+            });
+            return promise;
+        };
+        GameCardService.prototype.edit = function (game) {
+            var parentPath = this.gameType === EditGameType.ActiveGame
+                ? "/ActiveGames/Edit/#"
+                : "/GameHistory/Edit/#";
+            this.$window.location.href = parentPath + game.getIdAsPath();
+        };
+        GameCardService.prototype.delete = function (game) {
+            return this.gameType === EditGameType.ActiveGame
+                ? this.apiService.deleteActiveGame(game.getIdAsPath())
+                : this.apiService.deleteGame(game.getIdAsPath());
+        };
+        GameCardService.$inject = ['$window', 'apiService'];
+        return GameCardService;
+    }());
+    Components.GameCardService = GameCardService;
+})(Components || (Components = {}));
+
+var Components;
+(function (Components) {
     function GameCardDirective() {
         return {
             scope: {
@@ -21,12 +61,12 @@ var Components;
         State[State["Deleting"] = 2] = "Deleting";
         State[State["Deleted"] = 3] = "Deleted";
         State[State["Copy"] = 4] = "Copy";
-        State[State["Error"] = 5] = "Error";
+        State[State["Edit"] = 5] = "Edit";
+        State[State["Error"] = 6] = "Error";
     })(State || (State = {}));
     var GameCardController = (function () {
-        function GameCardController($http, $window, apiService) {
-            this.$http = $http;
-            this.$window = $window;
+        function GameCardController(gameCardService, apiService) {
+            this.gameCardService = gameCardService;
             this.apiService = apiService;
             this.showOverlay = false;
             this.showLoadBar = false;
@@ -37,7 +77,7 @@ var Components;
         }
         GameCardController.prototype.changeState = function (newState) {
             this.showOverlay = newState !== State.Ready;
-            this.showLoadBar = newState === State.Deleting || newState === State.Copy;
+            this.showLoadBar = newState === State.Deleting || newState === State.Copy || newState === State.Edit;
             this.showDeleteWarning = newState === State.DeleteWarning;
             this.showError = newState === State.Error;
             this.showDeleted = newState === State.Deleted;
@@ -46,6 +86,9 @@ var Components;
                     break;
                 case State.Copy:
                     this.copy();
+                    break;
+                case State.Edit:
+                    this.gameCardService.edit(this.game);
                     break;
                 case State.Deleting:
                     this.delete();
@@ -59,7 +102,7 @@ var Components;
         };
         GameCardController.prototype.delete = function () {
             var _this = this;
-            this.apiService.deleteActiveGame(this.game.getIdAsPath()).then(function () {
+            this.gameCardService.delete(this.game).then(function () {
                 _this.changeState(State.Deleted);
             }, function (data) {
                 _this.errorHandler(data, 'Error deleting game!');
@@ -67,17 +110,12 @@ var Components;
         };
         GameCardController.prototype.copy = function () {
             var _this = this;
-            var newGame = new Shared.Game();
-            newGame.players = this.game.players.map(function (player) {
-                var gamePlayer = new Shared.GamePlayer();
-                gamePlayer.player = player.player;
-                return gamePlayer;
-            });
-            this.apiService.createActiveGame(newGame).then(function (editUrl) {
-                _this.$window.location.href = editUrl;
-            }, function (data) {
+            this.gameCardService.copy(this.game).then(function () { }, function (data) {
                 _this.errorHandler(data, 'Error copying game!');
             });
+        };
+        GameCardController.prototype.edit = function () {
+            this.changeState(State.Edit);
         };
         GameCardController.prototype.warnDelete = function () {
             this.changeState(State.DeleteWarning);
@@ -91,13 +129,14 @@ var Components;
         GameCardController.prototype.copyGame = function (game) {
             this.changeState(State.Copy);
         };
-        GameCardController.$inject = ['$http', '$window', 'apiService'];
+        GameCardController.$inject = ['gameCardService', 'apiService'];
         return GameCardController;
     }());
     Components.GameCardController = GameCardController;
 })(Components || (Components = {}));
 
 var GameCardModule = angular.module('GameCardModule', []);
+GameCardModule.service('gameCardService', Components.GameCardService);
 GameCardModule.controller('GameCardController', Components.GameCardController);
 GameCardModule.directive('gameCard', Components.GameCardDirective);
 
