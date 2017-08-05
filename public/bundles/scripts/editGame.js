@@ -16,9 +16,9 @@ var Components;
     var PlayerFormController = (function () {
         function PlayerFormController() {
         }
+        PlayerFormController.$inject = [];
         return PlayerFormController;
     }());
-    PlayerFormController.$inject = [];
     Components.PlayerFormController = PlayerFormController;
 })(Components || (Components = {}));
 
@@ -169,9 +169,9 @@ var Components;
                 };
             }));
         };
+        PlayerSelectionService.$inject = ["$q", "apiService"];
         return PlayerSelectionService;
     }());
-    PlayerSelectionService.$inject = ["$q", "apiService"];
     Components.PlayerSelectionService = PlayerSelectionService;
 })(Components || (Components = {}));
 
@@ -226,9 +226,9 @@ var Components;
                 hasPlayers: list.length > 0
             };
         };
+        PlayerSelectorController.$inject = ["$element", "$timeout", "$filter", "playerSelectionService"];
         return PlayerSelectorController;
     }());
-    PlayerSelectorController.$inject = ["$element", "$timeout", "$filter", "playerSelectionService"];
     Components.PlayerSelectorController = PlayerSelectorController;
 })(Components || (Components = {}));
 
@@ -238,11 +238,16 @@ PlayerSelectorModule.filter('playerSelectorFilter', Components.PlayerSelectorFil
 PlayerSelectorModule.controller('PlayerSelectorController', Components.PlayerSelectorController);
 PlayerSelectorModule.directive('playerSelector', Components.PlayerSelectorDirective);
 
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var Components;
 (function (Components) {
     var NewPlayerPanelService = (function (_super) {
@@ -275,9 +280,9 @@ var Components;
                 _this.$q.reject(data);
             });
         };
+        NewPlayerPanelService.$inject = ["$timeout", "$q", "apiService"];
         return NewPlayerPanelService;
     }(Shared.PubSubServiceBase));
-    NewPlayerPanelService.$inject = ["$timeout", "$q", "apiService"];
     Components.NewPlayerPanelService = NewPlayerPanelService;
 })(Components || (Components = {}));
 
@@ -371,9 +376,9 @@ var Components;
                 _this.disabled = false;
             });
         };
+        NewPlayerPanelController.$inject = ["newPlayerPanelService"];
         return NewPlayerPanelController;
     }());
-    NewPlayerPanelController.$inject = ["newPlayerPanelService"];
     Components.NewPlayerPanelController = NewPlayerPanelController;
 })(Components || (Components = {}));
 
@@ -383,6 +388,30 @@ newPlayerModule.controller('NewPlayerButtonController', Components.NewPlayerButt
 newPlayerModule.directive('newPlayerButton', Components.NewPlayerButtonDirective);
 newPlayerModule.controller('NewPlayerPanelController', Components.NewPlayerPanelController);
 newPlayerModule.directive('newPlayerPanel', Components.NewPlayerPanelDirective);
+
+var EditGame;
+(function (EditGame) {
+    var EditGameCollapseService = (function () {
+        function EditGameCollapseService() {
+            this.collapseScoreForm = false;
+            this.collapseModifyPlayers = true;
+        }
+        EditGameCollapseService.prototype.disableScoreForm = function () {
+            this.collapseScoreForm = true;
+        };
+        EditGameCollapseService.prototype.enableScoreForm = function () {
+            this.collapseScoreForm = false;
+        };
+        EditGameCollapseService.prototype.disableModifyPlayers = function () {
+            this.collapseModifyPlayers = true;
+        };
+        EditGameCollapseService.prototype.enableModifyPlayers = function () {
+            this.collapseModifyPlayers = false;
+        };
+        return EditGameCollapseService;
+    }());
+    EditGame.EditGameCollapseService = EditGameCollapseService;
+})(EditGame || (EditGame = {}));
 
 var EditGame;
 (function (EditGame) {
@@ -592,34 +621,238 @@ var EditGame;
             }
             return this.activeGame.declareWinner();
         };
+        EditGameService.$inject = ["$location", "$q", "apiService", "playerSelectionService", "newPlayerPanelService"];
         return EditGameService;
     }());
-    EditGameService.$inject = ["$location", "$q", "apiService", "playerSelectionService", "newPlayerPanelService"];
     EditGame.EditGameService = EditGameService;
+})(EditGame || (EditGame = {}));
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var EditGame;
+(function (EditGame) {
+    var State;
+    (function (State) {
+        State[State["Init"] = 0] = "Init";
+        State[State["Loading"] = 1] = "Loading";
+        State[State["Error"] = 2] = "Error";
+        State[State["Ready"] = 3] = "Ready";
+        State[State["Saving"] = 4] = "Saving";
+        State[State["Finalizing"] = 5] = "Finalizing";
+        State[State["Updating"] = 6] = "Updating";
+    })(State = EditGame.State || (EditGame.State = {}));
+    var EditGameStateService = (function (_super) {
+        __extends(EditGameStateService, _super);
+        function EditGameStateService($timeout) {
+            var _this = _super.call(this, $timeout) || this;
+            _this.showLoading = false;
+            _this.showError = false;
+            _this.showScoreForm = false;
+            _this.disabled = false;
+            _this.events = {
+                stateChange: "stateChange"
+            };
+            _this.changeState(State.Init);
+            return _this;
+        }
+        EditGameStateService.prototype.changeState = function (newState) {
+            this.showLoading = (newState === State.Init) ||
+                (newState === State.Loading);
+            this.showError = newState === State.Error;
+            this.showScoreForm = (newState !== State.Init) &&
+                (newState !== State.Loading) &&
+                (newState !== State.Error);
+            this.disabled = (newState === State.Saving) ||
+                (newState === State.Updating) ||
+                (newState === State.Finalizing) ||
+                (newState === State.Init) ||
+                (newState === State.Loading);
+            this.publish(this.events.stateChange, newState);
+        };
+        EditGameStateService.prototype.subscribeStateChange = function (callback) {
+            this.subscribe(this.events.stateChange, callback);
+        };
+        EditGameStateService.$inject = ["$timeout"];
+        return EditGameStateService;
+    }(Shared.PubSubServiceBase));
+    EditGame.EditGameStateService = EditGameStateService;
 })(EditGame || (EditGame = {}));
 
 var EditGame;
 (function (EditGame) {
-    var EditGameCollapseService = (function () {
-        function EditGameCollapseService() {
-            this.collapseScoreForm = false;
-            this.collapseModifyPlayers = true;
+    var EditGameType = Shared.EditGameType;
+    function EditGameDirective() {
+        return {
+            scope: {
+                isFinalizedGame: '='
+            },
+            templateUrl: "/areas/editGame/directives/EditGameTemplate.html",
+            controller: "EditGameController",
+            controllerAs: "ctrl",
+            bindToController: true
+        };
+    }
+    EditGame.EditGameDirective = EditGameDirective;
+    var EditGameController = (function () {
+        function EditGameController($window, stateService, editGameService, alertsService, editGameCollapseService) {
+            var _this = this;
+            this.$window = $window;
+            this.stateService = stateService;
+            this.editGameService = editGameService;
+            this.alertsService = alertsService;
+            this.editGameCollapseService = editGameCollapseService;
+            this.gameType = this.isFinalizedGame ? EditGameType.FinalizedGame : EditGameType.ActiveGame;
+            this.stateService.subscribeStateChange(function (event, newState) {
+                switch (newState) {
+                    case EditGame.State.Loading:
+                        _this.getGame();
+                        break;
+                    case EditGame.State.Error:
+                        _this.alertsService.scrollToTop();
+                        break;
+                    case EditGame.State.Ready:
+                        _this.ready();
+                        break;
+                    case EditGame.State.Saving:
+                        _this.saveGame();
+                        break;
+                    case EditGame.State.Finalizing:
+                        _this.finalizeGame();
+                        break;
+                    case EditGame.State.Updating:
+                        _this.updateFinalizedGame();
+                        break;
+                }
+            });
+            this.stateService.changeState(EditGame.State.Loading);
         }
-        EditGameCollapseService.prototype.disableScoreForm = function () {
-            this.collapseScoreForm = true;
+        Object.defineProperty(EditGameController.prototype, "showLoading", {
+            get: function () {
+                return this.stateService.showLoading;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(EditGameController.prototype, "showError", {
+            get: function () {
+                return this.stateService.showError;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(EditGameController.prototype, "showScoreForm", {
+            get: function () {
+                return this.stateService.showScoreForm;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(EditGameController.prototype, "disabled", {
+            get: function () {
+                return this.stateService.disabled;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(EditGameController.prototype, "alerts", {
+            get: function () {
+                return this.alertsService.alerts;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(EditGameController.prototype, "collapseScoreForm", {
+            get: function () {
+                return this.editGameCollapseService.collapseScoreForm;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(EditGameController.prototype, "collapseModifyPlayers", {
+            get: function () {
+                return this.editGameCollapseService.collapseModifyPlayers;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        EditGameController.prototype.ready = function () {
+            if (this.collapseScoreForm) {
+                this.editGameCollapseService.enableScoreForm();
+            }
+            this.alertsService.scrollToTop();
         };
-        EditGameCollapseService.prototype.enableScoreForm = function () {
-            this.collapseScoreForm = false;
+        EditGameController.prototype.errorHandler = function (data, errorMessage) {
+            this.alertsService.addAlert("danger", errorMessage);
+            console.error(data);
+            this.stateService.changeState(EditGame.State.Error);
         };
-        EditGameCollapseService.prototype.disableModifyPlayers = function () {
-            this.collapseModifyPlayers = true;
+        EditGameController.prototype.getGame = function () {
+            var _this = this;
+            this.alertsService.clearAlerts();
+            this.editGameService.getGame(this.gameType).then(function () {
+                _this.stateService.changeState(EditGame.State.Ready);
+                _this.datePlayed = _this.editGameService.datePlayed;
+            }, function () {
+                _this.errorHandler("Cannot get active game.", "Cannot load game");
+            });
         };
-        EditGameCollapseService.prototype.enableModifyPlayers = function () {
-            this.collapseModifyPlayers = false;
+        EditGameController.prototype.saveGame = function () {
+            var _this = this;
+            this.alertsService.clearAlerts();
+            this.editGameService.datePlayed = this.datePlayed;
+            this.editGameService.save().then(function () {
+                _this.alertsService.addAlert("success", "Game saved successfully!");
+                _this.stateService.changeState(EditGame.State.Ready);
+            }, function () {
+                _this.saveReject();
+            });
         };
-        return EditGameCollapseService;
+        EditGameController.prototype.finalizeGame = function () {
+            var _this = this;
+            this.editGameService.finalize().then(function () {
+                _this.$window.location.href = "/GameHistory";
+            }, function () {
+                _this.saveReject();
+            });
+        };
+        EditGameController.prototype.updateFinalizedGame = function () {
+            var _this = this;
+            this.editGameService.updateFinalizedGame().then(function () {
+                _this.$window.location.href = "/GameHistory/Admin";
+            }, function () {
+                _this.saveReject();
+            });
+        };
+        EditGameController.prototype.saveReject = function () {
+            var _this = this;
+            this.alertsService.clearAlerts();
+            this.editGameService.errorMessages.forEach(function (msg) { _this.alertsService.addAlert("danger", msg); });
+            this.stateService.changeState(EditGame.State.Ready);
+        };
+        EditGameController.prototype.closeAlert = function (index) {
+            this.alertsService.closeAlert(index);
+        };
+        EditGameController.prototype.enableScoreForm = function () {
+            this.editGameCollapseService.enableScoreForm();
+        };
+        EditGameController.prototype.disableScoreForm = function () {
+            this.editGameCollapseService.disableScoreForm();
+        };
+        EditGameController.prototype.enableModifyPlayers = function () {
+            this.editGameCollapseService.enableModifyPlayers();
+        };
+        EditGameController.$inject = ["$window", "editGameStateService", "editGameService", "alertsService", "editGameCollapseService"];
+        return EditGameController;
     }());
-    EditGame.EditGameCollapseService = EditGameCollapseService;
+    EditGame.EditGameController = EditGameController;
 })(EditGame || (EditGame = {}));
 
 var EditGame;
@@ -674,10 +907,79 @@ var EditGame;
                 player.points = (points + 1 <= this.pointsMax) ? points + 1 : points;
             }
         };
+        EditScoresController.$inject = ['editGameService'];
         return EditScoresController;
     }());
-    EditScoresController.$inject = ['editGameService'];
     EditGame.EditScoresController = EditScoresController;
+})(EditGame || (EditGame = {}));
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var EditGame;
+(function (EditGame) {
+    function ModifyPlayersDirective() {
+        return {
+            scope: {},
+            templateUrl: "/areas/editGame/directives/ModifyPlayersTemplate.html",
+            controller: "ModifyPlayersController",
+            controllerAs: "ctrl",
+            bindToController: true
+        };
+    }
+    EditGame.ModifyPlayersDirective = ModifyPlayersDirective;
+    var ModifyPlayersController = (function (_super) {
+        __extends(ModifyPlayersController, _super);
+        function ModifyPlayersController(editGameService, playerSelectionService, newPlayerPanelService, editGameCollapseService) {
+            var _this = _super.call(this) || this;
+            _this.editGameService = editGameService;
+            _this.playerSelectionService = playerSelectionService;
+            _this.newPlayerPanelService = newPlayerPanelService;
+            _this.editGameCollapseService = editGameCollapseService;
+            _this.newPlayerPanelService.subscribeFormCancel(function () {
+                _this.disableAddNewPlayer();
+            });
+            _this.newPlayerPanelService.subscribeSavedPlayer(function () {
+                _this.disableAddNewPlayer();
+            });
+            return _this;
+        }
+        Object.defineProperty(ModifyPlayersController.prototype, "unselectedPlayers", {
+            get: function () {
+                return this.editGameService.unselectedPlayers;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(ModifyPlayersController.prototype, "movePlayerActive", {
+            get: function () {
+                return this.editGameService.movePlayerActive;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        ModifyPlayersController.prototype.onSelected = function (data) {
+            var player = new Shared.GamePlayer(data.toGamePlayerViewModel());
+            this.editGameService.addPlayer(player);
+        };
+        ModifyPlayersController.prototype.back = function () {
+            this.editGameCollapseService.disableModifyPlayers();
+        };
+        ModifyPlayersController.prototype.enablePlayerSelectorPanel = function () {
+            this.playerSelectionService.removeFilter();
+            _super.prototype.enablePlayerSelectorPanel.call(this);
+        };
+        ModifyPlayersController.$inject = ["editGameService", "playerSelectionService", "newPlayerPanelService", "editGameCollapseService"];
+        return ModifyPlayersController;
+    }(Components.NewPlayerPanelBase));
+    EditGame.ModifyPlayersController = ModifyPlayersController;
 })(EditGame || (EditGame = {}));
 
 var EditGame;
@@ -753,74 +1055,10 @@ var EditGame;
         ReorderPlayersController.prototype.removePlayer = function (player) {
             this.editGameService.removePlayer(player);
         };
+        ReorderPlayersController.$inject = ['editGameService'];
         return ReorderPlayersController;
     }());
-    ReorderPlayersController.$inject = ['editGameService'];
     EditGame.ReorderPlayersController = ReorderPlayersController;
-})(EditGame || (EditGame = {}));
-
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var EditGame;
-(function (EditGame) {
-    function ModifyPlayersDirective() {
-        return {
-            scope: {},
-            templateUrl: "/areas/editGame/directives/ModifyPlayersTemplate.html",
-            controller: "ModifyPlayersController",
-            controllerAs: "ctrl",
-            bindToController: true
-        };
-    }
-    EditGame.ModifyPlayersDirective = ModifyPlayersDirective;
-    var ModifyPlayersController = (function (_super) {
-        __extends(ModifyPlayersController, _super);
-        function ModifyPlayersController(editGameService, playerSelectionService, newPlayerPanelService, editGameCollapseService) {
-            var _this = _super.call(this) || this;
-            _this.editGameService = editGameService;
-            _this.playerSelectionService = playerSelectionService;
-            _this.newPlayerPanelService = newPlayerPanelService;
-            _this.editGameCollapseService = editGameCollapseService;
-            _this.newPlayerPanelService.subscribeFormCancel(function () {
-                _this.disableAddNewPlayer();
-            });
-            _this.newPlayerPanelService.subscribeSavedPlayer(function () {
-                _this.disableAddNewPlayer();
-            });
-            return _this;
-        }
-        Object.defineProperty(ModifyPlayersController.prototype, "unselectedPlayers", {
-            get: function () {
-                return this.editGameService.unselectedPlayers;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(ModifyPlayersController.prototype, "movePlayerActive", {
-            get: function () {
-                return this.editGameService.movePlayerActive;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        ModifyPlayersController.prototype.onSelected = function (data) {
-            var player = new Shared.GamePlayer(data.toGamePlayerViewModel());
-            this.editGameService.addPlayer(player);
-        };
-        ModifyPlayersController.prototype.back = function () {
-            this.editGameCollapseService.disableModifyPlayers();
-        };
-        ModifyPlayersController.prototype.enablePlayerSelectorPanel = function () {
-            this.playerSelectionService.removeFilter();
-            _super.prototype.enablePlayerSelectorPanel.call(this);
-        };
-        return ModifyPlayersController;
-    }(Components.NewPlayerPanelBase));
-    ModifyPlayersController.$inject = ["editGameService", "playerSelectionService", "newPlayerPanelService", "editGameCollapseService"];
-    EditGame.ModifyPlayersController = ModifyPlayersController;
 })(EditGame || (EditGame = {}));
 
 var EditGame;
@@ -828,13 +1066,7 @@ var EditGame;
     var EditGameType = Shared.EditGameType;
     function RevertFinalizeDirective() {
         return {
-            scope: {
-                save: "&",
-                revert: "&",
-                finalize: "&",
-                update: "&",
-                disabled: "="
-            },
+            scope: {},
             templateUrl: '/areas/editGame/directives/RevertFinalizeTemplate.html',
             controller: 'RevertFinalizeController',
             controllerAs: 'ctrl',
@@ -843,9 +1075,17 @@ var EditGame;
     }
     EditGame.RevertFinalizeDirective = RevertFinalizeDirective;
     var RevertFinalizeController = (function () {
-        function RevertFinalizeController(editGameService) {
+        function RevertFinalizeController(stateService, editGameService) {
+            this.stateService = stateService;
             this.editGameService = editGameService;
         }
+        Object.defineProperty(RevertFinalizeController.prototype, "disabled", {
+            get: function () {
+                return this.stateService.disabled;
+            },
+            enumerable: true,
+            configurable: true
+        });
         Object.defineProperty(RevertFinalizeController.prototype, "numPlayers", {
             get: function () {
                 return this.editGameService.players.length;
@@ -860,186 +1100,28 @@ var EditGame;
             enumerable: true,
             configurable: true
         });
+        RevertFinalizeController.prototype.save = function () {
+            this.stateService.changeState(EditGame.State.Saving);
+        };
+        RevertFinalizeController.prototype.revert = function () {
+            this.stateService.changeState(EditGame.State.Loading);
+        };
+        RevertFinalizeController.prototype.finalize = function () {
+            this.stateService.changeState(EditGame.State.Finalizing);
+        };
+        RevertFinalizeController.prototype.update = function () {
+            this.stateService.changeState(EditGame.State.Updating);
+        };
+        RevertFinalizeController.$inject = ["editGameStateService", "editGameService"];
         return RevertFinalizeController;
     }());
-    RevertFinalizeController.$inject = ['editGameService'];
     EditGame.RevertFinalizeController = RevertFinalizeController;
-})(EditGame || (EditGame = {}));
-
-var EditGame;
-(function (EditGame) {
-    var EditGameType = Shared.EditGameType;
-    function EditGameDirective() {
-        return {
-            scope: {
-                isFinalizedGame: '='
-            },
-            templateUrl: "/areas/editGame/directives/EditGameTemplate.html",
-            controller: "EditGameController",
-            controllerAs: "ctrl",
-            bindToController: true
-        };
-    }
-    EditGame.EditGameDirective = EditGameDirective;
-    var State;
-    (function (State) {
-        State[State["Init"] = 0] = "Init";
-        State[State["Loading"] = 1] = "Loading";
-        State[State["Error"] = 2] = "Error";
-        State[State["Ready"] = 3] = "Ready";
-        State[State["Saving"] = 4] = "Saving";
-        State[State["Finalizing"] = 5] = "Finalizing";
-    })(State || (State = {}));
-    ;
-    var EditGameController = (function () {
-        function EditGameController($window, editGameService, alertsService, editGameCollapseService) {
-            this.$window = $window;
-            this.editGameService = editGameService;
-            this.alertsService = alertsService;
-            this.editGameCollapseService = editGameCollapseService;
-            this.showLoading = false;
-            this.showError = false;
-            this.showScoreForm = false;
-            this.disabled = false;
-            this.changeState(State.Init);
-        }
-        Object.defineProperty(EditGameController.prototype, "alerts", {
-            get: function () {
-                return this.alertsService.alerts;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(EditGameController.prototype, "collapseScoreForm", {
-            get: function () {
-                return this.editGameCollapseService.collapseScoreForm;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(EditGameController.prototype, "collapseModifyPlayers", {
-            get: function () {
-                return this.editGameCollapseService.collapseModifyPlayers;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        EditGameController.prototype.changeState = function (newState) {
-            this.showLoading = (newState === State.Init) ||
-                (newState === State.Loading);
-            this.showError = newState === State.Error;
-            this.showScoreForm = (newState !== State.Init) &&
-                (newState !== State.Loading) &&
-                (newState !== State.Error);
-            this.disabled = (newState === State.Saving) ||
-                (newState === State.Finalizing) ||
-                (newState === State.Init) ||
-                (newState === State.Loading);
-            switch (newState) {
-                case State.Init:
-                    this.changeState(State.Loading);
-                    break;
-                case State.Loading:
-                    this.getGame();
-                    break;
-                case State.Error:
-                    this.alertsService.scrollToTop();
-                    break;
-                case State.Ready:
-                    this.ready();
-                    break;
-                case State.Saving:
-                    this.saveGame();
-                    break;
-                case State.Finalizing:
-                    this.finalizeGame();
-                    break;
-            }
-        };
-        EditGameController.prototype.ready = function () {
-            if (this.collapseScoreForm) {
-                this.editGameCollapseService.enableScoreForm();
-            }
-            this.alertsService.scrollToTop();
-        };
-        EditGameController.prototype.errorHandler = function (data, errorMessage) {
-            this.alertsService.addAlert("danger", errorMessage);
-            console.error(data);
-            this.changeState(State.Error);
-        };
-        EditGameController.prototype.getGame = function () {
-            var _this = this;
-            var gameType = this.isFinalizedGame ? EditGameType.FinalizedGame : EditGameType.ActiveGame;
-            this.editGameService.getGame(gameType).then(function () {
-                _this.changeState(State.Ready);
-                _this.datePlayed = _this.editGameService.datePlayed;
-            }, function () {
-                _this.errorHandler("Cannot get active game.", "Cannot load game");
-            });
-        };
-        EditGameController.prototype.saveGame = function () {
-            var _this = this;
-            this.alertsService.clearAlerts();
-            this.editGameService.datePlayed = this.datePlayed;
-            this.editGameService.save().then(function () {
-                _this.alertsService.addAlert("success", "Game saved successfully!");
-                _this.changeState(State.Ready);
-            }, function () {
-                _this.saveReject();
-            });
-        };
-        EditGameController.prototype.finalizeGame = function () {
-            var _this = this;
-            this.editGameService.finalize().then(function () {
-                _this.$window.location.href = "/GameHistory";
-            }, function () {
-                _this.saveReject();
-            });
-        };
-        EditGameController.prototype.updateFinalizedGame = function () {
-            var _this = this;
-            this.editGameService.updateFinalizedGame().then(function () {
-                _this.$window.location.href = "/GameHistory/Admin";
-            }, function () {
-                _this.saveReject();
-            });
-        };
-        EditGameController.prototype.saveReject = function () {
-            var _this = this;
-            this.alertsService.clearAlerts();
-            this.editGameService.errorMessages.forEach(function (msg) { _this.alertsService.addAlert("danger", msg); });
-            this.changeState(State.Ready);
-        };
-        EditGameController.prototype.closeAlert = function (index) {
-            this.alertsService.closeAlert(index);
-        };
-        EditGameController.prototype.save = function () {
-            this.changeState(State.Saving);
-        };
-        EditGameController.prototype.finalize = function () {
-            this.changeState(State.Finalizing);
-        };
-        EditGameController.prototype.revert = function () {
-            this.changeState(State.Loading);
-        };
-        EditGameController.prototype.enableScoreForm = function () {
-            this.editGameCollapseService.enableScoreForm();
-        };
-        EditGameController.prototype.disableScoreForm = function () {
-            this.editGameCollapseService.disableScoreForm();
-        };
-        EditGameController.prototype.enableModifyPlayers = function () {
-            this.editGameCollapseService.enableModifyPlayers();
-        };
-        return EditGameController;
-    }());
-    EditGameController.$inject = ["$window", "editGameService", "alertsService", "editGameCollapseService"];
-    EditGame.EditGameController = EditGameController;
 })(EditGame || (EditGame = {}));
 
 var EditGameModule = angular.module('EditGameModule', ['UxControlsModule', 'PlayerSelectorModule', 'NewPlayerPanelModule']);
 EditGameModule.service('alertsService', Shared.AlertsService);
 EditGameModule.service('editGameService', EditGame.EditGameService);
+EditGameModule.service('editGameStateService', EditGame.EditGameStateService);
 EditGameModule.service('editGameCollapseService', EditGame.EditGameCollapseService);
 EditGameModule.controller('EditGameController', EditGame.EditGameController);
 EditGameModule.directive('editGame', EditGame.EditGameDirective);

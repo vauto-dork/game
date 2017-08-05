@@ -2,6 +2,7 @@ var EditGameModule = angular.module('EditGameModule', ['UxControlsModule', 'Play
 
 EditGameModule.service('alertsService', Shared.AlertsService);
 EditGameModule.service('editGameService', EditGame.EditGameService);
+EditGameModule.service('editGameStateService', EditGame.EditGameStateService);
 EditGameModule.service('editGameCollapseService', EditGame.EditGameCollapseService);
 
 EditGameModule.controller('EditGameController', EditGame.EditGameController);

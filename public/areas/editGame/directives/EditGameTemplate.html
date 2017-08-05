@@ -12,13 +12,7 @@
                         <date-picker date="ctrl.datePlayed" disabled="ctrl.disabled"></date-picker>
                     </div>
                     
-                    <revert-finalize class="visible-md-block visible-lg-block"
-                                     save="ctrl.save()"
-                                     revert="ctrl.revert()"
-                                     finalize="ctrl.finalize()"
-                                     update="ctrl.updateFinalizedGame()"
-                                     disabled="ctrl.disabled">
-                    </revert-finalize>
+                    <revert-finalize class="visible-md-block visible-lg-block"></revert-finalize>
                 </div>
 
                 <div class="col-xs-12 col-md-6 col-lg-7">
@@ -33,19 +27,13 @@
 
                     <edit-scores disabled="ctrl.disabled"></edit-scores>
 
-                    <revert-finalize class="visible-xs-block visible-sm-block"
-                                     save="ctrl.save()"
-                                     revert="ctrl.revert()"
-                                     finalize="ctrl.finalize()"
-                                     update="ctrl.updateFinalizedGame()"
-                                     disabled="ctrl.disabled">
-                    </revert-finalize>
+                    <revert-finalize class="visible-xs-block visible-sm-block"></revert-finalize>
                 </div>
             </div>
         </div>
 
         <div uib-collapse="ctrl.collapseModifyPlayers" collapsed="ctrl.enableScoreForm()">
-            <modify-players save="ctrl.save()"></modify-players>
+            <modify-players></modify-players>
         </div>
     </div>
 

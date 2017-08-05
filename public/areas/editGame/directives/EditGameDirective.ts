@@ -13,25 +13,29 @@ module EditGame {
         };
     }
 
-    enum State {
-        Init,
-        Loading,
-        Error,
-        Ready,
-        Saving,
-        Finalizing
-    };
-
     export class EditGameController {
-        public static $inject: string[] = ["$window", "editGameService", "alertsService", "editGameCollapseService"];
+        public static $inject: string[] = ["$window", "editGameStateService", "editGameService", "alertsService", "editGameCollapseService"];
 
         public isFinalizedGame: boolean;
 
-        private showLoading: boolean = false;
-        private showError: boolean = false;
-        private showScoreForm: boolean = false;
-        private disabled: boolean = false;
         private datePlayed: Date;
+        private gameType: EditGameType;
+
+        private get showLoading(): boolean {
+            return this.stateService.showLoading;
+        }
+
+        private get showError(): boolean {
+            return this.stateService.showError;
+        }
+
+        private get showScoreForm(): boolean {
+            return this.stateService.showScoreForm;
+        }
+
+        private get disabled(): boolean {
+            return this.stateService.disabled;
+        }
 
         private get alerts(): Shared.IAlert[] {
             return this.alertsService.alerts;
@@ -46,48 +50,37 @@ module EditGame {
         }
 
         constructor(private $window: ng.IWindowService,
+            private stateService: IEditGameStateService,
             private editGameService: IEditGameService,
             private alertsService: Shared.IAlertsService,
-            private editGameCollapseService: IEditGameCollapseService) {
-            this.changeState(State.Init);
-        }
+            private editGameCollapseService: IEditGameCollapseService)
+            {
+                this.gameType = this.isFinalizedGame ? EditGameType.FinalizedGame : EditGameType.ActiveGame;
 
-        private changeState(newState: State): void {
+                this.stateService.subscribeStateChange((event, newState) => {
+                    switch (newState) {
+                        case State.Loading:
+                            this.getGame();
+                            break;
+                        case State.Error:
+                            this.alertsService.scrollToTop();
+                            break;
+                        case State.Ready:
+                            this.ready();
+                            break;
+                        case State.Saving:
+                            this.saveGame();
+                            break;
+                        case State.Finalizing:
+                            this.finalizeGame();
+                            break;
+                        case State.Updating:
+                            this.updateFinalizedGame();
+                            break;
+                    }
+                });
 
-            this.showLoading = (newState === State.Init) ||
-                (newState === State.Loading);
-
-            this.showError = newState === State.Error;
-
-            this.showScoreForm = (newState !== State.Init) &&
-                (newState !== State.Loading) &&
-                (newState !== State.Error);
-
-            this.disabled = (newState === State.Saving) ||
-                (newState === State.Finalizing) ||
-                (newState === State.Init) ||
-                (newState === State.Loading);
-
-            switch (newState) {
-                case State.Init:
-                    this.changeState(State.Loading);
-                    break;
-                case State.Loading:
-                    this.getGame();
-                    break;
-                case State.Error:
-                    this.alertsService.scrollToTop();
-                    break;
-                case State.Ready:
-                    this.ready();
-                    break;
-                case State.Saving:
-                    this.saveGame();
-                    break;
-                case State.Finalizing:
-                    this.finalizeGame();
-                    break;
-            }
+                this.stateService.changeState(State.Loading);
         }
 
         private ready(): void {
@@ -100,14 +93,13 @@ module EditGame {
         private errorHandler(data: string, errorMessage: string) {
             this.alertsService.addAlert("danger", errorMessage);
             console.error(data);
-            this.changeState(State.Error);
+            this.stateService.changeState(State.Error);
         }
 
         private getGame(): void {
-            var gameType = this.isFinalizedGame ? EditGameType.FinalizedGame : EditGameType.ActiveGame;
-
-            this.editGameService.getGame(gameType).then(() => {
-                this.changeState(State.Ready);
+            this.alertsService.clearAlerts();
+            this.editGameService.getGame(this.gameType).then(() => {
+                this.stateService.changeState(State.Ready);
                 this.datePlayed = this.editGameService.datePlayed;
             }, () => {
                 this.errorHandler("Cannot get active game.", "Cannot load game");
@@ -120,7 +112,7 @@ module EditGame {
 
             this.editGameService.save().then(() => {
                 this.alertsService.addAlert("success", "Game saved successfully!");
-                this.changeState(State.Ready);
+                this.stateService.changeState(State.Ready);
             }, () => {
                 this.saveReject();
             });
@@ -146,25 +138,13 @@ module EditGame {
             // get error messages and display alerts
             this.alertsService.clearAlerts();
             this.editGameService.errorMessages.forEach(msg => { this.alertsService.addAlert("danger", msg); });
-            this.changeState(State.Ready);
+            this.stateService.changeState(State.Ready);
         }
         
         // UI Hookups
 
         private closeAlert(index: number): void {
             this.alertsService.closeAlert(index);
-        }
-
-        private save(): void {
-            this.changeState(State.Saving);
-        }
-
-        private finalize(): void {
-            this.changeState(State.Finalizing);
-        }
-
-        private revert(): void {
-            this.changeState(State.Loading);
         }
 
         private enableScoreForm(): void {

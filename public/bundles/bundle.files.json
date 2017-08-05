@@ -80,14 +80,9 @@
         },
         "editGame": {
             "files": [
-                "areas/editGame/services/EditGameService.js",
-                "areas/editGame/services/EditGameCollapseService.js",
-                "areas/editGame/directives/EditScoresDirective.js",
-                "areas/editGame/directives/ReorderPlayersDirective.js",
-                "areas/editGame/directives/ModifyPlayersDirective.js",
-                "areas/editGame/directives/RevertFinalizeDirective.js",
-                "areas/editGame/directives/EditGameDirective.js",
-                "areas/editGame/modules/EditGameModule.js",
+                "areas/editGame/services/*.js",
+                "areas/editGame/directives/*.js",
+                "areas/editGame/modules/*.js",
                 "bundles/pageModules/editGame.js"
             ],
             "components": [

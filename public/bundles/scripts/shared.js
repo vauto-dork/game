@@ -255,6 +255,74 @@ var Shared;
 
 var Shared;
 (function (Shared) {
+    var PlayerStats = (function () {
+        function PlayerStats(games, ranking) {
+            this.gamesData = games;
+            this.ranking = ranking;
+            this.calculateData();
+        }
+        Object.defineProperty(PlayerStats.prototype, "player", {
+            get: function () {
+                return !this.ranking ? null : this.ranking.player;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(PlayerStats.prototype, "rating", {
+            get: function () {
+                return !this.ranking ? 0 : this.ranking.rating;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(PlayerStats.prototype, "points", {
+            get: function () {
+                return !this.ranking ? 0 : this.ranking.totalPoints;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(PlayerStats.prototype, "gamesPlayed", {
+            get: function () {
+                return !this.ranking ? 0 : this.ranking.gamesPlayed;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        PlayerStats.prototype.calculateData = function () {
+            var _this = this;
+            this.games = [];
+            this.previousPoints = 0;
+            this.previousRating = 0;
+            if (this.gamesData.length <= 0) {
+                return;
+            }
+            var tally = this.ranking.totalPoints;
+            var games = this.gamesData.forEach(function (game, index) {
+                var player = game.players.filter(function (player) {
+                    return player.playerId === _this.player._id;
+                })[0];
+                if (index > 0) {
+                    _this.previousPoints += player.points;
+                }
+                _this.games.push({
+                    gameIndex: index,
+                    datePlayed: new Date(game.datePlayed),
+                    tally: tally,
+                    points: player.points,
+                    rank: player.rank
+                });
+                tally -= player.points;
+            });
+            this.previousRating = this.previousPoints / (this.gamesData.length - 1);
+        };
+        return PlayerStats;
+    }());
+    Shared.PlayerStats = PlayerStats;
+})(Shared || (Shared = {}));
+
+var Shared;
+(function (Shared) {
     var RankedPlayer = (function () {
         function RankedPlayer(player) {
             if (!player) {
@@ -323,9 +391,9 @@ var Shared;
                 _this.$window.scrollTo(0, 100000);
             });
         };
+        AlertsService.$inject = ['$timeout', '$window'];
         return AlertsService;
     }());
-    AlertsService.$inject = ['$timeout', '$window'];
     Shared.AlertsService = AlertsService;
 })(Shared || (Shared = {}));
 
@@ -584,9 +652,9 @@ var Shared;
             });
             return def.promise;
         };
+        ApiService.$inject = ['$http', '$q'];
         return ApiService;
     }());
-    ApiService.$inject = ['$http', '$q'];
     Shared.ApiService = ApiService;
 })(Shared || (Shared = {}));
 
@@ -690,9 +758,9 @@ var Shared;
             this.$location.search('year', year);
             this.$location.replace();
         };
+        MonthYearQueryService.$inject = ['$location'];
         return MonthYearQueryService;
     }());
-    MonthYearQueryService.$inject = ['$location'];
     Shared.MonthYearQueryService = MonthYearQueryService;
 })(Shared || (Shared = {}));
 
@@ -835,9 +903,9 @@ var Shared;
         DatePickerController.prototype.useCurrentTime = function () {
             this.date = new Date();
         };
+        DatePickerController.$inject = ['$element', '$window', '$timeout', 'dateTimeService'];
         return DatePickerController;
     }());
-    DatePickerController.$inject = ['$element', '$window', '$timeout', 'dateTimeService'];
     Shared.DatePickerController = DatePickerController;
 })(Shared || (Shared = {}));
 
@@ -862,9 +930,9 @@ var Shared;
                 this.sidebarOpen = false;
             }
         };
+        GlobalNavController.$inject = [];
         return GlobalNavController;
     }());
-    GlobalNavController.$inject = [];
     Shared.GlobalNavController = GlobalNavController;
 })(Shared || (Shared = {}));
 
@@ -883,9 +951,9 @@ var Shared;
     var LoadSpinnerController = (function () {
         function LoadSpinnerController() {
         }
+        LoadSpinnerController.$inject = [];
         return LoadSpinnerController;
     }());
-    LoadSpinnerController.$inject = [];
     Shared.LoadSpinnerController = LoadSpinnerController;
 })(Shared || (Shared = {}));
 
@@ -981,9 +1049,9 @@ var Shared;
                 this.change();
             }
         };
+        MonthYearPickerController.$inject = ['dateTimeService'];
         return MonthYearPickerController;
     }());
-    MonthYearPickerController.$inject = ['dateTimeService'];
     Shared.MonthYearPickerController = MonthYearPickerController;
 })(Shared || (Shared = {}));
 
@@ -1035,9 +1103,9 @@ var Shared;
     var PlayerBonusPanelController = (function () {
         function PlayerBonusPanelController() {
         }
+        PlayerBonusPanelController.$inject = [];
         return PlayerBonusPanelController;
     }());
-    PlayerBonusPanelController.$inject = [];
     Shared.PlayerBonusPanelController = PlayerBonusPanelController;
 })(Shared || (Shared = {}));
 
@@ -1058,9 +1126,9 @@ var Shared;
     var PlayerNametagController = (function () {
         function PlayerNametagController() {
         }
+        PlayerNametagController.$inject = [];
         return PlayerNametagController;
     }());
-    PlayerNametagController.$inject = [];
     Shared.PlayerNametagController = PlayerNametagController;
 })(Shared || (Shared = {}));
 
@@ -1090,9 +1158,9 @@ var Shared;
             enumerable: true,
             configurable: true
         });
+        PlayerScoretagController.$inject = [];
         return PlayerScoretagController;
     }());
-    PlayerScoretagController.$inject = [];
     Shared.PlayerScoretagController = PlayerScoretagController;
 })(Shared || (Shared = {}));
 

@@ -16,9 +16,9 @@ var Components;
     var PlayerFormController = (function () {
         function PlayerFormController() {
         }
+        PlayerFormController.$inject = [];
         return PlayerFormController;
     }());
-    PlayerFormController.$inject = [];
     Components.PlayerFormController = PlayerFormController;
 })(Components || (Components = {}));
 
@@ -169,9 +169,9 @@ var Components;
                 };
             }));
         };
+        PlayerSelectionService.$inject = ["$q", "apiService"];
         return PlayerSelectionService;
     }());
-    PlayerSelectionService.$inject = ["$q", "apiService"];
     Components.PlayerSelectionService = PlayerSelectionService;
 })(Components || (Components = {}));
 
@@ -226,9 +226,9 @@ var Components;
                 hasPlayers: list.length > 0
             };
         };
+        PlayerSelectorController.$inject = ["$element", "$timeout", "$filter", "playerSelectionService"];
         return PlayerSelectorController;
     }());
-    PlayerSelectorController.$inject = ["$element", "$timeout", "$filter", "playerSelectionService"];
     Components.PlayerSelectorController = PlayerSelectorController;
 })(Components || (Components = {}));
 
@@ -238,11 +238,16 @@ PlayerSelectorModule.filter('playerSelectorFilter', Components.PlayerSelectorFil
 PlayerSelectorModule.controller('PlayerSelectorController', Components.PlayerSelectorController);
 PlayerSelectorModule.directive('playerSelector', Components.PlayerSelectorDirective);
 
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var Components;
 (function (Components) {
     var NewPlayerPanelService = (function (_super) {
@@ -275,9 +280,9 @@ var Components;
                 _this.$q.reject(data);
             });
         };
+        NewPlayerPanelService.$inject = ["$timeout", "$q", "apiService"];
         return NewPlayerPanelService;
     }(Shared.PubSubServiceBase));
-    NewPlayerPanelService.$inject = ["$timeout", "$q", "apiService"];
     Components.NewPlayerPanelService = NewPlayerPanelService;
 })(Components || (Components = {}));
 
@@ -371,9 +376,9 @@ var Components;
                 _this.disabled = false;
             });
         };
+        NewPlayerPanelController.$inject = ["newPlayerPanelService"];
         return NewPlayerPanelController;
     }());
-    NewPlayerPanelController.$inject = ["newPlayerPanelService"];
     Components.NewPlayerPanelController = NewPlayerPanelController;
 })(Components || (Components = {}));
 
@@ -544,9 +549,9 @@ var CreateGame;
         CreateGameService.prototype.debugShowSortedPlayersTable = function () {
             this.playerSelectionService.debugPrintPlayersTable(this.playersSorted);
         };
+        CreateGameService.$inject = ["$q", "apiService", "playerSelectionService", "newPlayerPanelService"];
         return CreateGameService;
     }());
-    CreateGameService.$inject = ["$q", "apiService", "playerSelectionService", "newPlayerPanelService"];
     CreateGame.CreateGameService = CreateGameService;
 })(CreateGame || (CreateGame = {}));
 
@@ -599,9 +604,9 @@ var CreateGame;
             enumerable: true,
             configurable: true
         });
+        ButtonsPanelController.$inject = ['$window', 'createGameService'];
         return ButtonsPanelController;
     }());
-    ButtonsPanelController.$inject = ['$window', 'createGameService'];
     CreateGame.ButtonsPanelController = ButtonsPanelController;
 })(CreateGame || (CreateGame = {}));
 
@@ -638,17 +643,22 @@ var CreateGame;
         SelectedPlayersController.prototype.removePlayer = function (player) {
             this.createGameService.removePlayer(player);
         };
+        SelectedPlayersController.$inject = ['createGameService'];
         return SelectedPlayersController;
     }());
-    SelectedPlayersController.$inject = ['createGameService'];
     CreateGame.SelectedPlayersController = SelectedPlayersController;
 })(CreateGame || (CreateGame = {}));
 
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var CreateGame;
 (function (CreateGame) {
     function CreateGameDirective() {
@@ -742,9 +752,9 @@ var CreateGame;
             this.playerSelectionService.removeFilter();
             _super.prototype.enablePlayerSelectorPanel.call(this);
         };
+        CreateGameController.$inject = ["$window", "createGameService", "playerSelectionService", "newPlayerPanelService"];
         return CreateGameController;
     }(Components.NewPlayerPanelBase));
-    CreateGameController.$inject = ["$window", "createGameService", "playerSelectionService", "newPlayerPanelService"];
     CreateGame.CreateGameController = CreateGameController;
 })(CreateGame || (CreateGame = {}));
 

@@ -4,11 +4,6 @@
     export function RevertFinalizeDirective(): ng.IDirective {
         return {
             scope: {
-                save: "&",
-                revert: "&",
-                finalize: "&",
-                update: "&",
-                disabled: "="
             },
             templateUrl: '/areas/editGame/directives/RevertFinalizeTemplate.html',
             controller: 'RevertFinalizeController',
@@ -18,13 +13,11 @@
     }
 
     export class RevertFinalizeController {
-        public static $inject: string[] = ['editGameService'];
+        public static $inject: string[] = ["editGameStateService", "editGameService"];
 
-        private save: Function;
-        private revert: Function;
-        private finalize: Function;
-        private update: Function;
-        private disabled: boolean;
+        private get disabled(): boolean {
+            return this.stateService.disabled;
+        }
 
         private get numPlayers(): number {
             return this.editGameService.players.length;
@@ -34,8 +27,24 @@
             return this.editGameService.gameType === EditGameType.FinalizedGame;
         }
 
-        constructor(private editGameService: IEditGameService) {
+        constructor(private stateService: IEditGameStateService, private editGameService: IEditGameService) {
             
+        }
+
+        private save() {
+            this.stateService.changeState(State.Saving);
+        }
+
+        private revert() {
+            this.stateService.changeState(State.Loading);
+        }
+
+        private finalize() {
+            this.stateService.changeState(State.Finalizing);
+        }
+
+        private update() {
+            this.stateService.changeState(State.Updating);
         }
     }
 }
