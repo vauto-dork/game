@@ -9,10 +9,10 @@ module EditGame {
         movePlayerActive: boolean;
         errorMessages: string[];
 
+        cleanRanks(playerChanged: Shared.IGamePlayer): void;
         addPlayer(player: Shared.IGamePlayer): void;
         removePlayer(player: Shared.IGamePlayer): void;
         movePlayer(selectedPlayerId: string, destinationPlayer: Shared.IGamePlayer): void;
-        playerIndex(playerId: string): number;
         getGame(gameType: EditGameType): ng.IPromise<void>;
         save(): ng.IPromise<void>;
         finalize(): ng.IPromise<void>;
@@ -118,10 +118,6 @@ module EditGame {
 
             return def.promise;
         }
-        
-        public playerIndex(playerId: string): number {
-            return this.activeGame.getPlayerIndex(playerId);
-        }
 
         public addPlayer(player: Shared.IGamePlayer): void {
             this.activeGame.addPlayer(player);
@@ -139,6 +135,10 @@ module EditGame {
             if(!isSuccess) {
                 console.error("Cannot find player: ", selectedPlayerId);
             }
+        }
+
+        public cleanRanks(playerChanged: Shared.IGamePlayer): void {
+            this.activeGame.cleanRanks(playerChanged);
         }
 
         public save(): ng.IPromise<void> {
@@ -219,8 +219,6 @@ module EditGame {
                 this.addErrorMessage('Game cannot have less than three players.');
                 return false;
             }
-
-            this.activeGame.convertNullPointsToZero();
 
             return true;
         }

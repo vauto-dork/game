@@ -42,6 +42,15 @@ var Shared;
             }
             return false;
         };
+        Game.prototype.cleanRanks = function (playerChanged) {
+            this.players.forEach(function (p) {
+                if (p.playerId !== playerChanged.playerId) {
+                    if (playerChanged.rank > 0 && p.rank === playerChanged.rank) {
+                        p.rank = 0;
+                    }
+                }
+            });
+        };
         Game.prototype.hasFirstPlace = function () {
             return this.players.filter(function (value) { return value.rank === 1; }).length === 1;
         };
@@ -87,11 +96,6 @@ var Shared;
                 }
             });
         };
-        Game.prototype.convertNullPointsToZero = function () {
-            this.players.forEach(function (player) {
-                player.points = !player.points ? 0 : player.points;
-            });
-        };
         Game.prototype.toGameViewModel = function () {
             var game = {
                 _id: this._id,
@@ -128,18 +132,38 @@ var Shared;
             enumerable: true,
             configurable: true
         });
+        GamePlayer.prototype.decrementScore = function () {
+            var points = this.points || 0;
+            this.points = (points - 1 >= Shared.GamePointsRange.min) ? points - 1 : points;
+        };
+        GamePlayer.prototype.incrementScore = function () {
+            var points = this.points || 0;
+            this.points = (points + 1 <= Shared.GamePointsRange.max) ? points + 1 : points;
+        };
         GamePlayer.prototype.toGamePlayerViewModel = function () {
             var player = {
                 _id: this._id,
                 player: this.player.toPlayerViewModel(),
-                rank: this.rank,
-                points: this.points
+                rank: this.rank || 0,
+                points: this.points || 0
             };
             return player;
         };
         return GamePlayer;
     }());
     Shared.GamePlayer = GamePlayer;
+})(Shared || (Shared = {}));
+
+var Shared;
+(function (Shared) {
+    var GamePointsRange = (function () {
+        function GamePointsRange() {
+        }
+        GamePointsRange.min = -4;
+        GamePointsRange.max = 99;
+        return GamePointsRange;
+    }());
+    Shared.GamePointsRange = GamePointsRange;
 })(Shared || (Shared = {}));
 
 var Shared;

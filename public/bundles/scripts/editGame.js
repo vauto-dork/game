@@ -516,9 +516,6 @@ var EditGame;
             });
             return def.promise;
         };
-        EditGameService.prototype.playerIndex = function (playerId) {
-            return this.activeGame.getPlayerIndex(playerId);
-        };
         EditGameService.prototype.addPlayer = function (player) {
             this.activeGame.addPlayer(player);
             this.playerSelectionService.addPlayer(player.player);
@@ -532,6 +529,9 @@ var EditGame;
             if (!isSuccess) {
                 console.error("Cannot find player: ", selectedPlayerId);
             }
+        };
+        EditGameService.prototype.cleanRanks = function (playerChanged) {
+            this.activeGame.cleanRanks(playerChanged);
         };
         EditGameService.prototype.save = function () {
             var _this = this;
@@ -605,7 +605,6 @@ var EditGame;
                 this.addErrorMessage('Game cannot have less than three players.');
                 return false;
             }
-            this.activeGame.convertNullPointsToZero();
             return true;
         };
         EditGameService.prototype.hasRanks = function () {
@@ -872,8 +871,8 @@ var EditGame;
     var EditScoresController = (function () {
         function EditScoresController(editGameService) {
             this.editGameService = editGameService;
-            this.pointsMin = -4;
-            this.pointsMax = 99;
+            this.pointsMin = Shared.GamePointsRange.min;
+            this.pointsMax = Shared.GamePointsRange.max;
         }
         Object.defineProperty(EditScoresController.prototype, "players", {
             get: function () {
@@ -886,25 +885,16 @@ var EditGame;
             configurable: true
         });
         EditScoresController.prototype.rankHandler = function (player) {
-            player.rank = player.rank === null ? 0 : player.rank;
-            this.players.forEach(function (p) {
-                if (p.playerId !== player.playerId) {
-                    if (player.rank > 0 && p.rank === player.rank) {
-                        p.rank = 0;
-                    }
-                }
-            });
+            this.editGameService.cleanRanks(player);
         };
         EditScoresController.prototype.decrementScore = function (player) {
             if (!this.disabled) {
-                var points = player.points;
-                player.points = (points - 1 >= this.pointsMin) ? points - 1 : points;
+                player.decrementScore();
             }
         };
         EditScoresController.prototype.incrementScore = function (player) {
             if (!this.disabled) {
-                var points = player.points;
-                player.points = (points + 1 <= this.pointsMax) ? points + 1 : points;
+                player.incrementScore();
             }
         };
         EditScoresController.$inject = ['editGameService'];
@@ -1042,9 +1032,6 @@ var EditGame;
         ReorderPlayersController.prototype.unselect = function () {
             this.dropZoneActive = false;
             this.selectedPlayerId = null;
-        };
-        ReorderPlayersController.prototype.playerIndex = function (playerId) {
-            return this.editGameService.playerIndex(playerId);
         };
         ReorderPlayersController.prototype.dropPlayerHere = function (destinationPlayer) {
             if (!!this.selectedPlayerId) {

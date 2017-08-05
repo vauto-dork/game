@@ -10,13 +10,13 @@ module Shared {
 		addPlayer(player: IGamePlayer): void;
 		removePlayer(player: Shared.IGamePlayer): void;
 		movePlayer(selectedPlayerId: string, destinationPlayer: Shared.IGamePlayer): boolean;
+		cleanRanks(playerChanged: IGamePlayer): void;
 		hasFirstPlace(): boolean;
 		hasSecondPlace(): boolean;
 		hasThirdPlace(): boolean;
 		declareWinner(): boolean;
 		addBonusPoints(): void;
 		removeBonusPoints(): void;
-		convertNullPointsToZero(): void;
 		toGameViewModel(): IGameViewModel;
 	}
 	
@@ -77,6 +77,16 @@ module Shared {
             }
 
 			return false
+		}
+		
+		public cleanRanks(playerChanged: IGamePlayer): void {
+            this.players.forEach(p => {
+                if (p.playerId !== playerChanged.playerId) {
+                    if (playerChanged.rank > 0 && p.rank === playerChanged.rank) {
+                        p.rank = 0;
+                    }
+                }
+            });
         }
 
 		public hasFirstPlace(): boolean {
@@ -132,12 +142,6 @@ module Shared {
             });
 		}
 
-		public convertNullPointsToZero(): void {
-            this.players.forEach((player) => {
-                player.points = !player.points ? 0 : player.points;
-            });
-		}
-		
 		public toGameViewModel(): IGameViewModel {
 			var game: IGameViewModel = {
 				_id: this._id,

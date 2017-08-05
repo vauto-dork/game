@@ -61,10 +61,6 @@
             this.selectedPlayerId = null;
         }
 
-        private playerIndex(playerId: string): number {
-            return this.editGameService.playerIndex(playerId);
-        }
-
         private dropPlayerHere(destinationPlayer: Shared.IGamePlayer): void {
             if (!!this.selectedPlayerId) {
                 this.editGameService.movePlayer(this.selectedPlayerId, destinationPlayer);

@@ -16,8 +16,8 @@ module EditGame {
 
         private disabled: boolean;
 
-        private pointsMin: number = -4;
-        private pointsMax: number = 99;
+        private pointsMin: number = Shared.GamePointsRange.min;
+        private pointsMax: number = Shared.GamePointsRange.max;
 
         private get players(): Shared.IGamePlayer[] {
             return this.editGameService.players;
@@ -31,28 +31,18 @@ module EditGame {
         }
 
         public rankHandler(player: Shared.IGamePlayer): void {
-            player.rank = player.rank === null ? 0 : player.rank;
-
-            this.players.forEach(p => {
-                if (p.playerId !== player.playerId) {
-                    if (player.rank > 0 && p.rank === player.rank) {
-                        p.rank = 0;
-                    }
-                }
-            });
+            this.editGameService.cleanRanks(player);
         }
 
         public decrementScore(player: Shared.IGamePlayer): void {
             if (!this.disabled) {
-                var points = player.points;
-                player.points = (points - 1 >= this.pointsMin) ? points - 1 : points;
+                player.decrementScore();
             }
         }
 
         public incrementScore(player: Shared.IGamePlayer): void {
             if (!this.disabled) {
-                var points = player.points;
-                player.points = (points + 1 <= this.pointsMax) ? points + 1 : points;
+                player.incrementScore();
             }
         }
     }
