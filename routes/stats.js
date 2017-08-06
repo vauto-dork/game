@@ -27,9 +27,7 @@ var statsHelper = {
         .exec(function (err, games) {
             if (err) return next(err);
 
-            var totalPoints = 0;
-            var gamesPlayed = 0;
-            var currentRating = 0;
+            var previousRating = 0;
             var previousPosition = 0;
 
             var currentPositions = GameHelper.getLeaderboardSnapshot(games, false);
@@ -38,22 +36,22 @@ var statsHelper = {
             });
 
             var result = games.map(function(game, index) {
-                var hasPlayedGame = GameHelper.hasPlayedGame(playerId, game);
+                var playerPosition = previousPosition;
+                var playerRating = previousRating;
                 var ratingDiff = 0;
-                
-                if(hasPlayedGame) {
-                    totalPoints += GameHelper.getPlayerPointsFromGame(playerId, game);
-                    gamesPlayed++;
-                    var tempRating = statsHelper.round(totalPoints / (!gamesPlayed ? 1 : gamesPlayed), 2);
-                    ratingDiff = statsHelper.round(tempRating - currentRating, 2);
-                    currentRating = tempRating;
-                }
+                var positionDiff = 0;
 
                 var leaderboard = GameHelper.getLeaderboardSnapshot(games.slice(0, index + 1), aboveTenGamesOnly);
-                var playerPosition = 0;
+
                 leaderboard.some(function(player) {
                     if(player.id == playerId) {
+                        playerRating = statsHelper.round(player.rating, 2);
+                        ratingDiff = statsHelper.round(playerRating - previousRating, 2);
+                        previousRating = playerRating;
+
                         playerPosition = player.position;
+                        positionDiff = playerPosition - previousPosition;
+                        previousPosition = playerPosition;
                         return true;
                     }
                     else {
@@ -61,13 +59,10 @@ var statsHelper = {
                     }
                 });
 
-                var positionDiff = playerPosition - previousPosition;
-                previousPosition = playerPosition || previousPosition;
-
                 return {
                     gameDate: game.datePlayed,
-                    played: hasPlayedGame,
-                    rating: currentRating,
+                    played: GameHelper.hasPlayedGame(playerId, game),
+                    rating: playerRating,
                     ratingDiff: ratingDiff,
                     position: playerPosition,
                     positionDiff: positionDiff
