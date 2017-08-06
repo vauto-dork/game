@@ -4,6 +4,81 @@ var GameModel = mongoose.model('Game');
 
 module.exports = 
 {
+	getPlayerPointsFromGame: function(playerId, game) {
+		var player = game.players.filter(function(p) {
+			return p.player._id == playerId;
+		})[0];
+
+		return player.points;
+	},
+    hasPlayedGame: function(playerId, game) {
+        return game.players.some(function(p) {
+            return p.player._id == playerId;
+        });
+    },
+	getLeaderboardSnapshot: function(games, aboveTenGamesOnly) {
+		var playerArray = [];
+
+		games.forEach(function(game) {
+			game.players.forEach(function(gamePlayer) {
+				var playerId = gamePlayer.player._id;
+				var playerPoints = gamePlayer.points;
+
+				var playerExists = !playerArray.length
+					? false
+					: playerArray.some(function(playerArrayItem){
+						return playerArrayItem.id == playerId;
+					});
+				
+				if(playerExists) {
+					playerArray.some(function(playerArrayItem) {
+						if(playerArrayItem.id == playerId) {
+							playerArrayItem.gamesPlayed++;
+							playerArrayItem.points += playerPoints;
+							return true;
+						} else {
+							return false;
+						}
+					});
+				} else {
+					playerArray.push({
+						id: playerId,
+						fullName: gamePlayer.player.getFullName(),
+						gamesPlayed: 1,
+						points: playerPoints
+					});
+				}
+			});
+		});
+
+		var result = playerArray.map(function(player) {
+			return {
+				id: player.id,
+				fullName: player.fullName,
+				gamesPlayed: player.gamesPlayed,
+				points: player.points,
+				rating: player.points / player.gamesPlayed
+			}
+		}).sort(function(a,b) {
+			return b.rating - a.rating;
+		});
+		
+		if(aboveTenGamesOnly) {
+			result = result.filter(function(player) {
+				return player.gamesPlayed >= 10;
+			});
+		}
+
+		var previousRatingValue = 0;
+		var currentPositionValue = 0;
+		result.forEach(function(player) {
+			currentPositionValue = currentPositionValue + (player.rating !== previousRatingValue ? 1 : 0);
+			player.position = currentPositionValue;
+			previousRatingValue = player.rating;
+		});
+
+		return result;
+	},
 	saveGame: function (id, game, next, onSuccess) {
 		
 		if(!game || !game.players || game.players.length <3) {
