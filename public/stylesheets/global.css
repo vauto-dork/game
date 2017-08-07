@@ -11,7 +11,7 @@ body {
 
 body {
   margin-bottom: 2em;
-  background-color: #e4e9ef; }
+  background-color: #E6EBEF; }
 
 hr {
   border-color: #7a8394; }
@@ -96,14 +96,14 @@ hr {
     margin-left: 0;
     margin-right: 0; }
   .navbar-collapse li > a {
-    color: #4f6885;
+    color: #3F5163;
     padding-left: 0.9em;
     padding-right: 0.9em; }
     .navbar-collapse li > a .glyphicon {
       margin-right: 0.8em; }
     .navbar-collapse li > a:hover {
-      color: #4f6885;
-      background-color: #e7c0ab; }
+      color: #3F5163;
+      background-color: #FAC4A5; }
 
 .container-fluid.max-width {
   max-width: 1280px; }
