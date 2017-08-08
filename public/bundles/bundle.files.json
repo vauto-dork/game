@@ -122,6 +122,13 @@
                 "playerForm"
             ]
         },
+        "playerStats": {
+            "files": [
+                "areas/playerStats/services/*.js",
+                "areas/playerStats/directives/*.js",
+                "bundles/pageModules/playerStats.js"
+            ]
+        },
         "rankingHistory": {
             "files": [
                 "areas/dotm/directives/DotmDirective.js",

@@ -5,6 +5,7 @@ var PlayerModel = mongoose.model('Player');
 var GameModel = mongoose.model('Game');
 var GameHelper = require('./gameHelper');
 var DateHelper = require('./dateHelper');
+var bundler = require('./_bundler.js');
 
 var statsHelper = {
     round: function(value, decimals) {
@@ -23,13 +24,9 @@ var statsHelper = {
         GameModel.find()
         .where('datePlayed').gte(startDateRange).lt(endDateRange)
         .populate('players.player')
+        .sort({ datePlayed: 1 })
         .exec(function (err, games) {
             if (err) return next(err);
-
-            // Apparently the games aren't guaranteed to be returned in date order
-            games.sort(function(a,b) {
-                return a.datePlayed - b.datePlayed;
-            });
 
             var aboveTenGamesOnly = true;
             // This leads to weird user expectations if the positions suddenly disappear
@@ -83,6 +80,18 @@ var statsHelper = {
     }
 }
 
+/* GET page. */
+router.get('/', function(req, res, next) {
+    res.render('playerStats', {
+        title: 'Player Stats',
+        scripts: bundler.scripts('playerStats')
+    });
+  });
+
+/* GET player's game history.
+ * @query (Optional) month - Get all games for this month. Default is current month.
+ * @query (Optional) year - Get all games for this year. Default is current year.
+ */
 router.get('/json/:id', function (req, res, next) {
     var playerId = req.params.id;
     var dateRange = DateHelper.monthDefined(req) && DateHelper.yearDefined(req)

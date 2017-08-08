@@ -13,6 +13,7 @@ module.exports = {
     gameHistory: bundleHelper.getScriptConfig('gameHistory'),
     index: bundleHelper.getScriptConfig('index'),
     playersList: bundleHelper.getScriptConfig('playersList'),
+    playerStats: bundleHelper.getScriptConfig('playerStats'),
     rankingHistory: bundleHelper.getScriptConfig('rankingHistory')
   }
 };

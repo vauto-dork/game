@@ -12,7 +12,7 @@ var models = require('./models');
 var routes = require('./routes/index');
 var admin = require('./routes/admin');
 var players = require('./routes/players');
-var stats = require('./routes/stats');
+var playerStats = require('./routes/playerStats');
 var games = require('./routes/games');
 var activeGames = require('./routes/activeGames');
 var gameHistory = require('./routes/gameHistory');
@@ -37,9 +37,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/', admin);
-app.use('/stats', stats);
 app.use('/games', games);
 app.use('/players', players);
+app.use('/playerStats', playerStats);
 app.use('/activeGames', activeGames);
 app.use('/gameHistory', gameHistory);
 
