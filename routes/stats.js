@@ -16,8 +16,7 @@ var statsHelper = {
             callback(player);
         });
     },
-    getGamesPlayed: function(playerId, callback) {
-        var dateRange = DateHelper.getCurrentMonthRange();
+    getGamesPlayed: function(playerId, dateRange, callback) {
         var startDateRange = dateRange[0];
         var endDateRange = dateRange[1];
     
@@ -27,13 +26,22 @@ var statsHelper = {
         .exec(function (err, games) {
             if (err) return next(err);
 
+            // Apparently the games aren't guaranteed to be returned in date order
+            games.sort(function(a,b) {
+                return a.datePlayed - b.datePlayed;
+            });
+
+            var aboveTenGamesOnly = true;
+            // This leads to weird user expectations if the positions suddenly disappear
+            // and re-arrange in the middle of the month.
+            //
+            // var currentPositions = GameHelper.getLeaderboardSnapshot(games, false);
+            // var aboveTenGamesOnly = currentPositions.some(function(player) {
+            //     return player.gamesPlayed >= 10;
+            // });
+
             var previousRating = 0;
             var previousPosition = 0;
-
-            var currentPositions = GameHelper.getLeaderboardSnapshot(games, false);
-            var aboveTenGamesOnly = currentPositions.some(function(player) {
-                return player.gamesPlayed >= 10;
-            });
 
             var result = games.map(function(game, index) {
                 var playerPosition = previousPosition;
@@ -60,6 +68,7 @@ var statsHelper = {
                 });
 
                 return {
+                    gameId: game._id,
                     gameDate: game.datePlayed,
                     played: GameHelper.hasPlayedGame(playerId, game),
                     rating: playerRating,
@@ -76,10 +85,15 @@ var statsHelper = {
 
 router.get('/json/:id', function (req, res, next) {
     var playerId = req.params.id;
+    var dateRange = DateHelper.monthDefined(req) && DateHelper.yearDefined(req)
+        ? DateHelper.getDateRange(req)
+        : DateHelper.getCurrentMonthRange();
+    
     statsHelper.getPlayerObject(playerId, function(player) {
-        statsHelper.getGamesPlayed(playerId, function(gameData) {
+        statsHelper.getGamesPlayed(playerId, dateRange, function(gameData) {
             res.json({
                 player: player,
+                dateRange: dateRange,
                 gamesPlayed: gameData.filter(function(game) { return game.played; }).length,
                 games: gameData.reverse()
             });
