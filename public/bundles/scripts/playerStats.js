@@ -63,10 +63,18 @@ var PlayerStats;
         function PlayerStatsController(playerStatsService) {
             var _this = this;
             this.playerStatsService = playerStatsService;
+            this.ready = false;
             playerStatsService.getPlayerStats().then(function () {
-                _this.tempJsonData = playerStatsService.playerStats;
+                _this.ready = true;
             });
         }
+        Object.defineProperty(PlayerStatsController.prototype, "playerStats", {
+            get: function () {
+                return this.playerStatsService.playerStats;
+            },
+            enumerable: true,
+            configurable: true
+        });
         PlayerStatsController.$inject = ["playerStatsService"];
         return PlayerStatsController;
     }());

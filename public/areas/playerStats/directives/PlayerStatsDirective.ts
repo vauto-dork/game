@@ -15,11 +15,15 @@ module PlayerStats {
     export class PlayerStatsController {
         public static $inject: string[] = ["playerStatsService"];
 
-        private tempJsonData: IPlayerStats;
+        private ready: boolean = false;
+
+        private get playerStats(): IPlayerStats {
+            return this.playerStatsService.playerStats;
+        }
 
         constructor(private playerStatsService: IPlayerStatsService) {
             playerStatsService.getPlayerStats().then(()=>{
-                this.tempJsonData = playerStatsService.playerStats;
+                this.ready = true;
             });
         }
     }

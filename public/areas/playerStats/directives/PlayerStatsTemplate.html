@@ -1,1 +1,17 @@
-{{ctrl.tempJsonData}}
+<div class="col-xs-12">
+    <div class="player-card">
+        <player-nametag player="ctrl.playerStats.player"></player-nametag>
+    </div>
+
+    <div>
+        Games Played: {{ctrl.playerStats.gamesPlayed}}
+    </div>
+
+    <div ng-repeat="game in ctrl.playerStats.games">
+        <div>{{game.gameId}} {{game.gameDate}}</div>
+        <div>Played: {{game.played}}</div>
+        <div>{{game.rating}} ({{game.ratingDiff}})</div>
+        <div>{{game.position}} ({{game.positionDiff}})</div>
+    </div>
+</div>
+
