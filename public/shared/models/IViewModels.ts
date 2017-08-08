@@ -46,4 +46,21 @@ module Shared {
 		orderNumber: number;
 		rating: number;
 	}
+
+	export interface IPlayerStatsGame {
+		gameId: string,
+		gameDate: Date,
+		played: boolean,
+		rating: number,
+		ratingDiff: number,
+		position: number,
+		positionDiff: number
+	}
+
+	export interface IPlayerStatsViewModel {
+		player: IPlayerViewModel,
+		dateRange: Date[],
+		gamesPlayed: number,
+		games: IPlayerStatsGame[]
+	}
 }

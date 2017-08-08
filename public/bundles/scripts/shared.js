@@ -280,66 +280,19 @@ var Shared;
 var Shared;
 (function (Shared) {
     var PlayerStats = (function () {
-        function PlayerStats(games, ranking) {
-            this.gamesData = games;
-            this.ranking = ranking;
-            this.calculateData();
-        }
-        Object.defineProperty(PlayerStats.prototype, "player", {
-            get: function () {
-                return !this.ranking ? null : this.ranking.player;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(PlayerStats.prototype, "rating", {
-            get: function () {
-                return !this.ranking ? 0 : this.ranking.rating;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(PlayerStats.prototype, "points", {
-            get: function () {
-                return !this.ranking ? 0 : this.ranking.totalPoints;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(PlayerStats.prototype, "gamesPlayed", {
-            get: function () {
-                return !this.ranking ? 0 : this.ranking.gamesPlayed;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        PlayerStats.prototype.calculateData = function () {
-            var _this = this;
-            this.games = [];
-            this.previousPoints = 0;
-            this.previousRating = 0;
-            if (this.gamesData.length <= 0) {
+        function PlayerStats(playerStats) {
+            if (!playerStats) {
+                this.player = new Shared.Player();
+                this.dateRange = [];
+                this.gamesPlayed = 0;
+                this.games = [];
                 return;
             }
-            var tally = this.ranking.totalPoints;
-            var games = this.gamesData.forEach(function (game, index) {
-                var player = game.players.filter(function (player) {
-                    return player.playerId === _this.player._id;
-                })[0];
-                if (index > 0) {
-                    _this.previousPoints += player.points;
-                }
-                _this.games.push({
-                    gameIndex: index,
-                    datePlayed: new Date(game.datePlayed),
-                    tally: tally,
-                    points: player.points,
-                    rank: player.rank
-                });
-                tally -= player.points;
-            });
-            this.previousRating = this.previousPoints / (this.gamesData.length - 1);
-        };
+            this.player = new Shared.Player(playerStats.player);
+            this.dateRange = playerStats.dateRange;
+            this.gamesPlayed = playerStats.gamesPlayed;
+            this.games = playerStats.games;
+        }
         return PlayerStats;
     }());
     Shared.PlayerStats = PlayerStats;
@@ -672,6 +625,23 @@ var Shared;
             })
                 .error(function (data, status, headers, config) {
                 console.error("Cannot delete game with id " + gameIdPath);
+                def.reject(data);
+            });
+            return def.promise;
+        };
+        ApiService.prototype.getPlayerStats = function (playerIdPath) {
+            var def = this.$q.defer();
+            this.$http.get('/PlayerStats/json' + playerIdPath)
+                .success(function (data, status, headers, config) {
+                if (data === null || data === undefined) {
+                    def.reject(status);
+                }
+                else {
+                    def.resolve(new Shared.PlayerStats(data));
+                }
+            })
+                .error(function (data, status, headers, config) {
+                console.error("Cannot get player stats with id " + playerIdPath);
                 def.reject(data);
             });
             return def.promise;

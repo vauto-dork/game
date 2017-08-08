@@ -17,6 +17,7 @@ module Shared {
 		finalizeGame(game: IGame): ng.IPromise<void>;
 		updateFinalizeGame(game: IGame): ng.IPromise<void>;
 		deleteGame(gameIdPath: string): ng.IPromise<void>;
+		getPlayerStats(playerId: string): ng.IPromise<IPlayerStats>;
 	}
 
 	export class ApiService implements IApiService {
@@ -339,6 +340,29 @@ module Shared {
 				})
 				.error((data, status, headers, config) => {
 					console.error(`Cannot delete game with id ${gameIdPath}`)
+					def.reject(data);
+				});
+
+			return def.promise;
+		}
+
+		// --------------------------------------------------------------
+		// Player Stats
+
+		public getPlayerStats(playerIdPath: string): ng.IPromise<IPlayerStats> {
+			var def = this.$q.defer<IPlayerStats>();
+			
+			this.$http.get('/PlayerStats/json' + playerIdPath)
+				.success((data: IPlayerStatsViewModel, status, headers, config) => {
+					if (data === null || data === undefined) {
+						def.reject(status);
+					}
+					else {
+						def.resolve(new PlayerStats(data));
+					}
+				})
+				.error((data, status, headers, config) => {
+					console.error(`Cannot get player stats with id ${playerIdPath}`);
 					def.reject(data);
 				});
 

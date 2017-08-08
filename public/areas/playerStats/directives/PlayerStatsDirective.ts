@@ -1,4 +1,6 @@
 module PlayerStats {
+    import IPlayerStats = Shared.IPlayerStats;
+
     export function PlayerStatsDirective(): ng.IDirective {
         return {
 			scope: {
@@ -11,5 +13,14 @@ module PlayerStats {
     }
 
     export class PlayerStatsController {
+        public static $inject: string[] = ["playerStatsService"];
+
+        private tempJsonData: IPlayerStats;
+
+        constructor(private playerStatsService: IPlayerStatsService) {
+            playerStatsService.getPlayerStats().then(()=>{
+                this.tempJsonData = playerStatsService.playerStats;
+            });
+        }
     }
 }
