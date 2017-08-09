@@ -1,3 +1,6 @@
+.player-card.stats-card-override {
+  margin: 0.5em 0; }
+
 .player-stats-card {
   display: flex;
   justify-content: flex-start;

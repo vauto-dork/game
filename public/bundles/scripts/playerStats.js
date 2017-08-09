@@ -125,9 +125,10 @@ var PlayerStats;
         function PlayerStatsController(playerStatsService) {
             var _this = this;
             this.playerStatsService = playerStatsService;
-            this.ready = false;
+            this.showLoading = false;
+            this.showLoading = true;
             playerStatsService.getPlayerStats().then(function () {
-                _this.ready = true;
+                _this.showLoading = false;
             });
         }
         Object.defineProperty(PlayerStatsController.prototype, "playerStats", {

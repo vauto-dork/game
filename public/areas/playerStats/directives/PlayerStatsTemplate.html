@@ -1,4 +1,6 @@
-<div class="col-xs-12 player-card">
+<load-spinner ng-show="ctrl.showLoading"></load-spinner>
+
+<div class="col-xs-12 player-card stats-card-override" ng-show="!ctrl.showLoading">
     <div class="player-stats-card">
         <player-nametag player="ctrl.playerStats.player"></player-nametag>
     
@@ -25,7 +27,7 @@
     </div>
 </div>
 
-<div class="col-xs-12 player-stats">
+<div class="col-xs-12 player-stats" ng-show="!ctrl.showLoading">
     <div class="stats-intro">
         <div>
             Rank deltas are measured when the player hits the ten game minimum.

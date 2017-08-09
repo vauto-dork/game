@@ -15,7 +15,7 @@ module PlayerStats {
     export class PlayerStatsController {
         public static $inject: string[] = ["playerStatsService"];
 
-        private ready: boolean = false;
+        private showLoading: boolean = false;
 
         private get playerStats(): IPlayerStats {
             return this.playerStatsService.playerStats;
@@ -38,8 +38,9 @@ module PlayerStats {
         }
 
         constructor(private playerStatsService: IPlayerStatsService) {
+            this.showLoading = true;
             playerStatsService.getPlayerStats().then(()=>{
-                this.ready = true;
+                this.showLoading = false;
             });
         }
 
