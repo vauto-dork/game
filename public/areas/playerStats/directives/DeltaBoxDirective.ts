@@ -25,16 +25,24 @@ module PlayerStats {
             return this.value === null || this.value === undefined;
         }
 
-        private get isPositive(): boolean {
+        private get hasValue(): boolean {
+            return (this.value === 0) || !!this.value;
+        }
+
+        private get isDiffPositive(): boolean {
             return this.diff > 0;
         }
 
-        private get isNegative(): boolean {
+        private get isDiffNegative(): boolean {
             return this.diff < 0;
         }
 
         private get absDiff(): number {
             return Math.abs(this.diff);
+        }
+
+        private get absValue(): number {
+            return Math.abs(this.value);
         }
 
         constructor() {

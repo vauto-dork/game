@@ -83,14 +83,21 @@ var PlayerStats;
             enumerable: true,
             configurable: true
         });
-        Object.defineProperty(DeltaBoxController.prototype, "isPositive", {
+        Object.defineProperty(DeltaBoxController.prototype, "hasValue", {
+            get: function () {
+                return (this.value === 0) || !!this.value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(DeltaBoxController.prototype, "isDiffPositive", {
             get: function () {
                 return this.diff > 0;
             },
             enumerable: true,
             configurable: true
         });
-        Object.defineProperty(DeltaBoxController.prototype, "isNegative", {
+        Object.defineProperty(DeltaBoxController.prototype, "isDiffNegative", {
             get: function () {
                 return this.diff < 0;
             },
@@ -100,6 +107,13 @@ var PlayerStats;
         Object.defineProperty(DeltaBoxController.prototype, "absDiff", {
             get: function () {
                 return Math.abs(this.diff);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(DeltaBoxController.prototype, "absValue", {
+            get: function () {
+                return Math.abs(this.value);
             },
             enumerable: true,
             configurable: true
