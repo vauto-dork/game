@@ -26,5 +26,9 @@ module PlayerStats {
                 this.ready = true;
             });
         }
+
+        private positionValue(value: number): number {
+            return value === 0 ? null : value;
+        }
     }
 }

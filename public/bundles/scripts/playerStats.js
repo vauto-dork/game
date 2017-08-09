@@ -49,6 +49,51 @@ var PlayerStats;
 
 var PlayerStats;
 (function (PlayerStats) {
+    function DeltaBoxDirective() {
+        return {
+            scope: {
+                value: "=",
+                decimal: "@",
+                diff: "="
+            },
+            templateUrl: "/areas/playerStats/directives/DeltaBoxTemplate.html",
+            controller: "DeltaBoxController",
+            controllerAs: "ctrl",
+            bindToController: true
+        };
+    }
+    PlayerStats.DeltaBoxDirective = DeltaBoxDirective;
+    var DeltaBoxController = (function () {
+        function DeltaBoxController() {
+        }
+        Object.defineProperty(DeltaBoxController.prototype, "hasNoValue", {
+            get: function () {
+                return this.value === null || this.value === undefined;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(DeltaBoxController.prototype, "isPositive", {
+            get: function () {
+                return this.diff > 0;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(DeltaBoxController.prototype, "isNegative", {
+            get: function () {
+                return this.diff < 0;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        return DeltaBoxController;
+    }());
+    PlayerStats.DeltaBoxController = DeltaBoxController;
+})(PlayerStats || (PlayerStats = {}));
+
+var PlayerStats;
+(function (PlayerStats) {
     function PlayerStatsDirective() {
         return {
             scope: {},
@@ -75,6 +120,9 @@ var PlayerStats;
             enumerable: true,
             configurable: true
         });
+        PlayerStatsController.prototype.positionValue = function (value) {
+            return value === 0 ? null : value;
+        };
         PlayerStatsController.$inject = ["playerStatsService"];
         return PlayerStatsController;
     }());
@@ -84,6 +132,9 @@ var PlayerStats;
 var DorkModule = angular.module('DorkModule', ['UxControlsModule']);
 
 DorkModule.service('playerStatsService', PlayerStats.PlayerStatsService);
+
+DorkModule.controller('DeltaBoxController', PlayerStats.DeltaBoxController);
+DorkModule.directive('deltaBox', PlayerStats.DeltaBoxDirective);
 
 DorkModule.controller('PlayerStatsController', PlayerStats.PlayerStatsController);
 DorkModule.directive('playerStats', PlayerStats.PlayerStatsDirective);
