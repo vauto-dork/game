@@ -29,23 +29,23 @@ var statsHelper = {
             if (err) return next(err);
 
             var aboveTenGamesOnly = true;
-            // This leads to weird user expectations if the positions suddenly disappear
+            // This leads to weird user expectations if the ranks suddenly disappear
             // and re-arrange in the middle of the month.
             //
-            // var currentPositions = GameHelper.getLeaderboardSnapshot(games, false);
-            // var aboveTenGamesOnly = currentPositions.some(function(player) {
+            // var currentRanks = GameHelper.getLeaderboardSnapshot(games, false);
+            // var aboveTenGamesOnly = currentRanks.some(function(player) {
             //     return player.gamesPlayed >= 10;
             // });
 
             var previousRating = 0;
-            var previousPosition = 0;
+            var previousRank = 0;
             var totalPoints = 0;
 
             var result = games.map(function(game, index) {
-                var playerPosition = previousPosition;
+                var playerRank = previousRank;
                 var playerRating = previousRating;
                 var ratingDiff = 0;
-                var positionDiff = 0;
+                var rankDiff = 0;
 
                 var leaderboard = GameHelper.getLeaderboardSnapshot(games.slice(0, index + 1), aboveTenGamesOnly);
 
@@ -55,9 +55,9 @@ var statsHelper = {
                         ratingDiff = statsHelper.round(playerRating - previousRating, 2);
                         previousRating = playerRating;
 
-                        playerPosition = player.position;
-                        positionDiff = previousPosition === 0 ? playerPosition : previousPosition - playerPosition;
-                        previousPosition = playerPosition;
+                        playerRank = player.rank;
+                        rankDiff = previousRank === 0 ? playerRank : previousRank - playerRank;
+                        previousRank = playerRank;
 
                         // Really only care to assign this on the last iteration of the loop (points after last game)
                         totalPoints = player.points;
@@ -74,8 +74,8 @@ var statsHelper = {
                     played: GameHelper.hasPlayedGame(playerId, game),
                     rating: playerRating,
                     ratingDiff: ratingDiff,
-                    position: playerPosition,
-                    positionDiff: positionDiff
+                    rank: playerRank,
+                    rankDiff: rankDiff
                 };
             });
     

@@ -34,7 +34,7 @@ module PlayerStats {
                 return 0;
             }
 
-            return this.playerStatsService.latestGame.position;
+            return this.playerStatsService.latestGame.rank;
         }
 
         constructor(private playerStatsService: IPlayerStatsService) {
@@ -44,7 +44,7 @@ module PlayerStats {
             });
         }
 
-        private positionValue(value: number): number {
+        private rankValue(value: number): number {
             return value === 0 ? null : value;
         }
     }

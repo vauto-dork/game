@@ -167,12 +167,12 @@ var PlayerStats;
                 if (!this.playerStatsService.latestGame) {
                     return 0;
                 }
-                return this.playerStatsService.latestGame.position;
+                return this.playerStatsService.latestGame.rank;
             },
             enumerable: true,
             configurable: true
         });
-        PlayerStatsController.prototype.positionValue = function (value) {
+        PlayerStatsController.prototype.rankValue = function (value) {
             return value === 0 ? null : value;
         };
         PlayerStatsController.$inject = ["playerStatsService"];

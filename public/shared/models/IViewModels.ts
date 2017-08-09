@@ -53,8 +53,8 @@ module Shared {
 		played: boolean,
 		rating: number,
 		ratingDiff: number,
-		position: number,
-		positionDiff: number
+		rank: number,
+		rankDiff: number
 	}
 
 	export interface IPlayerStatsViewModel {

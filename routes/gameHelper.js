@@ -2,17 +2,17 @@ var express = require('express');
 var mongoose = require('mongoose');
 var GameModel = mongoose.model('Game');
 
-var assignPositions = function(playerArray, aboveTenGamesOnly) {
+var assignRanks = function(playerArray, aboveTenGamesOnly) {
 	var previousRatingValue = 0;
-	var currentPositionValue = 0;
+	var currentRankValue = 0;
 	playerArray.forEach(function(player) {
 		if(aboveTenGamesOnly && player.gamesPlayed < 10) {
-			player.position = 0;
+			player.rank = 0;
 			return;
 		}
 		
-		currentPositionValue = currentPositionValue + (player.rating !== previousRatingValue ? 1 : 0);
-		player.position = currentPositionValue;
+		currentRankValue = currentRankValue + (player.rating !== previousRatingValue ? 1 : 0);
+		player.rank = currentRankValue;
 		previousRatingValue = player.rating;
 	});
 };
@@ -78,7 +78,7 @@ module.exports =
 			return b.rating - a.rating;
 		});
 		
-		assignPositions(result, aboveTenGamesOnly);
+		assignRanks(result, aboveTenGamesOnly);
 		return result;
 	},
 	saveGame: function (id, game, next, onSuccess) {
