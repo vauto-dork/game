@@ -21,6 +21,22 @@ module PlayerStats {
             return this.playerStatsService.playerStats;
         }
 
+        private get rating(): number {
+            if(!this.playerStatsService.latestGame) {
+                return 0;
+            }
+
+            return this.playerStatsService.latestGame.rating;
+        }
+
+        private get rank(): number {
+            if(!this.playerStatsService.latestGame) {
+                return 0;
+            }
+
+            return this.playerStatsService.latestGame.position;
+        }
+
         constructor(private playerStatsService: IPlayerStatsService) {
             playerStatsService.getPlayerStats().then(()=>{
                 this.ready = true;

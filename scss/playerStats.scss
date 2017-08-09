@@ -1,6 +1,27 @@
 @import "variables";
 @import "mixins";
 
+.player-stats-card {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+
+    player-nametag {
+        margin-top: $standard-spacing/2;
+        margin-right: 2em;
+    }
+
+    .ranking-row {
+        width: 270px;
+        padding: 0;
+    }
+
+    .ranking-row-container {
+        display: flex;
+        justify-content: space-between;
+    }
+}
+
 .player-stats {
     font-size: $font-large;
 
@@ -57,7 +78,7 @@
     }
 
     .header-rating,
-    .header-position {
+    .header-rank {
         width: 9em;
         text-align: center;
     }

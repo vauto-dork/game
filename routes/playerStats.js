@@ -39,6 +39,7 @@ var statsHelper = {
 
             var previousRating = 0;
             var previousPosition = 0;
+            var totalPoints = 0;
 
             var result = games.map(function(game, index) {
                 var playerPosition = previousPosition;
@@ -55,8 +56,11 @@ var statsHelper = {
                         previousRating = playerRating;
 
                         playerPosition = player.position;
-                        positionDiff = playerPosition - previousPosition;
+                        positionDiff = previousPosition === 0 ? playerPosition : previousPosition - playerPosition;
                         previousPosition = playerPosition;
+
+                        // Really only care to assign this on the last iteration of the loop (points after last game)
+                        totalPoints = player.points;
                         return true;
                     }
                     else {
@@ -75,7 +79,7 @@ var statsHelper = {
                 };
             });
     
-            callback(result);
+            callback(result, totalPoints);
         });
     }
 }
@@ -99,10 +103,11 @@ router.get('/json/:id', function (req, res, next) {
         : DateHelper.getCurrentMonthRange();
     
     statsHelper.getPlayerObject(playerId, function(player) {
-        statsHelper.getGamesPlayed(playerId, dateRange, function(gameData) {
+        statsHelper.getGamesPlayed(playerId, dateRange, function(gameData, totalPoints) {
             res.json({
                 player: player,
                 dateRange: dateRange,
+                totalPoints: totalPoints,
                 gamesPlayed: gameData.filter(function(game) { return game.played; }).length,
                 games: gameData.reverse()
             });

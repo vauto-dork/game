@@ -16,6 +16,16 @@ var PlayerStats;
             enumerable: true,
             configurable: true
         });
+        Object.defineProperty(PlayerStatsService.prototype, "latestGame", {
+            get: function () {
+                if (this.localPlayerStats) {
+                    return this.localPlayerStats.games[0];
+                }
+                return null;
+            },
+            enumerable: true,
+            configurable: true
+        });
         PlayerStatsService.prototype.getPlayerStats = function () {
             var _this = this;
             var def = this.$q.defer();
@@ -87,6 +97,13 @@ var PlayerStats;
             enumerable: true,
             configurable: true
         });
+        Object.defineProperty(DeltaBoxController.prototype, "absDiff", {
+            get: function () {
+                return Math.abs(this.diff);
+            },
+            enumerable: true,
+            configurable: true
+        });
         return DeltaBoxController;
     }());
     PlayerStats.DeltaBoxController = DeltaBoxController;
@@ -116,6 +133,26 @@ var PlayerStats;
         Object.defineProperty(PlayerStatsController.prototype, "playerStats", {
             get: function () {
                 return this.playerStatsService.playerStats;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(PlayerStatsController.prototype, "rating", {
+            get: function () {
+                if (!this.playerStatsService.latestGame) {
+                    return 0;
+                }
+                return this.playerStatsService.latestGame.rating;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(PlayerStatsController.prototype, "rank", {
+            get: function () {
+                if (!this.playerStatsService.latestGame) {
+                    return 0;
+                }
+                return this.playerStatsService.latestGame.position;
             },
             enumerable: true,
             configurable: true

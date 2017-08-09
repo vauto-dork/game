@@ -1,12 +1,34 @@
-<div class="col-xs-12 player-stats">
-    <div class="player-card">
+<div class="col-xs-12 player-card">
+    <div class="player-stats-card">
         <player-nametag player="ctrl.playerStats.player"></player-nametag>
+    
+        <div class="ranking-row">
+            <div class="ranking-row-container">
+                <div>
+                    <div class="ranking-label">Rank</div>
+                    <div class="ranking-value" ng-bind="ctrl.rank || '—'"></div>
+                </div>
+                <div>
+                    <div class="ranking-label">Rating</div>
+                    <div class="ranking-value" ng-bind="ctrl.rating | number:2"></div>
+                </div>
+                <div>
+                    <div class="ranking-label">Points</div>
+                    <div class="ranking-value" ng-bind="ctrl.playerStats.totalPoints"></div>
+                </div>
+                <div>
+                    <div class="ranking-label">Games</div>
+                    <div class="ranking-value" ng-bind="ctrl.playerStats.gamesPlayed"></div>
+                </div>
+            </div>
+        </div>
     </div>
+</div>
 
+<div class="col-xs-12 player-stats">
     <div class="stats-intro">
-        <div>Games Played: {{ctrl.playerStats.gamesPlayed}}</div>
         <div>
-            Position deltas are measured when the player hits the ten game minimum.
+            Rank deltas are measured when the player hits the ten game minimum.
         </div>
         <div>
             <span class="glyphicon glyphicon-star gold-star-on-light" aria-hidden="true"></span> = Player played this game.
@@ -22,15 +44,15 @@
             </div>
             <div class="col-xs-4">
                 <div class="stats-table-header-cell delta-row">
-                    <div class="header-rating">
-                        Rating
+                    <div class="header-rank">
+                        Rank
                     </div>
                 </div>
             </div>
             <div class="col-xs-4">
                 <div class="stats-table-header-cell delta-row">
-                    <div class="header-position">
-                        Position
+                    <div class="header-rating">
+                        Rating
                     </div>
                 </div>
             </div>
@@ -51,16 +73,16 @@
             </div>
             <div class="col-xs-12 col-sm-4">
                 <div class="stats-info-row-container delta-row">
-                    <div class="stats-label visible-xs-block">Rating:</div>
-                    <delta-box value="game.rating" diff="game.ratingDiff" decimal="2"></delta-box>
-                </div>
-            </div>
-            <div class="col-xs-12 col-sm-4">
-                <div class="stats-info-row-container delta-row">
-                    <div class="stats-label visible-xs-block">Position:</div>
+                    <div class="stats-label visible-xs-block">Rank:</div>
                     <delta-box value="ctrl.positionValue(game.position)" diff="game.positionDiff"></delta-box>
                 </div>
             </div>
+            <div class="col-xs-12 col-sm-4">
+                    <div class="stats-info-row-container delta-row">
+                        <div class="stats-label visible-xs-block">Rating:</div>
+                        <delta-box value="game.rating" diff="game.ratingDiff" decimal="2"></delta-box>
+                    </div>
+                </div>
         </div>
     </div>
 </div>

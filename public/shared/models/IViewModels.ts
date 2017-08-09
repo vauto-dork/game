@@ -60,6 +60,7 @@ module Shared {
 	export interface IPlayerStatsViewModel {
 		player: IPlayerViewModel,
 		dateRange: Date[],
+		totalPoints: number,
 		gamesPlayed: number,
 		games: IPlayerStatsGame[]
 	}

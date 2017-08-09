@@ -284,12 +284,14 @@ var Shared;
             if (!playerStats) {
                 this.player = new Shared.Player();
                 this.dateRange = [];
+                this.totalPoints = 0;
                 this.gamesPlayed = 0;
                 this.games = [];
                 return;
             }
             this.player = new Shared.Player(playerStats.player);
             this.dateRange = playerStats.dateRange;
+            this.totalPoints = playerStats.totalPoints;
             this.gamesPlayed = playerStats.gamesPlayed;
             this.games = playerStats.games;
         }

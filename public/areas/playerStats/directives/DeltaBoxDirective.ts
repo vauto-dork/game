@@ -33,6 +33,10 @@ module PlayerStats {
             return this.diff < 0;
         }
 
+        private get absDiff(): number {
+            return Math.abs(this.diff);
+        }
+
         constructor() {
         }
     }

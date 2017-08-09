@@ -1,8 +1,10 @@
 module PlayerStats {
     import IPlayerStats = Shared.IPlayerStats;
+    import IPlayerStatsGame = Shared.IPlayerStatsGame;
 
     export interface IPlayerStatsService {
         playerStats: IPlayerStats;
+        latestGame: IPlayerStatsGame;
 
         getPlayerStats(): ng.IPromise<void>;
     }
@@ -17,6 +19,14 @@ module PlayerStats {
 
         public get playerStats(): IPlayerStats {
             return this.localPlayerStats;
+        }
+
+        public get latestGame(): IPlayerStatsGame {
+            if(this.localPlayerStats) {
+                return this.localPlayerStats.games[0];
+            }
+
+            return null;
         }
 
         constructor(private $location: ng.ILocationService,
