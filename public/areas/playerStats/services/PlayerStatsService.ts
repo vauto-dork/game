@@ -5,6 +5,7 @@ module PlayerStats {
     export interface IPlayerStatsService {
         playerStats: IPlayerStats;
         latestGame: IPlayerStatsGame;
+        hasPlayedGames: boolean;
 
         getPlayerStats(): ng.IPromise<void>;
     }
@@ -15,6 +16,7 @@ module PlayerStats {
         private playerId: string = "";
         private errorMessageList: string[] = [];
 
+        private localLoading: boolean;
         private localPlayerStats: IPlayerStats;
 
         public get playerStats(): IPlayerStats {
@@ -27,6 +29,10 @@ module PlayerStats {
             }
 
             return null;
+        }
+
+        public get hasPlayedGames(): boolean {
+            return !this.playerStats ? false : this.playerStats.gamesPlayed > 0;
         }
 
         constructor(private $location: ng.ILocationService,

@@ -26,6 +26,13 @@ var PlayerStats;
             enumerable: true,
             configurable: true
         });
+        Object.defineProperty(PlayerStatsService.prototype, "hasPlayedGames", {
+            get: function () {
+                return !this.playerStats ? false : this.playerStats.gamesPlayed > 0;
+            },
+            enumerable: true,
+            configurable: true
+        });
         PlayerStatsService.prototype.getPlayerStats = function () {
             var _this = this;
             var def = this.$q.defer();
@@ -125,6 +132,62 @@ var PlayerStats;
 
 var PlayerStats;
 (function (PlayerStats) {
+    function PlayerStatsCardDirective() {
+        return {
+            scope: {},
+            templateUrl: "/areas/playerStats/directives/PlayerStatsCardTemplate.html",
+            controller: "PlayerStatsCardController",
+            controllerAs: "ctrl",
+            bindToController: true
+        };
+    }
+    PlayerStats.PlayerStatsCardDirective = PlayerStatsCardDirective;
+    var PlayerStatsCardController = (function () {
+        function PlayerStatsCardController(playerStatsService) {
+            this.playerStatsService = playerStatsService;
+        }
+        Object.defineProperty(PlayerStatsCardController.prototype, "playerStats", {
+            get: function () {
+                return this.playerStatsService.playerStats;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(PlayerStatsCardController.prototype, "rating", {
+            get: function () {
+                if (!this.playerStatsService.latestGame) {
+                    return 0;
+                }
+                return this.playerStatsService.latestGame.rating;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(PlayerStatsCardController.prototype, "rank", {
+            get: function () {
+                if (!this.playerStatsService.latestGame) {
+                    return 0;
+                }
+                return this.playerStatsService.latestGame.rank;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(PlayerStatsCardController.prototype, "hasPlayedGames", {
+            get: function () {
+                return this.playerStatsService.hasPlayedGames;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        PlayerStatsCardController.$inject = ["playerStatsService"];
+        return PlayerStatsCardController;
+    }());
+    PlayerStats.PlayerStatsCardController = PlayerStatsCardController;
+})(PlayerStats || (PlayerStats = {}));
+
+var PlayerStats;
+(function (PlayerStats) {
     function PlayerStatsDirective() {
         return {
             scope: {},
@@ -152,22 +215,9 @@ var PlayerStats;
             enumerable: true,
             configurable: true
         });
-        Object.defineProperty(PlayerStatsController.prototype, "rating", {
+        Object.defineProperty(PlayerStatsController.prototype, "hasPlayedGames", {
             get: function () {
-                if (!this.playerStatsService.latestGame) {
-                    return 0;
-                }
-                return this.playerStatsService.latestGame.rating;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(PlayerStatsController.prototype, "rank", {
-            get: function () {
-                if (!this.playerStatsService.latestGame) {
-                    return 0;
-                }
-                return this.playerStatsService.latestGame.rank;
+                return this.playerStatsService.hasPlayedGames;
             },
             enumerable: true,
             configurable: true
@@ -187,6 +237,9 @@ DorkModule.service('playerStatsService', PlayerStats.PlayerStatsService);
 
 DorkModule.controller('DeltaBoxController', PlayerStats.DeltaBoxController);
 DorkModule.directive('deltaBox', PlayerStats.DeltaBoxDirective);
+
+DorkModule.controller('PlayerStatsCardController', PlayerStats.PlayerStatsCardController);
+DorkModule.directive('playerStatsCard', PlayerStats.PlayerStatsCardDirective);
 
 DorkModule.controller('PlayerStatsController', PlayerStats.PlayerStatsController);
 DorkModule.directive('playerStats', PlayerStats.PlayerStatsDirective);
