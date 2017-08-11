@@ -44,6 +44,11 @@
 	.ranking-value {
 		font-size: $font-large;
 		color: $gray;
+
+		a {
+			border-bottom-style: dotted;
+			border-bottom-width: 1px;
+		}
 	}
 
 	.ranking-label {

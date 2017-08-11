@@ -136,6 +136,20 @@ var Rankings;
     var RankingsCardController = (function () {
         function RankingsCardController() {
         }
+        Object.defineProperty(RankingsCardController.prototype, "playerStatUrlId", {
+            get: function () {
+                return this.player.player.urlId;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(RankingsCardController.prototype, "hasPlayedGames", {
+            get: function () {
+                return this.player.gamesPlayed > 0;
+            },
+            enumerable: true,
+            configurable: true
+        });
         RankingsCardController.$inject = [];
         return RankingsCardController;
     }());

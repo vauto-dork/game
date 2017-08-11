@@ -623,6 +623,9 @@ input.ng-touched.ng-invalid {
   .ranking-row .ranking-value {
     font-size: 1.4em;
     color: #7a8394; }
+    .ranking-row .ranking-value a {
+      border-bottom-style: dotted;
+      border-bottom-width: 1px; }
   .ranking-row .ranking-label {
     display: inline-block;
     margin-right: 0.5em;
