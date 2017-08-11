@@ -1,5 +1,64 @@
 var Shared;
 (function (Shared) {
+    var PubSubServiceBase = (function () {
+        function PubSubServiceBase($timeout) {
+            this.$timeout = $timeout;
+            this.topics = {};
+            this.subUid = -1;
+        }
+        PubSubServiceBase.prototype.subscribe = function (callbackId, callback, once) {
+            var token = this.subUid += 1;
+            if (!this.topics[callbackId]) {
+                this.topics[callbackId] = [];
+            }
+            var obj = {
+                token: token,
+                callback: callback,
+                once: !!once
+            };
+            this.topics[callbackId].push(obj);
+            return token;
+        };
+        PubSubServiceBase.prototype.subscribeOnce = function (callbackId, callback) {
+            return this.subscribe(callbackId, callback, true);
+        };
+        PubSubServiceBase.prototype.publish = function (callbackId, params) {
+            var _this = this;
+            if (!this.topics[callbackId])
+                return;
+            this.$timeout(function () {
+                var subscribers = _this.topics[callbackId];
+                var len = subscribers ? subscribers.length : 0;
+                while (len) {
+                    len -= 1;
+                    subscribers[len].callback(callbackId, params);
+                    if (subscribers[len].once) {
+                        _this.unsubscribe(subscribers[len].token);
+                    }
+                }
+            });
+        };
+        PubSubServiceBase.prototype.unsubscribe = function (token) {
+            for (var prop in this.topics) {
+                if (this.topics.hasOwnProperty(prop) && this.topics[prop]) {
+                    var len = this.topics[prop].length;
+                    while (len) {
+                        len -= 1;
+                        this.topics[prop].splice(len, 1);
+                    }
+                }
+            }
+        };
+        PubSubServiceBase.prototype.hasTopic = function (callbackId) {
+            return !!this.topics[callbackId];
+        };
+        return PubSubServiceBase;
+    }());
+    Shared.PubSubServiceBase = PubSubServiceBase;
+})(Shared || (Shared = {}));
+
+var Shared;
+(function (Shared) {
     var Game = (function () {
         function Game(game) {
             if (!game) {
@@ -175,6 +234,46 @@ var Shared;
     })(EditGameType = Shared.EditGameType || (Shared.EditGameType = {}));
 })(Shared || (Shared = {}));
 
+
+var Shared;
+(function (Shared) {
+    var Months = (function () {
+        function Months() {
+        }
+        Months.Names = ["January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+        Months.ShortNames = ["Jan", "Feb", "Mar", "Apr", "May", "June",
+            "July", "Aug", "Sept", "Oct", "Nov", "Dec"
+        ];
+        return Months;
+    }());
+    Shared.Months = Months;
+})(Shared || (Shared = {}));
+
+var Shared;
+(function (Shared) {
+    var MonthYearParams = (function () {
+        function MonthYearParams(month, year) {
+            this.currentDate = new Date();
+            this.month = (month === null || month === undefined) ? this.currentDate.getMonth() : month;
+            this.year = (year === null || year === undefined) ? this.currentDate.getFullYear() : month;
+        }
+        MonthYearParams.prototype.getVisibleQueryString = function () {
+            if (this.month === this.currentDate.getMonth() && this.year === this.currentDate.getFullYear())
+                return '';
+            var monthShortName = Shared.Months.ShortNames[this.month];
+            return "?month=" + monthShortName + "&year=" + this.year;
+        };
+        MonthYearParams.prototype.getQueryString = function () {
+            if (this.month === this.currentDate.getMonth() && this.year === this.currentDate.getFullYear())
+                return '';
+            return "?month=" + this.month + "&year=" + this.year;
+        };
+        return MonthYearParams;
+    }());
+    Shared.MonthYearParams = MonthYearParams;
+})(Shared || (Shared = {}));
 
 var Shared;
 (function (Shared) {
@@ -633,7 +732,7 @@ var Shared;
             });
             return def.promise;
         };
-        ApiService.prototype.getPlayerStats = function (playerId) {
+        ApiService.prototype.getPlayerStats = function (playerId, date) {
             var def = this.$q.defer();
             if (!playerId) {
                 var message = "Player ID cannot be blank";
@@ -641,7 +740,9 @@ var Shared;
                 def.reject(message);
             }
             else {
-                this.$http.get('/PlayerStats/json/' + playerId)
+                var queryString = date ? date.getQueryString() : '';
+                var url = "/PlayerStats/json/" + playerId + queryString;
+                this.$http.get(url)
                     .success(function (data, status, headers, config) {
                     if (data === null || data === undefined) {
                         def.reject(status);
@@ -667,12 +768,8 @@ var Shared;
 (function (Shared) {
     var DateTimeService = (function () {
         function DateTimeService() {
-            this.monthNames = ["January", "February", "March", "April", "May", "June",
-                "July", "August", "September", "October", "November", "December"
-            ];
-            this.abbrMonthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June",
-                "July", "Aug", "Sept", "Oct", "Nov", "Dec"
-            ];
+            this.monthNames = Shared.Months.Names;
+            this.abbrMonthNames = Shared.Months.ShortNames;
         }
         DateTimeService.prototype.currentYear = function () {
             return new Date().getFullYear();
@@ -726,14 +823,30 @@ var Shared;
     Shared.DateTimeService = DateTimeService;
 })(Shared || (Shared = {}));
 
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var Shared;
 (function (Shared) {
-    var MonthYearQueryService = (function () {
-        function MonthYearQueryService($location) {
-            this.$location = $location;
-            this.minimumYear = 2015;
+    var MonthYearQueryService = (function (_super) {
+        __extends(MonthYearQueryService, _super);
+        function MonthYearQueryService($timeout, $location) {
+            var _this = _super.call(this, $timeout) || this;
+            _this.$location = $location;
+            _this.minimumYear = 2015;
+            _this.events = {
+                dateChange: "dateChange"
+            };
+            return _this;
         }
-        MonthYearQueryService.prototype.SanitizeParam = function (value) {
+        MonthYearQueryService.prototype.sanitizeParam = function (value) {
             if (value === undefined) {
                 return undefined;
             }
@@ -742,90 +855,47 @@ var Shared;
         };
         ;
         MonthYearQueryService.prototype.getMonthQueryParam = function (month) {
-            var queryMonth = this.SanitizeParam(this.$location.search().month);
+            var queryMonth = this.$location.search().month;
             if (queryMonth !== undefined) {
-                queryMonth--;
-                month = queryMonth > 11
-                    ? 0
-                    : queryMonth < 0 ? 11 : queryMonth;
+                month = Shared.Months.ShortNames.indexOf(queryMonth);
             }
             return month;
         };
         MonthYearQueryService.prototype.getYearQueryParam = function (year) {
-            var queryYear = this.SanitizeParam(this.$location.search().year);
+            var queryYear = this.sanitizeParam(this.$location.search().year);
             if (queryYear !== undefined) {
                 year = queryYear < this.minimumYear ? this.minimumYear : queryYear;
             }
             return year;
         };
+        MonthYearQueryService.prototype.getQueryParams = function () {
+            var queryMonth = this.$location.search().month;
+            var queryYear = this.sanitizeParam(this.$location.search().year);
+            var params = new Shared.MonthYearParams();
+            if (!queryMonth && !queryYear)
+                return null;
+            if (queryMonth !== undefined) {
+                params.month = Shared.Months.ShortNames.indexOf(queryMonth);
+            }
+            if (queryYear !== undefined) {
+                params.year = queryYear < this.minimumYear ? this.minimumYear : queryYear;
+            }
+            return params;
+        };
         MonthYearQueryService.prototype.saveQueryParams = function (month, year) {
-            this.$location.search('month', month + 1);
+            this.$location.search('month', Shared.Months.ShortNames[month]);
             this.$location.search('year', year);
             this.$location.replace();
+            var date = new Shared.MonthYearParams(month, year);
+            this.publish(this.events.dateChange, date);
         };
-        MonthYearQueryService.$inject = ['$location'];
+        MonthYearQueryService.prototype.subscribeDateChange = function (callback) {
+            this.subscribe(this.events.dateChange, callback);
+        };
+        MonthYearQueryService.$inject = ['$timeout', '$location'];
         return MonthYearQueryService;
-    }());
+    }(Shared.PubSubServiceBase));
     Shared.MonthYearQueryService = MonthYearQueryService;
-})(Shared || (Shared = {}));
-
-var Shared;
-(function (Shared) {
-    var PubSubServiceBase = (function () {
-        function PubSubServiceBase($timeout) {
-            this.$timeout = $timeout;
-            this.topics = {};
-            this.subUid = -1;
-        }
-        PubSubServiceBase.prototype.subscribe = function (callbackId, callback, once) {
-            var token = this.subUid += 1;
-            if (!this.topics[callbackId]) {
-                this.topics[callbackId] = [];
-            }
-            var obj = {
-                token: token,
-                callback: callback,
-                once: !!once
-            };
-            this.topics[callbackId].push(obj);
-            return token;
-        };
-        PubSubServiceBase.prototype.subscribeOnce = function (callbackId, callback) {
-            return this.subscribe(callbackId, callback, true);
-        };
-        PubSubServiceBase.prototype.publish = function (callbackId, params) {
-            var _this = this;
-            if (!this.topics[callbackId])
-                return;
-            this.$timeout(function () {
-                var subscribers = _this.topics[callbackId];
-                var len = subscribers ? subscribers.length : 0;
-                while (len) {
-                    len -= 1;
-                    subscribers[len].callback(callbackId, params);
-                    if (subscribers[len].once) {
-                        _this.unsubscribe(subscribers[len].token);
-                    }
-                }
-            });
-        };
-        PubSubServiceBase.prototype.unsubscribe = function (token) {
-            for (var prop in this.topics) {
-                if (this.topics.hasOwnProperty(prop) && this.topics[prop]) {
-                    var len = this.topics[prop].length;
-                    while (len) {
-                        len -= 1;
-                        this.topics[prop].splice(len, 1);
-                    }
-                }
-            }
-        };
-        PubSubServiceBase.prototype.hasTopic = function (callbackId) {
-            return !!this.topics[callbackId];
-        };
-        return PubSubServiceBase;
-    }());
-    Shared.PubSubServiceBase = PubSubServiceBase;
 })(Shared || (Shared = {}));
 
 var Shared;

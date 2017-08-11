@@ -21,13 +21,9 @@ module Shared {
 	
 	export class DateTimeService implements IDateTimeService {
 		
-		private monthNames = ["January", "February", "March", "April", "May", "June",
-			"July", "August", "September", "October", "November", "December"
-		];
+		private monthNames = Months.Names;
 
-		private abbrMonthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June",
-			"July", "Aug", "Sept", "Oct", "Nov", "Dec"
-		];
+		private abbrMonthNames = Months.ShortNames;
 		
 		constructor() {
 		}

@@ -41,6 +41,7 @@ module DorkHistory {
 					this.$timeout(() => {
 						this.month = this.monthYearQueryService.getMonthQueryParam(this.month);
 						this.year = this.monthYearQueryService.getYearQueryParam(this.year);
+						this.monthYearQueryService.saveQueryParams(this.month, this.year);
 					}, 0);
 					this.changeState(State.Ready);
 					break;

@@ -195,6 +195,7 @@ var DorkHistory;
                     this.$timeout(function () {
                         _this.month = _this.monthYearQueryService.getMonthQueryParam(_this.month);
                         _this.year = _this.monthYearQueryService.getYearQueryParam(_this.year);
+                        _this.monthYearQueryService.saveQueryParams(_this.month, _this.year);
                         _this.changeState(State.Loading);
                     }, 0);
                     break;

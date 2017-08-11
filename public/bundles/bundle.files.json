@@ -36,6 +36,7 @@
     "scripts": {
         "shared": {
             "files": [
+                "shared/base/*.js",
                 "shared/models/*.js",
                 "shared/services/*.js",
                 "shared/directives/*.js",

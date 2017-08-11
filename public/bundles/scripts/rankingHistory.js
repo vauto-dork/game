@@ -134,11 +134,19 @@ var Rankings;
     }
     Rankings.RankingsCardDirective = RankingsCardDirective;
     var RankingsCardController = (function () {
-        function RankingsCardController() {
+        function RankingsCardController(monthYearQueryService) {
+            var _this = this;
+            this.monthYearQueryService = monthYearQueryService;
+            this.playerStatsUrl = "";
+            monthYearQueryService.subscribeDateChange(function (event, date) {
+                _this.appendQueryParams("#" + date.getVisibleQueryString());
+            });
+            var date = monthYearQueryService.getQueryParams();
+            this.appendQueryParams(!date ? "" : "#" + date.getVisibleQueryString());
         }
-        Object.defineProperty(RankingsCardController.prototype, "playerStatUrlId", {
+        Object.defineProperty(RankingsCardController.prototype, "playerStatsBaseUrl", {
             get: function () {
-                return this.player.player.urlId;
+                return "/playerStats/" + this.player.player.urlId;
             },
             enumerable: true,
             configurable: true
@@ -150,7 +158,10 @@ var Rankings;
             enumerable: true,
             configurable: true
         });
-        RankingsCardController.$inject = [];
+        RankingsCardController.prototype.appendQueryParams = function (value) {
+            this.playerStatsUrl = "" + this.playerStatsBaseUrl + value;
+        };
+        RankingsCardController.$inject = ["monthYearQueryService"];
         return RankingsCardController;
     }());
     Rankings.RankingsCardController = RankingsCardController;
@@ -292,6 +303,7 @@ var DorkHistory;
                     this.$timeout(function () {
                         _this.month = _this.monthYearQueryService.getMonthQueryParam(_this.month);
                         _this.year = _this.monthYearQueryService.getYearQueryParam(_this.year);
+                        _this.monthYearQueryService.saveQueryParams(_this.month, _this.year);
                     }, 0);
                     this.changeState(State.Ready);
                     break;

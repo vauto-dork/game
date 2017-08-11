@@ -19,7 +19,7 @@ module PlayerStats {
     }
 
     export class PlayerStatsController {
-        public static $inject: string[] = ["playerStatsService"];
+        public static $inject: string[] = ["monthYearQueryService", "playerStatsService"];
 
         private showLoading: boolean = false;
         private showErrorMessage: boolean = false;
@@ -33,10 +33,21 @@ module PlayerStats {
             return this.playerStatsService.hasPlayedGames;
         }
 
-        constructor(private playerStatsService: IPlayerStatsService) {
+        constructor(
+            private monthYearQueryService: Shared.IMonthYearQueryService,
+            private playerStatsService: IPlayerStatsService)
+        {
             this.changeState(State.Loading);
 
-            playerStatsService.getPlayerStats().then(()=>{
+            monthYearQueryService.subscribeDateChange((event, date: Shared.IMonthYearParams) => {
+                this.getPlayerStats(date);
+            });
+
+            this.getPlayerStats(monthYearQueryService.getQueryParams());
+        }
+
+        private getPlayerStats(date: Shared.IMonthYearParams): void {
+            this.playerStatsService.getPlayerStats(date).then(()=>{
                 this.changeState(State.Ready);
             }, () => {
                 this.changeState(State.Error);

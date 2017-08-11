@@ -10,8 +10,8 @@
 			<div class="col-xs-4">
 				<div class="ranking-label">Rating</div>
 				<div class="ranking-value">
-					<a ng-if="ctrl.hasPlayedGames" ng-href="{{'/playerStats/' + ctrl.playerStatUrlId}}">{{ctrl.player.rating | number:2}}</a>
-					<span ng-if="!ctrl.hasPlayedGames">{{ctrl.player.rating | number:2}}</span>
+					<a ng-show="ctrl.hasPlayedGames" ng-href="{{ctrl.playerStatsUrl}}">{{ctrl.player.rating | number:2}}</a>
+					<span ng-show="!ctrl.hasPlayedGames">{{ctrl.player.rating | number:2}}</span>
 				</div>
 			</div>
 			<div class="col-xs-4">

@@ -17,7 +17,7 @@ module Shared {
 		finalizeGame(game: IGame): ng.IPromise<void>;
 		updateFinalizeGame(game: IGame): ng.IPromise<void>;
 		deleteGame(gameIdPath: string): ng.IPromise<void>;
-		getPlayerStats(playerId: string): ng.IPromise<IPlayerStats>;
+		getPlayerStats(playerId: string, date?: IMonthYearParams): ng.IPromise<IPlayerStats>;
 	}
 
 	export class ApiService implements IApiService {
@@ -349,9 +349,9 @@ module Shared {
 		// --------------------------------------------------------------
 		// Player Stats
 
-		public getPlayerStats(playerId: string): ng.IPromise<IPlayerStats> {
+		public getPlayerStats(playerId: string, date?: IMonthYearParams): ng.IPromise<IPlayerStats> {
 			var def = this.$q.defer<IPlayerStats>();
-
+			
 			if(!playerId) {
 				var message = `Player ID cannot be blank`;
 				console.error(message);
@@ -359,7 +359,10 @@ module Shared {
 			}
 			else
 			{
-				this.$http.get('/PlayerStats/json/' + playerId)
+				var queryString = date ? date.getQueryString() : '';
+				var url = `/PlayerStats/json/${playerId}${queryString}`;
+
+				this.$http.get(url)
 					.success((data: IPlayerStatsViewModel, status, headers, config) => {
 						if (data === null || data === undefined) {
 							def.reject(status);

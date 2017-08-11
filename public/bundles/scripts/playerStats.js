@@ -5,7 +5,6 @@ var PlayerStats;
             this.$q = $q;
             this.playerId = playerId;
             this.apiService = apiService;
-            this.getPlayerStats();
         }
         Object.defineProperty(PlayerStatsService.prototype, "playerStats", {
             get: function () {
@@ -31,10 +30,10 @@ var PlayerStats;
             enumerable: true,
             configurable: true
         });
-        PlayerStatsService.prototype.getPlayerStats = function () {
+        PlayerStatsService.prototype.getPlayerStats = function (date) {
             var _this = this;
             var def = this.$q.defer();
-            this.apiService.getPlayerStats(this.playerId).then(function (playerStats) {
+            this.apiService.getPlayerStats(this.playerId, date).then(function (playerStats) {
                 _this.localPlayerStats = playerStats;
                 def.resolve();
             }, function () {
@@ -189,18 +188,18 @@ var PlayerStats;
         State[State["Error"] = 2] = "Error";
     })(State || (State = {}));
     var PlayerStatsController = (function () {
-        function PlayerStatsController(playerStatsService) {
+        function PlayerStatsController(monthYearQueryService, playerStatsService) {
             var _this = this;
+            this.monthYearQueryService = monthYearQueryService;
             this.playerStatsService = playerStatsService;
             this.showLoading = false;
             this.showErrorMessage = false;
             this.showContent = false;
             this.changeState(State.Loading);
-            playerStatsService.getPlayerStats().then(function () {
-                _this.changeState(State.Ready);
-            }, function () {
-                _this.changeState(State.Error);
+            monthYearQueryService.subscribeDateChange(function (event, date) {
+                _this.getPlayerStats(date);
             });
+            this.getPlayerStats(monthYearQueryService.getQueryParams());
         }
         Object.defineProperty(PlayerStatsController.prototype, "playerStats", {
             get: function () {
@@ -216,6 +215,14 @@ var PlayerStats;
             enumerable: true,
             configurable: true
         });
+        PlayerStatsController.prototype.getPlayerStats = function (date) {
+            var _this = this;
+            this.playerStatsService.getPlayerStats(date).then(function () {
+                _this.changeState(State.Ready);
+            }, function () {
+                _this.changeState(State.Error);
+            });
+        };
         PlayerStatsController.prototype.changeState = function (newState) {
             this.showLoading = newState === State.Loading;
             this.showContent = newState === State.Ready;
@@ -224,7 +231,7 @@ var PlayerStats;
         PlayerStatsController.prototype.rankValue = function (value) {
             return value === 0 ? null : value;
         };
-        PlayerStatsController.$inject = ["playerStatsService"];
+        PlayerStatsController.$inject = ["monthYearQueryService", "playerStatsService"];
         return PlayerStatsController;
     }());
     PlayerStats.PlayerStatsController = PlayerStatsController;
