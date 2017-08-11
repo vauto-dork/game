@@ -15,7 +15,7 @@ module Shared {
 
         constructor(month?: number, year?: number) {
             this.month = (month === null || month === undefined) ? this.currentDate.getMonth() : month;
-            this.year = (year === null || year === undefined) ? this.currentDate.getFullYear() : month;
+            this.year = (year === null || year === undefined) ? this.currentDate.getFullYear() : year;
         }
 
         public getVisibleQueryString(): string {

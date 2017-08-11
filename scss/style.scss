@@ -161,6 +161,8 @@
 	border: 1px solid $btn-default-border-color;
 	margin: 1.5em 0 2em 0;
 
+	.myp-prev,
+	.myp-next,
 	.myp-month,
 	.myp-year {
 		display: table-cell;
@@ -170,6 +172,19 @@
 		// arrow hack doesn't size with the parent element.
 		select {
 			font-size: 18px;
+		}
+	}
+
+	.myp-prev,
+	.myp-next {
+		text-align: center;
+		width: 2em;
+	}
+
+	@media (max-width: 374px) {
+		.myp-prev,
+		.myp-next {
+			display: none;
 		}
 	}
 }

@@ -1,4 +1,7 @@
 <div class="month-year-picker">
+	<div class="myp-prev">
+		<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+	</div>
 	<div class="myp-month select-wrapper">
 		<select class="form-control" ng-model="ctrl.selectedMonth"
 			ng-options="month.name for month in ctrl.months" ng-disabled="ctrl.disabled"
@@ -9,5 +12,8 @@
 		<select class="form-control" ng-model="ctrl.selectedYear"
 			ng-options="year.name for year in ctrl.years" ng-disabled="ctrl.disabled || ctrl.disableYear"
 			ng-change="ctrl.updateParams()"></select>
+	</div>
+	<div class="myp-next">
+		<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
 	</div>
 </div>

@@ -710,10 +710,22 @@ input.ng-touched.ng-invalid {
   width: 100%;
   border: 1px solid #CCC;
   margin: 1.5em 0 2em 0; }
+  .month-year-picker .myp-prev,
+  .month-year-picker .myp-next,
   .month-year-picker .myp-month,
   .month-year-picker .myp-year {
     display: table-cell;
     font-size: 18px; }
+    .month-year-picker .myp-prev select,
+    .month-year-picker .myp-next select,
     .month-year-picker .myp-month select,
     .month-year-picker .myp-year select {
       font-size: 18px; }
+  .month-year-picker .myp-prev,
+  .month-year-picker .myp-next {
+    text-align: center;
+    width: 2em; }
+  @media (max-width: 374px) {
+    .month-year-picker .myp-prev,
+    .month-year-picker .myp-next {
+      display: none; } }

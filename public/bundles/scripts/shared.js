@@ -257,7 +257,7 @@ var Shared;
         function MonthYearParams(month, year) {
             this.currentDate = new Date();
             this.month = (month === null || month === undefined) ? this.currentDate.getMonth() : month;
-            this.year = (year === null || year === undefined) ? this.currentDate.getFullYear() : month;
+            this.year = (year === null || year === undefined) ? this.currentDate.getFullYear() : year;
         }
         MonthYearParams.prototype.getVisibleQueryString = function () {
             if (this.month === this.currentDate.getMonth() && this.year === this.currentDate.getFullYear())
@@ -1108,7 +1108,7 @@ var Shared;
         });
         MonthYearPickerController.prototype.init = function () {
             this.selectedMonth = this.months[this.currentMonth];
-            for (var i = this.minimumYear; i <= this.currentYear; i++) {
+            for (var i = this.minimumYear; i <= this.dateTimeService.currentYear(); i++) {
                 var tempYear = { name: i.toString(), value: i };
                 this.years.push(tempYear);
                 if (i === this.currentYear) {

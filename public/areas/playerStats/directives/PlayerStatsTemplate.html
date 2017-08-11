@@ -7,6 +7,14 @@
 <div ng-show="ctrl.showContent">
     <player-stats-card></player-stats-card>
 
+    <div class="col-xs-12">
+        <month-year-picker month="ctrl.date.month" year="ctrl.date.year" change="ctrl.updateQueryParams()"></month-year-picker>
+        
+        <div ng-show="!ctrl.hasPlayedGames" class="text-center">
+            <h2>No rankings for this month.</h2>
+        </div>
+    </div>
+
     <div class="col-xs-12 player-stats" ng-show="ctrl.hasPlayedGames">
         <div class="stats-intro">
             <div>

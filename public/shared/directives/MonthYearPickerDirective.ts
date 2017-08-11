@@ -85,7 +85,7 @@ module Shared {
 		private init(): void {
 			this.selectedMonth = this.months[this.currentMonth];
 
-			for (var i = this.minimumYear; i <= this.currentYear; i++) {
+			for (var i = this.minimumYear; i <= this.dateTimeService.currentYear(); i++) {
 				var tempYear: INameValuePair = { name: i.toString(), value: i };
 				this.years.push(tempYear);
 
@@ -104,6 +104,20 @@ module Shared {
 			if (this.change !== undefined) {
 				this.change();
 			}
+		}
+
+		private prev(): void {
+			this.month = (this.month === 0) ? 11 : this.month - 1;
+
+			if(this.month === 11 && this.year > this.minimumYear) {
+				this.year--;
+			}
+		}
+
+		private next(): void {
+			this.month = (this.month === 11) ? 0 : this.month + 1;
+
+			if(this.month === 0)
 		}
     }
 }
