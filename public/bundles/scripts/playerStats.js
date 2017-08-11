@@ -6,7 +6,6 @@ var PlayerStats;
             this.$q = $q;
             this.apiService = apiService;
             this.playerId = "";
-            this.errorMessageList = [];
             this.getPlayerStats();
         }
         Object.defineProperty(PlayerStatsService.prototype, "playerStats", {
@@ -43,20 +42,9 @@ var PlayerStats;
                 _this.localPlayerStats = playerStats;
                 def.resolve();
             }, function () {
-                _this.addErrorMessage('Cannot get active game.');
                 def.reject();
             });
             return def.promise;
-        };
-        PlayerStatsService.prototype.addErrorMessage = function (message, clear) {
-            if (clear === void 0) { clear = true; }
-            if (clear) {
-                this.clearerrorMessageList();
-            }
-            this.errorMessageList.push(message);
-        };
-        PlayerStatsService.prototype.clearerrorMessageList = function () {
-            this.errorMessageList = [];
         };
         PlayerStatsService.$inject = ["$location", "$q", "apiService"];
         return PlayerStatsService;
@@ -198,14 +186,24 @@ var PlayerStats;
         };
     }
     PlayerStats.PlayerStatsDirective = PlayerStatsDirective;
+    var State;
+    (function (State) {
+        State[State["Loading"] = 0] = "Loading";
+        State[State["Ready"] = 1] = "Ready";
+        State[State["Error"] = 2] = "Error";
+    })(State || (State = {}));
     var PlayerStatsController = (function () {
         function PlayerStatsController(playerStatsService) {
             var _this = this;
             this.playerStatsService = playerStatsService;
             this.showLoading = false;
-            this.showLoading = true;
+            this.showErrorMessage = false;
+            this.showContent = false;
+            this.changeState(State.Loading);
             playerStatsService.getPlayerStats().then(function () {
-                _this.showLoading = false;
+                _this.changeState(State.Ready);
+            }, function () {
+                _this.changeState(State.Error);
             });
         }
         Object.defineProperty(PlayerStatsController.prototype, "playerStats", {
@@ -222,6 +220,11 @@ var PlayerStats;
             enumerable: true,
             configurable: true
         });
+        PlayerStatsController.prototype.changeState = function (newState) {
+            this.showLoading = newState === State.Loading;
+            this.showContent = newState === State.Ready;
+            this.showErrorMessage = newState === State.Error;
+        };
         PlayerStatsController.prototype.rankValue = function (value) {
             return value === 0 ? null : value;
         };

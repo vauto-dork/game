@@ -14,7 +14,6 @@ module PlayerStats {
         public static $inject: string[] = ["$location", "$q", "apiService"];
         
         private playerId: string = "";
-        private errorMessageList: string[] = [];
 
         private localLoading: boolean;
         private localPlayerStats: IPlayerStats;
@@ -53,23 +52,10 @@ module PlayerStats {
                 this.localPlayerStats = playerStats;
                 def.resolve();
             }, () => {
-                this.addErrorMessage('Cannot get active game.');
                 def.reject();
             });
 
             return def.promise;
-        }
-
-        private addErrorMessage(message: string, clear: boolean = true) {
-            if (clear) {
-                this.clearerrorMessageList();
-            }
-
-            this.errorMessageList.push(message);
-        }
-
-        private clearerrorMessageList() {
-            this.errorMessageList = [];
         }
     }   
 }

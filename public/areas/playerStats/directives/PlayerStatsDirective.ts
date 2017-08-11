@@ -12,10 +12,18 @@ module PlayerStats {
         };
     }
 
+    enum State {
+        Loading,
+        Ready,
+        Error
+    }
+
     export class PlayerStatsController {
         public static $inject: string[] = ["playerStatsService"];
 
         private showLoading: boolean = false;
+        private showErrorMessage: boolean = false;
+        private showContent: boolean = false;
 
         private get playerStats(): IPlayerStats {
             return this.playerStatsService.playerStats;
@@ -26,10 +34,19 @@ module PlayerStats {
         }
 
         constructor(private playerStatsService: IPlayerStatsService) {
-            this.showLoading = true;
+            this.changeState(State.Loading);
+
             playerStatsService.getPlayerStats().then(()=>{
-                this.showLoading = false;
+                this.changeState(State.Ready);
+            }, () => {
+                this.changeState(State.Error);
             });
+        }
+
+        private changeState(newState: State): void {
+            this.showLoading = newState === State.Loading;
+            this.showContent = newState === State.Ready;
+            this.showErrorMessage = newState === State.Error;
         }
 
         private rankValue(value: number): number {

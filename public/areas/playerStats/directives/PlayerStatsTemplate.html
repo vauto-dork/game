@@ -1,6 +1,10 @@
+<div ng-show="ctrl.showErrorMessage" class="status-banner bg-danger">
+    <h4>Error getting player stats.</h4>
+</div>
+
 <load-spinner ng-show="ctrl.showLoading"></load-spinner>
 
-<div ng-show="!ctrl.showLoading">
+<div ng-show="ctrl.showContent">
     <player-stats-card></player-stats-card>
 
     <div class="col-xs-12 player-stats" ng-show="ctrl.hasPlayedGames">
