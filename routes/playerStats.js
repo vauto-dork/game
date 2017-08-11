@@ -1,6 +1,7 @@
 var express = require('express');
 var mongoose = require('mongoose');
 var router = express.Router();
+var crypto = require("base64-mongo-id");
 var PlayerModel = mongoose.model('Player');
 var GameModel = mongoose.model('Game');
 var GameHelper = require('./gameHelper');
@@ -93,7 +94,7 @@ router.get('/', function(req, res, next) {
   });
 
 router.get('/:id', function(req, res, next) {
-    var playerId = req.params.id;
+    var playerId = crypto.toHex(req.params.id);
     res.render('playerStats', {
         title: 'Player Stats',
         scripts: bundler.scripts('playerStats'),

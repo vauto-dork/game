@@ -2,6 +2,7 @@
  * Module dependencies
  */
 
+var crypto = require("base64-mongo-id");
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
@@ -24,6 +25,14 @@ var PlayerSchema = new Schema({
  * - validations
  * - virtuals
  */
+
+/**
+ * Virtuals
+ */
+
+PlayerSchema.virtual("urlId").get(function(){
+  return crypto.toBase64(this._id);
+});
 
 /**
  * Methods
@@ -167,5 +176,7 @@ PlayerSchema.static({
 /**
  * Register
  */
+
+PlayerSchema.set('toJSON', { getters: false, virtuals: true });
 
 module.exports = mongoose.model('Player', PlayerSchema);

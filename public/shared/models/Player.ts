@@ -13,6 +13,7 @@ module Shared {
 		public customInitials: string;
 		public duplicate: string;
 		public inactive: boolean;
+		public urlId: string;
 		
 		public get initials(): string {
 			return this.customInitials || (this.firstName.charAt(0) + this.lastName.charAt(0));
@@ -30,6 +31,7 @@ module Shared {
 				this.customInitials = '';
 				this.duplicate = '';
 				this.inactive = false;
+				this.urlId = '';
 				return;
 			}
 			
@@ -40,6 +42,7 @@ module Shared {
 			this.customInitials = player.customInitials;
 			this.duplicate = player.duplicate;
 			this.inactive = player.inactive;
+			this.urlId = player.urlId;
 		}
 		
 		public toPlayerViewModel(): IPlayerViewModel {

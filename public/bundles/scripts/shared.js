@@ -236,6 +236,7 @@ var Shared;
                 this.customInitials = '';
                 this.duplicate = '';
                 this.inactive = false;
+                this.urlId = '';
                 return;
             }
             this._id = player._id;
@@ -245,6 +246,7 @@ var Shared;
             this.customInitials = player.customInitials;
             this.duplicate = player.duplicate;
             this.inactive = player.inactive;
+            this.urlId = player.urlId;
         }
         Object.defineProperty(Player.prototype, "initials", {
             get: function () {

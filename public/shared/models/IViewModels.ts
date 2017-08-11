@@ -29,6 +29,7 @@ module Shared {
 		firstName: string;
 		duplicate?: string;
 		inactive?: boolean;
+		urlId?: string;
 	}
 	
 	export interface IDotmViewModel {
