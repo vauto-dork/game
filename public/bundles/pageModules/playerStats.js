@@ -10,3 +10,7 @@ DorkModule.directive('playerStatsCard', PlayerStats.PlayerStatsCardDirective);
 
 DorkModule.controller('PlayerStatsController', PlayerStats.PlayerStatsController);
 DorkModule.directive('playerStats', PlayerStats.PlayerStatsDirective);
+
+function setPlayerId(value) {
+    DorkModule.constant('playerId', value);
+}

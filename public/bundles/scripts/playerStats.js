@@ -1,11 +1,10 @@
 var PlayerStats;
 (function (PlayerStats) {
     var PlayerStatsService = (function () {
-        function PlayerStatsService($location, $q, apiService) {
-            this.$location = $location;
+        function PlayerStatsService($q, playerId, apiService) {
             this.$q = $q;
+            this.playerId = playerId;
             this.apiService = apiService;
-            this.playerId = "";
             this.getPlayerStats();
         }
         Object.defineProperty(PlayerStatsService.prototype, "playerStats", {
@@ -17,7 +16,7 @@ var PlayerStats;
         });
         Object.defineProperty(PlayerStatsService.prototype, "latestGame", {
             get: function () {
-                if (this.localPlayerStats) {
+                if (this.localPlayerStats && this.localPlayerStats.games) {
                     return this.localPlayerStats.games[0];
                 }
                 return null;
@@ -35,9 +34,6 @@ var PlayerStats;
         PlayerStatsService.prototype.getPlayerStats = function () {
             var _this = this;
             var def = this.$q.defer();
-            if (this.$location.path() !== undefined || this.$location.path() !== '') {
-                this.playerId = this.$location.path();
-            }
             this.apiService.getPlayerStats(this.playerId).then(function (playerStats) {
                 _this.localPlayerStats = playerStats;
                 def.resolve();
@@ -46,7 +42,7 @@ var PlayerStats;
             });
             return def.promise;
         };
-        PlayerStatsService.$inject = ["$location", "$q", "apiService"];
+        PlayerStatsService.$inject = ["$q", "playerId", "apiService"];
         return PlayerStatsService;
     }());
     PlayerStats.PlayerStatsService = PlayerStatsService;
@@ -246,4 +242,8 @@ DorkModule.directive('playerStatsCard', PlayerStats.PlayerStatsCardDirective);
 
 DorkModule.controller('PlayerStatsController', PlayerStats.PlayerStatsController);
 DorkModule.directive('playerStats', PlayerStats.PlayerStatsDirective);
+
+function setPlayerId(value) {
+    DorkModule.constant('playerId', value);
+}
 //# sourceMappingURL=maps/playerStats.js.map

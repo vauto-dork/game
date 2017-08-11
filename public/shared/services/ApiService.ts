@@ -349,22 +349,30 @@ module Shared {
 		// --------------------------------------------------------------
 		// Player Stats
 
-		public getPlayerStats(playerIdPath: string): ng.IPromise<IPlayerStats> {
+		public getPlayerStats(playerId: string): ng.IPromise<IPlayerStats> {
 			var def = this.$q.defer<IPlayerStats>();
-			
-			this.$http.get('/PlayerStats/json' + playerIdPath)
-				.success((data: IPlayerStatsViewModel, status, headers, config) => {
-					if (data === null || data === undefined) {
-						def.reject(status);
-					}
-					else {
-						def.resolve(new PlayerStats(data));
-					}
-				})
-				.error((data, status, headers, config) => {
-					console.error(`Cannot get player stats with id ${playerIdPath}`);
-					def.reject(data);
-				});
+
+			if(!playerId) {
+				var message = `Player ID cannot be blank`;
+				console.error(message);
+				def.reject(message);
+			}
+			else
+			{
+				this.$http.get('/PlayerStats/json/' + playerId)
+					.success((data: IPlayerStatsViewModel, status, headers, config) => {
+						if (data === null || data === undefined) {
+							def.reject(status);
+						}
+						else {
+							def.resolve(new PlayerStats(data));
+						}
+					})
+					.error((data, status, headers, config) => {
+						console.error(`Cannot get player stats with id ${playerId}`);
+						def.reject(data);
+					});
+			}
 
 			return def.promise;
 		}

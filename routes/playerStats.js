@@ -92,6 +92,15 @@ router.get('/', function(req, res, next) {
     });
   });
 
+router.get('/:id', function(req, res, next) {
+    var playerId = req.params.id;
+    res.render('playerStats', {
+        title: 'Player Stats',
+        scripts: bundler.scripts('playerStats'),
+        playerId: playerId
+    });
+  });
+
 /* GET player's game history.
  * @query (Optional) month - Get all games for this month. Default is current month.
  * @query (Optional) year - Get all games for this year. Default is current year.

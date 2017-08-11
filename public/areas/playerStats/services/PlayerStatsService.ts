@@ -11,10 +11,8 @@ module PlayerStats {
     }
 
     export class PlayerStatsService {
-        public static $inject: string[] = ["$location", "$q", "apiService"];
+        public static $inject: string[] = ["$q", "playerId", "apiService"];
         
-        private playerId: string = "";
-
         private localLoading: boolean;
         private localPlayerStats: IPlayerStats;
 
@@ -23,7 +21,7 @@ module PlayerStats {
         }
 
         public get latestGame(): IPlayerStatsGame {
-            if(this.localPlayerStats) {
+            if(this.localPlayerStats && this.localPlayerStats.games) {
                 return this.localPlayerStats.games[0];
             }
 
@@ -34,8 +32,9 @@ module PlayerStats {
             return !this.playerStats ? false : this.playerStats.gamesPlayed > 0;
         }
 
-        constructor(private $location: ng.ILocationService,
+        constructor(
             private $q: ng.IQService,
+            private playerId: string,
             private apiService: Shared.IApiService)
         {
             this.getPlayerStats();
@@ -43,10 +42,6 @@ module PlayerStats {
 
         public getPlayerStats(): ng.IPromise<void> {
             var def = this.$q.defer<void>();
-            
-            if (this.$location.path() !== undefined || this.$location.path() !== '') {
-                this.playerId = this.$location.path();
-            }
 
             this.apiService.getPlayerStats(this.playerId).then((playerStats) => {
                 this.localPlayerStats = playerStats;

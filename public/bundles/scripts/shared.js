@@ -631,21 +631,28 @@ var Shared;
             });
             return def.promise;
         };
-        ApiService.prototype.getPlayerStats = function (playerIdPath) {
+        ApiService.prototype.getPlayerStats = function (playerId) {
             var def = this.$q.defer();
-            this.$http.get('/PlayerStats/json' + playerIdPath)
-                .success(function (data, status, headers, config) {
-                if (data === null || data === undefined) {
-                    def.reject(status);
-                }
-                else {
-                    def.resolve(new Shared.PlayerStats(data));
-                }
-            })
-                .error(function (data, status, headers, config) {
-                console.error("Cannot get player stats with id " + playerIdPath);
-                def.reject(data);
-            });
+            if (!playerId) {
+                var message = "Player ID cannot be blank";
+                console.error(message);
+                def.reject(message);
+            }
+            else {
+                this.$http.get('/PlayerStats/json/' + playerId)
+                    .success(function (data, status, headers, config) {
+                    if (data === null || data === undefined) {
+                        def.reject(status);
+                    }
+                    else {
+                        def.resolve(new Shared.PlayerStats(data));
+                    }
+                })
+                    .error(function (data, status, headers, config) {
+                    console.error("Cannot get player stats with id " + playerId);
+                    def.reject(data);
+                });
+            }
             return def.promise;
         };
         ApiService.$inject = ['$http', '$q'];

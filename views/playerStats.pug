@@ -1,5 +1,9 @@
 extends layout
 
+block append head
+  script.
+    setPlayerId('!{playerId}');
+
 block content
     div.row
         player-stats
