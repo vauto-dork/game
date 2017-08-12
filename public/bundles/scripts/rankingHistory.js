@@ -139,10 +139,10 @@ var Rankings;
             this.monthYearQueryService = monthYearQueryService;
             this.playerStatsUrl = "";
             monthYearQueryService.subscribeDateChange(function (event, date) {
-                _this.appendQueryParams("#" + date.getVisibleQueryString());
+                _this.appendQueryParams("" + date.getVisibleQueryString());
             });
             var date = monthYearQueryService.getQueryParams();
-            this.appendQueryParams(!date ? "" : "#" + date.getVisibleQueryString());
+            this.appendQueryParams(!date ? "" : "" + date.getVisibleQueryString());
         }
         Object.defineProperty(RankingsCardController.prototype, "playerStatsBaseUrl", {
             get: function () {

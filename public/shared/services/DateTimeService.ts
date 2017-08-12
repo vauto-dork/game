@@ -8,22 +8,17 @@ module Shared {
 		lastMonthValue(): number;
 		lastMonthName(): string;
 		monthName(monthValue: number, abbreviateMonth?: boolean): string;
-		beautifyDate(date: Date, abbreviateMonth: boolean): IPrettyDate;
-	}
-
-	export interface IPrettyDate {
-		month: string;
-		day: number;
-		year: number;
-		hour: number;
-		minute: number;
-		ampm: string;
 	}
 	
 	export class DateTimeService implements IDateTimeService {
 		
-		private monthNames = Months.Names;
-		private abbrMonthNames = Months.ShortNames;
+		private get monthNames(): string[] {
+			return Months.Names;
+		}
+
+		private get abbrMonthNames(): string[] {
+			return Months.ShortNames;
+		}
 
 		public get minimumYear(): number {
 			return 2015;
@@ -64,29 +59,6 @@ module Shared {
 			}
 
 			return '';
-		}
-
-		public beautifyDate(date: Date, abbreviateMonth?: boolean): IPrettyDate {
-			if(!date) {
-				return {
-					month: this.monthName(0, abbreviateMonth),
-					day: 1,
-					year: 1970,
-					hour: 12,
-					minute: 0,
-					ampm: "AM"
-				};
-			};
-
-			var hour = date.getHours();
-			return {
-				month: this.monthName(date.getMonth(), abbreviateMonth),
-				day: date.getDate(),
-				year: date.getFullYear(),
-				hour: hour === 0 ? 12 : (hour > 12 ? hour - 12 : hour),
-				minute: date.getMinutes(),
-				ampm: hour >= 12 ? "PM" : "AM"
-			};
 		}
 	}
 }

@@ -247,9 +247,9 @@ var Shared;
             if (this.month === this.currentDate.getMonth() && this.year === this.currentDate.getFullYear())
                 return '';
             var monthShortName = Shared.Months.ShortNames[this.month];
-            return "?month=" + monthShortName + "&year=" + this.year;
+            return "#?month=" + monthShortName + "&year=" + this.year;
         };
-        MonthYearParams.prototype.getQueryString = function () {
+        MonthYearParams.prototype.getPostQueryString = function () {
             if (this.month === this.currentDate.getMonth() && this.year === this.currentDate.getFullYear())
                 return '';
             return "?month=" + this.month + "&year=" + this.year;
@@ -740,7 +740,7 @@ var Shared;
                 def.reject(message);
             }
             else {
-                var queryString = date ? date.getQueryString() : '';
+                var queryString = date ? date.getPostQueryString() : '';
                 var url = "/PlayerStats/json/" + playerId + queryString;
                 this.$http.get(url)
                     .success(function (data, status, headers, config) {
@@ -768,9 +768,21 @@ var Shared;
 (function (Shared) {
     var DateTimeService = (function () {
         function DateTimeService() {
-            this.monthNames = Shared.Months.Names;
-            this.abbrMonthNames = Shared.Months.ShortNames;
         }
+        Object.defineProperty(DateTimeService.prototype, "monthNames", {
+            get: function () {
+                return Shared.Months.Names;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(DateTimeService.prototype, "abbrMonthNames", {
+            get: function () {
+                return Shared.Months.ShortNames;
+            },
+            enumerable: true,
+            configurable: true
+        });
         Object.defineProperty(DateTimeService.prototype, "minimumYear", {
             get: function () {
                 return 2015;
@@ -802,28 +814,6 @@ var Shared;
                 return monthNames[monthValue];
             }
             return '';
-        };
-        DateTimeService.prototype.beautifyDate = function (date, abbreviateMonth) {
-            if (!date) {
-                return {
-                    month: this.monthName(0, abbreviateMonth),
-                    day: 1,
-                    year: 1970,
-                    hour: 12,
-                    minute: 0,
-                    ampm: "AM"
-                };
-            }
-            ;
-            var hour = date.getHours();
-            return {
-                month: this.monthName(date.getMonth(), abbreviateMonth),
-                day: date.getDate(),
-                year: date.getFullYear(),
-                hour: hour === 0 ? 12 : (hour > 12 ? hour - 12 : hour),
-                minute: date.getMinutes(),
-                ampm: hour >= 12 ? "PM" : "AM"
-            };
         };
         return DateTimeService;
     }());
@@ -998,15 +988,16 @@ var Shared;
                 showWeeks: false,
                 startingDay: 0
             };
+            this.emptyDate = new Date(1970, 1, 1);
             $timeout(function () {
                 _this.resizeTimePickerDropdown();
                 _this.markInputSelectOnClick(".hours");
                 _this.markInputSelectOnClick(".minutes");
             }, 0);
         }
-        Object.defineProperty(DatePickerController.prototype, "prettyDate", {
+        Object.defineProperty(DatePickerController.prototype, "displayDate", {
             get: function () {
-                return this.dateTimeService.beautifyDate(this.date, true);
+                return this.date || this.emptyDate;
             },
             enumerable: true,
             configurable: true
@@ -1037,9 +1028,6 @@ var Shared;
                 var newWidth = buttonWidth > dropdownMinWidth ? buttonWidth : dropdownMinWidth;
                 this.$element.find("#time-picker-dropdown").width(newWidth);
             }
-        };
-        DatePickerController.prototype.withLeadingZero = function (value) {
-            return value < 10 ? "0" + value : "" + value;
         };
         DatePickerController.prototype.useCurrentTime = function () {
             this.date = new Date();

@@ -4,7 +4,7 @@ module Shared {
         year: number;
 
         getVisibleQueryString(): string;
-        getQueryString(): string;
+        getPostQueryString(): string;
     }
     
     export class MonthYearParams implements IMonthYearParams {
@@ -24,10 +24,10 @@ module Shared {
 
             var monthShortName = Months.ShortNames[this.month];
 
-            return `?month=${monthShortName}&year=${this.year}`;
+            return `#?month=${monthShortName}&year=${this.year}`;
         }
 
-        public getQueryString(): string {
+        public getPostQueryString(): string {
             if(this.month === this.currentDate.getMonth() && this.year === this.currentDate.getFullYear())
                 return '';
 

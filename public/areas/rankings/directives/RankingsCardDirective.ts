@@ -27,11 +27,11 @@ module Rankings {
 
         constructor(private monthYearQueryService: Shared.IMonthYearQueryService) {
             monthYearQueryService.subscribeDateChange((event, date: Shared.IMonthYearParams) => {
-                this.appendQueryParams(`#${date.getVisibleQueryString()}`);
+                this.appendQueryParams(`${date.getVisibleQueryString()}`);
             });
 
             var date = monthYearQueryService.getQueryParams();
-            this.appendQueryParams(!date ? "" : `#${date.getVisibleQueryString()}`);
+            this.appendQueryParams(!date ? "" : `${date.getVisibleQueryString()}`);
         }
 
         private appendQueryParams(value: string): void {

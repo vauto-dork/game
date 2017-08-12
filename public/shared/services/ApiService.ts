@@ -359,7 +359,7 @@ module Shared {
 			}
 			else
 			{
-				var queryString = date ? date.getQueryString() : '';
+				var queryString = date ? date.getPostQueryString() : '';
 				var url = `/PlayerStats/json/${playerId}${queryString}`;
 
 				this.$http.get(url)
