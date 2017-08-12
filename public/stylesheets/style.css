@@ -299,6 +299,48 @@ input.ng-touched.ng-invalid {
 .uib-datepicker .uib-day {
   padding: 2px; }
 
+.month-year-picker {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  border: 1px solid #CCC;
+  margin: 1.5em 0 2em 0; }
+  .month-year-picker .myp-prev,
+  .month-year-picker .myp-next,
+  .month-year-picker .myp-month,
+  .month-year-picker .myp-year {
+    font-size: 18px; }
+    .month-year-picker .myp-prev select,
+    .month-year-picker .myp-next select,
+    .month-year-picker .myp-month select,
+    .month-year-picker .myp-year select {
+      font-size: 18px; }
+  .month-year-picker .myp-month {
+    flex: 2; }
+  .month-year-picker .myp-year {
+    flex: 1; }
+  .month-year-picker .myp-prev,
+  .month-year-picker .myp-next {
+    text-align: center; }
+    .month-year-picker .myp-prev button.myp-nav,
+    .month-year-picker .myp-next button.myp-nav {
+      border: 1px solid #CCC;
+      border-radius: 0;
+      padding: 0 0.5em;
+      font-size: 18px;
+      height: 3em;
+      color: #555; }
+      .month-year-picker .myp-prev button.myp-nav div,
+      .month-year-picker .myp-next button.myp-nav div {
+        display: inline-block; }
+      .month-year-picker .myp-prev button.myp-nav .glyphicon,
+      .month-year-picker .myp-next button.myp-nav .glyphicon {
+        margin: 0; }
+  @media (max-width: 374px) {
+    .month-year-picker .myp-prev,
+    .month-year-picker .myp-next {
+      display: none; } }
+
 .player-selector {
   padding-top: 1em;
   padding-bottom: 1em; }
@@ -704,28 +746,3 @@ input.ng-touched.ng-invalid {
 
 .reorder-players .panel-body {
   cursor: pointer; }
-
-.month-year-picker {
-  display: table;
-  width: 100%;
-  border: 1px solid #CCC;
-  margin: 1.5em 0 2em 0; }
-  .month-year-picker .myp-prev,
-  .month-year-picker .myp-next,
-  .month-year-picker .myp-month,
-  .month-year-picker .myp-year {
-    display: table-cell;
-    font-size: 18px; }
-    .month-year-picker .myp-prev select,
-    .month-year-picker .myp-next select,
-    .month-year-picker .myp-month select,
-    .month-year-picker .myp-year select {
-      font-size: 18px; }
-  .month-year-picker .myp-prev,
-  .month-year-picker .myp-next {
-    text-align: center;
-    width: 2em; }
-  @media (max-width: 374px) {
-    .month-year-picker .myp-prev,
-    .month-year-picker .myp-next {
-      display: none; } }

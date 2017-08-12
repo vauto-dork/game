@@ -237,22 +237,6 @@ var Shared;
 
 var Shared;
 (function (Shared) {
-    var Months = (function () {
-        function Months() {
-        }
-        Months.Names = ["January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"
-        ];
-        Months.ShortNames = ["Jan", "Feb", "Mar", "Apr", "May", "June",
-            "July", "Aug", "Sept", "Oct", "Nov", "Dec"
-        ];
-        return Months;
-    }());
-    Shared.Months = Months;
-})(Shared || (Shared = {}));
-
-var Shared;
-(function (Shared) {
     var MonthYearParams = (function () {
         function MonthYearParams(month, year) {
             this.currentDate = new Date();
@@ -273,6 +257,22 @@ var Shared;
         return MonthYearParams;
     }());
     Shared.MonthYearParams = MonthYearParams;
+})(Shared || (Shared = {}));
+
+var Shared;
+(function (Shared) {
+    var Months = (function () {
+        function Months() {
+        }
+        Months.Names = ["January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+        Months.ShortNames = ["Jan", "Feb", "Mar", "Apr", "May", "June",
+            "July", "Aug", "Sept", "Oct", "Nov", "Dec"
+        ];
+        return Months;
+    }());
+    Shared.Months = Months;
 })(Shared || (Shared = {}));
 
 var Shared;
@@ -771,6 +771,13 @@ var Shared;
             this.monthNames = Shared.Months.Names;
             this.abbrMonthNames = Shared.Months.ShortNames;
         }
+        Object.defineProperty(DateTimeService.prototype, "minimumYear", {
+            get: function () {
+                return 2015;
+            },
+            enumerable: true,
+            configurable: true
+        });
         DateTimeService.prototype.currentYear = function () {
             return new Date().getFullYear();
         };
@@ -896,6 +903,65 @@ var Shared;
         return MonthYearQueryService;
     }(Shared.PubSubServiceBase));
     Shared.MonthYearQueryService = MonthYearQueryService;
+})(Shared || (Shared = {}));
+
+var Shared;
+(function (Shared) {
+    var PubSubServiceBase = (function () {
+        function PubSubServiceBase($timeout) {
+            this.$timeout = $timeout;
+            this.topics = {};
+            this.subUid = -1;
+        }
+        PubSubServiceBase.prototype.subscribe = function (callbackId, callback, once) {
+            var token = this.subUid += 1;
+            if (!this.topics[callbackId]) {
+                this.topics[callbackId] = [];
+            }
+            var obj = {
+                token: token,
+                callback: callback,
+                once: !!once
+            };
+            this.topics[callbackId].push(obj);
+            return token;
+        };
+        PubSubServiceBase.prototype.subscribeOnce = function (callbackId, callback) {
+            return this.subscribe(callbackId, callback, true);
+        };
+        PubSubServiceBase.prototype.publish = function (callbackId, params) {
+            var _this = this;
+            if (!this.topics[callbackId])
+                return;
+            this.$timeout(function () {
+                var subscribers = _this.topics[callbackId];
+                var len = subscribers ? subscribers.length : 0;
+                while (len) {
+                    len -= 1;
+                    subscribers[len].callback(callbackId, params);
+                    if (subscribers[len].once) {
+                        _this.unsubscribe(subscribers[len].token);
+                    }
+                }
+            });
+        };
+        PubSubServiceBase.prototype.unsubscribe = function (token) {
+            for (var prop in this.topics) {
+                if (this.topics.hasOwnProperty(prop) && this.topics[prop]) {
+                    var len = this.topics[prop].length;
+                    while (len) {
+                        len -= 1;
+                        this.topics[prop].splice(len, 1);
+                    }
+                }
+            }
+        };
+        PubSubServiceBase.prototype.hasTopic = function (callbackId) {
+            return !!this.topics[callbackId];
+        };
+        return PubSubServiceBase;
+    }());
+    Shared.PubSubServiceBase = PubSubServiceBase;
 })(Shared || (Shared = {}));
 
 var Shared;
@@ -1052,77 +1118,64 @@ var Shared;
     var MonthYearPickerController = (function () {
         function MonthYearPickerController(dateTimeService) {
             this.dateTimeService = dateTimeService;
-            this.isDisabled = false;
-            this.minimumYear = 2015;
             this.disableYear = false;
             this.years = [];
-            this.months = [
-                { name: 'January', value: 0 },
-                { name: 'February', value: 1 },
-                { name: 'March', value: 2 },
-                { name: 'April', value: 3 },
-                { name: 'May', value: 4 },
-                { name: 'June', value: 5 },
-                { name: 'July', value: 6 },
-                { name: 'August', value: 7 },
-                { name: 'September', value: 8 },
-                { name: 'October', value: 9 },
-                { name: 'November', value: 10 },
-                { name: 'December', value: 11 }
-            ];
+            this.months = Shared.Months.Names;
             this.init();
         }
-        Object.defineProperty(MonthYearPickerController.prototype, "disabled", {
+        Object.defineProperty(MonthYearPickerController.prototype, "minimumYear", {
             get: function () {
-                return this.isDisabled;
-            },
-            set: function (value) {
-                this.isDisabled = value;
+                return this.dateTimeService.minimumYear;
             },
             enumerable: true,
             configurable: true
         });
-        Object.defineProperty(MonthYearPickerController.prototype, "month", {
+        Object.defineProperty(MonthYearPickerController.prototype, "disablePrev", {
             get: function () {
-                return this.currentMonth === undefined || this.currentMonth === null
-                    ? this.dateTimeService.currentMonthValue()
-                    : this.currentMonth;
-            },
-            set: function (value) {
-                this.currentMonth = value;
+                return this.month === 0 && this.year === this.minimumYear;
             },
             enumerable: true,
             configurable: true
         });
-        Object.defineProperty(MonthYearPickerController.prototype, "year", {
+        Object.defineProperty(MonthYearPickerController.prototype, "disableNext", {
             get: function () {
-                return this.currentYear === undefined || this.currentYear === null
-                    ? this.dateTimeService.currentYear()
-                    : this.currentYear;
-            },
-            set: function (value) {
-                this.currentYear = value;
+                return this.month === 11 && this.year === this.dateTimeService.currentYear();
             },
             enumerable: true,
             configurable: true
         });
         MonthYearPickerController.prototype.init = function () {
-            this.selectedMonth = this.months[this.currentMonth];
+            this.selectedMonth = this.months[this.month];
             for (var i = this.minimumYear; i <= this.dateTimeService.currentYear(); i++) {
-                var tempYear = { name: i.toString(), value: i };
-                this.years.push(tempYear);
-                if (i === this.currentYear) {
-                    this.selectedYear = tempYear;
+                this.years.push(i);
+                if (i === this.year) {
+                    this.selectedYear = i;
                 }
             }
             this.disableYear = this.disableYear || this.years.length <= 1;
         };
         MonthYearPickerController.prototype.updateParams = function () {
-            this.month = this.selectedMonth.value;
-            this.year = this.selectedYear.value;
+            this.month = this.months.indexOf(this.selectedMonth);
+            this.year = this.selectedYear;
             if (this.change !== undefined) {
                 this.change();
             }
+        };
+        MonthYearPickerController.prototype.prev = function () {
+            var monthIndex = (this.month === 0) ? 11 : this.month - 1;
+            if (monthIndex === 11) {
+                this.selectedYear--;
+            }
+            this.selectedMonth = this.months[monthIndex];
+            this.updateParams();
+        };
+        MonthYearPickerController.prototype.next = function () {
+            var monthIndex = (this.month + 1) % 12;
+            if (monthIndex === 0) {
+                this.selectedYear++;
+            }
+            this.selectedMonth = this.months[monthIndex];
+            this.updateParams();
         };
         MonthYearPickerController.$inject = ['dateTimeService'];
         return MonthYearPickerController;

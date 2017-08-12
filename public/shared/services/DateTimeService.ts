@@ -1,5 +1,6 @@
 module Shared {
 	export interface IDateTimeService {
+		minimumYear: number;
 		currentYear(): number;
 		currentMonthValue(): number;
 		currentMonthName(): string;
@@ -22,8 +23,11 @@ module Shared {
 	export class DateTimeService implements IDateTimeService {
 		
 		private monthNames = Months.Names;
-
 		private abbrMonthNames = Months.ShortNames;
+
+		public get minimumYear(): number {
+			return 2015;
+		}
 		
 		constructor() {
 		}

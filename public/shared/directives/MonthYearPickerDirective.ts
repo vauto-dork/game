@@ -22,75 +22,43 @@ module Shared {
     export class MonthYearPickerController {
         public static $inject: string[] = ['dateTimeService'];
 
-		private change: Function;
-		private isDisabled: boolean = false;
+		public month: number;
+		public year: number;
+		public disabled: boolean;
+		public change: Function;
 
-		private minimumYear: number = 2015;
 		private disableYear: boolean = false;
 
-		private selectedMonth: INameValuePair;
-		private selectedYear: INameValuePair;
+		private selectedMonth: string;
+		private selectedYear: number;
 
-		private currentMonth: number;
-		private currentYear: number;
+		private years: number[] = [];
+		private months: string[] = Shared.Months.Names;
 
-		private years: INameValuePair[] = [];
-		private months: INameValuePair[] = [
-			{ name: 'January', value: 0 },
-			{ name: 'February', value: 1 },
-			{ name: 'March', value: 2 },
-			{ name: 'April', value: 3 },
-			{ name: 'May', value: 4 },
-			{ name: 'June', value: 5 },
-			{ name: 'July', value: 6 },
-			{ name: 'August', value: 7 },
-			{ name: 'September', value: 8 },
-			{ name: 'October', value: 9 },
-			{ name: 'November', value: 10 },
-			{ name: 'December', value: 11 }
-		];
-
-		public get disabled(): boolean {
-			return this.isDisabled;
+		private get minimumYear(): number {
+			return this.dateTimeService.minimumYear;
 		}
 
-		public set disabled(value: boolean) {
-			this.isDisabled = value;
+		private get disablePrev(): boolean {
+			return this.month === 0 && this.year === this.minimumYear;
 		}
 
-		public get month(): number {
-			return this.currentMonth === undefined || this.currentMonth === null
-                ? this.dateTimeService.currentMonthValue()
-                : this.currentMonth;
+		private get disableNext(): boolean {
+			return this.month === 11 && this.year === this.dateTimeService.currentYear();
 		}
 
-		public set month(value: number) {
-			this.currentMonth = value;
-		}
-
-		public get year(): number {
-			return this.currentYear === undefined || this.currentYear === null
-                ? this.dateTimeService.currentYear()
-                : this.currentYear;
-		}
-
-		public set year(value: number) {
-			this.currentYear = value;
-		}
-
-        constructor(private dateTimeService: Shared.IDateTimeService) {
+        constructor(private dateTimeService: IDateTimeService) {
 			this.init();
         }
 
 		private init(): void {
-			this.selectedMonth = this.months[this.currentMonth];
+			this.selectedMonth = this.months[this.month];
 
 			for (var i = this.minimumYear; i <= this.dateTimeService.currentYear(); i++) {
-				var tempYear: INameValuePair = { name: i.toString(), value: i };
-				this.years.push(tempYear);
+				this.years.push(i);
 
-				if (i === this.currentYear) {
-					this.selectedYear = tempYear;
+				if (i === this.year) {
+					this.selectedYear = i;
 				}
 			}
 
@@ -98,8 +66,8 @@ module Shared {
 		}
 
 		private updateParams(): void {
-			this.month = this.selectedMonth.value;
-			this.year = this.selectedYear.value;
+			this.month = this.months.indexOf(this.selectedMonth);
+			this.year = this.selectedYear;
 
 			if (this.change !== undefined) {
 				this.change();
@@ -107,17 +75,25 @@ module Shared {
 		}
 
 		private prev(): void {
-			this.month = (this.month === 0) ? 11 : this.month - 1;
-
-			if(this.month === 11 && this.year > this.minimumYear) {
-				this.year--;
+			var monthIndex = (this.month === 0) ? 11 : this.month - 1;
+			
+			if(monthIndex === 11) {
+				this.selectedYear--;
 			}
+
+			this.selectedMonth = this.months[monthIndex];
+			this.updateParams();
 		}
 
 		private next(): void {
-			this.month = (this.month === 11) ? 0 : this.month + 1;
+			var monthIndex = (this.month + 1) % 12;
 
-			if(this.month === 0)
+			if(monthIndex === 0) {
+				this.selectedYear++;	
+			}
+
+			this.selectedMonth = this.months[monthIndex];
+			this.updateParams();
 		}
     }
 }
