@@ -95,12 +95,6 @@
         color: $bright-yellow-on-light;
     }
 
-    .stats-intro {
-        div {
-            margin: $standard-spacing auto;
-        }
-    }
-
     @media (min-width: 768px) {
         .delta-row {
             justify-content: flex-end;

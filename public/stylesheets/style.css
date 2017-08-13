@@ -432,8 +432,6 @@ input.ng-touched.ng-invalid {
     color: #FFCB00; }
   .player-stats .gold-star-on-light {
     color: #EFA517; }
-  .player-stats .stats-intro div {
-    margin: 0.5em auto; }
   @media (min-width: 768px) {
     .player-stats .delta-row {
       justify-content: flex-end; } }
@@ -668,6 +666,8 @@ input.ng-touched.ng-invalid {
     .ranking-row .ranking-value a {
       border-bottom-style: dotted;
       border-bottom-width: 1px; }
+      .ranking-row .ranking-value a:hover {
+        text-decoration: none; }
   .ranking-row .ranking-label {
     display: inline-block;
     margin-right: 0.5em;

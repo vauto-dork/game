@@ -49,6 +49,10 @@
 		a {
 			border-bottom-style: dotted;
 			border-bottom-width: 1px;
+
+			&:hover {
+				text-decoration: none;
+			}
 		}
 	}
 

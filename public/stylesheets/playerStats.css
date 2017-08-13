@@ -55,8 +55,6 @@
     color: #FFCB00; }
   .player-stats .gold-star-on-light {
     color: #EFA517; }
-  .player-stats .stats-intro div {
-    margin: 0.5em auto; }
   @media (min-width: 768px) {
     .player-stats .delta-row {
       justify-content: flex-end; } }
