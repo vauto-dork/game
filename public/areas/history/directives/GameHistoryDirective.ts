@@ -47,8 +47,6 @@ module DorkHistory {
 				? EditGameType.FinalizedGame
 				: EditGameType.ActiveGame;
 			
-			this.month = dateTimeService.currentMonthValue();
-			this.year = dateTimeService.currentYear();
 			this.changeState(State.Init);
 		}
 
@@ -62,9 +60,16 @@ module DorkHistory {
 			switch (newState) {
 				case State.Init:
 					this.$timeout(() => {
-						this.month = this.monthYearQueryService.getMonthQueryParam(this.month);
-						this.year = this.monthYearQueryService.getYearQueryParam(this.year);
-						this.monthYearQueryService.saveQueryParams(this.month, this.year);
+						var date = this.monthYearQueryService.getQueryParams();
+						if(date) {
+							this.month = date.month;
+							this.year = date.year;
+						} else {
+							this.month = this.dateTimeService.currentMonthValue();
+							this.year = this.dateTimeService.currentYear();
+							this.monthYearQueryService.saveQueryParams(this.month, this.year);
+						}
+
 						this.changeState(State.Loading);
 					}, 0);
 					break;

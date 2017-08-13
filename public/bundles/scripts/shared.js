@@ -244,14 +244,10 @@ var Shared;
             this.year = (year === null || year === undefined) ? this.currentDate.getFullYear() : year;
         }
         MonthYearParams.prototype.getVisibleQueryString = function () {
-            if (this.month === this.currentDate.getMonth() && this.year === this.currentDate.getFullYear())
-                return '';
             var monthShortName = Shared.Months.ShortNames[this.month];
             return "#?month=" + monthShortName + "&year=" + this.year;
         };
         MonthYearParams.prototype.getPostQueryString = function () {
-            if (this.month === this.currentDate.getMonth() && this.year === this.currentDate.getFullYear())
-                return '';
             return "?month=" + this.month + "&year=" + this.year;
         };
         return MonthYearParams;
@@ -616,10 +612,9 @@ var Shared;
         };
         ApiService.prototype.getRankedPlayers = function (month, year, hideUnranked) {
             var def = this.$q.defer();
-            month = (month === undefined || month === null) ? new Date().getMonth() : month;
-            year = (year === undefined || year === null) ? new Date().getFullYear() : year;
+            var queryString = new Shared.MonthYearParams(month, year).getPostQueryString();
             var unrankedParam = hideUnranked ? '&hideUnranked=true' : '';
-            var rankedUrl = '/players/ranked?month=' + month + '&year=' + year + unrankedParam;
+            var rankedUrl = "/players/ranked" + queryString + unrankedParam;
             this.$http.get(rankedUrl)
                 .success(function (data, status, headers, config) {
                 var players = data.map(function (value) {
@@ -641,8 +636,8 @@ var Shared;
         };
         ApiService.prototype.getDotm = function (month, year) {
             var def = this.$q.defer();
-            var query = '?month=' + month + '&year=' + year;
-            this.$http.get("/Players/dotm" + query)
+            var queryString = new Shared.MonthYearParams(month, year).getPostQueryString();
+            this.$http.get("/Players/dotm" + queryString)
                 .success(function (data, status, headers, config) {
                 def.resolve(data);
             }).
@@ -685,7 +680,8 @@ var Shared;
         };
         ApiService.prototype.getGames = function (month, year) {
             var def = this.$q.defer();
-            var path = '/Games?month=' + month + '&year=' + year;
+            var queryString = new Shared.MonthYearParams(month, year).getPostQueryString();
+            var path = "/Games" + queryString;
             this.$http.get(path).success(function (data, status, headers, config) {
                 var game = data.map(function (value) {
                     return new Shared.Game(value);
@@ -1111,6 +1107,30 @@ var Shared;
             this.months = Shared.Months.Names;
             this.init();
         }
+        Object.defineProperty(MonthYearPickerController.prototype, "month", {
+            get: function () {
+                return this.localMonth;
+            },
+            set: function (value) {
+                this.localMonth = value;
+                this.selectedMonth = (value === null || value === undefined || !this.months)
+                    ? this.selectedMonth
+                    : this.months[value];
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MonthYearPickerController.prototype, "year", {
+            get: function () {
+                return this.localYear;
+            },
+            set: function (value) {
+                this.localYear = value;
+                this.selectedYear = (value === null || value === undefined) ? this.selectedYear : value;
+            },
+            enumerable: true,
+            configurable: true
+        });
         Object.defineProperty(MonthYearPickerController.prototype, "minimumYear", {
             get: function () {
                 return this.dateTimeService.minimumYear;
@@ -1120,14 +1140,14 @@ var Shared;
         });
         Object.defineProperty(MonthYearPickerController.prototype, "disablePrev", {
             get: function () {
-                return this.month === 0 && this.year === this.minimumYear;
+                return this.month <= 4 && this.year === this.minimumYear;
             },
             enumerable: true,
             configurable: true
         });
         Object.defineProperty(MonthYearPickerController.prototype, "disableNext", {
             get: function () {
-                return this.month === 11 && this.year === this.dateTimeService.currentYear();
+                return this.month >= this.dateTimeService.currentMonthValue() && this.year >= this.dateTimeService.currentYear();
             },
             enumerable: true,
             configurable: true

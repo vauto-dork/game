@@ -20,10 +20,30 @@ module Shared {
 	}
 
     export class MonthYearPickerController {
-        public static $inject: string[] = ['dateTimeService'];
+		public static $inject: string[] = ['dateTimeService'];
+		
+		private localMonth: number;
+		private localYear: number;
 
-		public month: number;
-		public year: number;
+		public get month(): number {
+			return this.localMonth;
+		}
+
+		public set month(value: number) {
+			this.localMonth = value;
+			this.selectedMonth = (value === null || value === undefined || !this.months)
+				? this.selectedMonth
+				: this.months[value];
+		}
+		public get year(): number {
+			return this.localYear;
+		}
+
+		public set year(value: number) {
+			this.localYear = value;
+			this.selectedYear = (value === null || value === undefined) ? this.selectedYear : value;
+		}
+
 		public disabled: boolean;
 		public change: Function;
 
@@ -40,11 +60,11 @@ module Shared {
 		}
 
 		private get disablePrev(): boolean {
-			return this.month === 0 && this.year === this.minimumYear;
+			return this.month <= 4 && this.year === this.minimumYear;
 		}
 
 		private get disableNext(): boolean {
-			return this.month === 11 && this.year === this.dateTimeService.currentYear();
+			return this.month >= this.dateTimeService.currentMonthValue() && this.year >= this.dateTimeService.currentYear();
 		}
 
         constructor(private dateTimeService: IDateTimeService) {

@@ -195,11 +195,9 @@ module Shared {
 		public getRankedPlayers(month: number, year: number, hideUnranked: boolean): ng.IPromise<IRankedPlayer[]> {
 			var def = this.$q.defer<IRankedPlayer[]>();
 
-			month = (month === undefined || month === null) ? new Date().getMonth() : month;
-			year = (year === undefined || year === null) ? new Date().getFullYear() : year;
-
+			var queryString = new MonthYearParams(month, year).getPostQueryString();
 			var unrankedParam = hideUnranked ? '&hideUnranked=true' : '';
-			var rankedUrl = '/players/ranked?month=' + month + '&year=' + year + unrankedParam;
+			var rankedUrl = `/players/ranked${queryString}${unrankedParam}`;
 
 			this.$http.get(rankedUrl)
 				.success((data: IRankedPlayerViewModel[], status, headers, config) => {
@@ -231,9 +229,9 @@ module Shared {
 		public getDotm(month: number, year: number): ng.IPromise<IDotmViewModel> {
 			var def = this.$q.defer<IDotmViewModel>();
 
-			var query: string = '?month=' + month + '&year=' + year;
+			var queryString = new MonthYearParams(month, year).getPostQueryString();
 
-			this.$http.get("/Players/dotm" + query)
+			this.$http.get("/Players/dotm" + queryString)
 				.success((data: IDotmViewModel, status, headers, config) => {
 					def.resolve(data);
 				}).
@@ -286,7 +284,9 @@ module Shared {
 		
 		public getGames(month: number, year: number): ng.IPromise<IGame[]> {
 			var def = this.$q.defer<IGame[]>();
-			var path = '/Games?month=' + month + '&year=' + year;
+
+			var queryString = new MonthYearParams(month, year).getPostQueryString();
+			var path = `/Games${queryString}`;
 			
 			this.$http.get(path).success((data: IGameViewModel[], status, headers, config) => {
 				var game: IGame[] = data.map((value: IGameViewModel) => {
