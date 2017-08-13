@@ -294,6 +294,13 @@ var DorkHistory;
             this.dateTimeService = dateTimeService;
             this.changeState(State.Init);
         }
+        Object.defineProperty(RankingHistoryController.prototype, "isCurrentMonth", {
+            get: function () {
+                return this.month === this.dateTimeService.currentMonthValue() && this.year === this.dateTimeService.currentYear();
+            },
+            enumerable: true,
+            configurable: true
+        });
         RankingHistoryController.prototype.changeState = function (newState) {
             var _this = this;
             switch (newState) {

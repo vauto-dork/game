@@ -22,6 +22,10 @@ module DorkHistory {
 		private month: number;
 		private year: number;
 
+		private get isCurrentMonth(): boolean {
+			return this.month === this.dateTimeService.currentMonthValue() && this.year === this.dateTimeService.currentYear();
+		}
+
         constructor(
 			private $timeout: ng.ITimeoutService,
 			private monthYearQueryService: Shared.IMonthYearQueryService,
