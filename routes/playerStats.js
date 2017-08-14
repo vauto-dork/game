@@ -12,13 +12,13 @@ var statsHelper = {
     round: function(value, decimals) {
         return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
     },
-    getPlayerObject: function(playerId, callback) {
+    getPlayerObject: function(playerId, next, callback) {
         PlayerModel.findById(playerId, function (err, player) {
             if (err) return next(err);
             callback(player);
         });
     },
-    getGamesPlayed: function(playerId, dateRange, callback) {
+    getGamesPlayed: function(playerId, next, dateRange, callback) {
         var startDateRange = dateRange[0];
         var endDateRange = dateRange[1];
     
@@ -103,6 +103,7 @@ router.get('/:id', function(req, res, next) {
   });
 
 /* GET player's game history.
+ * @query id - Unencrypted player ID
  * @query (Optional) month - Get all games for this month. Default is current month.
  * @query (Optional) year - Get all games for this year. Default is current year.
  */
@@ -112,8 +113,8 @@ router.get('/json/:id', function (req, res, next) {
         ? DateHelper.getDateRange(req)
         : DateHelper.getCurrentMonthRange();
     
-    statsHelper.getPlayerObject(playerId, function(player) {
-        statsHelper.getGamesPlayed(playerId, dateRange, function(gameData, totalPoints) {
+    statsHelper.getPlayerObject(playerId, next, function(player) {
+        statsHelper.getGamesPlayed(playerId, next, dateRange, function(gameData, totalPoints) {
             res.json({
                 player: player,
                 dateRange: dateRange,
