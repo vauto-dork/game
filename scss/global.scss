@@ -216,6 +216,11 @@ input.ng-touched.ng-invalid {
 			color: transparent;
 			text-shadow: 0 0 0 #000;
 		}
+
+		// Remove arrow from IE
+		&::-ms-expand {
+			display: none;
+		}
 	}
 }
 

@@ -162,6 +162,8 @@ input.ng-touched.ng-invalid {
     .select-wrapper select:-moz-focusring {
       color: transparent;
       text-shadow: 0 0 0 #000; }
+    .select-wrapper select::-ms-expand {
+      display: none; }
 
 .text-input-container {
   margin: 0.5em 0;

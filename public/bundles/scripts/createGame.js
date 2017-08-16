@@ -238,23 +238,29 @@ PlayerSelectorModule.filter('playerSelectorFilter', Components.PlayerSelectorFil
 PlayerSelectorModule.controller('PlayerSelectorController', Components.PlayerSelectorController);
 PlayerSelectorModule.directive('playerSelector', Components.PlayerSelectorDirective);
 
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var Components;
 (function (Components) {
     var NewPlayerPanelService = (function (_super) {
         __extends(NewPlayerPanelService, _super);
         function NewPlayerPanelService($timeout, $q, apiService) {
-            _super.call(this, $timeout);
-            this.$q = $q;
-            this.apiService = apiService;
-            this.event = {
+            var _this = _super.call(this, $timeout) || this;
+            _this.$q = $q;
+            _this.apiService = apiService;
+            _this.event = {
                 formCancel: "formCancel",
                 newPlayerReady: "newPlayerReady"
             };
+            return _this;
         }
         NewPlayerPanelService.prototype.subscribeFormCancel = function (callback) {
             this.subscribe(this.event.formCancel, callback);
@@ -385,11 +391,11 @@ newPlayerModule.directive('newPlayerPanel', Components.NewPlayerPanelDirective);
 
 var CreateGame;
 (function (CreateGame) {
+    var NewGameSort;
     (function (NewGameSort) {
         NewGameSort[NewGameSort["Selected"] = 0] = "Selected";
         NewGameSort[NewGameSort["Rating"] = 1] = "Rating";
-    })(CreateGame.NewGameSort || (CreateGame.NewGameSort = {}));
-    var NewGameSort = CreateGame.NewGameSort;
+    })(NewGameSort = CreateGame.NewGameSort || (CreateGame.NewGameSort = {}));
     var CreateGameService = (function () {
         function CreateGameService($q, apiService, playerSelectionService, newPlayerPanelService) {
             var _this = this;
@@ -643,11 +649,16 @@ var CreateGame;
     CreateGame.SelectedPlayersController = SelectedPlayersController;
 })(CreateGame || (CreateGame = {}));
 
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var CreateGame;
 (function (CreateGame) {
     function CreateGameDirective() {
@@ -670,26 +681,26 @@ var CreateGame;
     var CreateGameController = (function (_super) {
         __extends(CreateGameController, _super);
         function CreateGameController($window, createGameService, playerSelectionService, newPlayerPanelService) {
-            var _this = this;
-            _super.call(this);
-            this.$window = $window;
-            this.createGameService = createGameService;
-            this.playerSelectionService = playerSelectionService;
-            this.newPlayerPanelService = newPlayerPanelService;
-            this.showLoading = false;
-            this.showErrorMessage = false;
-            this.showForm = false;
-            this.datePlayed = null;
-            this.changeState(State.Loading);
-            this.createGameService.init().then(function () {
+            var _this = _super.call(this) || this;
+            _this.$window = $window;
+            _this.createGameService = createGameService;
+            _this.playerSelectionService = playerSelectionService;
+            _this.newPlayerPanelService = newPlayerPanelService;
+            _this.showLoading = false;
+            _this.showErrorMessage = false;
+            _this.showForm = false;
+            _this.datePlayed = null;
+            _this.changeState(State.Loading);
+            _this.createGameService.init().then(function () {
                 _this.changeState(State.Loaded);
             });
-            this.newPlayerPanelService.subscribeFormCancel(function () {
+            _this.newPlayerPanelService.subscribeFormCancel(function () {
                 _this.disableAddNewPlayer();
             });
-            this.newPlayerPanelService.subscribeSavedPlayer(function () {
+            _this.newPlayerPanelService.subscribeSavedPlayer(function () {
                 _this.disableAddNewPlayer();
             });
+            return _this;
         }
         Object.defineProperty(CreateGameController.prototype, "sortOrder", {
             get: function () {

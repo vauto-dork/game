@@ -227,13 +227,29 @@ var Shared;
 
 var Shared;
 (function (Shared) {
+    var EditGameType;
     (function (EditGameType) {
         EditGameType[EditGameType["ActiveGame"] = 0] = "ActiveGame";
         EditGameType[EditGameType["FinalizedGame"] = 1] = "FinalizedGame";
-    })(Shared.EditGameType || (Shared.EditGameType = {}));
-    var EditGameType = Shared.EditGameType;
+    })(EditGameType = Shared.EditGameType || (Shared.EditGameType = {}));
 })(Shared || (Shared = {}));
 
+
+var Shared;
+(function (Shared) {
+    var Months = (function () {
+        function Months() {
+        }
+        Months.Names = ["January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+        Months.ShortNames = ["Jan", "Feb", "Mar", "Apr", "May", "June",
+            "July", "Aug", "Sept", "Oct", "Nov", "Dec"
+        ];
+        return Months;
+    }());
+    Shared.Months = Months;
+})(Shared || (Shared = {}));
 
 var Shared;
 (function (Shared) {
@@ -253,22 +269,6 @@ var Shared;
         return MonthYearParams;
     }());
     Shared.MonthYearParams = MonthYearParams;
-})(Shared || (Shared = {}));
-
-var Shared;
-(function (Shared) {
-    var Months = (function () {
-        function Months() {
-        }
-        Months.Names = ["January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"
-        ];
-        Months.ShortNames = ["Jan", "Feb", "Mar", "Apr", "May", "June",
-            "July", "Aug", "Sept", "Oct", "Nov", "Dec"
-        ];
-        return Months;
-    }());
-    Shared.Months = Months;
 })(Shared || (Shared = {}));
 
 var Shared;
@@ -816,22 +816,28 @@ var Shared;
     Shared.DateTimeService = DateTimeService;
 })(Shared || (Shared = {}));
 
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var Shared;
 (function (Shared) {
     var MonthYearQueryService = (function (_super) {
         __extends(MonthYearQueryService, _super);
         function MonthYearQueryService($timeout, $location) {
-            _super.call(this, $timeout);
-            this.$location = $location;
-            this.minimumYear = 2015;
-            this.events = {
+            var _this = _super.call(this, $timeout) || this;
+            _this.$location = $location;
+            _this.minimumYear = 2015;
+            _this.events = {
                 dateChange: "dateChange"
             };
+            return _this;
         }
         MonthYearQueryService.prototype.sanitizeParam = function (value) {
             if (value === undefined) {
@@ -883,65 +889,6 @@ var Shared;
         return MonthYearQueryService;
     }(Shared.PubSubServiceBase));
     Shared.MonthYearQueryService = MonthYearQueryService;
-})(Shared || (Shared = {}));
-
-var Shared;
-(function (Shared) {
-    var PubSubServiceBase = (function () {
-        function PubSubServiceBase($timeout) {
-            this.$timeout = $timeout;
-            this.topics = {};
-            this.subUid = -1;
-        }
-        PubSubServiceBase.prototype.subscribe = function (callbackId, callback, once) {
-            var token = this.subUid += 1;
-            if (!this.topics[callbackId]) {
-                this.topics[callbackId] = [];
-            }
-            var obj = {
-                token: token,
-                callback: callback,
-                once: !!once
-            };
-            this.topics[callbackId].push(obj);
-            return token;
-        };
-        PubSubServiceBase.prototype.subscribeOnce = function (callbackId, callback) {
-            return this.subscribe(callbackId, callback, true);
-        };
-        PubSubServiceBase.prototype.publish = function (callbackId, params) {
-            var _this = this;
-            if (!this.topics[callbackId])
-                return;
-            this.$timeout(function () {
-                var subscribers = _this.topics[callbackId];
-                var len = subscribers ? subscribers.length : 0;
-                while (len) {
-                    len -= 1;
-                    subscribers[len].callback(callbackId, params);
-                    if (subscribers[len].once) {
-                        _this.unsubscribe(subscribers[len].token);
-                    }
-                }
-            });
-        };
-        PubSubServiceBase.prototype.unsubscribe = function (token) {
-            for (var prop in this.topics) {
-                if (this.topics.hasOwnProperty(prop) && this.topics[prop]) {
-                    var len = this.topics[prop].length;
-                    while (len) {
-                        len -= 1;
-                        this.topics[prop].splice(len, 1);
-                    }
-                }
-            }
-        };
-        PubSubServiceBase.prototype.hasTopic = function (callbackId) {
-            return !!this.topics[callbackId];
-        };
-        return PubSubServiceBase;
-    }());
-    Shared.PubSubServiceBase = PubSubServiceBase;
 })(Shared || (Shared = {}));
 
 var Shared;
