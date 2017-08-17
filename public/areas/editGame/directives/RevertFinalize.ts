@@ -1,14 +1,10 @@
 ﻿module EditGame {
     import EditGameType = Shared.EditGameType;
     
-    export function RevertFinalizeDirective(): ng.IDirective {
+    export function RevertFinalize(): ng.IComponentOptions {
         return {
-            scope: {
-            },
             templateUrl: '/areas/editGame/directives/RevertFinalizeTemplate.html',
-            controller: 'RevertFinalizeController',
-            controllerAs: 'ctrl',
-            bindToController: true
+            controller: RevertFinalizeController
         };
     }
 

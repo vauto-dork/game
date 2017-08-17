@@ -697,20 +697,18 @@ var EditGame;
 })(EditGame || (EditGame = {}));
 
 var EditGame;
-(function (EditGame) {
+(function (EditGame_1) {
     var EditGameType = Shared.EditGameType;
-    function EditGameDirective() {
+    function EditGame() {
         return {
-            scope: {
+            bindings: {
                 isFinalizedGame: '='
             },
             templateUrl: "/areas/editGame/directives/EditGameTemplate.html",
-            controller: "EditGameController",
-            controllerAs: "ctrl",
-            bindToController: true
+            controller: EditGameController
         };
     }
-    EditGame.EditGameDirective = EditGameDirective;
+    EditGame_1.EditGame = EditGame;
     var EditGameController = (function () {
         function EditGameController($window, stateService, editGameService, alertsService, editGameCollapseService) {
             var _this = this;
@@ -722,27 +720,27 @@ var EditGame;
             this.gameType = this.isFinalizedGame ? EditGameType.FinalizedGame : EditGameType.ActiveGame;
             this.stateService.subscribeStateChange(function (event, newState) {
                 switch (newState) {
-                    case EditGame.State.Loading:
+                    case EditGame_1.State.Loading:
                         _this.getGame();
                         break;
-                    case EditGame.State.Error:
+                    case EditGame_1.State.Error:
                         _this.alertsService.scrollToTop();
                         break;
-                    case EditGame.State.Ready:
+                    case EditGame_1.State.Ready:
                         _this.ready();
                         break;
-                    case EditGame.State.Saving:
+                    case EditGame_1.State.Saving:
                         _this.saveGame();
                         break;
-                    case EditGame.State.Finalizing:
+                    case EditGame_1.State.Finalizing:
                         _this.finalizeGame();
                         break;
-                    case EditGame.State.Updating:
+                    case EditGame_1.State.Updating:
                         _this.updateFinalizedGame();
                         break;
                 }
             });
-            this.stateService.changeState(EditGame.State.Loading);
+            this.stateService.changeState(EditGame_1.State.Loading);
         }
         Object.defineProperty(EditGameController.prototype, "showLoading", {
             get: function () {
@@ -802,13 +800,13 @@ var EditGame;
         EditGameController.prototype.errorHandler = function (data, errorMessage) {
             this.alertsService.addAlert("danger", errorMessage);
             console.error(data);
-            this.stateService.changeState(EditGame.State.Error);
+            this.stateService.changeState(EditGame_1.State.Error);
         };
         EditGameController.prototype.getGame = function () {
             var _this = this;
             this.alertsService.clearAlerts();
             this.editGameService.getGame(this.gameType).then(function () {
-                _this.stateService.changeState(EditGame.State.Ready);
+                _this.stateService.changeState(EditGame_1.State.Ready);
                 _this.datePlayed = _this.editGameService.datePlayed;
             }, function () {
                 _this.errorHandler("Cannot get active game.", "Cannot load game");
@@ -820,7 +818,7 @@ var EditGame;
             this.editGameService.datePlayed = this.datePlayed;
             this.editGameService.save().then(function () {
                 _this.alertsService.addAlert("success", "Game saved successfully!");
-                _this.stateService.changeState(EditGame.State.Ready);
+                _this.stateService.changeState(EditGame_1.State.Ready);
             }, function () {
                 _this.saveReject();
             });
@@ -846,7 +844,7 @@ var EditGame;
             var _this = this;
             this.alertsService.clearAlerts();
             this.editGameService.errorMessages.forEach(function (msg) { _this.alertsService.addAlert("danger", msg); });
-            this.stateService.changeState(EditGame.State.Ready);
+            this.stateService.changeState(EditGame_1.State.Ready);
         };
         EditGameController.prototype.closeAlert = function (index) {
             this.alertsService.closeAlert(index);
@@ -863,23 +861,21 @@ var EditGame;
         EditGameController.$inject = ["$window", "editGameStateService", "editGameService", "alertsService", "editGameCollapseService"];
         return EditGameController;
     }());
-    EditGame.EditGameController = EditGameController;
+    EditGame_1.EditGameController = EditGameController;
 })(EditGame || (EditGame = {}));
 
 var EditGame;
 (function (EditGame) {
-    function EditScoresDirective() {
+    function EditScores() {
         return {
-            scope: {
+            bindings: {
                 disabled: '='
             },
             templateUrl: '/areas/editGame/directives/EditScoresTemplate.html',
-            controller: 'EditScoresController',
-            controllerAs: 'ctrl',
-            bindToController: true
+            controller: EditScoresController
         };
     }
-    EditGame.EditScoresDirective = EditScoresDirective;
+    EditGame.EditScores = EditScores;
     var EditScoresController = (function () {
         function EditScoresController(editGameService) {
             this.editGameService = editGameService;
@@ -922,16 +918,13 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var EditGame;
 (function (EditGame) {
-    function ModifyPlayersDirective() {
+    function ModifyPlayers() {
         return {
-            scope: {},
             templateUrl: "/areas/editGame/directives/ModifyPlayersTemplate.html",
-            controller: "ModifyPlayersController",
-            controllerAs: "ctrl",
-            bindToController: true
+            controller: ModifyPlayersController
         };
     }
-    EditGame.ModifyPlayersDirective = ModifyPlayersDirective;
+    EditGame.ModifyPlayers = ModifyPlayers;
     var ModifyPlayersController = (function (_super) {
         __extends(ModifyPlayersController, _super);
         function ModifyPlayersController(editGameService, playerSelectionService, newPlayerPanelService, editGameCollapseService) {
@@ -981,16 +974,13 @@ var EditGame;
 
 var EditGame;
 (function (EditGame) {
-    function ReorderPlayersDirective() {
+    function ReorderPlayers() {
         return {
-            scope: {},
             templateUrl: '/areas/editGame/directives/ReorderPlayersTemplate.html',
-            controller: 'ReorderPlayersController',
-            controllerAs: 'ctrl',
-            bindToController: true
+            controller: ReorderPlayersController
         };
     }
-    EditGame.ReorderPlayersDirective = ReorderPlayersDirective;
+    EditGame.ReorderPlayers = ReorderPlayers;
     var ReorderPlayersController = (function () {
         function ReorderPlayersController(editGameService) {
             this.editGameService = editGameService;
@@ -1058,16 +1048,13 @@ var EditGame;
 var EditGame;
 (function (EditGame) {
     var EditGameType = Shared.EditGameType;
-    function RevertFinalizeDirective() {
+    function RevertFinalize() {
         return {
-            scope: {},
             templateUrl: '/areas/editGame/directives/RevertFinalizeTemplate.html',
-            controller: 'RevertFinalizeController',
-            controllerAs: 'ctrl',
-            bindToController: true
+            controller: RevertFinalizeController
         };
     }
-    EditGame.RevertFinalizeDirective = RevertFinalizeDirective;
+    EditGame.RevertFinalize = RevertFinalize;
     var RevertFinalizeController = (function () {
         function RevertFinalizeController(stateService, editGameService) {
             this.stateService = stateService;
@@ -1112,21 +1099,19 @@ var EditGame;
     EditGame.RevertFinalizeController = RevertFinalizeController;
 })(EditGame || (EditGame = {}));
 
-var EditGameModule = angular.module('EditGameModule', ['UxControlsModule', 'PlayerSelectorModule', 'NewPlayerPanelModule', 'PlayerBonusPanelModule']);
-EditGameModule.service('alertsService', Shared.AlertsService);
-EditGameModule.service('editGameService', EditGame.EditGameService);
-EditGameModule.service('editGameStateService', EditGame.EditGameStateService);
-EditGameModule.service('editGameCollapseService', EditGame.EditGameCollapseService);
-EditGameModule.controller('EditGameController', EditGame.EditGameController);
-EditGameModule.directive('editGame', EditGame.EditGameDirective);
-EditGameModule.controller('EditScoresController', EditGame.EditScoresController);
-EditGameModule.directive('editScores', EditGame.EditScoresDirective);
-EditGameModule.controller('ReorderPlayersController', EditGame.ReorderPlayersController);
-EditGameModule.directive('reorderPlayers', EditGame.ReorderPlayersDirective);
-EditGameModule.controller('ModifyPlayersController', EditGame.ModifyPlayersController);
-EditGameModule.directive('modifyPlayers', EditGame.ModifyPlayersDirective);
-EditGameModule.controller('RevertFinalizeController', EditGame.RevertFinalizeController);
-EditGameModule.directive('revertFinalize', EditGame.RevertFinalizeDirective);
+var EditGame;
+(function (EditGame) {
+    var EditGameModule = angular.module('EditGameModule', ['UxControlsModule', 'PlayerSelectorModule', 'NewPlayerPanelModule', 'PlayerBonusPanelModule']);
+    EditGameModule.service('alertsService', Shared.AlertsService);
+    EditGameModule.service('editGameService', EditGame.EditGameService);
+    EditGameModule.service('editGameStateService', EditGame.EditGameStateService);
+    EditGameModule.service('editGameCollapseService', EditGame.EditGameCollapseService);
+    EditGameModule.component('editGame', EditGame.EditGame());
+    EditGameModule.component('editScores', EditGame.EditScores());
+    EditGameModule.component('reorderPlayers', EditGame.ReorderPlayers());
+    EditGameModule.component('modifyPlayers', EditGame.ModifyPlayers());
+    EditGameModule.component('revertFinalize', EditGame.RevertFinalize());
+})(EditGame || (EditGame = {}));
 
 var DorkModule = angular.module('DorkModule', ['EditGameModule']);
 

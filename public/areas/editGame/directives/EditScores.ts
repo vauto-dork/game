@@ -1,13 +1,11 @@
 module EditGame {
-    export function EditScoresDirective(): ng.IDirective {
+    export function EditScores(): ng.IComponentOptions {
         return {
-            scope: {
+            bindings: {
                 disabled: '='
             },
             templateUrl: '/areas/editGame/directives/EditScoresTemplate.html',
-            controller: 'EditScoresController',
-            controllerAs: 'ctrl',
-            bindToController: true
+            controller: EditScoresController
         };
     }
 

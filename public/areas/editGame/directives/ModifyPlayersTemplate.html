@@ -1,12 +1,12 @@
 ﻿<div class="container">
     <div class="row">
         <div class="col-xs-12 col-md-6 col-lg-5">
-            <div uib-collapse="ctrl.collapsePlayerSelectorPanel" collapsed="ctrl.enableAddNewPlayer()">
+            <div uib-collapse="$ctrl.collapsePlayerSelectorPanel" collapsed="$ctrl.enableAddNewPlayer()">
                 <p>
                     <button type="button"
                             class="btn btn-primary btn-lg btn-block"
-                            ng-click="ctrl.back()"
-                            ng-disabled="ctrl.disabled || ctrl.movePlayerActive"
+                            ng-click="$ctrl.back()"
+                            ng-disabled="$ctrl.disabled || $ctrl.movePlayerActive"
                             aria-label="Back">
                         <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Back
                     </button>
@@ -15,16 +15,16 @@
                 <hr class="modify-players-divider visible-xs-block visible-sm-block" />
 
                 <h2>Add Player</h2>
-                <player-selector players="ctrl.unselectedPlayers"
-                                on-selected="ctrl.onSelected(data)"
-                                disabled="ctrl.movePlayerActive"></player-selector>
+                <player-selector players="$ctrl.unselectedPlayers"
+                                on-selected="$ctrl.onSelected(data)"
+                                disabled="$ctrl.movePlayerActive"></player-selector>
 
                 <div class="text-center">
-                    <new-player-button click="ctrl.disablePlayerSelectorPanel()"></new-player-button>
+                    <new-player-button click="$ctrl.disablePlayerSelectorPanel()"></new-player-button>
                 </div>
             </div>
 
-            <div uib-collapse="ctrl.collapseAddNewPlayerPanel" collapsed="ctrl.enablePlayerSelectorPanel()">
+            <div uib-collapse="$ctrl.collapseAddNewPlayerPanel" collapsed="$ctrl.enablePlayerSelectorPanel()">
                 <new-player-panel></new-player-panel>
             </div>
 

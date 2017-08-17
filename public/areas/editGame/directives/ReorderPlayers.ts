@@ -1,12 +1,8 @@
 ﻿module EditGame {
-    export function ReorderPlayersDirective(): ng.IDirective {
+    export function ReorderPlayers(): ng.IComponentOptions {
         return {
-            scope: {
-            },
             templateUrl: '/areas/editGame/directives/ReorderPlayersTemplate.html',
-            controller: 'ReorderPlayersController',
-            controllerAs: 'ctrl',
-            bindToController: true
+            controller: ReorderPlayersController
         };
     }
 

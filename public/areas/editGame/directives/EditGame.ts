@@ -1,15 +1,13 @@
 module EditGame {
     import EditGameType = Shared.EditGameType;
     
-    export function EditGameDirective(): ng.IDirective {
+    export function EditGame(): ng.IComponentOptions {
         return {
-            scope: {
+            bindings: {
                 isFinalizedGame: '='
             },
             templateUrl: "/areas/editGame/directives/EditGameTemplate.html",
-            controller: "EditGameController",
-            controllerAs: "ctrl",
-            bindToController: true
+            controller: EditGameController
         };
     }
 

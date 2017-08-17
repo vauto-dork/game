@@ -1,12 +1,8 @@
 ﻿module EditGame {
-    export function ModifyPlayersDirective(): ng.IDirective {
+    export function ModifyPlayers(): ng.IComponentOptions {
         return {
-            scope: {
-            },
             templateUrl: "/areas/editGame/directives/ModifyPlayersTemplate.html",
-            controller: "ModifyPlayersController",
-            controllerAs: "ctrl",
-            bindToController: true
+            controller: ModifyPlayersController
         };
     }
 
