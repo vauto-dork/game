@@ -1,12 +1,8 @@
 module CreateGame {
-    export function CreateGameDirective(): ng.IDirective {
+    export function CreateGame(): ng.IComponentOptions {
         return {
-			scope: {
-			},
 			templateUrl: '/areas/createGame/directives/CreateGameTemplate.html',
-			controller: 'CreateGameController',
-			controllerAs: 'ctrl',
-			bindToController: true
+			controller: CreateGameController
 		};
     }
 

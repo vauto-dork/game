@@ -1,12 +1,8 @@
 module ActiveGame {
-    export function ActiveGamesDirective(): ng.IDirective {
+    export function ActiveGames(): ng.IComponentOptions {
         return {
-            scope: {
-            },
             templateUrl: '/areas/activeGame/directives/ActiveGamesTemplate.html',
-			controller: 'ActiveGamesController',
-			controllerAs: 'ctrl',
-			bindToController: true
+			controller: ActiveGamesController
         };
     }
 	

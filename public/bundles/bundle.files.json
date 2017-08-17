@@ -37,6 +37,13 @@
                 "components/playerBonusPanel/directives/*.js",
                 "components/playerBonusPanel/modules/*.js"
             ]
+        },
+        "dotm": {
+            "files": [
+                "components/dotm/services/*.js",
+                "components/dotm/directives/*.js",
+                "components/dotm/modules/*.js"
+            ]
         }
     },
     "scripts": {
@@ -51,7 +58,8 @@
         },
         "activeGames": {
             "files": [
-                "areas/activeGame/directives/ActiveGamesDirective.js",
+                "areas/activeGame/directives/*.js",
+                "areas/activeGame/modules/*.js",
                 "bundles/pageModules/activeGames.js"
             ],
             "components": [
@@ -74,10 +82,9 @@
         },
         "createGame": {
             "files": [
-                "areas/createGame/services/CreateGameService.js",
-                "areas/createGame/directives/ButtonsPanelDirective.js",
-                "areas/createGame/directives/SelectedPlayersDirective.js",
-                "areas/createGame/directives/CreateGameDirective.js",
+                "areas/createGame/services/*.js",
+                "areas/createGame/directives/*.js",
+                "areas/createGame/modules/*.js",
                 "bundles/pageModules/createGame.js"
             ],
             "components": [
@@ -109,14 +116,15 @@
         },
         "index": {
             "files": [
-                "areas/dotm/directives/DotmDirective.js",
-                "areas/dotm/modules/DotmModule.js",
                 "areas/rankings/services/RankingsService.js",
                 "areas/rankings/directives/RankingsCardDirective.js",
                 "areas/rankings/directives/RankingsDirective.js",
                 "areas/rankings/modules/RankingsModule.js",
                 "areas/rankings/directives/LeaderboardDirective.js",
                 "bundles/pageModules/index.js"
+            ],
+            "components": [
+                "dotm"
             ]
         },
         "playersList": {
@@ -139,14 +147,15 @@
         },
         "rankingHistory": {
             "files": [
-                "areas/dotm/directives/DotmDirective.js",
-                "areas/dotm/modules/DotmModule.js",
                 "areas/rankings/services/RankingsService.js",
                 "areas/rankings/directives/RankingsCardDirective.js",
                 "areas/rankings/directives/RankingsDirective.js",
                 "areas/rankings/modules/RankingsModule.js",
                 "areas/history/directives/RankingHistoryDirective.js",
                 "bundles/pageModules/rankingHistory.js"
+            ],
+            "components": [
+                "dotm"
             ]
         }
     }

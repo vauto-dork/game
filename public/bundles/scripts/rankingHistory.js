@@ -1,50 +1,93 @@
-var Dotm;
-(function (Dotm) {
-    function DotmDirective() {
-        return {
-            scope: {
-                month: "=",
-                year: "="
-            },
-            templateUrl: '/areas/dotm/directives/DotmTemplate.html',
-            controller: 'DotmController',
-            controllerAs: 'ctrl',
-            bindToController: true
-        };
-    }
-    Dotm.DotmDirective = DotmDirective;
-    var DotmController = (function () {
-        function DotmController($scope, apiService) {
-            var _this = this;
-            this.$scope = $scope;
-            this.apiService = apiService;
-            this.hasUberdorks = false;
-            this.getDotm();
-            $scope.$watchGroup([function () { return _this.month; }, function () { return _this.year; }], function (newValue, oldValue) {
-                if (newValue !== oldValue) {
-                    _this.getDotm();
-                }
-            });
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var Components;
+(function (Components) {
+    var DotmService = (function (_super) {
+        __extends(DotmService, _super);
+        function DotmService($timeout, apiService) {
+            var _this = _super.call(this, $timeout) || this;
+            _this.apiService = apiService;
+            _this.events = {
+                dateChanged: "dateChanged"
+            };
+            return _this;
         }
-        DotmController.prototype.getDotm = function () {
+        Object.defineProperty(DotmService.prototype, "data", {
+            get: function () {
+                return this.localDotmData;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        DotmService.prototype.changeDate = function (month, year) {
+            this.getDotm(month, year);
+        };
+        DotmService.prototype.subscribeDateChange = function (callback) {
+            this.subscribe(this.events.dateChanged, callback);
+        };
+        DotmService.prototype.getDotm = function (month, year) {
             var _this = this;
-            this.hasUberdorks = false;
-            this.apiService.getDotm(this.month, this.year).then(function (data) {
-                _this.dotm = data;
-                _this.hasUberdorks = data.uberdorks.length > 0;
+            this.apiService.getDotm(month, year).then(function (data) {
+                _this.localDotmData = data;
+                _this.publish(_this.events.dateChanged, null);
             }, function () {
                 console.error("Cannot get DOTM.");
             });
         };
-        DotmController.$inject = ['$scope', 'apiService'];
+        DotmService.$inject = ["$timeout", "apiService"];
+        return DotmService;
+    }(Shared.PubSubServiceBase));
+    Components.DotmService = DotmService;
+})(Components || (Components = {}));
+
+var Components;
+(function (Components) {
+    function Dotm() {
+        return {
+            templateUrl: '/components/dotm/directives/DotmTemplate.html',
+            controller: DotmController
+        };
+    }
+    Components.Dotm = Dotm;
+    var DotmController = (function () {
+        function DotmController(dotmService, apiService) {
+            this.dotmService = dotmService;
+            this.apiService = apiService;
+        }
+        Object.defineProperty(DotmController.prototype, "dotm", {
+            get: function () {
+                return this.dotmService.data;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(DotmController.prototype, "hasUberdorks", {
+            get: function () {
+                return !this.dotm ? false : this.dotm.uberdorks.length > 0;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        DotmController.$inject = ['dotmService', 'apiService'];
         return DotmController;
     }());
-    Dotm.DotmController = DotmController;
-})(Dotm || (Dotm = {}));
+    Components.DotmController = DotmController;
+})(Components || (Components = {}));
 
-var DotmModule = angular.module('DotmModule', []);
-DotmModule.controller('DotmController', Dotm.DotmController);
-DotmModule.directive('dotm', Dotm.DotmDirective);
+var Components;
+(function (Components) {
+    var DotmModule = angular.module('DotmModule', []);
+    DotmModule.service('dotmService', Components.DotmService);
+    DotmModule.component('dotm', Components.Dotm());
+})(Components || (Components = {}));
 
 var Rankings;
 (function (Rankings) {
@@ -288,10 +331,12 @@ var DorkHistory;
     })(State || (State = {}));
     ;
     var RankingHistoryController = (function () {
-        function RankingHistoryController($timeout, monthYearQueryService, dateTimeService) {
+        function RankingHistoryController($timeout, monthYearQueryService, dateTimeService, dotmService) {
             this.$timeout = $timeout;
             this.monthYearQueryService = monthYearQueryService;
             this.dateTimeService = dateTimeService;
+            this.dotmService = dotmService;
+            this.dotmService.changeDate(this.dateTimeService.currentMonthValue(), this.dateTimeService.currentYear());
             this.changeState(State.Init);
         }
         Object.defineProperty(RankingHistoryController.prototype, "isCurrentMonth", {
@@ -310,18 +355,19 @@ var DorkHistory;
                         if (date) {
                             _this.month = date.month;
                             _this.year = date.year;
+                            _this.changeState(State.Ready);
                         }
                         else {
                             _this.month = _this.dateTimeService.lastMonthValue();
                             _this.year = _this.dateTimeService.lastMonthYear();
-                            _this.monthYearQueryService.saveQueryParams(_this.month, _this.year);
+                            _this.changeState(State.Change);
                         }
                     }, 0);
-                    this.changeState(State.Ready);
                     break;
                 case State.Change:
                     this.$timeout(function () {
                         _this.monthYearQueryService.saveQueryParams(_this.month, _this.year);
+                        _this.dotmService.changeDate(_this.month, _this.year);
                     }, 0);
                     this.changeState(State.Ready);
                     break;
@@ -330,7 +376,7 @@ var DorkHistory;
         RankingHistoryController.prototype.updateQueryParams = function () {
             this.changeState(State.Change);
         };
-        RankingHistoryController.$inject = ['$timeout', 'monthYearQueryService', 'dateTimeService'];
+        RankingHistoryController.$inject = ['$timeout', 'monthYearQueryService', 'dateTimeService', 'dotmService'];
         return RankingHistoryController;
     }());
     DorkHistory.RankingHistoryController = RankingHistoryController;

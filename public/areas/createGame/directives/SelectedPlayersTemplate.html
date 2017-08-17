@@ -1,6 +1,6 @@
 <div class="selected-players">
-    <div class="playlist-row" ng-repeat="player in ctrl.players">
-        <div class="player-card" ng-click="ctrl.removePlayer(player)">
+    <div class="playlist-row" ng-repeat="player in $ctrl.players">
+        <div class="player-card" ng-click="$ctrl.removePlayer(player)">
             <div class="player-order">
                 <div class="checkmark">
                     <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
@@ -14,6 +14,6 @@
 
 </div>
 
-<div ng-if="!ctrl.hasMinimumPlayers" class="alert alert-danger text-center">
+<div ng-if="!$ctrl.hasMinimumPlayers" class="alert alert-danger text-center">
     At least three players required.
 </div>

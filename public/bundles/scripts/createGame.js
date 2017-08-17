@@ -547,19 +547,17 @@ var CreateGame;
 
 var CreateGame;
 (function (CreateGame) {
-    function ButtonsPanelDirective() {
+    function ButtonsPanel() {
         return {
-            scope: {
+            bindings: {
                 datePlayed: "=",
                 create: "&"
             },
             templateUrl: '/areas/createGame/directives/ButtonsPanelTemplate.html',
-            controller: 'ButtonsPanelController',
-            controllerAs: 'ctrl',
-            bindToController: true
+            controller: ButtonsPanelController
         };
     }
-    CreateGame.ButtonsPanelDirective = ButtonsPanelDirective;
+    CreateGame.ButtonsPanel = ButtonsPanel;
     var ButtonsPanelController = (function () {
         function ButtonsPanelController($window, createGameService) {
             this.$window = $window;
@@ -600,62 +598,20 @@ var CreateGame;
     CreateGame.ButtonsPanelController = ButtonsPanelController;
 })(CreateGame || (CreateGame = {}));
 
-var CreateGame;
-(function (CreateGame) {
-    function SelectedPlayersDirective() {
-        return {
-            scope: {},
-            templateUrl: '/areas/createGame/directives/SelectedPlayersTemplate.html',
-            controller: 'SelectedPlayersController',
-            controllerAs: 'ctrl',
-            bindToController: true
-        };
-    }
-    CreateGame.SelectedPlayersDirective = SelectedPlayersDirective;
-    var SelectedPlayersController = (function () {
-        function SelectedPlayersController(createGameService) {
-            this.createGameService = createGameService;
-        }
-        Object.defineProperty(SelectedPlayersController.prototype, "players", {
-            get: function () {
-                return this.createGameService.playersSorted;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(SelectedPlayersController.prototype, "hasMinimumPlayers", {
-            get: function () {
-                return this.createGameService.hasMinimumPlayers;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        SelectedPlayersController.prototype.removePlayer = function (player) {
-            this.createGameService.removePlayer(player);
-        };
-        SelectedPlayersController.$inject = ['createGameService'];
-        return SelectedPlayersController;
-    }());
-    CreateGame.SelectedPlayersController = SelectedPlayersController;
-})(CreateGame || (CreateGame = {}));
-
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var CreateGame;
-(function (CreateGame) {
-    function CreateGameDirective() {
+(function (CreateGame_1) {
+    function CreateGame() {
         return {
-            scope: {},
             templateUrl: '/areas/createGame/directives/CreateGameTemplate.html',
-            controller: 'CreateGameController',
-            controllerAs: 'ctrl',
-            bindToController: true
+            controller: CreateGameController
         };
     }
-    CreateGame.CreateGameDirective = CreateGameDirective;
+    CreateGame_1.CreateGame = CreateGame;
     var State;
     (function (State) {
         State[State["Loading"] = 0] = "Loading";
@@ -689,7 +645,7 @@ var CreateGame;
         }
         Object.defineProperty(CreateGameController.prototype, "sortOrder", {
             get: function () {
-                return CreateGame.NewGameSort[this.createGameService.sortOrder];
+                return CreateGame_1.NewGameSort[this.createGameService.sortOrder];
             },
             set: function (value) {
             },
@@ -728,10 +684,10 @@ var CreateGame;
             });
         };
         CreateGameController.prototype.useThisOrder = function () {
-            this.createGameService.sortOrder = CreateGame.NewGameSort.Selected;
+            this.createGameService.sortOrder = CreateGame_1.NewGameSort.Selected;
         };
         CreateGameController.prototype.useGameOrder = function () {
-            this.createGameService.sortOrder = CreateGame.NewGameSort.Rating;
+            this.createGameService.sortOrder = CreateGame_1.NewGameSort.Rating;
         };
         CreateGameController.prototype.enablePlayerSelectorPanel = function () {
             this.playerSelectionService.removeFilter();
@@ -740,19 +696,53 @@ var CreateGame;
         CreateGameController.$inject = ["$window", "createGameService", "playerSelectionService", "newPlayerPanelService"];
         return CreateGameController;
     }(Components.NewPlayerPanelBase));
-    CreateGame.CreateGameController = CreateGameController;
+    CreateGame_1.CreateGameController = CreateGameController;
 })(CreateGame || (CreateGame = {}));
 
-var DorkModule = angular.module('DorkModule', ['UxControlsModule', 'PlayerSelectorModule', 'NewPlayerPanelModule']);
+var CreateGame;
+(function (CreateGame) {
+    function SelectedPlayers() {
+        return {
+            templateUrl: '/areas/createGame/directives/SelectedPlayersTemplate.html',
+            controller: SelectedPlayersController
+        };
+    }
+    CreateGame.SelectedPlayers = SelectedPlayers;
+    var SelectedPlayersController = (function () {
+        function SelectedPlayersController(createGameService) {
+            this.createGameService = createGameService;
+        }
+        Object.defineProperty(SelectedPlayersController.prototype, "players", {
+            get: function () {
+                return this.createGameService.playersSorted;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(SelectedPlayersController.prototype, "hasMinimumPlayers", {
+            get: function () {
+                return this.createGameService.hasMinimumPlayers;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        SelectedPlayersController.prototype.removePlayer = function (player) {
+            this.createGameService.removePlayer(player);
+        };
+        SelectedPlayersController.$inject = ['createGameService'];
+        return SelectedPlayersController;
+    }());
+    CreateGame.SelectedPlayersController = SelectedPlayersController;
+})(CreateGame || (CreateGame = {}));
 
-DorkModule.service('createGameService', CreateGame.CreateGameService);
+var CreateGame;
+(function (CreateGame) {
+    var CreateGameModule = angular.module('CreateGameModule', ['UxControlsModule', 'PlayerSelectorModule', 'NewPlayerPanelModule']);
+    CreateGameModule.service('createGameService', CreateGame.CreateGameService);
+    CreateGameModule.component('buttonsPanel', CreateGame.ButtonsPanel());
+    CreateGameModule.component('selectedPlayers', CreateGame.SelectedPlayers());
+    CreateGameModule.component('createGame', CreateGame.CreateGame());
+})(CreateGame || (CreateGame = {}));
 
-DorkModule.controller('ButtonsPanelController', CreateGame.ButtonsPanelController);
-DorkModule.directive('buttonsPanel', CreateGame.ButtonsPanelDirective);
-
-DorkModule.controller('SelectedPlayersController', CreateGame.SelectedPlayersController);
-DorkModule.directive('selectedPlayers', CreateGame.SelectedPlayersDirective);
-
-DorkModule.controller('CreateGameController', CreateGame.CreateGameController);
-DorkModule.directive('createGame', CreateGame.CreateGameDirective);
+var DorkModule = angular.module('DorkModule', ['CreateGameModule']);
 //# sourceMappingURL=maps/createGame.js.map

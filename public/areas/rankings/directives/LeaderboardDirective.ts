@@ -12,7 +12,7 @@ module Rankings {
     }
 
     export class LeaderboardController {
-        public static $inject: string[] = ['dateTimeService', 'apiService'];
+        public static $inject: string[] = ['dateTimeService', 'dotmService', 'apiService'];
 
 		private lastDatePlayed: string;
 		private currentMonth: number;
@@ -21,12 +21,15 @@ module Rankings {
 		private lastMonthYear: number;
 		private noGamesThisMonth: boolean = false;
 
-        constructor(private dateTimeService: Shared.IDateTimeService, private apiService: Shared.IApiService) {
+		constructor(private dateTimeService: Shared.IDateTimeService,
+			private dotmService: Components.DotmService,
+			private apiService: Shared.IApiService) {
 			this.currentMonth = dateTimeService.currentMonthValue();
 			this.currentYear = dateTimeService.currentYear();
 			this.lastMonth = dateTimeService.lastMonthValue();
 			this.lastMonthYear = dateTimeService.lastMonthYear();
 
+			this.dotmService.changeDate(this.lastMonth, this.lastMonthYear);
 			this.getLastPlayedGame();
         }
 

@@ -142,16 +142,13 @@ var Components;
 
 var ActiveGame;
 (function (ActiveGame) {
-    function ActiveGamesDirective() {
+    function ActiveGames() {
         return {
-            scope: {},
             templateUrl: '/areas/activeGame/directives/ActiveGamesTemplate.html',
-            controller: 'ActiveGamesController',
-            controllerAs: 'ctrl',
-            bindToController: true
+            controller: ActiveGamesController
         };
     }
-    ActiveGame.ActiveGamesDirective = ActiveGamesDirective;
+    ActiveGame.ActiveGames = ActiveGames;
     var State;
     (function (State) {
         State[State["Loading"] = 0] = "Loading";
@@ -207,8 +204,12 @@ var ActiveGame;
     ActiveGame.ActiveGamesController = ActiveGamesController;
 })(ActiveGame || (ActiveGame = {}));
 
-var DorkModule = angular.module('DorkModule', ['UxControlsModule', 'GameCardModule']);
+var ActiveGame;
+(function (ActiveGame) {
+    var ActiveGameModule = angular.module('ActiveGameModule', ['UxControlsModule', 'GameCardModule']);
+    ActiveGameModule.component('activeGames', ActiveGame.ActiveGames());
+})(ActiveGame || (ActiveGame = {}));
 
-DorkModule.controller('ActiveGamesController', ActiveGame.ActiveGamesController);
-DorkModule.directive('activeGames', ActiveGame.ActiveGamesDirective);
+var DorkModule = angular.module('DorkModule', ['ActiveGameModule']);
+
 //# sourceMappingURL=maps/activeGames.js.map

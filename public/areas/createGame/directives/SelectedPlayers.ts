@@ -1,12 +1,8 @@
 module CreateGame {
-    export function SelectedPlayersDirective(): ng.IDirective {
+    export function SelectedPlayers(): ng.IComponentOptions {
         return {
-            scope: {
-            },
             templateUrl: '/areas/createGame/directives/SelectedPlayersTemplate.html',
-            controller: 'SelectedPlayersController',
-            controllerAs: 'ctrl',
-            bindToController: true
+            controller: SelectedPlayersController
         };
     }
 

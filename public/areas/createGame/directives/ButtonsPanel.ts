@@ -1,14 +1,12 @@
 ﻿module CreateGame {
-    export function ButtonsPanelDirective(): ng.IDirective {
+    export function ButtonsPanel(): ng.IComponentOptions {
         return {
-            scope: {
+            bindings: {
                 datePlayed: "=",
                 create: "&"
             },
             templateUrl: '/areas/createGame/directives/ButtonsPanelTemplate.html',
-            controller: 'ButtonsPanelController',
-            controllerAs: 'ctrl',
-            bindToController: true
+            controller: ButtonsPanelController
         };
     }
 

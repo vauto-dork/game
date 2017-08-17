@@ -17,7 +17,7 @@ module DorkHistory {
 	};
 
     export class RankingHistoryController {
-        public static $inject: string[] = ['$timeout', 'monthYearQueryService', 'dateTimeService'];
+        public static $inject: string[] = ['$timeout', 'monthYearQueryService', 'dateTimeService', 'dotmService'];
 
 		private month: number;
 		private year: number;
@@ -29,8 +29,10 @@ module DorkHistory {
         constructor(
 			private $timeout: ng.ITimeoutService,
 			private monthYearQueryService: Shared.IMonthYearQueryService,
-			private dateTimeService: Shared.IDateTimeService) {
+			private dateTimeService: Shared.IDateTimeService,
+			private dotmService: Components.DotmService) {
 
+			this.dotmService.changeDate(this.dateTimeService.currentMonthValue(), this.dateTimeService.currentYear());
 			this.changeState(State.Init);
         }
 
@@ -44,17 +46,18 @@ module DorkHistory {
 						if(date) {
 							this.month = date.month;
 							this.year = date.year;
+							this.changeState(State.Ready);
 						} else {
 							this.month = this.dateTimeService.lastMonthValue();
 							this.year = this.dateTimeService.lastMonthYear();
-							this.monthYearQueryService.saveQueryParams(this.month, this.year);
+							this.changeState(State.Change);
 						}
 					}, 0);
-					this.changeState(State.Ready);
 					break;
 				case State.Change:
 					this.$timeout(() => {
 						this.monthYearQueryService.saveQueryParams(this.month, this.year);
+						this.dotmService.changeDate(this.month, this.year);
 					}, 0);
 					this.changeState(State.Ready);
 					break;
