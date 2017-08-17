@@ -1,14 +1,12 @@
 module Components {
-    export function PlayerFormDirective(): ng.IDirective {
+    export function PlayerForm(): ng.IComponentOptions {
         return {
-			scope: {
+			bindings: {
 				player: "=",
 				disableForm: "=?"
 			},
 			templateUrl: "/components/playerForm/directives/PlayerFormTemplate.html",
-			controller: "PlayerFormController",
-			controllerAs: "ctrl",
-			bindToController: true
+			controller: PlayerFormController
 		};
     }
 

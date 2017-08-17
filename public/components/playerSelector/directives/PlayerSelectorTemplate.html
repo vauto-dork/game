@@ -3,30 +3,30 @@
 		<input type="text"
                class="form-control"
                placeholder="Type name..."
-               ng-model="ctrl.filter"
-               ng-disabled="ctrl.disabled"
-               uib-typeahead="p as p.player.fullname for p in ctrl.players | playerSelectorFilter:$viewValue | limitTo:6"
-               typeahead-on-select="ctrl.selectPlayer($item, $model, $label)"
+               ng-model="$ctrl.filter"
+               ng-disabled="$ctrl.disabled"
+               uib-typeahead="p as p.player.fullname for p in $ctrl.players | playerSelectorFilter:$viewValue | limitTo:6"
+               typeahead-on-select="$ctrl.selectPlayer($item, $model, $label)"
                typeahead-focus-on-select="false"
-               typeahead-no-results="ctrl.noResults"
+               typeahead-no-results="$ctrl.noResults"
                autocomplete="off"
                autofocus />
         <span class="input-group-btn">
             <button type="button"
                 class="btn btn-default"
-                ng-click="ctrl.removeFilter()"
-                ng-disabled="ctrl.disabled">
+                ng-click="$ctrl.removeFilter()"
+                ng-disabled="$ctrl.disabled">
                 <span class="glyphicon glyphicon-remove-sign"></span>
             </button>
         </span>
 	</div>
     
-    <div class="player-selector-not-found alert alert-danger" ng-show="ctrl.noResults && !!ctrl.filter">
-        <p class="player-selector-not-found-text">Cannot find player {{ctrl.filter}}</p>
-        <p ng-show="ctrl.possiblePlayersAdded().hasPlayers">Player may have been selected as:<br/>{{ctrl.possiblePlayersAdded().flatList}}</p>
+    <div class="player-selector-not-found alert alert-danger" ng-show="$ctrl.noResults && !!$ctrl.filter">
+        <p class="player-selector-not-found-text">Cannot find player {{$ctrl.filter}}</p>
+        <p ng-show="$ctrl.possiblePlayersAdded().hasPlayers">Player may have been selected as:<br/>{{$ctrl.possiblePlayersAdded().flatList}}</p>
     </div>
 
-    <div class="player-selector-instructions" ng-hide="ctrl.noResults && !!ctrl.filter">
+    <div class="player-selector-instructions" ng-hide="$ctrl.noResults && !!$ctrl.filter">
         Select players by typing initials, full name, or nickname into textbox.
     </div>
 </div>

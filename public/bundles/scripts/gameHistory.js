@@ -40,20 +40,18 @@ var Components;
 
 var Components;
 (function (Components) {
-    function GameCardDirective() {
+    function GameCard() {
         return {
-            scope: {
+            bindings: {
                 game: "=",
                 showModifyButtons: "=",
                 reload: "&"
             },
             templateUrl: '/components/gameCard/directives/GameCardTemplate.html',
-            controller: 'GameCardController',
-            controllerAs: 'ctrl',
-            bindToController: true
+            controller: GameCardController
         };
     }
-    Components.GameCardDirective = GameCardDirective;
+    Components.GameCard = GameCard;
     var State;
     (function (State) {
         State[State["Ready"] = 0] = "Ready";
@@ -135,10 +133,12 @@ var Components;
     Components.GameCardController = GameCardController;
 })(Components || (Components = {}));
 
-var GameCardModule = angular.module('GameCardModule', []);
-GameCardModule.service('gameCardService', Components.GameCardService);
-GameCardModule.controller('GameCardController', Components.GameCardController);
-GameCardModule.directive('gameCard', Components.GameCardDirective);
+var Components;
+(function (Components) {
+    var GameCardModule = angular.module('GameCardModule', []);
+    GameCardModule.service('gameCardService', Components.GameCardService);
+    GameCardModule.component('gameCard', Components.GameCard());
+})(Components || (Components = {}));
 
 var DorkHistory;
 (function (DorkHistory) {

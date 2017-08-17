@@ -1,15 +1,13 @@
 module Components {
-    export function PlayerSelectorDirective(): ng.IDirective {
+    export function PlayerSelector(): ng.IComponentOptions {
         return {
-            scope: {
+            bindings: {
 				players: "=",
                 onSelected: "&",
                 disabled: "="
 			},
 			templateUrl: "/components/playerSelector/directives/PlayerSelectorTemplate.html",
-			controller: "PlayerSelectorController",
-			controllerAs: "ctrl",
-			bindToController: true
+			controller: PlayerSelectorController
         };
     }
 

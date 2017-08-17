@@ -1,18 +1,16 @@
 var Components;
 (function (Components) {
-    function PlayerFormDirective() {
+    function PlayerForm() {
         return {
-            scope: {
+            bindings: {
                 player: "=",
                 disableForm: "=?"
             },
             templateUrl: "/components/playerForm/directives/PlayerFormTemplate.html",
-            controller: "PlayerFormController",
-            controllerAs: "ctrl",
-            bindToController: true
+            controller: PlayerFormController
         };
     }
-    Components.PlayerFormDirective = PlayerFormDirective;
+    Components.PlayerForm = PlayerForm;
     var PlayerFormController = (function () {
         function PlayerFormController() {
         }
@@ -22,9 +20,11 @@ var Components;
     Components.PlayerFormController = PlayerFormController;
 })(Components || (Components = {}));
 
-var PlayerFormModule = angular.module('PlayerFormModule', []);
-PlayerFormModule.controller('PlayerFormController', Components.PlayerFormController);
-PlayerFormModule.directive('playerForm', Components.PlayerFormDirective);
+var Components;
+(function (Components) {
+    var PlayerFormModule = angular.module('PlayerFormModule', []);
+    PlayerFormModule.component('playerForm', Components.PlayerForm());
+})(Components || (Components = {}));
 
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];

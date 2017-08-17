@@ -1,12 +1,8 @@
 module Components {
-    export function NewPlayerPanelDirective(): ng.IDirective {
+    export function NewPlayerPanel(): ng.IComponentOptions {
         return {
-            scope: {
-			},
 			templateUrl: "/components/newPlayerPanel/directives/NewPlayerPanelTemplate.html",
-			controller: "NewPlayerPanelController",
-			controllerAs: "ctrl",
-			bindToController: true
+			controller: NewPlayerPanelController
         };
     }
 

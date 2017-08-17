@@ -1,14 +1,12 @@
 module Components {
-    export function NewPlayerButtonDirective(): ng.IDirective {
+    export function NewPlayerButton(): ng.IComponentOptions {
         return {
-            scope: {
+            bindings: {
                 click: "&",
                 disabled: "="
 			},
 			templateUrl: "/components/newPlayerPanel/directives/NewPlayerButtonTemplate.html",
-			controller: "NewPlayerButtonController",
-			controllerAs: "ctrl",
-			bindToController: true
+			controller: NewPlayerButtonController
         };
     }
 

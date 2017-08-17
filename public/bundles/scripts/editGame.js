@@ -1,18 +1,16 @@
 var Components;
 (function (Components) {
-    function PlayerFormDirective() {
+    function PlayerForm() {
         return {
-            scope: {
+            bindings: {
                 player: "=",
                 disableForm: "=?"
             },
             templateUrl: "/components/playerForm/directives/PlayerFormTemplate.html",
-            controller: "PlayerFormController",
-            controllerAs: "ctrl",
-            bindToController: true
+            controller: PlayerFormController
         };
     }
-    Components.PlayerFormDirective = PlayerFormDirective;
+    Components.PlayerForm = PlayerForm;
     var PlayerFormController = (function () {
         function PlayerFormController() {
         }
@@ -22,9 +20,11 @@ var Components;
     Components.PlayerFormController = PlayerFormController;
 })(Components || (Components = {}));
 
-var PlayerFormModule = angular.module('PlayerFormModule', []);
-PlayerFormModule.controller('PlayerFormController', Components.PlayerFormController);
-PlayerFormModule.directive('playerForm', Components.PlayerFormDirective);
+var Components;
+(function (Components) {
+    var PlayerFormModule = angular.module('PlayerFormModule', []);
+    PlayerFormModule.component('playerForm', Components.PlayerForm());
+})(Components || (Components = {}));
 
 var Components;
 (function (Components) {
@@ -177,20 +177,18 @@ var Components;
 
 var Components;
 (function (Components) {
-    function PlayerSelectorDirective() {
+    function PlayerSelector() {
         return {
-            scope: {
+            bindings: {
                 players: "=",
                 onSelected: "&",
                 disabled: "="
             },
             templateUrl: "/components/playerSelector/directives/PlayerSelectorTemplate.html",
-            controller: "PlayerSelectorController",
-            controllerAs: "ctrl",
-            bindToController: true
+            controller: PlayerSelectorController
         };
     }
-    Components.PlayerSelectorDirective = PlayerSelectorDirective;
+    Components.PlayerSelector = PlayerSelector;
     var PlayerSelectorController = (function () {
         function PlayerSelectorController($element, $timeout, $filter, playerSelectionService) {
             this.$element = $element;
@@ -232,11 +230,13 @@ var Components;
     Components.PlayerSelectorController = PlayerSelectorController;
 })(Components || (Components = {}));
 
-var PlayerSelectorModule = angular.module('PlayerSelectorModule', []);
-PlayerSelectorModule.service('playerSelectionService', Components.PlayerSelectionService);
-PlayerSelectorModule.filter('playerSelectorFilter', Components.PlayerSelectorFilter);
-PlayerSelectorModule.controller('PlayerSelectorController', Components.PlayerSelectorController);
-PlayerSelectorModule.directive('playerSelector', Components.PlayerSelectorDirective);
+var Components;
+(function (Components) {
+    var PlayerSelectorModule = angular.module('PlayerSelectorModule', []);
+    PlayerSelectorModule.service('playerSelectionService', Components.PlayerSelectionService);
+    PlayerSelectorModule.filter('playerSelectorFilter', Components.PlayerSelectorFilter);
+    PlayerSelectorModule.component('playerSelector', Components.PlayerSelector());
+})(Components || (Components = {}));
 
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -282,19 +282,17 @@ var Components;
 
 var Components;
 (function (Components) {
-    function NewPlayerButtonDirective() {
+    function NewPlayerButton() {
         return {
-            scope: {
+            bindings: {
                 click: "&",
                 disabled: "="
             },
             templateUrl: "/components/newPlayerPanel/directives/NewPlayerButtonTemplate.html",
-            controller: "NewPlayerButtonController",
-            controllerAs: "ctrl",
-            bindToController: true
+            controller: NewPlayerButtonController
         };
     }
-    Components.NewPlayerButtonDirective = NewPlayerButtonDirective;
+    Components.NewPlayerButton = NewPlayerButton;
     var NewPlayerButtonController = (function () {
         function NewPlayerButtonController() {
         }
@@ -305,40 +303,13 @@ var Components;
 
 var Components;
 (function (Components) {
-    var NewPlayerPanelBase = (function () {
-        function NewPlayerPanelBase() {
-            this.collapsePlayerSelectorPanel = false;
-            this.collapseAddNewPlayerPanel = true;
-        }
-        NewPlayerPanelBase.prototype.disablePlayerSelectorPanel = function () {
-            this.collapsePlayerSelectorPanel = true;
-        };
-        NewPlayerPanelBase.prototype.enablePlayerSelectorPanel = function () {
-            this.collapsePlayerSelectorPanel = false;
-        };
-        NewPlayerPanelBase.prototype.disableAddNewPlayer = function () {
-            this.collapseAddNewPlayerPanel = true;
-        };
-        NewPlayerPanelBase.prototype.enableAddNewPlayer = function () {
-            this.collapseAddNewPlayerPanel = false;
-        };
-        return NewPlayerPanelBase;
-    }());
-    Components.NewPlayerPanelBase = NewPlayerPanelBase;
-})(Components || (Components = {}));
-
-var Components;
-(function (Components) {
-    function NewPlayerPanelDirective() {
+    function NewPlayerPanel() {
         return {
-            scope: {},
             templateUrl: "/components/newPlayerPanel/directives/NewPlayerPanelTemplate.html",
-            controller: "NewPlayerPanelController",
-            controllerAs: "ctrl",
-            bindToController: true
+            controller: NewPlayerPanelController
         };
     }
-    Components.NewPlayerPanelDirective = NewPlayerPanelDirective;
+    Components.NewPlayerPanel = NewPlayerPanel;
     var NewPlayerPanelController = (function () {
         function NewPlayerPanelController(panelService) {
             this.panelService = panelService;
@@ -376,12 +347,37 @@ var Components;
     Components.NewPlayerPanelController = NewPlayerPanelController;
 })(Components || (Components = {}));
 
-var newPlayerModule = angular.module('NewPlayerPanelModule', ['PlayerFormModule']);
-newPlayerModule.service('newPlayerPanelService', Components.NewPlayerPanelService);
-newPlayerModule.controller('NewPlayerButtonController', Components.NewPlayerButtonController);
-newPlayerModule.directive('newPlayerButton', Components.NewPlayerButtonDirective);
-newPlayerModule.controller('NewPlayerPanelController', Components.NewPlayerPanelController);
-newPlayerModule.directive('newPlayerPanel', Components.NewPlayerPanelDirective);
+var Components;
+(function (Components) {
+    var NewPlayerPanelBase = (function () {
+        function NewPlayerPanelBase() {
+            this.collapsePlayerSelectorPanel = false;
+            this.collapseAddNewPlayerPanel = true;
+        }
+        NewPlayerPanelBase.prototype.disablePlayerSelectorPanel = function () {
+            this.collapsePlayerSelectorPanel = true;
+        };
+        NewPlayerPanelBase.prototype.enablePlayerSelectorPanel = function () {
+            this.collapsePlayerSelectorPanel = false;
+        };
+        NewPlayerPanelBase.prototype.disableAddNewPlayer = function () {
+            this.collapseAddNewPlayerPanel = true;
+        };
+        NewPlayerPanelBase.prototype.enableAddNewPlayer = function () {
+            this.collapseAddNewPlayerPanel = false;
+        };
+        return NewPlayerPanelBase;
+    }());
+    Components.NewPlayerPanelBase = NewPlayerPanelBase;
+})(Components || (Components = {}));
+
+var Components;
+(function (Components) {
+    var newPlayerModule = angular.module('NewPlayerPanelModule', ['PlayerFormModule']);
+    newPlayerModule.service('newPlayerPanelService', Components.NewPlayerPanelService);
+    newPlayerModule.component('newPlayerButton', Components.NewPlayerButton());
+    newPlayerModule.component('newPlayerPanel', Components.NewPlayerPanel());
+})(Components || (Components = {}));
 
 var Components;
 (function (Components) {

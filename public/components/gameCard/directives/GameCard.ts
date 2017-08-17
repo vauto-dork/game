@@ -1,15 +1,13 @@
 module Components {
-	export function GameCardDirective(): ng.IDirective {
+	export function GameCard(): ng.IComponentOptions {
 		return {
-			scope: {
+			bindings: {
 				game: "=",
 				showModifyButtons: "=",
 				reload: "&"
 			},
 			templateUrl: '/components/gameCard/directives/GameCardTemplate.html',
-			controller: 'GameCardController',
-			controllerAs: 'ctrl',
-			bindToController: true
+			controller: GameCardController
 		};
 	}
 

@@ -1,8 +1,8 @@
 <div class="add-player-panel">
-    <div ng-show="ctrl.showError" class="alert alert-danger">Error Saving Player</div>
+    <div ng-show="$ctrl.showError" class="alert alert-danger">Error Saving Player</div>
 
-    <form name="ctrl.addPlayerForm">
-        <player-form player="ctrl.player" disable-form="ctrl.disabled"></player-form>
+    <form name="$ctrl.addPlayerForm">
+        <player-form player="$ctrl.player" disable-form="$ctrl.disabled"></player-form>
 
         <div class="btn-row">
             <div class="btn-group btn-group-justified" role="group">
@@ -10,8 +10,8 @@
                     <button
                         type="button"
                         class="btn btn-primary btn-lg"
-                        ng-click="ctrl.cancel()"
-                        ng-disabled="ctrl.disabled"
+                        ng-click="$ctrl.cancel()"
+                        ng-disabled="$ctrl.disabled"
                         aria-label="Cancel">
                         <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Cancel
                     </button>
@@ -20,8 +20,8 @@
                     <button
                         type="button"
                         class="btn btn-success btn-lg"
-                        ng-click="ctrl.save()"
-                        ng-disabled="ctrl.disabled || ctrl.addPlayerForm.$invalid || ctrl.addPlayerForm.$pristine"
+                        ng-click="$ctrl.save()"
+                        ng-disabled="$ctrl.disabled || $ctrl.addPlayerForm.$invalid || $ctrl.addPlayerForm.$pristine"
                         aria-label="Save Player">
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Player
                     </button>
