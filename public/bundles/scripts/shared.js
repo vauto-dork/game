@@ -887,20 +887,18 @@ var Shared;
 
 var Shared;
 (function (Shared) {
-    function DatePickerDirective() {
+    function DatePicker() {
         return {
-            scope: {
+            bindings: {
                 date: "=",
                 showNowButton: "=",
                 disabled: "="
             },
             templateUrl: '/shared/directives/DatePickerTemplate.html',
-            controller: 'DatePickerController',
-            controllerAs: 'ctrl',
-            bindToController: true
+            controller: DatePickerController
         };
     }
-    Shared.DatePickerDirective = DatePickerDirective;
+    Shared.DatePicker = DatePicker;
     var DatePickerController = (function () {
         function DatePickerController($element, $window, $timeout, dateTimeService) {
             var _this = this;
@@ -971,16 +969,13 @@ var Shared;
 
 var Shared;
 (function (Shared) {
-    function GlobalNavDirective() {
+    function GlobalNav() {
         return {
-            scope: {},
             templateUrl: '/shared/directives/GlobalNavTemplate.html',
-            controller: 'GlobalNavController',
-            controllerAs: 'ctrl',
-            bindToController: true
+            controller: GlobalNavController
         };
     }
-    Shared.GlobalNavDirective = GlobalNavDirective;
+    Shared.GlobalNav = GlobalNav;
     var GlobalNavController = (function () {
         function GlobalNavController() {
             this.sidebarOpen = false;
@@ -998,16 +993,13 @@ var Shared;
 
 var Shared;
 (function (Shared) {
-    function LoadSpinnerDirective() {
+    function LoadSpinner() {
         return {
-            scope: {},
             template: '<div class="load-bar"><img src="/images/loader.gif" width="220" height="19" /></div>',
-            controller: 'LoadSpinnerController',
-            controllerAs: 'ctrl',
-            bindToController: true
+            controller: LoadSpinnerController
         };
     }
-    Shared.LoadSpinnerDirective = LoadSpinnerDirective;
+    Shared.LoadSpinner = LoadSpinner;
     var LoadSpinnerController = (function () {
         function LoadSpinnerController() {
         }
@@ -1019,21 +1011,19 @@ var Shared;
 
 var Shared;
 (function (Shared) {
-    function MonthYearPickerDirective() {
+    function MonthYearPicker() {
         return {
-            scope: {
+            bindings: {
                 month: "=",
                 year: "=",
                 disabled: "=?",
                 change: "&"
             },
             templateUrl: '/shared/directives/MonthYearPickerTemplate.html',
-            controller: 'MonthYearPickerController',
-            controllerAs: 'ctrl',
-            bindToController: true
+            controller: MonthYearPickerController
         };
     }
-    Shared.MonthYearPickerDirective = MonthYearPickerDirective;
+    Shared.MonthYearPicker = MonthYearPicker;
     var MonthYearPickerController = (function () {
         function MonthYearPickerController(dateTimeService) {
             this.dateTimeService = dateTimeService;
@@ -1159,41 +1149,16 @@ var Shared;
 
 var Shared;
 (function (Shared) {
-    function PlayerBonusPanelDirective() {
+    function PlayerNametag() {
         return {
-            scope: {
-                numPlayers: "="
-            },
-            templateUrl: '/shared/directives/PlayerBonusPanelTemplate.html',
-            controller: 'PlayerBonusPanelController',
-            controllerAs: 'ctrl',
-            bindToController: true
-        };
-    }
-    Shared.PlayerBonusPanelDirective = PlayerBonusPanelDirective;
-    var PlayerBonusPanelController = (function () {
-        function PlayerBonusPanelController() {
-        }
-        PlayerBonusPanelController.$inject = [];
-        return PlayerBonusPanelController;
-    }());
-    Shared.PlayerBonusPanelController = PlayerBonusPanelController;
-})(Shared || (Shared = {}));
-
-var Shared;
-(function (Shared) {
-    function PlayerNametagDirective() {
-        return {
-            scope: {
+            bindings: {
                 player: '='
             },
             templateUrl: '/shared/directives/PlayerNametagTemplate.html',
-            controller: 'PlayerNametagController',
-            controllerAs: 'ctrl',
-            bindToController: true
+            controller: PlayerNametagController
         };
     }
-    Shared.PlayerNametagDirective = PlayerNametagDirective;
+    Shared.PlayerNametag = PlayerNametag;
     var PlayerNametagController = (function () {
         function PlayerNametagController() {
         }
@@ -1205,18 +1170,16 @@ var Shared;
 
 var Shared;
 (function (Shared) {
-    function PlayerScoretagDirective() {
+    function PlayerScoretag() {
         return {
-            scope: {
+            bindings: {
                 player: '='
             },
             templateUrl: '/shared/directives/PlayerScoretagTemplate.html',
-            controller: 'PlayerScoretagController',
-            controllerAs: 'ctrl',
-            bindToController: true
+            controller: PlayerScoretagController
         };
     }
-    Shared.PlayerScoretagDirective = PlayerScoretagDirective;
+    Shared.PlayerScoretag = PlayerScoretag;
     var PlayerScoretagController = (function () {
         function PlayerScoretagController() {
             var rankArray = !this.player.rank ? 0 : this.player.rank;
@@ -1237,9 +1200,9 @@ var Shared;
 
 var Shared;
 (function (Shared) {
-    function TextInputDirective() {
+    function TextInput() {
         return {
-            scope: {
+            bindings: {
                 name: "@",
                 placeholder: "@",
                 value: "=",
@@ -1249,12 +1212,10 @@ var Shared;
                 showClearBtn: "="
             },
             templateUrl: "/shared/directives/TextInputTemplate.html",
-            controller: "TextInputController",
-            controllerAs: "ctrl",
-            bindToController: true
+            controller: TextInputController
         };
     }
-    Shared.TextInputDirective = TextInputDirective;
+    Shared.TextInput = TextInput;
     var TextInputController = (function () {
         function TextInputController() {
         }
@@ -1266,24 +1227,20 @@ var Shared;
     Shared.TextInputController = TextInputController;
 })(Shared || (Shared = {}));
 
-var UxControlsModule = angular.module('UxControlsModule', ['ngAnimate', 'ui.bootstrap']);
-UxControlsModule.service('dateTimeService', Shared.DateTimeService);
-UxControlsModule.service('monthYearQueryService', Shared.MonthYearQueryService);
-UxControlsModule.service('apiService', Shared.ApiService);
-UxControlsModule.controller('TextInputController', Shared.TextInputController);
-UxControlsModule.directive('textInput', Shared.TextInputDirective);
-UxControlsModule.controller('LoadSpinnerController', Shared.LoadSpinnerController);
-UxControlsModule.directive('loadSpinner', Shared.LoadSpinnerDirective);
-UxControlsModule.controller('DatePickerController', Shared.DatePickerController);
-UxControlsModule.directive('datePicker', Shared.DatePickerDirective);
-UxControlsModule.controller('MonthYearPickerController', Shared.MonthYearPickerController);
-UxControlsModule.directive('monthYearPicker', Shared.MonthYearPickerDirective);
-UxControlsModule.controller('PlayerNametagController', Shared.PlayerNametagController);
-UxControlsModule.directive('playerNametag', Shared.PlayerNametagDirective);
-UxControlsModule.controller('PlayerScoretagController', Shared.PlayerScoretagController);
-UxControlsModule.directive('playerScoretag', Shared.PlayerScoretagDirective);
-UxControlsModule.controller('GlobalNavController', Shared.GlobalNavController);
-UxControlsModule.directive('globalNav', Shared.GlobalNavDirective);
-UxControlsModule.directive('numericUpDown', Shared.NumericUpDownDirective);
+var Shared;
+(function (Shared) {
+    var UxControlsModule = angular.module('UxControlsModule', ['ngAnimate', 'ui.bootstrap']);
+    UxControlsModule.service('dateTimeService', Shared.DateTimeService);
+    UxControlsModule.service('monthYearQueryService', Shared.MonthYearQueryService);
+    UxControlsModule.service('apiService', Shared.ApiService);
+    UxControlsModule.component('textInput', Shared.TextInput());
+    UxControlsModule.component('loadSpinner', Shared.LoadSpinner());
+    UxControlsModule.component('datePicker', Shared.DatePicker());
+    UxControlsModule.component('monthYearPicker', Shared.MonthYearPicker());
+    UxControlsModule.component('playerNametag', Shared.PlayerNametag());
+    UxControlsModule.component('playerScoretag', Shared.PlayerScoretag());
+    UxControlsModule.component('globalNav', Shared.GlobalNav());
+    UxControlsModule.directive('numericUpDown', Shared.NumericUpDownDirective);
+})(Shared || (Shared = {}));
 
 //# sourceMappingURL=maps/shared.js.map

@@ -1,4 +1,4 @@
-var EditGameModule = angular.module('EditGameModule', ['UxControlsModule', 'PlayerSelectorModule', 'NewPlayerPanelModule']);
+var EditGameModule = angular.module('EditGameModule', ['UxControlsModule', 'PlayerSelectorModule', 'NewPlayerPanelModule', 'PlayerBonusPanelModule']);
 
 EditGameModule.service('alertsService', Shared.AlertsService);
 EditGameModule.service('editGameService', EditGame.EditGameService);
@@ -19,6 +19,3 @@ EditGameModule.directive('modifyPlayers', EditGame.ModifyPlayersDirective);
 
 EditGameModule.controller('RevertFinalizeController', EditGame.RevertFinalizeController);
 EditGameModule.directive('revertFinalize', EditGame.RevertFinalizeDirective);
-
-EditGameModule.controller('PlayerBonusPanelController', Shared.PlayerBonusPanelController);
-EditGameModule.directive('playerBonusPanel', Shared.PlayerBonusPanelDirective);

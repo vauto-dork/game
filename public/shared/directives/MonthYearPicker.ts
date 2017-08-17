@@ -1,23 +1,16 @@
 module Shared {
-    export function MonthYearPickerDirective(): ng.IDirective {
+    export function MonthYearPicker(): ng.IComponentOptions {
         return {
-			scope: {
+			bindings: {
 				month: "=",
 				year: "=",
 				disabled: "=?",
 				change: "&"
 			},
 			templateUrl: '/shared/directives/MonthYearPickerTemplate.html',
-			controller: 'MonthYearPickerController',
-			controllerAs: 'ctrl',
-			bindToController: true
+			controller: MonthYearPickerController
 		};
     }
-
-	interface INameValuePair {
-		name: string;
-		value: number;
-	}
 
     export class MonthYearPickerController {
 		public static $inject: string[] = ['dateTimeService'];

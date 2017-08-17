@@ -1,13 +1,11 @@
 module Shared {
-    export function PlayerNametagDirective(): ng.IDirective {
+    export function PlayerNametag(): ng.IComponentOptions {
         return {
-			scope: {
+			bindings: {
 				player: '='
 			},
 			templateUrl: '/shared/directives/PlayerNametagTemplate.html',
-			controller: 'PlayerNametagController',
-			controllerAs: 'ctrl',
-			bindToController: true
+			controller: PlayerNametagController
 		};
     }
 

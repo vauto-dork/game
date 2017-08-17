@@ -383,6 +383,33 @@ newPlayerModule.directive('newPlayerButton', Components.NewPlayerButtonDirective
 newPlayerModule.controller('NewPlayerPanelController', Components.NewPlayerPanelController);
 newPlayerModule.directive('newPlayerPanel', Components.NewPlayerPanelDirective);
 
+var Components;
+(function (Components) {
+    function PlayerBonusPanel() {
+        return {
+            bindings: {
+                numPlayers: "="
+            },
+            templateUrl: '/components/playerBonusPanel/directives/PlayerBonusPanelTemplate.html',
+            controller: PlayerBonusPanelController
+        };
+    }
+    Components.PlayerBonusPanel = PlayerBonusPanel;
+    var PlayerBonusPanelController = (function () {
+        function PlayerBonusPanelController() {
+        }
+        PlayerBonusPanelController.$inject = [];
+        return PlayerBonusPanelController;
+    }());
+    Components.PlayerBonusPanelController = PlayerBonusPanelController;
+})(Components || (Components = {}));
+
+var Components;
+(function (Components) {
+    var PlayerBonusPanelModule = angular.module('PlayerBonusPanelModule', []);
+    PlayerBonusPanelModule.component('playerBonusPanel', Components.PlayerBonusPanel());
+})(Components || (Components = {}));
+
 var EditGame;
 (function (EditGame) {
     var EditGameCollapseService = (function () {
@@ -1089,7 +1116,7 @@ var EditGame;
     EditGame.RevertFinalizeController = RevertFinalizeController;
 })(EditGame || (EditGame = {}));
 
-var EditGameModule = angular.module('EditGameModule', ['UxControlsModule', 'PlayerSelectorModule', 'NewPlayerPanelModule']);
+var EditGameModule = angular.module('EditGameModule', ['UxControlsModule', 'PlayerSelectorModule', 'NewPlayerPanelModule', 'PlayerBonusPanelModule']);
 EditGameModule.service('alertsService', Shared.AlertsService);
 EditGameModule.service('editGameService', EditGame.EditGameService);
 EditGameModule.service('editGameStateService', EditGame.EditGameStateService);
@@ -1104,8 +1131,6 @@ EditGameModule.controller('ModifyPlayersController', EditGame.ModifyPlayersContr
 EditGameModule.directive('modifyPlayers', EditGame.ModifyPlayersDirective);
 EditGameModule.controller('RevertFinalizeController', EditGame.RevertFinalizeController);
 EditGameModule.directive('revertFinalize', EditGame.RevertFinalizeDirective);
-EditGameModule.controller('PlayerBonusPanelController', Shared.PlayerBonusPanelController);
-EditGameModule.directive('playerBonusPanel', Shared.PlayerBonusPanelDirective);
 
 var DorkModule = angular.module('DorkModule', ['EditGameModule']);
 

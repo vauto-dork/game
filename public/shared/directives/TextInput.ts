@@ -1,7 +1,7 @@
 module Shared {
-    export function TextInputDirective(): ng.IDirective {
+    export function TextInput(): ng.IComponentOptions {
         return {
-			scope: {
+			bindings: {
 				name: "@",
                 placeholder: "@",
                 value: "=",
@@ -11,9 +11,7 @@ module Shared {
                 showClearBtn: "="
 			},
 			templateUrl: "/shared/directives/TextInputTemplate.html",
-			controller: "TextInputController",
-			controllerAs: "ctrl",
-			bindToController: true
+			controller: TextInputController
 		};
     }
 

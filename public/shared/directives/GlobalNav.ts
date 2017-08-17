@@ -1,13 +1,8 @@
 module Shared {
-    export function GlobalNavDirective(): ng.IDirective {
+    export function GlobalNav(): ng.IComponentOptions {
         return {
-			scope: {
-	
-			},
 			templateUrl: '/shared/directives/GlobalNavTemplate.html',
-			controller: 'GlobalNavController',
-			controllerAs: 'ctrl',
-			bindToController: true
+			controller: GlobalNavController
 		};
     }
 

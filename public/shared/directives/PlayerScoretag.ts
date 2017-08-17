@@ -1,13 +1,11 @@
 module Shared {
-    export function PlayerScoretagDirective(): ng.IDirective {
+    export function PlayerScoretag(): ng.IComponentOptions {
         return {
-			scope: {
+			bindings: {
 				player: '='
 			},
 			templateUrl: '/shared/directives/PlayerScoretagTemplate.html',
-			controller: 'PlayerScoretagController',
-			controllerAs: 'ctrl',
-			bindToController: true
+			controller: PlayerScoretagController
 		};
     }
 

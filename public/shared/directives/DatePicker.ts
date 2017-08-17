@@ -1,15 +1,13 @@
 module Shared {
-    export function DatePickerDirective(): ng.IDirective {
+    export function DatePicker(): ng.IComponentOptions {
         return {
-			scope: {
+			bindings: {
 				date: "=",
 				showNowButton: "=",
 				disabled: "="
 			},
 			templateUrl: '/shared/directives/DatePickerTemplate.html',
-			controller: 'DatePickerController',
-			controllerAs: 'ctrl',
-			bindToController: true
+			controller: DatePickerController
 		};
     }
 
