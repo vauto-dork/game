@@ -1,15 +1,13 @@
 module DorkHistory {
 	import EditGameType = Shared.EditGameType;
 
-    export function GameHistoryDirective(): ng.IDirective {
+    export function GameHistory(): ng.IComponentOptions {
         return {
-			scope: {
+			bindings: {
 				isFinalizedGame: '='
 			},
 			templateUrl: '/areas/history/directives/GameHistoryTemplate.html',
-			controller: 'GameHistoryController',
-			controllerAs: 'ctrl',
-			bindToController: true
+			controller: GameHistoryController
 		};
     }
 

@@ -1,12 +1,8 @@
 module DorkHistory {
-    export function RankingHistoryDirective(): ng.IDirective {
+    export function RankingHistory(): ng.IComponentOptions {
         return {
-			scope: {
-			},
 			templateUrl: '/areas/history/directives/RankingHistoryTemplate.html',
-			controller: 'RankingHistoryController',
-			controllerAs: 'ctrl',
-			bindToController: true
+			controller: RankingHistoryController
 		};
     }
 
@@ -32,7 +28,6 @@ module DorkHistory {
 			private dateTimeService: Shared.IDateTimeService,
 			private dotmService: Components.DotmService) {
 
-			this.dotmService.changeDate(this.dateTimeService.currentMonthValue(), this.dateTimeService.currentYear());
 			this.changeState(State.Init);
         }
 
@@ -46,12 +41,11 @@ module DorkHistory {
 						if(date) {
 							this.month = date.month;
 							this.year = date.year;
-							this.changeState(State.Ready);
 						} else {
 							this.month = this.dateTimeService.lastMonthValue();
 							this.year = this.dateTimeService.lastMonthYear();
-							this.changeState(State.Change);
 						}
+						this.changeState(State.Change);
 					}, 0);
 					break;
 				case State.Change:

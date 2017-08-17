@@ -1,22 +1,22 @@
 <div class="ranking-history">
     <div class="row">
         <div class="col-xs-12">
-            <month-year-picker month="ctrl.month" year="ctrl.year" change="ctrl.updateQueryParams()"></month-year-picker>
+            <month-year-picker month="$ctrl.month" year="$ctrl.year" change="$ctrl.updateQueryParams()"></month-year-picker>
         </div>
     </div>
 
     <div class="row">
-        <div ng-show="ctrl.isCurrentMonth" class="col-xs-12 text-center">
+        <div ng-show="$ctrl.isCurrentMonth" class="col-xs-12 text-center">
             <h2>Month in progress.</h2>
         </div>
-        <div class="col-xs-12" ng-show="!ctrl.isCurrentMonth">
+        <div class="col-xs-12" ng-show="!$ctrl.isCurrentMonth">
             <dotm></dotm>
         </div>
     </div>
 
-    <div class="row" ng-show="!ctrl.isCurrentMonth">
+    <div class="row" ng-show="!$ctrl.isCurrentMonth">
         <div class="col-xs-12">
-            <rankings month="ctrl.month" year="ctrl.year" hide-unranked="true"></rankings>
+            <rankings month="$ctrl.month" year="$ctrl.year" hide-unranked="true"></rankings>
         </div>
     </div>
 </div>

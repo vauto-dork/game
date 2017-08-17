@@ -143,18 +143,16 @@ var Components;
 var DorkHistory;
 (function (DorkHistory) {
     var EditGameType = Shared.EditGameType;
-    function GameHistoryDirective() {
+    function GameHistory() {
         return {
-            scope: {
+            bindings: {
                 isFinalizedGame: '='
             },
             templateUrl: '/areas/history/directives/GameHistoryTemplate.html',
-            controller: 'GameHistoryController',
-            controllerAs: 'ctrl',
-            bindToController: true
+            controller: GameHistoryController
         };
     }
-    DorkHistory.GameHistoryDirective = GameHistoryDirective;
+    DorkHistory.GameHistory = GameHistory;
     var State;
     (function (State) {
         State[State["Init"] = 0] = "Init";
@@ -250,8 +248,11 @@ var DorkHistory;
     DorkHistory.GameHistoryController = GameHistoryController;
 })(DorkHistory || (DorkHistory = {}));
 
-var DorkModule = angular.module('DorkModule', ['UxControlsModule', 'GameCardModule']);
+var DorkHistory;
+(function (DorkHistory) {
+    var GameHistoryModule = angular.module('GameHistoryModule', ['UxControlsModule', 'GameCardModule']);
+    GameHistoryModule.component('gameHistory', DorkHistory.GameHistory());
+})(DorkHistory || (DorkHistory = {}));
 
-DorkModule.controller('GameHistoryController', DorkHistory.GameHistoryController);
-DorkModule.directive('gameHistory', DorkHistory.GameHistoryDirective);
+var DorkModule = angular.module('DorkModule', ['GameHistoryModule']);
 //# sourceMappingURL=maps/gameHistory.js.map

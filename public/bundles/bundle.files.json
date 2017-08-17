@@ -107,7 +107,8 @@
         },
         "gameHistory": {
             "files": [
-                "areas/history/directives/GameHistoryDirective.js",
+                "areas/history/directives/GameHistory.js",
+                "areas/history/modules/GameHistoryModule.js",
                 "bundles/pageModules/gameHistory.js"
             ],
             "components": [
@@ -151,7 +152,8 @@
                 "areas/rankings/directives/RankingsCardDirective.js",
                 "areas/rankings/directives/RankingsDirective.js",
                 "areas/rankings/modules/RankingsModule.js",
-                "areas/history/directives/RankingHistoryDirective.js",
+                "areas/history/directives/RankingHistory.js",
+                "areas/history/modules/RankingHistoryModule.js",
                 "bundles/pageModules/rankingHistory.js"
             ],
             "components": [

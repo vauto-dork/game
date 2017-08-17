@@ -313,16 +313,13 @@ RankingsModule.directive('rankings', Rankings.RankingsDirective);
 
 var DorkHistory;
 (function (DorkHistory) {
-    function RankingHistoryDirective() {
+    function RankingHistory() {
         return {
-            scope: {},
             templateUrl: '/areas/history/directives/RankingHistoryTemplate.html',
-            controller: 'RankingHistoryController',
-            controllerAs: 'ctrl',
-            bindToController: true
+            controller: RankingHistoryController
         };
     }
-    DorkHistory.RankingHistoryDirective = RankingHistoryDirective;
+    DorkHistory.RankingHistory = RankingHistory;
     var State;
     (function (State) {
         State[State["Init"] = 0] = "Init";
@@ -336,7 +333,6 @@ var DorkHistory;
             this.monthYearQueryService = monthYearQueryService;
             this.dateTimeService = dateTimeService;
             this.dotmService = dotmService;
-            this.dotmService.changeDate(this.dateTimeService.currentMonthValue(), this.dateTimeService.currentYear());
             this.changeState(State.Init);
         }
         Object.defineProperty(RankingHistoryController.prototype, "isCurrentMonth", {
@@ -355,13 +351,12 @@ var DorkHistory;
                         if (date) {
                             _this.month = date.month;
                             _this.year = date.year;
-                            _this.changeState(State.Ready);
                         }
                         else {
                             _this.month = _this.dateTimeService.lastMonthValue();
                             _this.year = _this.dateTimeService.lastMonthYear();
-                            _this.changeState(State.Change);
                         }
+                        _this.changeState(State.Change);
                     }, 0);
                     break;
                 case State.Change:
@@ -382,8 +377,12 @@ var DorkHistory;
     DorkHistory.RankingHistoryController = RankingHistoryController;
 })(DorkHistory || (DorkHistory = {}));
 
-var DorkModule = angular.module('DorkModule', ['UxControlsModule', 'DotmModule', 'RankingsModule']);
+var DorkHistory;
+(function (DorkHistory) {
+    var RankingHistoryModule = angular.module('RankingHistoryModule', ['UxControlsModule', 'DotmModule', 'RankingsModule']);
+    RankingHistoryModule.component('rankingHistory', DorkHistory.RankingHistory());
+})(DorkHistory || (DorkHistory = {}));
 
-DorkModule.controller('RankingHistoryController', DorkHistory.RankingHistoryController);
-DorkModule.directive('rankingHistory', DorkHistory.RankingHistoryDirective);
+var DorkModule = angular.module('DorkModule', ['RankingHistoryModule']);
+
 //# sourceMappingURL=maps/rankingHistory.js.map
