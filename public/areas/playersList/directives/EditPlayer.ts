@@ -1,13 +1,11 @@
-module Players {
-    export function EditPlayerDirective(): ng.IDirective {
+module PlayersList {
+    export function EditPlayer(): ng.IComponentOptions {
         return {
-			scope: {
+			bindings: {
 				player: "="
 			},
-			templateUrl: "/areas/players/directives/EditPlayerTemplate.html",
-			controller: "EditPlayerController",
-			controllerAs: "ctrl",
-			bindToController: true
+			templateUrl: "/areas/playersList/directives/EditPlayerTemplate.html",
+			controller: EditPlayerController
 		};
     }
 

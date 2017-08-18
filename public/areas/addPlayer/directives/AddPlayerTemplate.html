@@ -1,25 +1,25 @@
-<div ng-show="ctrl.success" class="status-banner bg-success"><h4>Player Added</h4></div>
-<div ng-show="ctrl.failure" class="status-banner bg-danger"><h4>Error Adding Player</h4></div>
+<div ng-show="$ctrl.success" class="status-banner bg-success"><h4>Player Added</h4></div>
+<div ng-show="$ctrl.failure" class="status-banner bg-danger"><h4>Error Adding Player</h4></div>
 
-<form name="ctrl.addPlayerForm">
-	<player-form player="ctrl.player" disable-form="ctrl.disableControls"></player-form>
+<form name="$ctrl.addPlayerForm">
+	<player-form player="$ctrl.player" disable-form="$ctrl.disableControls"></player-form>
 	
 	<div class="btn-row">
 		<div class="btn-group btn-group-justified" role="group">
 			<div class="btn-group" role="group">
 				<button type="button"
 						class="btn btn-danger btn-lg"
-						ng-click="ctrl.reset()"
-						ng-disabled="ctrl.disableControls || ctrl.addPlayerForm.$pristine"
+						ng-click="$ctrl.reset()"
+						ng-disabled="$ctrl.disableControls || $ctrl.addPlayerForm.$pristine"
 						aria-label="Reset">
 					<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Reset
 				</button>
 			</div>
 			<div class="btn-group" role="group">
 				<button type="button"
-						ng-click="ctrl.submit()"
+						ng-click="$ctrl.submit()"
 						class="btn btn-success btn-lg"
-						ng-disabled="ctrl.disableControls || ctrl.addPlayerForm.$invalid || ctrl.addPlayerForm.$pristine"
+						ng-disabled="$ctrl.disableControls || $ctrl.addPlayerForm.$invalid || $ctrl.addPlayerForm.$pristine"
 						aria-label="Add Player">
 					<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add
 				</button>

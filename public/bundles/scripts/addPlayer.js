@@ -26,18 +26,15 @@ var Components;
     PlayerFormModule.component('playerForm', Components.PlayerForm());
 })(Components || (Components = {}));
 
-var Players;
-(function (Players) {
-    function AddPlayerDirective() {
+var AddPlayer;
+(function (AddPlayer_1) {
+    function AddPlayer() {
         return {
-            scope: {},
-            templateUrl: '/areas/players/directives/AddPlayerTemplate.html',
-            controller: 'AddPlayerController',
-            controllerAs: 'ctrl',
-            bindToController: true
+            templateUrl: '/areas/addPlayer/directives/AddPlayerTemplate.html',
+            controller: AddPlayerController
         };
     }
-    Players.AddPlayerDirective = AddPlayerDirective;
+    AddPlayer_1.AddPlayer = AddPlayer;
     var State;
     (function (State) {
         State[State["Ready"] = 0] = "Ready";
@@ -103,12 +100,16 @@ var Players;
         AddPlayerController.$inject = ['$timeout', 'apiService'];
         return AddPlayerController;
     }());
-    Players.AddPlayerController = AddPlayerController;
-})(Players || (Players = {}));
+    AddPlayer_1.AddPlayerController = AddPlayerController;
+})(AddPlayer || (AddPlayer = {}));
 
-var DorkModule = angular.module('DorkModule', ['UxControlsModule', 'PlayerFormModule']);
+var AddPlayer;
+(function (AddPlayer) {
+    var AddPlayerModule = angular.module('AddPlayerModule', ['UxControlsModule', 'PlayerFormModule']);
+    AddPlayerModule.component('addPlayer', AddPlayer.AddPlayer());
+})(AddPlayer || (AddPlayer = {}));
 
-DorkModule.controller('AddPlayerController', Players.AddPlayerController);
-DorkModule.directive('addPlayer', Players.AddPlayerDirective);
+var DorkModule = angular.module('DorkModule', ['AddPlayerModule']);
+
 
 //# sourceMappingURL=maps/addPlayer.js.map

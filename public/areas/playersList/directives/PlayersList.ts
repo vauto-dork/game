@@ -1,12 +1,8 @@
-module Players {
-    export function PlayersListDirective(): ng.IDirective {
+module PlayersList {
+    export function PlayersList(): ng.IComponentOptions {
         return {
-			scope: {
-			},
-			templateUrl: "/areas/players/directives/PlayersListTemplate.html",
-			controller: "PlayersListController",
-			controllerAs: "ctrl",
-			bindToController: true
+			templateUrl: "/areas/playersList/directives/PlayersListTemplate.html",
+			controller: PlayersListController
         };
     }
 

@@ -94,23 +94,21 @@ var Players;
         PlayersListService.$inject = ['$timeout', '$q', 'apiService'];
         return PlayersListService;
     }(Shared.PubSubServiceBase));
-    Players.PlayersListService = PlayersListService;
-})(Players || (Players = {}));
+    PlayersList.PlayersListService = PlayersListService;
+})(PlayersList || (PlayersList = {}));
 
-var Players;
-(function (Players) {
-    function EditPlayerDirective() {
+var PlayersList;
+(function (PlayersList) {
+    function EditPlayer() {
         return {
-            scope: {
+            bindings: {
                 player: "="
             },
-            templateUrl: "/areas/players/directives/EditPlayerTemplate.html",
-            controller: "EditPlayerController",
-            controllerAs: "ctrl",
-            bindToController: true
+            templateUrl: "/areas/playersList/directives/EditPlayerTemplate.html",
+            controller: EditPlayerController
         };
     }
-    Players.EditPlayerDirective = EditPlayerDirective;
+    PlayersList.EditPlayer = EditPlayer;
     var EditPlayerController = (function () {
         function EditPlayerController(playersListService) {
             var _this = this;
@@ -130,21 +128,18 @@ var Players;
         EditPlayerController.$inject = ["playersListService"];
         return EditPlayerController;
     }());
-    Players.EditPlayerController = EditPlayerController;
-})(Players || (Players = {}));
+    PlayersList.EditPlayerController = EditPlayerController;
+})(PlayersList || (PlayersList = {}));
 
-var Players;
-(function (Players) {
-    function PlayersListDirective() {
+var PlayersList;
+(function (PlayersList_1) {
+    function PlayersList() {
         return {
-            scope: {},
-            templateUrl: "/areas/players/directives/PlayersListTemplate.html",
-            controller: "PlayersListController",
-            controllerAs: "ctrl",
-            bindToController: true
+            templateUrl: "/areas/playersList/directives/PlayersListTemplate.html",
+            controller: PlayersListController
         };
     }
-    Players.PlayersListDirective = PlayersListDirective;
+    PlayersList_1.PlayersList = PlayersList;
     var State;
     (function (State) {
         State[State["Loading"] = 0] = "Loading";
@@ -252,18 +247,19 @@ var Players;
         PlayersListController.$inject = ["apiService", "alertsService", "playersListService"];
         return PlayersListController;
     }());
-    Players.PlayersListController = PlayersListController;
-})(Players || (Players = {}));
+    PlayersList_1.PlayersListController = PlayersListController;
+})(PlayersList || (PlayersList = {}));
 
-var DorkModule = angular.module('DorkModule', ['UxControlsModule', 'PlayerFormModule']);
+var PlayersList;
+(function (PlayersList) {
+    var PlayersListModule = angular.module('PlayersListModule', ['UxControlsModule', 'PlayerFormModule']);
+    PlayersListModule.service('alertsService', Shared.AlertsService);
+    PlayersListModule.service('playersListService', PlayersList.PlayersListService);
+    PlayersListModule.component('editPlayer', PlayersList.EditPlayer());
+    PlayersListModule.component('playersList', PlayersList.PlayersList());
+})(PlayersList || (PlayersList = {}));
 
-DorkModule.service('alertsService', Shared.AlertsService);
-DorkModule.service('playersListService', Players.PlayersListService);
+var DorkModule = angular.module('DorkModule', ['PlayersList']);
 
-DorkModule.controller('EditPlayerController', Players.EditPlayerController);
-DorkModule.directive('editPlayer', Players.EditPlayerDirective);
-
-DorkModule.controller('PlayersListController', Players.PlayersListController);
-DorkModule.directive('playersList', Players.PlayersListDirective);
 
 //# sourceMappingURL=maps/playersList.js.map

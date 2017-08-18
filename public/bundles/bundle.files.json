@@ -68,7 +68,8 @@
         },
         "addPlayer": {
             "files": [
-                "areas/players/directives/AddPlayerDirective.js",
+                "areas/addPlayer/directives/*.js",
+                "areas/addPlayer/modules/*.js",
                 "bundles/pageModules/addPlayer.js"
             ],
             "components": [
@@ -130,9 +131,9 @@
         },
         "playersList": {
             "files": [
-                "areas/players/services/PlayersListService.js",
-                "areas/players/directives/EditPlayerDirective.js",
-                "areas/players/directives/PlayersListDirective.js",
+                "areas/playersList/services/*.js",
+                "areas/playersList/directives/*.js",
+                "areas/playersList/modules/*.js",
                 "bundles/pageModules/playersList.js"
             ],
             "components": [

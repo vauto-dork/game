@@ -1,4 +1,4 @@
-module Players {
+module PlayersList {
     export interface IPlayersListService {
         players: Shared.IPlayer[];
 

@@ -1,12 +1,8 @@
-module Players {
-    export function AddPlayerDirective(): ng.IDirective {
+module AddPlayer {
+    export function AddPlayer(): ng.IComponentOptions {
         return {
-			scope: {
-			},
-			templateUrl: '/areas/players/directives/AddPlayerTemplate.html',
-			controller: 'AddPlayerController',
-			controllerAs: 'ctrl',
-			bindToController: true
+			templateUrl: '/areas/addPlayer/directives/AddPlayerTemplate.html',
+			controller: AddPlayerController
 		};
     }
 
