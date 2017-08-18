@@ -57,11 +57,6 @@ discontinue service immediately if unexpected charges show up.
 
 There is an app on Heroku for each environment.
 
-# Trello
-
-* https://trello.com/b/on1e5OfO/dork-web-app
-* https://trello.com/b/Es8lXpIL/dork-android
-
 # Files
 * app.js - starting point. Update this when adding new routes
 * routes - Has all controllers
