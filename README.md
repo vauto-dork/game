@@ -1,15 +1,15 @@
 [![Codacy Badge](https://www.codacy.com/project/badge/e8b26b82697c41af8dbfec0da42caeb2)](https://www.codacy.com)
 
-#Setup
+# Setup
 Requires NodeJS, NPM, and MongoDB.
 
 Remote DB is for production use ONLY. Use a local mongodb or setup a Heroku dev env for testing.
 
-#Documentation
+# Documentation
 If updating any API make sure the documentation is up to date.  
 http://docs.dorkapi.apiary.io/
 
-#Running
+# Running
 1. Start a MongoDb instance (only required if using local mongodb; not necessary if pointing to dev or prod DB via config file)
 `> mongod`
     * **Note:** You must have database path already set up on local machine or mongo won't run.
@@ -17,7 +17,7 @@ http://docs.dorkapi.apiary.io/
     * **Note:** Mongo must be started first or web app won't run.
 3. Test that the server is running by going to `localhost:5000` in your browser.
 
-#Cloning Production Database to Local
+# Cloning Production Database to Local
 1. Open command prompt (Windows) or Terminal (Mac/Linux) and navigate to the project's working folder (`dork_api`).
 2. Get the config vars from Heroku with `heroku config --app dork-prod`
     * Find the `MONGOLAB_URI` value. It will be in the form of: `mongodb://<username>:<password>@<url>:<port>/<database>`
@@ -39,7 +39,7 @@ http://docs.dorkapi.apiary.io/
 9. ???
 10. Profit!
 
-#Initial Local Heroku Setup
+# Initial Local Heroku Setup
 1. This will read from/write to the local Mongo database only. See step 5 to read from/write to remote databases.
 2. Download the Heroku Toolbelt and install: https://toolbelt.heroku.com/
 3. **Windows Only:** 
@@ -52,7 +52,7 @@ http://docs.dorkapi.apiary.io/
     * After the plugin is installed, grab the dev config by typing `heroku config:pull --app dork-dev`
     * Add the `.env` file to `.gitignore`
 
-#Git Heroku Setup
+# Git Heroku Setup
 
 Please do **not** do anything that is not free. My card is attached to the account and I'll
 discontinue service immediately if unexpected charges show up.
@@ -63,18 +63,18 @@ Follow these steps for each env (dev, prod) to set up your local environment:
 
 1. Add the git repo as a remote. When "code is good" `git push <remote_name> master` to deploy your changes.
 
-##dork-dev
+## dork-dev
 **Git Repo**    https://git.heroku.com/dork-dev.git
 
-##dork-prod
+## dork-prod
 **Git Repo**    https://git.heroku.com/dork-prod.git
 
-#Trello
+# Trello
 
 * https://trello.com/b/on1e5OfO/dork-web-app
 * https://trello.com/b/Es8lXpIL/dork-android
 
-#Files
+# Files
 * app.js - starting point. Update this when adding new routes
 * routes - Has all controllers
 * models - Has all mongodb models
