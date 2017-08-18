@@ -57,16 +57,6 @@ discontinue service immediately if unexpected charges show up.
 
 There is an app on Heroku for each environment.
 
-Follow these steps for each env (dev, prod) to set up your local environment:
-
-1. Add the git repo as a remote. When "code is good" `git push <remote_name> master` to deploy your changes.
-
-## dork-dev
-**Git Repo**    https://git.heroku.com/dork-dev.git
-
-## dork-prod
-**Git Repo**    https://git.heroku.com/dork-prod.git
-
 # Trello
 
 * https://trello.com/b/on1e5OfO/dork-web-app
