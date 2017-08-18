@@ -34,6 +34,7 @@
 			<div class="player-extra-info">
 				<span class="playerId">ID: {{player._id}}</span>
 				<span class="label label-primary" ng-show="player.duplicate">Duplicate</span>
+				<div class="playerId">Url: <a ng-href="{{'/playerStats/' + player.urlId}}">{{player.urlId}}</a></div>
 			</div>
 
 			<div class="btn-group edit-player-btn-group" role="group">

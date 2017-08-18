@@ -11,7 +11,7 @@ body {
 
 body {
   margin-bottom: 2em;
-  background-color: #e4e9ef; }
+  background-color: #E6EBEF; }
 
 hr {
   border-color: #7a8394; }
@@ -96,14 +96,14 @@ hr {
     margin-left: 0;
     margin-right: 0; }
   .navbar-collapse li > a {
-    color: #4f6885;
+    color: #3F5163;
     padding-left: 0.9em;
     padding-right: 0.9em; }
     .navbar-collapse li > a .glyphicon {
       margin-right: 0.8em; }
     .navbar-collapse li > a:hover {
-      color: #4f6885;
-      background-color: #e7c0ab; }
+      color: #3F5163;
+      background-color: #FAC4A5; }
 
 .container-fluid.max-width {
   max-width: 1280px; }
@@ -162,6 +162,8 @@ input.ng-touched.ng-invalid {
     .select-wrapper select:-moz-focusring {
       color: transparent;
       text-shadow: 0 0 0 #000; }
+    .select-wrapper select::-ms-expand {
+      display: none; }
 
 .text-input-container {
   margin: 0.5em 0;
@@ -299,6 +301,48 @@ input.ng-touched.ng-invalid {
 .uib-datepicker .uib-day {
   padding: 2px; }
 
+.month-year-picker {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  border: 1px solid #CCC;
+  margin: 1.5em 0 2em 0; }
+  .month-year-picker .myp-prev,
+  .month-year-picker .myp-next,
+  .month-year-picker .myp-month,
+  .month-year-picker .myp-year {
+    font-size: 18px; }
+    .month-year-picker .myp-prev select,
+    .month-year-picker .myp-next select,
+    .month-year-picker .myp-month select,
+    .month-year-picker .myp-year select {
+      font-size: 18px; }
+  .month-year-picker .myp-month {
+    flex: 2; }
+  .month-year-picker .myp-year {
+    flex: 1; }
+  .month-year-picker .myp-prev,
+  .month-year-picker .myp-next {
+    text-align: center; }
+    .month-year-picker .myp-prev button.myp-nav,
+    .month-year-picker .myp-next button.myp-nav {
+      border: 1px solid #CCC;
+      border-radius: 0;
+      padding: 0 0.5em;
+      font-size: 18px;
+      height: 3em;
+      color: #555; }
+      .month-year-picker .myp-prev button.myp-nav div,
+      .month-year-picker .myp-next button.myp-nav div {
+        display: inline-block; }
+      .month-year-picker .myp-prev button.myp-nav .glyphicon,
+      .month-year-picker .myp-next button.myp-nav .glyphicon {
+        margin: 0; }
+  @media (max-width: 374px) {
+    .month-year-picker .myp-prev,
+    .month-year-picker .myp-next {
+      display: none; } }
+
 .player-selector {
   padding-top: 1em;
   padding-bottom: 1em; }
@@ -333,6 +377,84 @@ input.ng-touched.ng-invalid {
   .edit-player-btn-group .btn {
     padding-right: 2em; }
 
+.player-card.stats-card-override {
+  margin: 0.5em 0; }
+
+.player-stats-card {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap; }
+  .player-stats-card player-nametag {
+    margin-top: 0.25em;
+    margin-right: 2em; }
+  .player-stats-card .ranking-row {
+    width: 270px;
+    padding: 0; }
+  .player-stats-card .ranking-row-container {
+    display: flex;
+    justify-content: space-between; }
+
+.player-stats {
+  font-size: 1.4em; }
+  .player-stats .stats-row-even {
+    background-color: #373935;
+    color: #E6EBEF; }
+  .player-stats .stats-table-header,
+  .player-stats .stats-row-odd {
+    background-color: #25282B;
+    color: #E6EBEF; }
+  .player-stats .negative {
+    color: #EC5D49; }
+  .player-stats .positive {
+    color: #77C437; }
+  .player-stats .no-change {
+    color: #FFCB00; }
+  .player-stats .stats-table-header-cell,
+  .player-stats .stats-info-row-container {
+    display: flex;
+    justify-content: space-between; }
+  .player-stats .stats-table-header-cell,
+  .player-stats .stats-game-date,
+  .player-stats .stats-game-played {
+    margin: 0.5em; }
+  .player-stats .stats-game-date {
+    text-align: left; }
+  .player-stats .stats-game-played {
+    text-align: right; }
+  .player-stats .stats-label {
+    margin: 0.5em;
+    color: #7a8394; }
+  .player-stats .stats-table-header {
+    border-bottom: 1px solid #7a8394; }
+  .player-stats .header-rating,
+  .player-stats .header-rank {
+    width: 9em;
+    text-align: center; }
+  .player-stats .gold-star {
+    color: #FFCB00; }
+  .player-stats .gold-star-on-light {
+    color: #EFA517; }
+  @media (min-width: 768px) {
+    .player-stats .delta-row {
+      justify-content: flex-end; } }
+  .player-stats .delta-box {
+    margin: 0.5em auto;
+    text-align: center; }
+    .player-stats .delta-box .delta-box-value,
+    .player-stats .delta-box .delta-box-symbol,
+    .player-stats .delta-box .delta-box-diff {
+      display: inline-block; }
+    .player-stats .delta-box .delta-box-value,
+    .player-stats .delta-box .delta-box-diff {
+      width: 4em; }
+    .player-stats .delta-box .delta-box-value {
+      text-align: right; }
+    .player-stats .delta-box .delta-box-symbol {
+      width: 1.5em;
+      text-align: center; }
+    .player-stats .delta-box .delta-box-diff {
+      text-align: left; }
+
 .player-move-panel-content {
   font-size: 2em;
   color: #7a8394;
@@ -342,13 +464,13 @@ input.ng-touched.ng-invalid {
 .panel-title .player-nickname {
   margin-left: 0.3em;
   padding-left: 0.5em;
-  border-left: 2px solid #e4e9ef;
+  border-left: 2px solid #E6EBEF;
   display: inline-block;
   white-space: nowrap; }
 
 .panel-title .player-name {
-  background-color: #4f6885;
-  color: #e4e9ef;
+  background-color: #3F5163;
+  color: #E6EBEF;
   display: inline-block;
   padding: 0 0.5em;
   font-weight: bold;
@@ -373,12 +495,12 @@ input.ng-touched.ng-invalid {
   .player-card .player-nickname {
     margin-left: 0.3em;
     padding-left: 0.5em;
-    border-left: 2px solid #e4e9ef;
+    border-left: 2px solid #E6EBEF;
     display: inline-block;
     white-space: nowrap; }
   .player-card .player-name {
-    background-color: #4f6885;
-    color: #e4e9ef;
+    background-color: #3F5163;
+    color: #E6EBEF;
     display: inline-block;
     padding: 0 0.5em;
     font-weight: bold;
@@ -397,8 +519,8 @@ input.ng-touched.ng-invalid {
   cursor: default; }
   .player-score-card .player-name {
     margin: 0.5em;
-    background-color: #4f6885;
-    color: #e4e9ef;
+    background-color: #3F5163;
+    color: #E6EBEF;
     font-weight: bold; }
   .player-score-card .player-score-card-outline {
     border: 4px solid #df6d2e;
@@ -543,6 +665,11 @@ input.ng-touched.ng-invalid {
   .ranking-row .ranking-value {
     font-size: 1.4em;
     color: #7a8394; }
+    .ranking-row .ranking-value a {
+      border-bottom-style: dotted;
+      border-bottom-width: 1px; }
+      .ranking-row .ranking-value a:hover {
+        text-decoration: none; }
   .ranking-row .ranking-label {
     display: inline-block;
     margin-right: 0.5em;
@@ -563,12 +690,12 @@ input.ng-touched.ng-invalid {
   padding: 1em; }
   .playlist-row:hover {
     border-radius: 5px;
-    background-color: #e7c0ab;
+    background-color: #FAC4A5;
     cursor: pointer; }
     .playlist-row:hover .player-nickname {
-      border-color: #e7c0ab; }
+      border-color: #FAC4A5; }
     .playlist-row:hover .player-name {
-      color: #e7c0ab; }
+      color: #FAC4A5; }
   .playlist-row .player-order .checkmark {
     border: 4px solid #df6d2e;
     border-radius: 3px; }
@@ -621,16 +748,3 @@ input.ng-touched.ng-invalid {
 
 .reorder-players .panel-body {
   cursor: pointer; }
-
-.month-year-picker {
-  display: table;
-  width: 100%;
-  border: 1px solid #CCC;
-  margin: 1.5em 0 2em 0; }
-  .month-year-picker .myp-month,
-  .month-year-picker .myp-year {
-    display: table-cell;
-    font-size: 18px; }
-    .month-year-picker .myp-month select,
-    .month-year-picker .myp-year select {
-      font-size: 18px; }

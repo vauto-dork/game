@@ -5,14 +5,19 @@ $font-largest: 3em;
 
 $base-transition: all 0.3s ease-in-out;
 
-$background-color: #e4e9ef;
-$dark-bg: darken($background-color, 50%);
+$form-control-color: #555;
+$background-color: #E6EBEF; // Goose 100
+$dark-bg: #3F5163; // Goose 500
 $silver: #C0C0C0;
 $gray: #7a8394;
 $med-gray: #999999;
 $light-gray: #F1F5F8;
 $dark-orange: #df6d2e;
-$light-orange: #e7c0ab;
+$light-orange: #FAC4A5; // Oriole 200
+$bright-green: #77C437; // Parakeet 500
+$bright-red: #EC5D49; // Flamingo 400
+$bright-yellow: #FFCB00; // Alt Meadowlark 600
+$bright-yellow-on-light: #EFA517; // Wren 600
 
 $global-nav-height: 2em;
 $global-nav-spacer: 3.5em;
@@ -20,6 +25,9 @@ $global-nav-text-color: #fff;
 $global-nav-bg: black;
 $global-nav-menu-bg-color: #fff;
 $global-nav-menu-text-color: $dark-bg;
+
+$zebra-stripe-even: #373935; // Crow 500
+$zebra-stripe-odd: #25282B; // Viero 800
 
 $default-border: 1px solid black;
 $card-border-radius: 5px;

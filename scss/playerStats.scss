@@ -1,0 +1,132 @@
+@import "variables";
+@import "mixins";
+
+.player-card.stats-card-override {
+    margin: $standard-spacing 0;
+}
+
+.player-stats-card {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+
+    player-nametag {
+        margin-top: $standard-spacing/2;
+        margin-right: 2em;
+    }
+
+    .ranking-row {
+        width: 270px;
+        padding: 0;
+    }
+
+    .ranking-row-container {
+        display: flex;
+        justify-content: space-between;
+    }
+}
+
+.player-stats {
+    font-size: $font-large;
+
+    .stats-row-even {
+        background-color: $zebra-stripe-even;
+        color: $background-color;
+    }
+
+    .stats-table-header,
+    .stats-row-odd {
+        background-color: $zebra-stripe-odd;
+        color: $background-color;
+    }
+
+    .negative {
+        color: $bright-red;
+    }
+
+    .positive {
+        color: $bright-green;
+    }
+
+    .no-change {
+        color: $bright-yellow;
+    }
+
+    .stats-table-header-cell,
+    .stats-info-row-container {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .stats-table-header-cell,
+    .stats-game-date,
+    .stats-game-played {
+        margin: $standard-spacing;
+    }
+
+    .stats-game-date {
+        text-align: left;
+    }
+
+    .stats-game-played {
+        text-align: right;
+    }
+
+    .stats-label {
+        margin: $standard-spacing;
+        color: $gray;
+    }
+
+    .stats-table-header {
+        border-bottom: 1px solid $gray;
+    }
+
+    .header-rating,
+    .header-rank {
+        width: 9em;
+        text-align: center;
+    }
+
+    .gold-star {
+        color: $bright-yellow;
+    }
+
+    .gold-star-on-light {
+        color: $bright-yellow-on-light;
+    }
+
+    @media (min-width: 768px) {
+        .delta-row {
+            justify-content: flex-end;
+        }
+     }
+
+    .delta-box {
+        margin: $standard-spacing auto;
+        text-align: center;
+
+        .delta-box-value,
+        .delta-box-symbol,
+        .delta-box-diff {
+            display: inline-block;
+        }
+
+        .delta-box-value,
+        .delta-box-diff {
+            width: 4em;
+        }
+
+        .delta-box-value {
+            text-align: right;
+        }
+
+        .delta-box-symbol {
+            width: 1.5em;
+            text-align: center;
+        }
+
+        .delta-box-diff {
+            text-align: left;
+        }
+    }
+}

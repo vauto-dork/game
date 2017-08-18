@@ -134,9 +134,34 @@ var Rankings;
     }
     Rankings.RankingsCardDirective = RankingsCardDirective;
     var RankingsCardController = (function () {
-        function RankingsCardController() {
+        function RankingsCardController(monthYearQueryService) {
+            var _this = this;
+            this.monthYearQueryService = monthYearQueryService;
+            this.playerStatsUrl = "";
+            monthYearQueryService.subscribeDateChange(function (event, date) {
+                _this.appendQueryParams("" + date.getVisibleQueryString());
+            });
+            var date = monthYearQueryService.getQueryParams();
+            this.appendQueryParams(!date ? "" : "" + date.getVisibleQueryString());
         }
-        RankingsCardController.$inject = [];
+        Object.defineProperty(RankingsCardController.prototype, "playerStatsBaseUrl", {
+            get: function () {
+                return "/playerStats/" + this.player.player.urlId;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(RankingsCardController.prototype, "hasPlayedGames", {
+            get: function () {
+                return this.player.gamesPlayed > 0;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        RankingsCardController.prototype.appendQueryParams = function (value) {
+            this.playerStatsUrl = "" + this.playerStatsBaseUrl + value;
+        };
+        RankingsCardController.$inject = ["monthYearQueryService"];
         return RankingsCardController;
     }());
     Rankings.RankingsCardController = RankingsCardController;
@@ -267,17 +292,30 @@ var DorkHistory;
             this.$timeout = $timeout;
             this.monthYearQueryService = monthYearQueryService;
             this.dateTimeService = dateTimeService;
-            this.month = dateTimeService.lastMonthValue();
-            this.year = dateTimeService.lastMonthYear();
             this.changeState(State.Init);
         }
+        Object.defineProperty(RankingHistoryController.prototype, "isCurrentMonth", {
+            get: function () {
+                return this.month === this.dateTimeService.currentMonthValue() && this.year === this.dateTimeService.currentYear();
+            },
+            enumerable: true,
+            configurable: true
+        });
         RankingHistoryController.prototype.changeState = function (newState) {
             var _this = this;
             switch (newState) {
                 case State.Init:
                     this.$timeout(function () {
-                        _this.month = _this.monthYearQueryService.getMonthQueryParam(_this.month);
-                        _this.year = _this.monthYearQueryService.getYearQueryParam(_this.year);
+                        var date = _this.monthYearQueryService.getQueryParams();
+                        if (date) {
+                            _this.month = date.month;
+                            _this.year = date.year;
+                        }
+                        else {
+                            _this.month = _this.dateTimeService.lastMonthValue();
+                            _this.year = _this.dateTimeService.lastMonthYear();
+                            _this.monthYearQueryService.saveQueryParams(_this.month, _this.year);
+                        }
                     }, 0);
                     this.changeState(State.Ready);
                     break;

@@ -134,9 +134,34 @@ var Rankings;
     }
     Rankings.RankingsCardDirective = RankingsCardDirective;
     var RankingsCardController = (function () {
-        function RankingsCardController() {
+        function RankingsCardController(monthYearQueryService) {
+            var _this = this;
+            this.monthYearQueryService = monthYearQueryService;
+            this.playerStatsUrl = "";
+            monthYearQueryService.subscribeDateChange(function (event, date) {
+                _this.appendQueryParams("" + date.getVisibleQueryString());
+            });
+            var date = monthYearQueryService.getQueryParams();
+            this.appendQueryParams(!date ? "" : "" + date.getVisibleQueryString());
         }
-        RankingsCardController.$inject = [];
+        Object.defineProperty(RankingsCardController.prototype, "playerStatsBaseUrl", {
+            get: function () {
+                return "/playerStats/" + this.player.player.urlId;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(RankingsCardController.prototype, "hasPlayedGames", {
+            get: function () {
+                return this.player.gamesPlayed > 0;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        RankingsCardController.prototype.appendQueryParams = function (value) {
+            this.playerStatsUrl = "" + this.playerStatsBaseUrl + value;
+        };
+        RankingsCardController.$inject = ["monthYearQueryService"];
         return RankingsCardController;
     }());
     Rankings.RankingsCardController = RankingsCardController;

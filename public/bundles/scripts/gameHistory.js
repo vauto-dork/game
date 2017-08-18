@@ -179,8 +179,6 @@ var DorkHistory;
             this.gameCardService.gameType = this.isFinalizedGame
                 ? EditGameType.FinalizedGame
                 : EditGameType.ActiveGame;
-            this.month = dateTimeService.currentMonthValue();
-            this.year = dateTimeService.currentYear();
             this.changeState(State.Init);
         }
         GameHistoryController.prototype.changeState = function (newState) {
@@ -193,8 +191,16 @@ var DorkHistory;
             switch (newState) {
                 case State.Init:
                     this.$timeout(function () {
-                        _this.month = _this.monthYearQueryService.getMonthQueryParam(_this.month);
-                        _this.year = _this.monthYearQueryService.getYearQueryParam(_this.year);
+                        var date = _this.monthYearQueryService.getQueryParams();
+                        if (date) {
+                            _this.month = date.month;
+                            _this.year = date.year;
+                        }
+                        else {
+                            _this.month = _this.dateTimeService.currentMonthValue();
+                            _this.year = _this.dateTimeService.currentYear();
+                            _this.monthYearQueryService.saveQueryParams(_this.month, _this.year);
+                        }
                         _this.changeState(State.Loading);
                     }, 0);
                     break;

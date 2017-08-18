@@ -1,0 +1,77 @@
+<div ng-show="ctrl.showErrorMessage" class="status-banner bg-danger">
+    <h4>Error getting player stats.</h4>
+</div>
+
+<player-stats-card></player-stats-card>
+
+<div class="col-xs-12">
+    <month-year-picker ng-show="!ctrl.showErrorMessage" month="ctrl.date.month" year="ctrl.date.year" change="ctrl.updateQueryParams()"></month-year-picker>
+    
+    <div ng-show="ctrl.showContent && !ctrl.hasPlayedGames" class="text-center">
+        <h2>No rankings for this month.</h2>
+    </div>
+</div>
+
+<load-spinner ng-show="ctrl.showLoading"></load-spinner>
+
+<div class="col-xs-12 player-stats" ng-show="ctrl.showContent && ctrl.hasPlayedGames">
+    <p>
+        Rank deltas are measured when the player hits the ten game minimum.
+    </p>
+
+    <div class="stats-table-header">
+        <div class="row">
+            <div class="col-xs-12 col-sm-4">
+                <div class="stats-info-row-container">
+                    <div class="stats-game-date">
+                        Game
+                    </div>
+                    <div class="stats-game-played">
+                        Played = <span class="glyphicon glyphicon-star gold-star" aria-hidden="true"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4 hidden-xs">
+                <div class="stats-table-header-cell delta-row">
+                    <div class="header-rank">
+                        Rank
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4 hidden-xs">
+                <div class="stats-table-header-cell delta-row">
+                    <div class="header-rating">
+                        Rating
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div ng-repeat="game in ctrl.playerStats.games" ng-class="{'stats-row-even': $even, 'stats-row-odd': $odd}">
+        <div class="row">
+            <div class="col-xs-12 col-sm-4">
+                <div class="stats-info-row-container">
+                    <div class="stats-game-date">
+                        {{game.gameDate | date:'EEE, MMM d, h:mm a'}}
+                    </div>
+                    <div class="stats-game-played">
+                        <span ng-if="game.played" class="glyphicon glyphicon-star gold-star" aria-hidden="true"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                <div class="stats-info-row-container delta-row">
+                    <div class="stats-label visible-xs-block">Rank:</div>
+                    <delta-box value="ctrl.rankValue(game.rank)" diff="game.rankDiff"></delta-box>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                    <div class="stats-info-row-container delta-row">
+                        <div class="stats-label visible-xs-block">Rating:</div>
+                        <delta-box value="game.rating" diff="game.ratingDiff" decimal="2"></delta-box>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>

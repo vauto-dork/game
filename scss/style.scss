@@ -5,8 +5,10 @@
 @import "animation";
 @import "admin";
 @import "datePicker";
+@import "monthYearPicker";
 @import "playerSelector";
 @import "playersList";
+@import "playerStats";
 @import "player";
 @import "game";
 
@@ -43,6 +45,15 @@
 	.ranking-value {
 		font-size: $font-large;
 		color: $gray;
+
+		a {
+			border-bottom-style: dotted;
+			border-bottom-width: 1px;
+
+			&:hover {
+				text-decoration: none;
+			}
+		}
 	}
 
 	.ranking-label {
@@ -147,23 +158,4 @@
 	.panel-body {
         cursor: pointer;
     }
-}
-
-.month-year-picker {
-	display: table;
-	width: 100%;
-	border: 1px solid $btn-default-border-color;
-	margin: 1.5em 0 2em 0;
-
-	.myp-month,
-	.myp-year {
-		display: table-cell;
-		font-size: 18px;
-		
-		// Font-size is duplicated because the custom
-		// arrow hack doesn't size with the parent element.
-		select {
-			font-size: 18px;
-		}
-	}
 }

@@ -7,13 +7,13 @@
 .panel-title .player-nickname {
   margin-left: 0.3em;
   padding-left: 0.5em;
-  border-left: 2px solid #e4e9ef;
+  border-left: 2px solid #E6EBEF;
   display: inline-block;
   white-space: nowrap; }
 
 .panel-title .player-name {
-  background-color: #4f6885;
-  color: #e4e9ef;
+  background-color: #3F5163;
+  color: #E6EBEF;
   display: inline-block;
   padding: 0 0.5em;
   font-weight: bold;
@@ -38,12 +38,12 @@
   .player-card .player-nickname {
     margin-left: 0.3em;
     padding-left: 0.5em;
-    border-left: 2px solid #e4e9ef;
+    border-left: 2px solid #E6EBEF;
     display: inline-block;
     white-space: nowrap; }
   .player-card .player-name {
-    background-color: #4f6885;
-    color: #e4e9ef;
+    background-color: #3F5163;
+    color: #E6EBEF;
     display: inline-block;
     padding: 0 0.5em;
     font-weight: bold;
@@ -62,8 +62,8 @@
   cursor: default; }
   .player-score-card .player-name {
     margin: 0.5em;
-    background-color: #4f6885;
-    color: #e4e9ef;
+    background-color: #3F5163;
+    color: #E6EBEF;
     font-weight: bold; }
   .player-score-card .player-score-card-outline {
     border: 4px solid #df6d2e;

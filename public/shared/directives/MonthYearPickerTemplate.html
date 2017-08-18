@@ -1,13 +1,29 @@
 <div class="month-year-picker">
+	<div class="myp-prev">
+		<button class="btn btn-default myp-nav" type="button"
+			ng-click="ctrl.prev()"
+			ng-disabled="ctrl.disabled || ctrl.disablePrev">
+			<div class="glyphicon glyphicon-chevron-left" aria-hidden="true"></div>
+			<div class="myp-label hidden-xs">Prev</div>
+		</button>
+	</div>
 	<div class="myp-month select-wrapper">
 		<select class="form-control" ng-model="ctrl.selectedMonth"
-			ng-options="month.name for month in ctrl.months" ng-disabled="ctrl.disabled"
+			ng-options="month for month in ctrl.months" ng-disabled="ctrl.disabled"
 			ng-change="ctrl.updateParams()"></select>
 	</div>
 	
 	<div class="myp-year select-wrapper">
 		<select class="form-control" ng-model="ctrl.selectedYear"
-			ng-options="year.name for year in ctrl.years" ng-disabled="ctrl.disabled || ctrl.disableYear"
+			ng-options="year for year in ctrl.years" ng-disabled="ctrl.disabled || ctrl.disableYear"
 			ng-change="ctrl.updateParams()"></select>
+	</div>
+	<div class="myp-next">
+		<button class="btn btn-default myp-nav" type="button"
+			ng-click="ctrl.next()"
+			ng-disabled="ctrl.disabled || ctrl.disableNext">
+			<div class="myp-label hidden-xs">Next</div>
+			<div class="glyphicon glyphicon-chevron-right" aria-hidden="true"></div>
+		</button>
 	</div>
 </div>

@@ -17,12 +17,12 @@
 						<div class="no-sel-label">Select<br/>Date</div>
 					</div>
 					<div class="left-value">
-						<span ng-class="{'invisible': !ctrl.date}">{{ctrl.withLeadingZero(ctrl.prettyDate.day)}}</span>
+						<span ng-class="{'invisible': !ctrl.date}">{{ctrl.displayDate | date:'dd'}}</span>
 					</div>
 					<div class="middle-value">
-						<span ng-class="{'invisible': !ctrl.date}">{{ctrl.prettyDate.month}}<br/>{{ctrl.prettyDate.year}}</span>
+						<span ng-class="{'invisible': !ctrl.date}">{{ctrl.displayDate | date:'MMM'}}<br/>{{ctrl.displayDate | date:'yyyy'}}</span>
 					</div>
-					<div class="right-value btn-link text-right">
+					<div class="right-value text-right">
 						<span class="glyphicon glyphicon-menu-down"></span>
 					</div>
 				</div>
@@ -47,12 +47,12 @@
 					<div class="no-sel-label">Select<br/>Time</div>
 				</div>
 				<div class="left-value">
-					<span ng-class="{'invisible': !ctrl.date}">{{ctrl.withLeadingZero(ctrl.prettyDate.hour)}}</span>
+					<span ng-class="{'invisible': !ctrl.date}">{{ctrl.displayDate | date:'hh'}}</span>
 				</div>
 				<div class="middle-value">
-					<span ng-class="{'invisible': !ctrl.date}">:{{ctrl.withLeadingZero(ctrl.prettyDate.minute)}}<br/>{{ctrl.prettyDate.ampm}}</span>
+					<span ng-class="{'invisible': !ctrl.date}">:{{ctrl.displayDate | date:'mm'}}<br/>{{ctrl.displayDate | date:'a'}}</span>
 				</div>
-				<div class="right-value btn-link text-right">
+				<div class="right-value text-right">
 					<span class="glyphicon glyphicon-menu-down"></span>
 				</div>
 			</div>

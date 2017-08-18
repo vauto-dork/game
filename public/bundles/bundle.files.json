@@ -36,6 +36,7 @@
     "scripts": {
         "shared": {
             "files": [
+                "shared/base/*.js",
                 "shared/models/*.js",
                 "shared/services/*.js",
                 "shared/directives/*.js",
@@ -120,6 +121,13 @@
             ],
             "components": [
                 "playerForm"
+            ]
+        },
+        "playerStats": {
+            "files": [
+                "areas/playerStats/services/*.js",
+                "areas/playerStats/directives/*.js",
+                "bundles/pageModules/playerStats.js"
             ]
         },
         "rankingHistory": {

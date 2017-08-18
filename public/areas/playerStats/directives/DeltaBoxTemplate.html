@@ -1,0 +1,18 @@
+<div class="delta-box" ng-class="{'positive': ctrl.isDiffPositive, 'negative': ctrl.isDiffNegative, 'no-change': !ctrl.diff}">
+    <div class="delta-box-value">
+        <span ng-if="ctrl.hasNoValue">&mdash;</span>
+        <span ng-if="ctrl.hasValue && ctrl.value < 0">-</span>
+        <span ng-if="ctrl.hasValue">{{ctrl.absValue | number:ctrl.decimal}}</span>
+    </div>
+    <div class="delta-box-symbol">
+        <span ng-if="ctrl.isDiffPositive">&#9650;</span>
+        <span ng-if="!ctrl.diff">&#9670;</span>
+        <span ng-if="ctrl.isDiffNegative">&#9660;</span>
+    </div>
+    <div class="delta-box-diff">
+        <span ng-if="ctrl.isDiffNegative">-</span>
+        <span ng-if="ctrl.isDiffPositive">+</span>
+        <span ng-if="!ctrl.diff">&mdash;</span>
+        <span ng-if="ctrl.diff">{{ctrl.absDiff | number:ctrl.decimal}}</span>
+    </div>
+</div>

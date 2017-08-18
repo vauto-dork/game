@@ -1,0 +1,62 @@
+@import "variables";
+@import "mixins";
+
+.month-year-picker {
+    $border: 1px solid $btn-default-border-color;
+
+    display: flex;
+    justify-content: space-between;
+	width: 100%;
+	border: $border;
+	margin: 1.5em 0 2em 0;
+
+	.myp-prev,
+	.myp-next,
+	.myp-month,
+	.myp-year {
+		font-size: 18px;
+		
+		// Font-size is duplicated because the custom
+		// arrow hack doesn't size with the parent element.
+		select {
+			font-size: 18px;
+		}
+    }
+    
+    .myp-month {
+        flex: 2;
+    }
+
+    .myp-year {
+        flex: 1;
+    }
+
+	.myp-prev,
+	.myp-next {
+		text-align: center;
+        
+        button.myp-nav {
+            border: $border;
+            border-radius: 0;
+            padding: 0 $standard-spacing;
+            font-size: 18px;
+            height:3em;
+            color: $form-control-color;
+
+            div {
+                display: inline-block;
+            }
+
+            .glyphicon {
+                margin: 0;
+            }
+        }
+    }
+
+	@media (max-width: 374px) {
+		.myp-prev,
+		.myp-next {
+			display: none;
+		}
+    }
+}

@@ -1,5 +1,64 @@
 var Shared;
 (function (Shared) {
+    var PubSubServiceBase = (function () {
+        function PubSubServiceBase($timeout) {
+            this.$timeout = $timeout;
+            this.topics = {};
+            this.subUid = -1;
+        }
+        PubSubServiceBase.prototype.subscribe = function (callbackId, callback, once) {
+            var token = this.subUid += 1;
+            if (!this.topics[callbackId]) {
+                this.topics[callbackId] = [];
+            }
+            var obj = {
+                token: token,
+                callback: callback,
+                once: !!once
+            };
+            this.topics[callbackId].push(obj);
+            return token;
+        };
+        PubSubServiceBase.prototype.subscribeOnce = function (callbackId, callback) {
+            return this.subscribe(callbackId, callback, true);
+        };
+        PubSubServiceBase.prototype.publish = function (callbackId, params) {
+            var _this = this;
+            if (!this.topics[callbackId])
+                return;
+            this.$timeout(function () {
+                var subscribers = _this.topics[callbackId];
+                var len = subscribers ? subscribers.length : 0;
+                while (len) {
+                    len -= 1;
+                    subscribers[len].callback(callbackId, params);
+                    if (subscribers[len].once) {
+                        _this.unsubscribe(subscribers[len].token);
+                    }
+                }
+            });
+        };
+        PubSubServiceBase.prototype.unsubscribe = function (token) {
+            for (var prop in this.topics) {
+                if (this.topics.hasOwnProperty(prop) && this.topics[prop]) {
+                    var len = this.topics[prop].length;
+                    while (len) {
+                        len -= 1;
+                        this.topics[prop].splice(len, 1);
+                    }
+                }
+            }
+        };
+        PubSubServiceBase.prototype.hasTopic = function (callbackId) {
+            return !!this.topics[callbackId];
+        };
+        return PubSubServiceBase;
+    }());
+    Shared.PubSubServiceBase = PubSubServiceBase;
+})(Shared || (Shared = {}));
+
+var Shared;
+(function (Shared) {
     var Game = (function () {
         function Game(game) {
             if (!game) {
@@ -178,6 +237,42 @@ var Shared;
 
 var Shared;
 (function (Shared) {
+    var Months = (function () {
+        function Months() {
+        }
+        Months.Names = ["January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+        Months.ShortNames = ["Jan", "Feb", "Mar", "Apr", "May", "June",
+            "July", "Aug", "Sept", "Oct", "Nov", "Dec"
+        ];
+        return Months;
+    }());
+    Shared.Months = Months;
+})(Shared || (Shared = {}));
+
+var Shared;
+(function (Shared) {
+    var MonthYearParams = (function () {
+        function MonthYearParams(month, year) {
+            this.currentDate = new Date();
+            this.month = (month === null || month === undefined) ? this.currentDate.getMonth() : month;
+            this.year = (year === null || year === undefined) ? this.currentDate.getFullYear() : year;
+        }
+        MonthYearParams.prototype.getVisibleQueryString = function () {
+            var monthShortName = Shared.Months.ShortNames[this.month];
+            return "#?month=" + monthShortName + "&year=" + this.year;
+        };
+        MonthYearParams.prototype.getPostQueryString = function () {
+            return "?month=" + this.month + "&year=" + this.year;
+        };
+        return MonthYearParams;
+    }());
+    Shared.MonthYearParams = MonthYearParams;
+})(Shared || (Shared = {}));
+
+var Shared;
+(function (Shared) {
     var NewGame = (function () {
         function NewGame(game) {
             if (!game) {
@@ -236,6 +331,7 @@ var Shared;
                 this.customInitials = '';
                 this.duplicate = '';
                 this.inactive = false;
+                this.urlId = '';
                 return;
             }
             this._id = player._id;
@@ -245,6 +341,7 @@ var Shared;
             this.customInitials = player.customInitials;
             this.duplicate = player.duplicate;
             this.inactive = player.inactive;
+            this.urlId = player.urlId;
         }
         Object.defineProperty(Player.prototype, "initials", {
             get: function () {
@@ -280,66 +377,21 @@ var Shared;
 var Shared;
 (function (Shared) {
     var PlayerStats = (function () {
-        function PlayerStats(games, ranking) {
-            this.gamesData = games;
-            this.ranking = ranking;
-            this.calculateData();
-        }
-        Object.defineProperty(PlayerStats.prototype, "player", {
-            get: function () {
-                return !this.ranking ? null : this.ranking.player;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(PlayerStats.prototype, "rating", {
-            get: function () {
-                return !this.ranking ? 0 : this.ranking.rating;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(PlayerStats.prototype, "points", {
-            get: function () {
-                return !this.ranking ? 0 : this.ranking.totalPoints;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(PlayerStats.prototype, "gamesPlayed", {
-            get: function () {
-                return !this.ranking ? 0 : this.ranking.gamesPlayed;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        PlayerStats.prototype.calculateData = function () {
-            var _this = this;
-            this.games = [];
-            this.previousPoints = 0;
-            this.previousRating = 0;
-            if (this.gamesData.length <= 0) {
+        function PlayerStats(playerStats) {
+            if (!playerStats) {
+                this.player = new Shared.Player();
+                this.dateRange = [];
+                this.totalPoints = 0;
+                this.gamesPlayed = 0;
+                this.games = [];
                 return;
             }
-            var tally = this.ranking.totalPoints;
-            var games = this.gamesData.forEach(function (game, index) {
-                var player = game.players.filter(function (player) {
-                    return player.playerId === _this.player._id;
-                })[0];
-                if (index > 0) {
-                    _this.previousPoints += player.points;
-                }
-                _this.games.push({
-                    gameIndex: index,
-                    datePlayed: new Date(game.datePlayed),
-                    tally: tally,
-                    points: player.points,
-                    rank: player.rank
-                });
-                tally -= player.points;
-            });
-            this.previousRating = this.previousPoints / (this.gamesData.length - 1);
-        };
+            this.player = new Shared.Player(playerStats.player);
+            this.dateRange = playerStats.dateRange;
+            this.totalPoints = playerStats.totalPoints;
+            this.gamesPlayed = playerStats.gamesPlayed;
+            this.games = playerStats.games;
+        }
         return PlayerStats;
     }());
     Shared.PlayerStats = PlayerStats;
@@ -560,10 +612,9 @@ var Shared;
         };
         ApiService.prototype.getRankedPlayers = function (month, year, hideUnranked) {
             var def = this.$q.defer();
-            month = (month === undefined || month === null) ? new Date().getMonth() : month;
-            year = (year === undefined || year === null) ? new Date().getFullYear() : year;
+            var queryString = new Shared.MonthYearParams(month, year).getPostQueryString();
             var unrankedParam = hideUnranked ? '&hideUnranked=true' : '';
-            var rankedUrl = '/players/ranked?month=' + month + '&year=' + year + unrankedParam;
+            var rankedUrl = "/players/ranked" + queryString + unrankedParam;
             this.$http.get(rankedUrl)
                 .success(function (data, status, headers, config) {
                 var players = data.map(function (value) {
@@ -585,8 +636,8 @@ var Shared;
         };
         ApiService.prototype.getDotm = function (month, year) {
             var def = this.$q.defer();
-            var query = '?month=' + month + '&year=' + year;
-            this.$http.get("/Players/dotm" + query)
+            var queryString = new Shared.MonthYearParams(month, year).getPostQueryString();
+            this.$http.get("/Players/dotm" + queryString)
                 .success(function (data, status, headers, config) {
                 def.resolve(data);
             }).
@@ -629,7 +680,8 @@ var Shared;
         };
         ApiService.prototype.getGames = function (month, year) {
             var def = this.$q.defer();
-            var path = '/Games?month=' + month + '&year=' + year;
+            var queryString = new Shared.MonthYearParams(month, year).getPostQueryString();
+            var path = "/Games" + queryString;
             this.$http.get(path).success(function (data, status, headers, config) {
                 var game = data.map(function (value) {
                     return new Shared.Game(value);
@@ -676,6 +728,32 @@ var Shared;
             });
             return def.promise;
         };
+        ApiService.prototype.getPlayerStats = function (playerId, date) {
+            var def = this.$q.defer();
+            if (!playerId) {
+                var message = "Player ID cannot be blank";
+                console.error(message);
+                def.reject(message);
+            }
+            else {
+                var queryString = date ? date.getPostQueryString() : '';
+                var url = "/PlayerStats/json/" + playerId + queryString;
+                this.$http.get(url)
+                    .success(function (data, status, headers, config) {
+                    if (data === null || data === undefined) {
+                        def.reject(status);
+                    }
+                    else {
+                        def.resolve(new Shared.PlayerStats(data));
+                    }
+                })
+                    .error(function (data, status, headers, config) {
+                    console.error("Cannot get player stats with id " + playerId);
+                    def.reject(data);
+                });
+            }
+            return def.promise;
+        };
         ApiService.$inject = ['$http', '$q'];
         return ApiService;
     }());
@@ -686,13 +764,28 @@ var Shared;
 (function (Shared) {
     var DateTimeService = (function () {
         function DateTimeService() {
-            this.monthNames = ["January", "February", "March", "April", "May", "June",
-                "July", "August", "September", "October", "November", "December"
-            ];
-            this.abbrMonthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June",
-                "July", "Aug", "Sept", "Oct", "Nov", "Dec"
-            ];
         }
+        Object.defineProperty(DateTimeService.prototype, "monthNames", {
+            get: function () {
+                return Shared.Months.Names;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(DateTimeService.prototype, "abbrMonthNames", {
+            get: function () {
+                return Shared.Months.ShortNames;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(DateTimeService.prototype, "minimumYear", {
+            get: function () {
+                return 2015;
+            },
+            enumerable: true,
+            configurable: true
+        });
         DateTimeService.prototype.currentYear = function () {
             return new Date().getFullYear();
         };
@@ -718,41 +811,35 @@ var Shared;
             }
             return '';
         };
-        DateTimeService.prototype.beautifyDate = function (date, abbreviateMonth) {
-            if (!date) {
-                return {
-                    month: this.monthName(0, abbreviateMonth),
-                    day: 1,
-                    year: 1970,
-                    hour: 12,
-                    minute: 0,
-                    ampm: "AM"
-                };
-            }
-            ;
-            var hour = date.getHours();
-            return {
-                month: this.monthName(date.getMonth(), abbreviateMonth),
-                day: date.getDate(),
-                year: date.getFullYear(),
-                hour: hour === 0 ? 12 : (hour > 12 ? hour - 12 : hour),
-                minute: date.getMinutes(),
-                ampm: hour >= 12 ? "PM" : "AM"
-            };
-        };
         return DateTimeService;
     }());
     Shared.DateTimeService = DateTimeService;
 })(Shared || (Shared = {}));
 
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var Shared;
 (function (Shared) {
-    var MonthYearQueryService = (function () {
-        function MonthYearQueryService($location) {
-            this.$location = $location;
-            this.minimumYear = 2015;
+    var MonthYearQueryService = (function (_super) {
+        __extends(MonthYearQueryService, _super);
+        function MonthYearQueryService($timeout, $location) {
+            var _this = _super.call(this, $timeout) || this;
+            _this.$location = $location;
+            _this.minimumYear = 2015;
+            _this.events = {
+                dateChange: "dateChange"
+            };
+            return _this;
         }
-        MonthYearQueryService.prototype.SanitizeParam = function (value) {
+        MonthYearQueryService.prototype.sanitizeParam = function (value) {
             if (value === undefined) {
                 return undefined;
             }
@@ -761,90 +848,47 @@ var Shared;
         };
         ;
         MonthYearQueryService.prototype.getMonthQueryParam = function (month) {
-            var queryMonth = this.SanitizeParam(this.$location.search().month);
+            var queryMonth = this.$location.search().month;
             if (queryMonth !== undefined) {
-                queryMonth--;
-                month = queryMonth > 11
-                    ? 0
-                    : queryMonth < 0 ? 11 : queryMonth;
+                month = Shared.Months.ShortNames.indexOf(queryMonth);
             }
             return month;
         };
         MonthYearQueryService.prototype.getYearQueryParam = function (year) {
-            var queryYear = this.SanitizeParam(this.$location.search().year);
+            var queryYear = this.sanitizeParam(this.$location.search().year);
             if (queryYear !== undefined) {
                 year = queryYear < this.minimumYear ? this.minimumYear : queryYear;
             }
             return year;
         };
+        MonthYearQueryService.prototype.getQueryParams = function () {
+            var queryMonth = this.$location.search().month;
+            var queryYear = this.sanitizeParam(this.$location.search().year);
+            var params = new Shared.MonthYearParams();
+            if (!queryMonth && !queryYear)
+                return null;
+            if (queryMonth !== undefined) {
+                params.month = Shared.Months.ShortNames.indexOf(queryMonth);
+            }
+            if (queryYear !== undefined) {
+                params.year = queryYear < this.minimumYear ? this.minimumYear : queryYear;
+            }
+            return params;
+        };
         MonthYearQueryService.prototype.saveQueryParams = function (month, year) {
-            this.$location.search('month', month + 1);
+            this.$location.search('month', Shared.Months.ShortNames[month]);
             this.$location.search('year', year);
             this.$location.replace();
+            var date = new Shared.MonthYearParams(month, year);
+            this.publish(this.events.dateChange, date);
         };
-        MonthYearQueryService.$inject = ['$location'];
+        MonthYearQueryService.prototype.subscribeDateChange = function (callback) {
+            this.subscribe(this.events.dateChange, callback);
+        };
+        MonthYearQueryService.$inject = ['$timeout', '$location'];
         return MonthYearQueryService;
-    }());
+    }(Shared.PubSubServiceBase));
     Shared.MonthYearQueryService = MonthYearQueryService;
-})(Shared || (Shared = {}));
-
-var Shared;
-(function (Shared) {
-    var PubSubServiceBase = (function () {
-        function PubSubServiceBase($timeout) {
-            this.$timeout = $timeout;
-            this.topics = {};
-            this.subUid = -1;
-        }
-        PubSubServiceBase.prototype.subscribe = function (callbackId, callback, once) {
-            var token = this.subUid += 1;
-            if (!this.topics[callbackId]) {
-                this.topics[callbackId] = [];
-            }
-            var obj = {
-                token: token,
-                callback: callback,
-                once: !!once
-            };
-            this.topics[callbackId].push(obj);
-            return token;
-        };
-        PubSubServiceBase.prototype.subscribeOnce = function (callbackId, callback) {
-            return this.subscribe(callbackId, callback, true);
-        };
-        PubSubServiceBase.prototype.publish = function (callbackId, params) {
-            var _this = this;
-            if (!this.topics[callbackId])
-                return;
-            this.$timeout(function () {
-                var subscribers = _this.topics[callbackId];
-                var len = subscribers ? subscribers.length : 0;
-                while (len) {
-                    len -= 1;
-                    subscribers[len].callback(callbackId, params);
-                    if (subscribers[len].once) {
-                        _this.unsubscribe(subscribers[len].token);
-                    }
-                }
-            });
-        };
-        PubSubServiceBase.prototype.unsubscribe = function (token) {
-            for (var prop in this.topics) {
-                if (this.topics.hasOwnProperty(prop) && this.topics[prop]) {
-                    var len = this.topics[prop].length;
-                    while (len) {
-                        len -= 1;
-                        this.topics[prop].splice(len, 1);
-                    }
-                }
-            }
-        };
-        PubSubServiceBase.prototype.hasTopic = function (callbackId) {
-            return !!this.topics[callbackId];
-        };
-        return PubSubServiceBase;
-    }());
-    Shared.PubSubServiceBase = PubSubServiceBase;
 })(Shared || (Shared = {}));
 
 var Shared;
@@ -881,15 +925,16 @@ var Shared;
                 showWeeks: false,
                 startingDay: 0
             };
+            this.emptyDate = new Date(1970, 1, 1);
             $timeout(function () {
                 _this.resizeTimePickerDropdown();
                 _this.markInputSelectOnClick(".hours");
                 _this.markInputSelectOnClick(".minutes");
             }, 0);
         }
-        Object.defineProperty(DatePickerController.prototype, "prettyDate", {
+        Object.defineProperty(DatePickerController.prototype, "displayDate", {
             get: function () {
-                return this.dateTimeService.beautifyDate(this.date, true);
+                return this.date || this.emptyDate;
             },
             enumerable: true,
             configurable: true
@@ -920,9 +965,6 @@ var Shared;
                 var newWidth = buttonWidth > dropdownMinWidth ? buttonWidth : dropdownMinWidth;
                 this.$element.find("#time-picker-dropdown").width(newWidth);
             }
-        };
-        DatePickerController.prototype.withLeadingZero = function (value) {
-            return value < 10 ? "0" + value : "" + value;
         };
         DatePickerController.prototype.useCurrentTime = function () {
             this.date = new Date();
@@ -1001,77 +1043,88 @@ var Shared;
     var MonthYearPickerController = (function () {
         function MonthYearPickerController(dateTimeService) {
             this.dateTimeService = dateTimeService;
-            this.isDisabled = false;
-            this.minimumYear = 2015;
             this.disableYear = false;
             this.years = [];
-            this.months = [
-                { name: 'January', value: 0 },
-                { name: 'February', value: 1 },
-                { name: 'March', value: 2 },
-                { name: 'April', value: 3 },
-                { name: 'May', value: 4 },
-                { name: 'June', value: 5 },
-                { name: 'July', value: 6 },
-                { name: 'August', value: 7 },
-                { name: 'September', value: 8 },
-                { name: 'October', value: 9 },
-                { name: 'November', value: 10 },
-                { name: 'December', value: 11 }
-            ];
+            this.months = Shared.Months.Names;
             this.init();
         }
-        Object.defineProperty(MonthYearPickerController.prototype, "disabled", {
-            get: function () {
-                return this.isDisabled;
-            },
-            set: function (value) {
-                this.isDisabled = value;
-            },
-            enumerable: true,
-            configurable: true
-        });
         Object.defineProperty(MonthYearPickerController.prototype, "month", {
             get: function () {
-                return this.currentMonth === undefined || this.currentMonth === null
-                    ? this.dateTimeService.currentMonthValue()
-                    : this.currentMonth;
+                return this.localMonth;
             },
             set: function (value) {
-                this.currentMonth = value;
+                this.localMonth = value;
+                this.selectedMonth = (value === null || value === undefined || !this.months)
+                    ? this.selectedMonth
+                    : this.months[value];
             },
             enumerable: true,
             configurable: true
         });
         Object.defineProperty(MonthYearPickerController.prototype, "year", {
             get: function () {
-                return this.currentYear === undefined || this.currentYear === null
-                    ? this.dateTimeService.currentYear()
-                    : this.currentYear;
+                return this.localYear;
             },
             set: function (value) {
-                this.currentYear = value;
+                this.localYear = value;
+                this.selectedYear = (value === null || value === undefined) ? this.selectedYear : value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MonthYearPickerController.prototype, "minimumYear", {
+            get: function () {
+                return this.dateTimeService.minimumYear;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MonthYearPickerController.prototype, "disablePrev", {
+            get: function () {
+                return this.month <= 4 && this.year === this.minimumYear;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MonthYearPickerController.prototype, "disableNext", {
+            get: function () {
+                return this.month >= this.dateTimeService.currentMonthValue() && this.year >= this.dateTimeService.currentYear();
             },
             enumerable: true,
             configurable: true
         });
         MonthYearPickerController.prototype.init = function () {
-            this.selectedMonth = this.months[this.currentMonth];
-            for (var i = this.minimumYear; i <= this.currentYear; i++) {
-                var tempYear = { name: i.toString(), value: i };
-                this.years.push(tempYear);
-                if (i === this.currentYear) {
-                    this.selectedYear = tempYear;
+            this.selectedMonth = this.months[this.month];
+            for (var i = this.minimumYear; i <= this.dateTimeService.currentYear(); i++) {
+                this.years.push(i);
+                if (i === this.year) {
+                    this.selectedYear = i;
                 }
             }
             this.disableYear = this.disableYear || this.years.length <= 1;
         };
         MonthYearPickerController.prototype.updateParams = function () {
-            this.month = this.selectedMonth.value;
-            this.year = this.selectedYear.value;
+            this.month = this.months.indexOf(this.selectedMonth);
+            this.year = this.selectedYear;
             if (this.change !== undefined) {
                 this.change();
             }
+        };
+        MonthYearPickerController.prototype.prev = function () {
+            var monthIndex = (this.month === 0) ? 11 : this.month - 1;
+            if (monthIndex === 11) {
+                this.selectedYear--;
+            }
+            this.selectedMonth = this.months[monthIndex];
+            this.updateParams();
+        };
+        MonthYearPickerController.prototype.next = function () {
+            var monthIndex = (this.month + 1) % 12;
+            if (monthIndex === 0) {
+                this.selectedYear++;
+            }
+            this.selectedMonth = this.months[monthIndex];
+            this.updateParams();
         };
         MonthYearPickerController.$inject = ['dateTimeService'];
         return MonthYearPickerController;

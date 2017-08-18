@@ -3,6 +3,13 @@ var mongoose = require('mongoose');
 
 module.exports = 
 {
+	// Use these checks since using bang will cause zero to be not defined.
+	monthDefined: function(req) {
+		return req.query.month !== undefined && req.query.month !== null;
+	},
+	yearDefined: function(req) {
+		return req.query.year !== undefined && req.query.year !== null;
+	},
 	/**
 	 * Get date ranges from a request object.
 	 * @param req Should contain a month and optionally a year. Default is current year.

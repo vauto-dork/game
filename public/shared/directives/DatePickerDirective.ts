@@ -33,8 +33,10 @@ module Shared {
             startingDay: 0
 		};
 
-		private get prettyDate(): IPrettyDate {
-			return this.dateTimeService.beautifyDate(this.date, true);
+		private emptyDate = new Date(1970, 1, 1);
+
+		private get displayDate(): Date {
+			return this.date || this.emptyDate;
 		}
 
         constructor(private $element: ng.IAugmentedJQuery,
@@ -80,10 +82,6 @@ module Shared {
 				var newWidth = buttonWidth > dropdownMinWidth ? buttonWidth : dropdownMinWidth;
 				this.$element.find("#time-picker-dropdown").width(newWidth);
 			}
-		}
-
-		private withLeadingZero(value: number): string {
-			return value < 10 ? "0" + value : "" + value;
 		}
 
 		private useCurrentTime(): void {

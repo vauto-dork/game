@@ -29,6 +29,7 @@ module Shared {
 		firstName: string;
 		duplicate?: string;
 		inactive?: boolean;
+		urlId?: string;
 	}
 	
 	export interface IDotmViewModel {
@@ -45,5 +46,23 @@ module Shared {
 		player: IPlayerViewModel;
 		orderNumber: number;
 		rating: number;
+	}
+
+	export interface IPlayerStatsGame {
+		gameId: string,
+		gameDate: Date,
+		played: boolean,
+		rating: number,
+		ratingDiff: number,
+		rank: number,
+		rankDiff: number
+	}
+
+	export interface IPlayerStatsViewModel {
+		player: IPlayerViewModel,
+		dateRange: Date[],
+		totalPoints: number,
+		gamesPlayed: number,
+		games: IPlayerStatsGame[]
 	}
 }

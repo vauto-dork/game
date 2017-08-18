@@ -26,6 +26,9 @@
   "playersList": {
     "scripts": "<script src='/bundles/scripts/playersList.js' type='text/javascript'></script>"
   },
+  "playerStats": {
+    "scripts": "<script src='/bundles/scripts/playerStats.js' type='text/javascript'></script>"
+  },
   "rankingHistory": {
     "scripts": "<script src='/bundles/scripts/rankingHistory.js' type='text/javascript'></script>"
   }

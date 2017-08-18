@@ -1,0 +1,26 @@
+<div class="col-xs-12 player-card stats-card-override">
+    <div class="player-stats-card">
+        <player-nametag player="ctrl.playerStats.player"></player-nametag>
+    
+        <div class="ranking-row" ng-show="ctrl.hasPlayedGames">
+            <div class="ranking-row-container">
+                <div>
+                    <div class="ranking-label">Rank</div>
+                    <div class="ranking-value" ng-bind="ctrl.rank || '—'"></div>
+                </div>
+                <div>
+                    <div class="ranking-label">Rating</div>
+                    <div class="ranking-value" ng-bind="ctrl.rating | number:2"></div>
+                </div>
+                <div>
+                    <div class="ranking-label">Points</div>
+                    <div class="ranking-value" ng-bind="ctrl.playerStats.totalPoints"></div>
+                </div>
+                <div>
+                    <div class="ranking-label">Games</div>
+                    <div class="ranking-value" ng-bind="ctrl.playerStats.gamesPlayed"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
