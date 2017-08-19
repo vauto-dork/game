@@ -1,7 +1,7 @@
-module DorkHistory {
+module RankingHistory {
     export function RankingHistory(): ng.IComponentOptions {
         return {
-			templateUrl: '/areas/history/directives/RankingHistoryTemplate.html',
+			templateUrl: '/areas/rankingHistory/directives/RankingHistoryTemplate.html',
 			controller: RankingHistoryController
 		};
     }

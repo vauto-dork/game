@@ -140,19 +140,19 @@ var Components;
     GameCardModule.component('gameCard', Components.GameCard());
 })(Components || (Components = {}));
 
-var DorkHistory;
-(function (DorkHistory) {
+var GameHistory;
+(function (GameHistory_1) {
     var EditGameType = Shared.EditGameType;
     function GameHistory() {
         return {
             bindings: {
                 isFinalizedGame: '='
             },
-            templateUrl: '/areas/history/directives/GameHistoryTemplate.html',
+            templateUrl: '/areas/gameHistory/directives/GameHistoryTemplate.html',
             controller: GameHistoryController
         };
     }
-    DorkHistory.GameHistory = GameHistory;
+    GameHistory_1.GameHistory = GameHistory;
     var State;
     (function (State) {
         State[State["Init"] = 0] = "Init";
@@ -245,13 +245,13 @@ var DorkHistory;
         GameHistoryController.$inject = ['$timeout', 'dateTimeService', 'monthYearQueryService', 'apiService', 'gameCardService'];
         return GameHistoryController;
     }());
-    DorkHistory.GameHistoryController = GameHistoryController;
-})(DorkHistory || (DorkHistory = {}));
+    GameHistory_1.GameHistoryController = GameHistoryController;
+})(GameHistory || (GameHistory = {}));
 
-var DorkHistory;
-(function (DorkHistory) {
+var GameHistory;
+(function (GameHistory) {
     var GameHistoryModule = angular.module('GameHistoryModule', ['UxControlsModule', 'GameCardModule']);
-    GameHistoryModule.component('gameHistory', DorkHistory.GameHistory());
-})(DorkHistory || (DorkHistory = {}));
+    GameHistoryModule.component('gameHistory', GameHistory.GameHistory());
+})(GameHistory || (GameHistory = {}));
 
 //# sourceMappingURL=maps/gameHistory.js.map

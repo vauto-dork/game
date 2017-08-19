@@ -1,4 +1,4 @@
-module DorkHistory {
+module GameHistory {
 	import EditGameType = Shared.EditGameType;
 
     export function GameHistory(): ng.IComponentOptions {
@@ -6,7 +6,7 @@ module DorkHistory {
 			bindings: {
 				isFinalizedGame: '='
 			},
-			templateUrl: '/areas/history/directives/GameHistoryTemplate.html',
+			templateUrl: '/areas/gameHistory/directives/GameHistoryTemplate.html',
 			controller: GameHistoryController
 		};
     }

@@ -302,15 +302,15 @@ var Components;
     DotmModule.component('dotm', Components.Dotm());
 })(Components || (Components = {}));
 
-var DorkHistory;
-(function (DorkHistory) {
+var RankingHistory;
+(function (RankingHistory_1) {
     function RankingHistory() {
         return {
-            templateUrl: '/areas/history/directives/RankingHistoryTemplate.html',
+            templateUrl: '/areas/rankingHistory/directives/RankingHistoryTemplate.html',
             controller: RankingHistoryController
         };
     }
-    DorkHistory.RankingHistory = RankingHistory;
+    RankingHistory_1.RankingHistory = RankingHistory;
     var State;
     (function (State) {
         State[State["Init"] = 0] = "Init";
@@ -365,13 +365,13 @@ var DorkHistory;
         RankingHistoryController.$inject = ['$timeout', 'monthYearQueryService', 'dateTimeService', 'dotmService'];
         return RankingHistoryController;
     }());
-    DorkHistory.RankingHistoryController = RankingHistoryController;
-})(DorkHistory || (DorkHistory = {}));
+    RankingHistory_1.RankingHistoryController = RankingHistoryController;
+})(RankingHistory || (RankingHistory = {}));
 
-var DorkHistory;
-(function (DorkHistory) {
+var RankingHistory;
+(function (RankingHistory) {
     var RankingHistoryModule = angular.module('RankingHistoryModule', ['UxControlsModule', 'DotmModule', 'RankingsModule']);
-    RankingHistoryModule.component('rankingHistory', DorkHistory.RankingHistory());
-})(DorkHistory || (DorkHistory = {}));
+    RankingHistoryModule.component('rankingHistory', RankingHistory.RankingHistory());
+})(RankingHistory || (RankingHistory = {}));
 
 //# sourceMappingURL=maps/rankingHistory.js.map
