@@ -744,5 +744,4 @@ var CreateGame;
     CreateGameModule.component('createGame', CreateGame.CreateGame());
 })(CreateGame || (CreateGame = {}));
 
-var DorkModule = angular.module('DorkModule', ['CreateGameModule']);
 //# sourceMappingURL=maps/createGame.js.map

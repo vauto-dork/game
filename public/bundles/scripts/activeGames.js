@@ -210,6 +210,4 @@ var ActiveGame;
     ActiveGameModule.component('activeGames', ActiveGame.ActiveGames());
 })(ActiveGame || (ActiveGame = {}));
 
-var DorkModule = angular.module('DorkModule', ['ActiveGameModule']);
-
 //# sourceMappingURL=maps/activeGames.js.map

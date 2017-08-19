@@ -348,6 +348,4 @@ var Leaderboard;
     LeaderboardModule.component('leaderboard', Leaderboard.Leaderboard());
 })(Leaderboard || (Leaderboard = {}));
 
-var DorkModule = angular.module('DorkModule', ['LeaderboardModule']);
-
 //# sourceMappingURL=maps/index.js.map

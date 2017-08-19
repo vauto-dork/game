@@ -254,5 +254,4 @@ var DorkHistory;
     GameHistoryModule.component('gameHistory', DorkHistory.GameHistory());
 })(DorkHistory || (DorkHistory = {}));
 
-var DorkModule = angular.module('DorkModule', ['GameHistoryModule']);
 //# sourceMappingURL=maps/gameHistory.js.map

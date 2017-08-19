@@ -249,6 +249,4 @@ var PlayerStats;
     PlayerStatsModule.component('playerStatsPage', PlayerStats.PlayerStatsPage());
 })(PlayerStats || (PlayerStats = {}));
 
-var DorkModule = angular.module('DorkModule', ['PlayerStatsModule']);
-
 //# sourceMappingURL=maps/playerStats.js.map

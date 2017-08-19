@@ -109,7 +109,4 @@ var AddPlayer;
     AddPlayerModule.component('addPlayer', AddPlayer.AddPlayer());
 })(AddPlayer || (AddPlayer = {}));
 
-var DorkModule = angular.module('DorkModule', ['AddPlayerModule']);
-
-
 //# sourceMappingURL=maps/addPlayer.js.map

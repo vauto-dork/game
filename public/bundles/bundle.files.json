@@ -66,8 +66,7 @@
         "activeGames": {
             "files": [
                 "areas/activeGame/directives/*.js",
-                "areas/activeGame/modules/*.js",
-                "bundles/pageModules/activeGames.js"
+                "areas/activeGame/modules/*.js"
             ],
             "components": [
                 "gameCard"
@@ -76,8 +75,7 @@
         "addPlayer": {
             "files": [
                 "areas/addPlayer/directives/*.js",
-                "areas/addPlayer/modules/*.js",
-                "bundles/pageModules/addPlayer.js"
+                "areas/addPlayer/modules/*.js"
             ],
             "components": [
                 "playerForm"
@@ -85,15 +83,14 @@
         },
         "admin": {
             "files": [
-                "bundles/pageModules/admin.js"
+                
             ]
         },
         "createGame": {
             "files": [
                 "areas/createGame/services/*.js",
                 "areas/createGame/directives/*.js",
-                "areas/createGame/modules/*.js",
-                "bundles/pageModules/createGame.js"
+                "areas/createGame/modules/*.js"
             ],
             "components": [
                 "playerSelector",
@@ -104,8 +101,7 @@
             "files": [
                 "areas/editGame/services/*.js",
                 "areas/editGame/directives/*.js",
-                "areas/editGame/modules/*.js",
-                "bundles/pageModules/editGame.js"
+                "areas/editGame/modules/*.js"
             ],
             "components": [
                 "playerSelector",
@@ -116,8 +112,7 @@
         "gameHistory": {
             "files": [
                 "areas/history/directives/GameHistory.js",
-                "areas/history/modules/GameHistoryModule.js",
-                "bundles/pageModules/gameHistory.js"
+                "areas/history/modules/GameHistoryModule.js"
             ],
             "components": [
                 "gameCard"
@@ -126,8 +121,7 @@
         "index": {
             "files": [
                 "areas/leaderboard/directives/*.js",
-                "areas/leaderboard/modules/*.js",
-                "bundles/pageModules/index.js"
+                "areas/leaderboard/modules/*.js"
             ],
             "components": [
                 "rankings",
@@ -138,8 +132,7 @@
             "files": [
                 "areas/playersList/services/*.js",
                 "areas/playersList/directives/*.js",
-                "areas/playersList/modules/*.js",
-                "bundles/pageModules/playersList.js"
+                "areas/playersList/modules/*.js"
             ],
             "components": [
                 "playerForm"
@@ -149,15 +142,13 @@
             "files": [
                 "areas/playerStats/services/*.js",
                 "areas/playerStats/directives/*.js",
-                "areas/playerStats/modules/*.js",
-                "bundles/pageModules/playerStats.js"
+                "areas/playerStats/modules/*.js"
             ]
         },
         "rankingHistory": {
             "files": [
                 "areas/history/directives/RankingHistory.js",
-                "areas/history/modules/RankingHistoryModule.js",
-                "bundles/pageModules/rankingHistory.js"
+                "areas/history/modules/RankingHistoryModule.js"
             ],
             "components": [
                 "rankings",

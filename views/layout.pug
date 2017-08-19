@@ -13,6 +13,9 @@ html
       script(src='/scripts/angular-animate.js')
       script(src='/scripts/ui-bootstrap-tpls-1.3.3.min.js')
       | !{scripts}
+
+      script.
+        var DorkModule = angular.module('DorkModule', ['!{pageModule}']);
     
   body(ng-app="DorkModule")
     global-nav

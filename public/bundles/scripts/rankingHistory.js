@@ -374,6 +374,4 @@ var DorkHistory;
     RankingHistoryModule.component('rankingHistory', DorkHistory.RankingHistory());
 })(DorkHistory || (DorkHistory = {}));
 
-var DorkModule = angular.module('DorkModule', ['RankingHistoryModule']);
-
 //# sourceMappingURL=maps/rankingHistory.js.map

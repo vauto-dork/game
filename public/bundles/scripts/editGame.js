@@ -1113,6 +1113,4 @@ var EditGame;
     EditGameModule.component('revertFinalize', EditGame.RevertFinalize());
 })(EditGame || (EditGame = {}));
 
-var DorkModule = angular.module('DorkModule', ['EditGameModule']);
-
 //# sourceMappingURL=maps/editGame.js.map
