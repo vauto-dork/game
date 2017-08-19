@@ -44,6 +44,13 @@
                 "components/dotm/directives/*.js",
                 "components/dotm/modules/*.js"
             ]
+        },
+        "rankings": {
+            "files": [
+                "components/rankings/services/*.js",
+                "components/rankings/directives/*.js",
+                "components/rankings/modules/*.js"
+            ]
         }
     },
     "scripts": {
@@ -118,14 +125,12 @@
         },
         "index": {
             "files": [
-                "areas/rankings/services/RankingsService.js",
-                "areas/rankings/directives/RankingsCardDirective.js",
-                "areas/rankings/directives/RankingsDirective.js",
-                "areas/rankings/modules/RankingsModule.js",
-                "areas/rankings/directives/LeaderboardDirective.js",
+                "areas/leaderboard/directives/*.js",
+                "areas/leaderboard/modules/*.js",
                 "bundles/pageModules/index.js"
             ],
             "components": [
+                "rankings",
                 "dotm"
             ]
         },
@@ -150,15 +155,12 @@
         },
         "rankingHistory": {
             "files": [
-                "areas/rankings/services/RankingsService.js",
-                "areas/rankings/directives/RankingsCardDirective.js",
-                "areas/rankings/directives/RankingsDirective.js",
-                "areas/rankings/modules/RankingsModule.js",
                 "areas/history/directives/RankingHistory.js",
                 "areas/history/modules/RankingHistoryModule.js",
                 "bundles/pageModules/rankingHistory.js"
             ],
             "components": [
+                "rankings",
                 "dotm"
             ]
         }

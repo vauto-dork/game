@@ -1,13 +1,11 @@
 module Rankings {
-    export function RankingsCardDirective(): ng.IDirective {
+    export function RankingsCard(): ng.IComponentOptions {
         return {
-            scope: {
+            bindings: {
                 player: "="
             },
-            templateUrl: '/areas/rankings/directives/RankingsCardTemplate.html',
-            controller: 'RankingsCardController',
-            controllerAs: 'ctrl',
-            bindToController: true
+            templateUrl: '/components/rankings/directives/RankingsCardTemplate.html',
+            controller: RankingsCardController
         };
     }
 

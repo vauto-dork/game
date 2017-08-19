@@ -1,0 +1,27 @@
+<div class="player-card">
+	<div class="ranking-rank" ng-bind="$ctrl.player.rank"></div>
+	<div class="ranking-player-stats">
+		<div class="row">
+			<div class="col-xs-12">
+				<player-nametag player="$ctrl.player.player"></player-nametag>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-4">
+				<div class="ranking-label">Rating</div>
+				<div class="ranking-value">
+					<a ng-show="$ctrl.hasPlayedGames" ng-href="{{$ctrl.playerStatsUrl}}">{{$ctrl.player.rating | number:2}}</a>
+					<span ng-show="!$ctrl.hasPlayedGames">{{$ctrl.player.rating | number:2}}</span>
+				</div>
+			</div>
+			<div class="col-xs-4">
+				<div class="ranking-label">Points</div>
+				<div class="ranking-value" ng-bind="$ctrl.player.totalPoints"></div>
+			</div>
+			<div class="col-xs-4">
+				<div class="ranking-label">Games</div>
+				<div class="ranking-value" ng-bind="$ctrl.player.gamesPlayed"></div>
+			</div>
+		</div>
+	</div>
+</div>

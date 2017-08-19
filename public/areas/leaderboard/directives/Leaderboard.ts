@@ -1,13 +1,8 @@
-module Rankings {
-    export function LeaderboardDirective(): ng.IDirective {
+module Leaderboard {
+    export function Leaderboard(): ng.IComponentOptions {
         return {
-			scope: {
-
-			},
-			templateUrl: '/areas/rankings/directives/LeaderboardTemplate.html',
-			controller: 'LeaderboardController',
-			controllerAs: 'ctrl',
-			bindToController: true
+			templateUrl: '/areas/leaderboard/directives/LeaderboardTemplate.html',
+			controller: LeaderboardController
 		};
     }
 

@@ -1,15 +1,13 @@
 module Rankings {
-    export function RankingsDirective(): ng.IDirective {
+    export function RankingsPanel(): ng.IComponentOptions {
         return {
-            scope: {
+            bindings: {
                 month: "=",
                 year: "=",
                 hideUnranked: "="
             },
-            templateUrl: '/areas/rankings/directives/RankingsTemplate.html',
-            controller: 'RankingsController',
-            controllerAs: 'ctrl',
-            bindToController: true
+            templateUrl: '/components/rankings/directives/RankingsPanelTemplate.html',
+            controller: RankingsPanelController
         };
     }
 
@@ -20,7 +18,7 @@ module Rankings {
         NoRankings
     };
 
-    export class RankingsController {
+    export class RankingsPanelController {
         public static $inject: string[] = ['$scope', 'rankingsService'];
         private month: number;
         private year: number;
