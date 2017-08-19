@@ -83,7 +83,8 @@
         },
         "admin": {
             "files": [
-                "areas/adminPanel/dummy.js"
+                "areas/adminPanel/directives/*.js",
+                "areas/adminPanel/modules/*.js"
             ]
         },
         "createGame": {

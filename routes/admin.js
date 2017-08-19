@@ -7,7 +7,7 @@ router.get('/Admin', function(req, res, next) {
   res.render('admin', {
     title: 'Admin',
     scripts: bundler.scripts('admin'),
-	  pageModule: 'UxControlsModule'
+	  pageModule: 'AdminPanelModule'
   });
 });
 

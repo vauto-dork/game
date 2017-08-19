@@ -22,6 +22,30 @@ var Components;
 
 var Components;
 (function (Components) {
+    function PlayerFormDirective() {
+        return {
+            scope: {
+                player: "=",
+                disableForm: "=?"
+            },
+            templateUrl: "/components/playerForm/directives/PlayerFormTemplate.html",
+            controller: "PlayerFormController",
+            controllerAs: "ctrl",
+            bindToController: true
+        };
+    }
+    Components.PlayerFormDirective = PlayerFormDirective;
+    var PlayerFormController = (function () {
+        function PlayerFormController() {
+        }
+        PlayerFormController.$inject = [];
+        return PlayerFormController;
+    }());
+    Components.PlayerFormController = PlayerFormController;
+})(Components || (Components = {}));
+
+var Components;
+(function (Components) {
     var PlayerFormModule = angular.module('PlayerFormModule', []);
     PlayerFormModule.component('playerForm', Components.PlayerForm());
 })(Components || (Components = {}));
