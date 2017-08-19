@@ -3,14 +3,10 @@ module PlayerStats {
     import IMonthYearParams = Shared.IMonthYearParams;
     import MonthYearParams = Shared.MonthYearParams;
 
-    export function PlayerStatsDirective(): ng.IDirective {
+    export function PlayerStatsPage(): ng.IComponentOptions {
         return {
-			scope: {
-			},
-			templateUrl: "/areas/playerStats/directives/PlayerStatsTemplate.html",
-			controller: "PlayerStatsController",
-			controllerAs: "ctrl",
-			bindToController: true
+			templateUrl: "/areas/playerStats/directives/PlayerStatsPageTemplate.html",
+			controller: PlayerStatsPageController
         };
     }
 
@@ -21,7 +17,7 @@ module PlayerStats {
         Error
     }
 
-    export class PlayerStatsController {
+    export class PlayerStatsPageController {
         public static $inject: string[] = ["$timeout", "monthYearQueryService", "playerStatsService"];
 
         private showLoading: boolean = false;

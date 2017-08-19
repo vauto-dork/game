@@ -49,20 +49,18 @@ var PlayerStats;
 
 var PlayerStats;
 (function (PlayerStats) {
-    function DeltaBoxDirective() {
+    function DeltaBox() {
         return {
-            scope: {
+            bindings: {
                 value: "=",
                 decimal: "@",
                 diff: "="
             },
             templateUrl: "/areas/playerStats/directives/DeltaBoxTemplate.html",
-            controller: "DeltaBoxController",
-            controllerAs: "ctrl",
-            bindToController: true
+            controller: DeltaBoxController
         };
     }
-    PlayerStats.DeltaBoxDirective = DeltaBoxDirective;
+    PlayerStats.DeltaBox = DeltaBox;
     var DeltaBoxController = (function () {
         function DeltaBoxController() {
         }
@@ -115,16 +113,13 @@ var PlayerStats;
 
 var PlayerStats;
 (function (PlayerStats) {
-    function PlayerStatsCardDirective() {
+    function PlayerStatsCard() {
         return {
-            scope: {},
             templateUrl: "/areas/playerStats/directives/PlayerStatsCardTemplate.html",
-            controller: "PlayerStatsCardController",
-            controllerAs: "ctrl",
-            bindToController: true
+            controller: PlayerStatsCardController
         };
     }
-    PlayerStats.PlayerStatsCardDirective = PlayerStatsCardDirective;
+    PlayerStats.PlayerStatsCard = PlayerStatsCard;
     var PlayerStatsCardController = (function () {
         function PlayerStatsCardController(playerStatsService) {
             this.playerStatsService = playerStatsService;
@@ -172,16 +167,13 @@ var PlayerStats;
 var PlayerStats;
 (function (PlayerStats) {
     var MonthYearParams = Shared.MonthYearParams;
-    function PlayerStatsDirective() {
+    function PlayerStatsPage() {
         return {
-            scope: {},
-            templateUrl: "/areas/playerStats/directives/PlayerStatsTemplate.html",
-            controller: "PlayerStatsController",
-            controllerAs: "ctrl",
-            bindToController: true
+            templateUrl: "/areas/playerStats/directives/PlayerStatsPageTemplate.html",
+            controller: PlayerStatsPageController
         };
     }
-    PlayerStats.PlayerStatsDirective = PlayerStatsDirective;
+    PlayerStats.PlayerStatsPage = PlayerStatsPage;
     var State;
     (function (State) {
         State[State["Loading"] = 0] = "Loading";
@@ -189,8 +181,8 @@ var PlayerStats;
         State[State["Change"] = 2] = "Change";
         State[State["Error"] = 3] = "Error";
     })(State || (State = {}));
-    var PlayerStatsController = (function () {
-        function PlayerStatsController($timeout, monthYearQueryService, playerStatsService) {
+    var PlayerStatsPageController = (function () {
+        function PlayerStatsPageController($timeout, monthYearQueryService, playerStatsService) {
             var _this = this;
             this.$timeout = $timeout;
             this.monthYearQueryService = monthYearQueryService;
@@ -205,21 +197,21 @@ var PlayerStats;
             this.date = monthYearQueryService.getQueryParams() || new MonthYearParams();
             this.getPlayerStats(this.date);
         }
-        Object.defineProperty(PlayerStatsController.prototype, "playerStats", {
+        Object.defineProperty(PlayerStatsPageController.prototype, "playerStats", {
             get: function () {
                 return this.playerStatsService.playerStats;
             },
             enumerable: true,
             configurable: true
         });
-        Object.defineProperty(PlayerStatsController.prototype, "hasPlayedGames", {
+        Object.defineProperty(PlayerStatsPageController.prototype, "hasPlayedGames", {
             get: function () {
                 return this.playerStatsService.hasPlayedGames;
             },
             enumerable: true,
             configurable: true
         });
-        PlayerStatsController.prototype.getPlayerStats = function (date) {
+        PlayerStatsPageController.prototype.getPlayerStats = function (date) {
             var _this = this;
             this.playerStatsService.getPlayerStats(date).then(function () {
                 _this.changeState(State.Ready);
@@ -227,39 +219,37 @@ var PlayerStats;
                 _this.changeState(State.Error);
             });
         };
-        PlayerStatsController.prototype.changeState = function (newState) {
+        PlayerStatsPageController.prototype.changeState = function (newState) {
             this.showLoading = newState === State.Loading || newState === State.Change;
             this.showContent = newState === State.Ready;
             this.showErrorMessage = newState === State.Error;
         };
-        PlayerStatsController.prototype.rankValue = function (value) {
+        PlayerStatsPageController.prototype.rankValue = function (value) {
             return value === 0 ? null : value;
         };
-        PlayerStatsController.prototype.updateQueryParams = function () {
+        PlayerStatsPageController.prototype.updateQueryParams = function () {
             var _this = this;
             this.changeState(State.Change);
             this.$timeout(function () {
                 _this.monthYearQueryService.saveQueryParams(_this.date.month, _this.date.year);
             });
         };
-        PlayerStatsController.$inject = ["$timeout", "monthYearQueryService", "playerStatsService"];
-        return PlayerStatsController;
+        PlayerStatsPageController.$inject = ["$timeout", "monthYearQueryService", "playerStatsService"];
+        return PlayerStatsPageController;
     }());
-    PlayerStats.PlayerStatsController = PlayerStatsController;
+    PlayerStats.PlayerStatsPageController = PlayerStatsPageController;
 })(PlayerStats || (PlayerStats = {}));
 
-var DorkModule = angular.module('DorkModule', ['UxControlsModule']);
+var PlayerStats;
+(function (PlayerStats) {
+    var PlayerStatsModule = angular.module('PlayerStatsModule', ['UxControlsModule']);
+    PlayerStatsModule.service('playerStatsService', PlayerStats.PlayerStatsService);
+    PlayerStatsModule.component('deltaBox', PlayerStats.DeltaBox());
+    PlayerStatsModule.component('playerStatsCard', PlayerStats.PlayerStatsCard());
+    PlayerStatsModule.component('playerStatsPage', PlayerStats.PlayerStatsPage());
+})(PlayerStats || (PlayerStats = {}));
 
-DorkModule.service('playerStatsService', PlayerStats.PlayerStatsService);
-
-DorkModule.controller('DeltaBoxController', PlayerStats.DeltaBoxController);
-DorkModule.directive('deltaBox', PlayerStats.DeltaBoxDirective);
-
-DorkModule.controller('PlayerStatsCardController', PlayerStats.PlayerStatsCardController);
-DorkModule.directive('playerStatsCard', PlayerStats.PlayerStatsCardDirective);
-
-DorkModule.controller('PlayerStatsController', PlayerStats.PlayerStatsController);
-DorkModule.directive('playerStats', PlayerStats.PlayerStatsDirective);
+var DorkModule = angular.module('DorkModule', ['PlayerStatsModule']);
 
 function setPlayerId(value) {
     DorkModule.constant('playerId', value);

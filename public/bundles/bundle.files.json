@@ -144,6 +144,7 @@
             "files": [
                 "areas/playerStats/services/*.js",
                 "areas/playerStats/directives/*.js",
+                "areas/playerStats/modules/*.js",
                 "bundles/pageModules/playerStats.js"
             ]
         },

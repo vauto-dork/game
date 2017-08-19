@@ -1,14 +1,10 @@
 module PlayerStats {
     import IPlayerStats = Shared.IPlayerStats;
 
-    export function PlayerStatsCardDirective(): ng.IDirective {
+    export function PlayerStatsCard(): ng.IComponentOptions {
         return {
-			scope: {
-			},
 			templateUrl: "/areas/playerStats/directives/PlayerStatsCardTemplate.html",
-			controller: "PlayerStatsCardController",
-			controllerAs: "ctrl",
-			bindToController: true
+			controller: PlayerStatsCardController
         };
     }
 

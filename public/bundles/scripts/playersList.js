@@ -259,7 +259,7 @@ var PlayersList;
     PlayersListModule.component('playersList', PlayersList.PlayersList());
 })(PlayersList || (PlayersList = {}));
 
-var DorkModule = angular.module('DorkModule', ['PlayersList']);
+var DorkModule = angular.module('DorkModule', ['PlayersListModule']);
 
 
 //# sourceMappingURL=maps/playersList.js.map

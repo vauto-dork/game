@@ -1,17 +1,15 @@
 module PlayerStats {
     import IPlayerStats = Shared.IPlayerStats;
 
-    export function DeltaBoxDirective(): ng.IDirective {
+    export function DeltaBox(): ng.IComponentOptions {
         return {
-			scope: {
+			bindings: {
                 value: "=",
                 decimal: "@",
                 diff: "="
 			},
 			templateUrl: "/areas/playerStats/directives/DeltaBoxTemplate.html",
-			controller: "DeltaBoxController",
-			controllerAs: "ctrl",
-			bindToController: true
+			controller: DeltaBoxController
         };
     }
 
