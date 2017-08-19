@@ -227,29 +227,13 @@ var Shared;
 
 var Shared;
 (function (Shared) {
-    var EditGameType;
     (function (EditGameType) {
         EditGameType[EditGameType["ActiveGame"] = 0] = "ActiveGame";
         EditGameType[EditGameType["FinalizedGame"] = 1] = "FinalizedGame";
-    })(EditGameType = Shared.EditGameType || (Shared.EditGameType = {}));
+    })(Shared.EditGameType || (Shared.EditGameType = {}));
+    var EditGameType = Shared.EditGameType;
 })(Shared || (Shared = {}));
 
-
-var Shared;
-(function (Shared) {
-    var Months = (function () {
-        function Months() {
-        }
-        Months.Names = ["January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"
-        ];
-        Months.ShortNames = ["Jan", "Feb", "Mar", "Apr", "May", "June",
-            "July", "Aug", "Sept", "Oct", "Nov", "Dec"
-        ];
-        return Months;
-    }());
-    Shared.Months = Months;
-})(Shared || (Shared = {}));
 
 var Shared;
 (function (Shared) {
@@ -269,6 +253,22 @@ var Shared;
         return MonthYearParams;
     }());
     Shared.MonthYearParams = MonthYearParams;
+})(Shared || (Shared = {}));
+
+var Shared;
+(function (Shared) {
+    var Months = (function () {
+        function Months() {
+        }
+        Months.Names = ["January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+        Months.ShortNames = ["Jan", "Feb", "Mar", "Apr", "May", "June",
+            "July", "Aug", "Sept", "Oct", "Nov", "Dec"
+        ];
+        return Months;
+    }());
+    Shared.Months = Months;
 })(Shared || (Shared = {}));
 
 var Shared;
@@ -816,28 +816,22 @@ var Shared;
     Shared.DateTimeService = DateTimeService;
 })(Shared || (Shared = {}));
 
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var Shared;
 (function (Shared) {
     var MonthYearQueryService = (function (_super) {
         __extends(MonthYearQueryService, _super);
         function MonthYearQueryService($timeout, $location) {
-            var _this = _super.call(this, $timeout) || this;
-            _this.$location = $location;
-            _this.minimumYear = 2015;
-            _this.events = {
+            _super.call(this, $timeout);
+            this.$location = $location;
+            this.minimumYear = 2015;
+            this.events = {
                 dateChange: "dateChange"
             };
-            return _this;
         }
         MonthYearQueryService.prototype.sanitizeParam = function (value) {
             if (value === undefined) {

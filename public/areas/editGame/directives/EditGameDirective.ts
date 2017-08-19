@@ -127,6 +127,7 @@ module EditGame {
         }
 
         public updateFinalizedGame(): void {
+            this.editGameService.datePlayed = this.datePlayed;
             this.editGameService.updateFinalizedGame().then(() => {
                 this.$window.location.href = "/GameHistory/Admin";
             }, () => {
