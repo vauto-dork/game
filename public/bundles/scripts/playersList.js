@@ -55,8 +55,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Players;
-(function (Players) {
+var PlayersList;
+(function (PlayersList) {
     var PlayersListService = (function (_super) {
         __extends(PlayersListService, _super);
         function PlayersListService($timeout, $q, apiService) {
