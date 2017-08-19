@@ -1,5 +1,27 @@
 var Components;
 (function (Components) {
+    function PlayerForm() {
+        return {
+            bindings: {
+                player: "=",
+                disableForm: "=?"
+            },
+            templateUrl: "/components/playerForm/directives/PlayerFormTemplate.html",
+            controller: PlayerFormController
+        };
+    }
+    Components.PlayerForm = PlayerForm;
+    var PlayerFormController = (function () {
+        function PlayerFormController() {
+        }
+        PlayerFormController.$inject = [];
+        return PlayerFormController;
+    }());
+    Components.PlayerFormController = PlayerFormController;
+})(Components || (Components = {}));
+
+var Components;
+(function (Components) {
     function PlayerFormDirective() {
         return {
             scope: {
@@ -22,9 +44,11 @@ var Components;
     Components.PlayerFormController = PlayerFormController;
 })(Components || (Components = {}));
 
-var PlayerFormModule = angular.module('PlayerFormModule', []);
-PlayerFormModule.controller('PlayerFormController', Components.PlayerFormController);
-PlayerFormModule.directive('playerForm', Components.PlayerFormDirective);
+var Components;
+(function (Components) {
+    var PlayerFormModule = angular.module('PlayerFormModule', []);
+    PlayerFormModule.component('playerForm', Components.PlayerForm());
+})(Components || (Components = {}));
 
 var Components;
 (function (Components) {
@@ -177,6 +201,61 @@ var Components;
 
 var Components;
 (function (Components) {
+    function PlayerSelector() {
+        return {
+            bindings: {
+                players: "=",
+                onSelected: "&",
+                disabled: "="
+            },
+            templateUrl: "/components/playerSelector/directives/PlayerSelectorTemplate.html",
+            controller: PlayerSelectorController
+        };
+    }
+    Components.PlayerSelector = PlayerSelector;
+    var PlayerSelectorController = (function () {
+        function PlayerSelectorController($element, $timeout, $filter, playerSelectionService) {
+            this.$element = $element;
+            this.$timeout = $timeout;
+            this.$filter = $filter;
+            this.playerSelectionService = playerSelectionService;
+        }
+        Object.defineProperty(PlayerSelectorController.prototype, "filter", {
+            get: function () {
+                return this.playerSelectionService.filter;
+            },
+            set: function (value) {
+                this.playerSelectionService.filter = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        PlayerSelectorController.prototype.removeFilter = function () {
+            this.playerSelectionService.removeFilter();
+        };
+        PlayerSelectorController.prototype.selectPlayer = function (item, model, label) {
+            this.$element.find("input").focus();
+            this.onSelected({ data: item });
+            this.removeFilter();
+        };
+        PlayerSelectorController.prototype.possiblePlayersAdded = function () {
+            var list = this.$filter("playerSelectorFilter")(this.playerSelectionService.selectedPlayers, this.filter)
+                .map(function (player) {
+                return player.player.fullname;
+            });
+            return {
+                flatList: list.join(", "),
+                hasPlayers: list.length > 0
+            };
+        };
+        PlayerSelectorController.$inject = ["$element", "$timeout", "$filter", "playerSelectionService"];
+        return PlayerSelectorController;
+    }());
+    Components.PlayerSelectorController = PlayerSelectorController;
+})(Components || (Components = {}));
+
+var Components;
+(function (Components) {
     function PlayerSelectorDirective() {
         return {
             scope: {
@@ -232,11 +311,13 @@ var Components;
     Components.PlayerSelectorController = PlayerSelectorController;
 })(Components || (Components = {}));
 
-var PlayerSelectorModule = angular.module('PlayerSelectorModule', []);
-PlayerSelectorModule.service('playerSelectionService', Components.PlayerSelectionService);
-PlayerSelectorModule.filter('playerSelectorFilter', Components.PlayerSelectorFilter);
-PlayerSelectorModule.controller('PlayerSelectorController', Components.PlayerSelectorController);
-PlayerSelectorModule.directive('playerSelector', Components.PlayerSelectorDirective);
+var Components;
+(function (Components) {
+    var PlayerSelectorModule = angular.module('PlayerSelectorModule', []);
+    PlayerSelectorModule.service('playerSelectionService', Components.PlayerSelectionService);
+    PlayerSelectorModule.filter('playerSelectorFilter', Components.PlayerSelectorFilter);
+    PlayerSelectorModule.component('playerSelector', Components.PlayerSelector());
+})(Components || (Components = {}));
 
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -282,6 +363,27 @@ var Components;
 
 var Components;
 (function (Components) {
+    function NewPlayerButton() {
+        return {
+            bindings: {
+                click: "&",
+                disabled: "="
+            },
+            templateUrl: "/components/newPlayerPanel/directives/NewPlayerButtonTemplate.html",
+            controller: NewPlayerButtonController
+        };
+    }
+    Components.NewPlayerButton = NewPlayerButton;
+    var NewPlayerButtonController = (function () {
+        function NewPlayerButtonController() {
+        }
+        return NewPlayerButtonController;
+    }());
+    Components.NewPlayerButtonController = NewPlayerButtonController;
+})(Components || (Components = {}));
+
+var Components;
+(function (Components) {
     function NewPlayerButtonDirective() {
         return {
             scope: {
@@ -301,6 +403,52 @@ var Components;
         return NewPlayerButtonController;
     }());
     Components.NewPlayerButtonController = NewPlayerButtonController;
+})(Components || (Components = {}));
+
+var Components;
+(function (Components) {
+    function NewPlayerPanel() {
+        return {
+            templateUrl: "/components/newPlayerPanel/directives/NewPlayerPanelTemplate.html",
+            controller: NewPlayerPanelController
+        };
+    }
+    Components.NewPlayerPanel = NewPlayerPanel;
+    var NewPlayerPanelController = (function () {
+        function NewPlayerPanelController(panelService) {
+            this.panelService = panelService;
+            this.player = new Shared.Player();
+            this.resetForm();
+        }
+        NewPlayerPanelController.prototype.resetForm = function () {
+            this.player = new Shared.Player();
+            if (this.addPlayerForm) {
+                this.addPlayerForm.$setPristine();
+                this.addPlayerForm.$setUntouched();
+            }
+            this.disabled = false;
+            this.showError = false;
+        };
+        NewPlayerPanelController.prototype.cancel = function () {
+            this.resetForm();
+            this.panelService.cancelForm();
+        };
+        NewPlayerPanelController.prototype.save = function () {
+            var _this = this;
+            this.showError = false;
+            this.disabled = true;
+            this.panelService.savePlayer(this.player).then(function () {
+                _this.resetForm();
+            }, function (data) {
+                console.error(data);
+                _this.showError = true;
+                _this.disabled = false;
+            });
+        };
+        NewPlayerPanelController.$inject = ["newPlayerPanelService"];
+        return NewPlayerPanelController;
+    }());
+    Components.NewPlayerPanelController = NewPlayerPanelController;
 })(Components || (Components = {}));
 
 var Components;
@@ -376,12 +524,13 @@ var Components;
     Components.NewPlayerPanelController = NewPlayerPanelController;
 })(Components || (Components = {}));
 
-var newPlayerModule = angular.module('NewPlayerPanelModule', ['PlayerFormModule']);
-newPlayerModule.service('newPlayerPanelService', Components.NewPlayerPanelService);
-newPlayerModule.controller('NewPlayerButtonController', Components.NewPlayerButtonController);
-newPlayerModule.directive('newPlayerButton', Components.NewPlayerButtonDirective);
-newPlayerModule.controller('NewPlayerPanelController', Components.NewPlayerPanelController);
-newPlayerModule.directive('newPlayerPanel', Components.NewPlayerPanelDirective);
+var Components;
+(function (Components) {
+    var newPlayerModule = angular.module('NewPlayerPanelModule', ['PlayerFormModule']);
+    newPlayerModule.service('newPlayerPanelService', Components.NewPlayerPanelService);
+    newPlayerModule.component('newPlayerButton', Components.NewPlayerButton());
+    newPlayerModule.component('newPlayerPanel', Components.NewPlayerPanel());
+})(Components || (Components = {}));
 
 var CreateGame;
 (function (CreateGame) {
@@ -551,6 +700,59 @@ var CreateGame;
 
 var CreateGame;
 (function (CreateGame) {
+    function ButtonsPanel() {
+        return {
+            bindings: {
+                datePlayed: "=",
+                create: "&"
+            },
+            templateUrl: '/areas/createGame/directives/ButtonsPanelTemplate.html',
+            controller: ButtonsPanelController
+        };
+    }
+    CreateGame.ButtonsPanel = ButtonsPanel;
+    var ButtonsPanelController = (function () {
+        function ButtonsPanelController($window, createGameService) {
+            this.$window = $window;
+            this.createGameService = createGameService;
+            this.datePlayed = null;
+        }
+        Object.defineProperty(ButtonsPanelController.prototype, "hasDate", {
+            get: function () {
+                return this.datePlayed !== null && this.datePlayed !== undefined && this.datePlayed.toISOString() !== "";
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(ButtonsPanelController.prototype, "hasSelectedPlayers", {
+            get: function () {
+                return this.createGameService.numPlayers > 0;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        ButtonsPanelController.prototype.reset = function () {
+            this.datePlayed = null;
+            this.createGameService.reset();
+        };
+        ButtonsPanelController.prototype.useCurrentDateTime = function () {
+            this.datePlayed = new Date();
+        };
+        Object.defineProperty(ButtonsPanelController.prototype, "disableGameCreation", {
+            get: function () {
+                return !this.hasDate || !this.createGameService.hasMinimumPlayers;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        ButtonsPanelController.$inject = ['$window', 'createGameService'];
+        return ButtonsPanelController;
+    }());
+    CreateGame.ButtonsPanelController = ButtonsPanelController;
+})(CreateGame || (CreateGame = {}));
+
+var CreateGame;
+(function (CreateGame) {
     function ButtonsPanelDirective() {
         return {
             scope: {
@@ -604,43 +806,105 @@ var CreateGame;
     CreateGame.ButtonsPanelController = ButtonsPanelController;
 })(CreateGame || (CreateGame = {}));
 
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var CreateGame;
-(function (CreateGame) {
-    function SelectedPlayersDirective() {
+(function (CreateGame_1) {
+    function CreateGame() {
         return {
-            scope: {},
-            templateUrl: '/areas/createGame/directives/SelectedPlayersTemplate.html',
-            controller: 'SelectedPlayersController',
-            controllerAs: 'ctrl',
-            bindToController: true
+            templateUrl: '/areas/createGame/directives/CreateGameTemplate.html',
+            controller: CreateGameController
         };
     }
-    CreateGame.SelectedPlayersDirective = SelectedPlayersDirective;
-    var SelectedPlayersController = (function () {
-        function SelectedPlayersController(createGameService) {
+    CreateGame_1.CreateGame = CreateGame;
+    var State;
+    (function (State) {
+        State[State["Loading"] = 0] = "Loading";
+        State[State["Error"] = 1] = "Error";
+        State[State["Loaded"] = 2] = "Loaded";
+        State[State["CreatingGame"] = 3] = "CreatingGame";
+    })(State || (State = {}));
+    var CreateGameController = (function (_super) {
+        __extends(CreateGameController, _super);
+        function CreateGameController($window, createGameService, playerSelectionService, newPlayerPanelService) {
+            var _this = this;
+            _super.call(this);
+            this.$window = $window;
             this.createGameService = createGameService;
+            this.playerSelectionService = playerSelectionService;
+            this.newPlayerPanelService = newPlayerPanelService;
+            this.showLoading = false;
+            this.showErrorMessage = false;
+            this.showForm = false;
+            this.datePlayed = null;
+            this.changeState(State.Loading);
+            this.createGameService.init().then(function () {
+                _this.changeState(State.Loaded);
+            });
+            this.newPlayerPanelService.subscribeFormCancel(function () {
+                _this.disableAddNewPlayer();
+            });
+            this.newPlayerPanelService.subscribeSavedPlayer(function () {
+                _this.disableAddNewPlayer();
+            });
         }
-        Object.defineProperty(SelectedPlayersController.prototype, "players", {
+        Object.defineProperty(CreateGameController.prototype, "sortOrder", {
             get: function () {
-                return this.createGameService.playersSorted;
+                return CreateGame_1.NewGameSort[this.createGameService.sortOrder];
+            },
+            set: function (value) {
             },
             enumerable: true,
             configurable: true
         });
-        Object.defineProperty(SelectedPlayersController.prototype, "hasMinimumPlayers", {
+        Object.defineProperty(CreateGameController.prototype, "unselectedPlayers", {
             get: function () {
-                return this.createGameService.hasMinimumPlayers;
+                return this.createGameService.unselectedPlayers;
             },
             enumerable: true,
             configurable: true
         });
-        SelectedPlayersController.prototype.removePlayer = function (player) {
-            this.createGameService.removePlayer(player);
+        CreateGameController.prototype.changeState = function (newState) {
+            this.showLoading = (newState === State.Loading) || (newState === State.CreatingGame);
+            this.showForm = (newState === State.Loaded);
+            this.showErrorMessage = newState === State.Error;
+            switch (newState) {
+                case State.CreatingGame:
+                    this.createNewActiveGame();
+                    break;
+            }
         };
-        SelectedPlayersController.$inject = ['createGameService'];
-        return SelectedPlayersController;
-    }());
-    CreateGame.SelectedPlayersController = SelectedPlayersController;
+        CreateGameController.prototype.addPlayer = function (data) {
+            this.createGameService.addPlayer(data);
+        };
+        CreateGameController.prototype.createGame = function () {
+            this.changeState(State.CreatingGame);
+        };
+        CreateGameController.prototype.createNewActiveGame = function () {
+            var _this = this;
+            this.createGameService.createNewActiveGame(this.datePlayed).then(function (editUrl) {
+                _this.$window.location.href = editUrl;
+            }, function () {
+                _this.changeState(State.Error);
+            });
+        };
+        CreateGameController.prototype.useThisOrder = function () {
+            this.createGameService.sortOrder = CreateGame_1.NewGameSort.Selected;
+        };
+        CreateGameController.prototype.useGameOrder = function () {
+            this.createGameService.sortOrder = CreateGame_1.NewGameSort.Rating;
+        };
+        CreateGameController.prototype.enablePlayerSelectorPanel = function () {
+            this.playerSelectionService.removeFilter();
+            _super.prototype.enablePlayerSelectorPanel.call(this);
+        };
+        CreateGameController.$inject = ["$window", "createGameService", "playerSelectionService", "newPlayerPanelService"];
+        return CreateGameController;
+    }(Components.NewPlayerPanelBase));
+    CreateGame_1.CreateGameController = CreateGameController;
 })(CreateGame || (CreateGame = {}));
 
 var __extends = (this && this.__extends) || function (d, b) {
@@ -747,16 +1011,88 @@ var CreateGame;
     CreateGame.CreateGameController = CreateGameController;
 })(CreateGame || (CreateGame = {}));
 
-var DorkModule = angular.module('DorkModule', ['UxControlsModule', 'PlayerSelectorModule', 'NewPlayerPanelModule']);
+var CreateGame;
+(function (CreateGame) {
+    function SelectedPlayers() {
+        return {
+            templateUrl: '/areas/createGame/directives/SelectedPlayersTemplate.html',
+            controller: SelectedPlayersController
+        };
+    }
+    CreateGame.SelectedPlayers = SelectedPlayers;
+    var SelectedPlayersController = (function () {
+        function SelectedPlayersController(createGameService) {
+            this.createGameService = createGameService;
+        }
+        Object.defineProperty(SelectedPlayersController.prototype, "players", {
+            get: function () {
+                return this.createGameService.playersSorted;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(SelectedPlayersController.prototype, "hasMinimumPlayers", {
+            get: function () {
+                return this.createGameService.hasMinimumPlayers;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        SelectedPlayersController.prototype.removePlayer = function (player) {
+            this.createGameService.removePlayer(player);
+        };
+        SelectedPlayersController.$inject = ['createGameService'];
+        return SelectedPlayersController;
+    }());
+    CreateGame.SelectedPlayersController = SelectedPlayersController;
+})(CreateGame || (CreateGame = {}));
 
-DorkModule.service('createGameService', CreateGame.CreateGameService);
+var CreateGame;
+(function (CreateGame) {
+    function SelectedPlayersDirective() {
+        return {
+            scope: {},
+            templateUrl: '/areas/createGame/directives/SelectedPlayersTemplate.html',
+            controller: 'SelectedPlayersController',
+            controllerAs: 'ctrl',
+            bindToController: true
+        };
+    }
+    CreateGame.SelectedPlayersDirective = SelectedPlayersDirective;
+    var SelectedPlayersController = (function () {
+        function SelectedPlayersController(createGameService) {
+            this.createGameService = createGameService;
+        }
+        Object.defineProperty(SelectedPlayersController.prototype, "players", {
+            get: function () {
+                return this.createGameService.playersSorted;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(SelectedPlayersController.prototype, "hasMinimumPlayers", {
+            get: function () {
+                return this.createGameService.hasMinimumPlayers;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        SelectedPlayersController.prototype.removePlayer = function (player) {
+            this.createGameService.removePlayer(player);
+        };
+        SelectedPlayersController.$inject = ['createGameService'];
+        return SelectedPlayersController;
+    }());
+    CreateGame.SelectedPlayersController = SelectedPlayersController;
+})(CreateGame || (CreateGame = {}));
 
-DorkModule.controller('ButtonsPanelController', CreateGame.ButtonsPanelController);
-DorkModule.directive('buttonsPanel', CreateGame.ButtonsPanelDirective);
+var CreateGame;
+(function (CreateGame) {
+    var CreateGameModule = angular.module('CreateGameModule', ['UxControlsModule', 'PlayerSelectorModule', 'NewPlayerPanelModule']);
+    CreateGameModule.service('createGameService', CreateGame.CreateGameService);
+    CreateGameModule.component('buttonsPanel', CreateGame.ButtonsPanel());
+    CreateGameModule.component('selectedPlayers', CreateGame.SelectedPlayers());
+    CreateGameModule.component('createGame', CreateGame.CreateGame());
+})(CreateGame || (CreateGame = {}));
 
-DorkModule.controller('SelectedPlayersController', CreateGame.SelectedPlayersController);
-DorkModule.directive('selectedPlayers', CreateGame.SelectedPlayersDirective);
-
-DorkModule.controller('CreateGameController', CreateGame.CreateGameController);
-DorkModule.directive('createGame', CreateGame.CreateGameDirective);
 //# sourceMappingURL=maps/createGame.js.map

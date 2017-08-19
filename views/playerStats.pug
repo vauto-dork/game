@@ -2,8 +2,8 @@ extends layout
 
 block append head
   script.
-    setPlayerId('!{playerId}');
+    DorkModule.constant('playerId', '!{playerId}');
 
 block content
     div.row
-        player-stats
+        player-stats-page

@@ -1,9 +1,8 @@
-var newPlayerModule = angular.module('NewPlayerPanelModule', ['PlayerFormModule']);
+module Components {
+    var newPlayerModule = angular.module('NewPlayerPanelModule', ['PlayerFormModule']);
 
-newPlayerModule.service('newPlayerPanelService', Components.NewPlayerPanelService);
+    newPlayerModule.service('newPlayerPanelService', NewPlayerPanelService);
 
-newPlayerModule.controller('NewPlayerButtonController', Components.NewPlayerButtonController);
-newPlayerModule.directive('newPlayerButton', Components.NewPlayerButtonDirective);
-
-newPlayerModule.controller('NewPlayerPanelController', Components.NewPlayerPanelController);
-newPlayerModule.directive('newPlayerPanel', Components.NewPlayerPanelDirective);
+    newPlayerModule.component('newPlayerButton', NewPlayerButton());
+    newPlayerModule.component('newPlayerPanel', NewPlayerPanel());
+}

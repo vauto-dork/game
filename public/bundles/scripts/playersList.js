@@ -1,5 +1,27 @@
 var Components;
 (function (Components) {
+    function PlayerForm() {
+        return {
+            bindings: {
+                player: "=",
+                disableForm: "=?"
+            },
+            templateUrl: "/components/playerForm/directives/PlayerFormTemplate.html",
+            controller: PlayerFormController
+        };
+    }
+    Components.PlayerForm = PlayerForm;
+    var PlayerFormController = (function () {
+        function PlayerFormController() {
+        }
+        PlayerFormController.$inject = [];
+        return PlayerFormController;
+    }());
+    Components.PlayerFormController = PlayerFormController;
+})(Components || (Components = {}));
+
+var Components;
+(function (Components) {
     function PlayerFormDirective() {
         return {
             scope: {
@@ -22,17 +44,19 @@ var Components;
     Components.PlayerFormController = PlayerFormController;
 })(Components || (Components = {}));
 
-var PlayerFormModule = angular.module('PlayerFormModule', []);
-PlayerFormModule.controller('PlayerFormController', Components.PlayerFormController);
-PlayerFormModule.directive('playerForm', Components.PlayerFormDirective);
+var Components;
+(function (Components) {
+    var PlayerFormModule = angular.module('PlayerFormModule', []);
+    PlayerFormModule.component('playerForm', Components.PlayerForm());
+})(Components || (Components = {}));
 
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Players;
-(function (Players) {
+var PlayersList;
+(function (PlayersList) {
     var PlayersListService = (function (_super) {
         __extends(PlayersListService, _super);
         function PlayersListService($timeout, $q, apiService) {
@@ -94,23 +118,21 @@ var Players;
         PlayersListService.$inject = ['$timeout', '$q', 'apiService'];
         return PlayersListService;
     }(Shared.PubSubServiceBase));
-    Players.PlayersListService = PlayersListService;
-})(Players || (Players = {}));
+    PlayersList.PlayersListService = PlayersListService;
+})(PlayersList || (PlayersList = {}));
 
-var Players;
-(function (Players) {
-    function EditPlayerDirective() {
+var PlayersList;
+(function (PlayersList) {
+    function EditPlayer() {
         return {
-            scope: {
+            bindings: {
                 player: "="
             },
-            templateUrl: "/areas/players/directives/EditPlayerTemplate.html",
-            controller: "EditPlayerController",
-            controllerAs: "ctrl",
-            bindToController: true
+            templateUrl: "/areas/playersList/directives/EditPlayerTemplate.html",
+            controller: EditPlayerController
         };
     }
-    Players.EditPlayerDirective = EditPlayerDirective;
+    PlayersList.EditPlayer = EditPlayer;
     var EditPlayerController = (function () {
         function EditPlayerController(playersListService) {
             var _this = this;
@@ -130,21 +152,18 @@ var Players;
         EditPlayerController.$inject = ["playersListService"];
         return EditPlayerController;
     }());
-    Players.EditPlayerController = EditPlayerController;
-})(Players || (Players = {}));
+    PlayersList.EditPlayerController = EditPlayerController;
+})(PlayersList || (PlayersList = {}));
 
-var Players;
-(function (Players) {
-    function PlayersListDirective() {
+var PlayersList;
+(function (PlayersList_1) {
+    function PlayersList() {
         return {
-            scope: {},
-            templateUrl: "/areas/players/directives/PlayersListTemplate.html",
-            controller: "PlayersListController",
-            controllerAs: "ctrl",
-            bindToController: true
+            templateUrl: "/areas/playersList/directives/PlayersListTemplate.html",
+            controller: PlayersListController
         };
     }
-    Players.PlayersListDirective = PlayersListDirective;
+    PlayersList_1.PlayersList = PlayersList;
     var State;
     (function (State) {
         State[State["Loading"] = 0] = "Loading";
@@ -252,18 +271,16 @@ var Players;
         PlayersListController.$inject = ["apiService", "alertsService", "playersListService"];
         return PlayersListController;
     }());
-    Players.PlayersListController = PlayersListController;
-})(Players || (Players = {}));
+    PlayersList_1.PlayersListController = PlayersListController;
+})(PlayersList || (PlayersList = {}));
 
-var DorkModule = angular.module('DorkModule', ['UxControlsModule', 'PlayerFormModule']);
-
-DorkModule.service('alertsService', Shared.AlertsService);
-DorkModule.service('playersListService', Players.PlayersListService);
-
-DorkModule.controller('EditPlayerController', Players.EditPlayerController);
-DorkModule.directive('editPlayer', Players.EditPlayerDirective);
-
-DorkModule.controller('PlayersListController', Players.PlayersListController);
-DorkModule.directive('playersList', Players.PlayersListDirective);
+var PlayersList;
+(function (PlayersList) {
+    var PlayersListModule = angular.module('PlayersListModule', ['UxControlsModule', 'PlayerFormModule']);
+    PlayersListModule.service('alertsService', Shared.AlertsService);
+    PlayersListModule.service('playersListService', PlayersList.PlayersListService);
+    PlayersListModule.component('editPlayer', PlayersList.EditPlayer());
+    PlayersListModule.component('playersList', PlayersList.PlayersList());
+})(PlayersList || (PlayersList = {}));
 
 //# sourceMappingURL=maps/playersList.js.map

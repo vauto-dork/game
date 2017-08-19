@@ -1,28 +1,17 @@
-var UxControlsModule = angular.module('UxControlsModule', ['ngAnimate', 'ui.bootstrap']);
+module Shared {
+    var UxControlsModule = angular.module('UxControlsModule', ['ngAnimate', 'ui.bootstrap']);
 
-UxControlsModule.service('dateTimeService', Shared.DateTimeService);
-UxControlsModule.service('monthYearQueryService', Shared.MonthYearQueryService);
-UxControlsModule.service('apiService', Shared.ApiService);
+    UxControlsModule.service('dateTimeService', DateTimeService);
+    UxControlsModule.service('monthYearQueryService', MonthYearQueryService);
+    UxControlsModule.service('apiService', ApiService);
 
-UxControlsModule.controller('TextInputController', Shared.TextInputController);
-UxControlsModule.directive('textInput', Shared.TextInputDirective);
+    UxControlsModule.component('textInput', TextInput());
+    UxControlsModule.component('loadSpinner', LoadSpinner());
+    UxControlsModule.component('datePicker', DatePicker());
+    UxControlsModule.component('monthYearPicker', MonthYearPicker());
+    UxControlsModule.component('playerNametag', PlayerNametag());
+    UxControlsModule.component('playerScoretag', PlayerScoretag());
+    UxControlsModule.component('globalNav', GlobalNav());
 
-UxControlsModule.controller('LoadSpinnerController', Shared.LoadSpinnerController);
-UxControlsModule.directive('loadSpinner', Shared.LoadSpinnerDirective);
-
-UxControlsModule.controller('DatePickerController', Shared.DatePickerController);
-UxControlsModule.directive('datePicker', Shared.DatePickerDirective);
-
-UxControlsModule.controller('MonthYearPickerController', Shared.MonthYearPickerController);
-UxControlsModule.directive('monthYearPicker', Shared.MonthYearPickerDirective);
-
-UxControlsModule.controller('PlayerNametagController', Shared.PlayerNametagController);
-UxControlsModule.directive('playerNametag', Shared.PlayerNametagDirective);
-
-UxControlsModule.controller('PlayerScoretagController', Shared.PlayerScoretagController);
-UxControlsModule.directive('playerScoretag', Shared.PlayerScoretagDirective);
-
-UxControlsModule.controller('GlobalNavController', Shared.GlobalNavController);
-UxControlsModule.directive('globalNav', Shared.GlobalNavDirective);
-
-UxControlsModule.directive('numericUpDown', Shared.NumericUpDownDirective);
+    UxControlsModule.directive('numericUpDown', NumericUpDownDirective);
+}

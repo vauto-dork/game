@@ -89,7 +89,8 @@ var statsHelper = {
 router.get('/', function(req, res, next) {
     res.render('playerStats', {
         title: 'Player Stats',
-        scripts: bundler.scripts('playerStats')
+        scripts: bundler.scripts('playerStats'),
+        pageModule: 'PlayerStatsModule'
     });
   });
 
@@ -98,7 +99,8 @@ router.get('/:id', function(req, res, next) {
     res.render('playerStats', {
         title: 'Player Stats',
         scripts: bundler.scripts('playerStats'),
-        playerId: playerId
+        playerId: playerId,
+        pageModule: 'PlayerStatsModule'
     });
   });
 

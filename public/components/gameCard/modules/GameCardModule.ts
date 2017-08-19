@@ -1,6 +1,7 @@
-var GameCardModule = angular.module('GameCardModule', []);
+module Components {
+    var GameCardModule = angular.module('GameCardModule', []);
 
-GameCardModule.service('gameCardService', Components.GameCardService);
+    GameCardModule.service('gameCardService', GameCardService);
 
-GameCardModule.controller('GameCardController', Components.GameCardController);
-GameCardModule.directive('gameCard', Components.GameCardDirective);
+    GameCardModule.component('gameCard', GameCard());
+}

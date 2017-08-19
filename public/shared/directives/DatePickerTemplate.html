@@ -1,26 +1,26 @@
 <div class="date-picker-wrapper text-center">
 	<div class="datepicker">
-		<div uib-datepicker-popup="{{ctrl.format}}"
-			ng-model="ctrl.date"
-			is-open="ctrl.datePickerOpened"
-			datepicker-options="ctrl.dateOptions"
+		<div uib-datepicker-popup="{{$ctrl.format}}"
+			ng-model="$ctrl.date"
+			is-open="$ctrl.datePickerOpened"
+			datepicker-options="$ctrl.dateOptions"
 			show-button-bar="false">
 
 			<button type="button"
 			class="btn btn-default btn-block"
-			ng-class="{'active': ctrl.datePickerOpened}"
-			ng-click="ctrl.openDatePicker()"
-			ng-disabled="ctrl.disabled">
+			ng-class="{'active': $ctrl.datePickerOpened}"
+			ng-click="$ctrl.openDatePicker()"
+			ng-disabled="$ctrl.disabled">
 				<div class="button-wrapper">
-					<div class="no-selection" ng-class="{'invisible': ctrl.date}">
+					<div class="no-selection" ng-class="{'invisible': $ctrl.date}">
 						<div class="glyphicon glyphicon-calendar"></div>
 						<div class="no-sel-label">Select<br/>Date</div>
 					</div>
 					<div class="left-value">
-						<span ng-class="{'invisible': !ctrl.date}">{{ctrl.displayDate | date:'dd'}}</span>
+						<span ng-class="{'invisible': !$ctrl.date}">{{$ctrl.displayDate | date:'dd'}}</span>
 					</div>
 					<div class="middle-value">
-						<span ng-class="{'invisible': !ctrl.date}">{{ctrl.displayDate | date:'MMM'}}<br/>{{ctrl.displayDate | date:'yyyy'}}</span>
+						<span ng-class="{'invisible': !$ctrl.date}">{{$ctrl.displayDate | date:'MMM'}}<br/>{{$ctrl.displayDate | date:'yyyy'}}</span>
 					</div>
 					<div class="right-value text-right">
 						<span class="glyphicon glyphicon-menu-down"></span>
@@ -32,25 +32,25 @@
 
 	<div class="timepicker"
 		auto-close="outsideClick"
-		on-toggle="ctrl.openTimePicker()"
+		on-toggle="$ctrl.openTimePicker()"
 		uib-dropdown>
 
 		<button type="button"
 			id="time-picker-toggle"
 			class="btn btn-default btn-block"
-			ng-class="{'active': ctrl.timePickerOpened}"
-			ng-disabled="ctrl.disabled"
+			ng-class="{'active': $ctrl.timePickerOpened}"
+			ng-disabled="$ctrl.disabled"
 			uib-dropdown-toggle>
 			<div class="button-wrapper">
-				<div class="no-selection" ng-class="{'invisible': ctrl.date}">
+				<div class="no-selection" ng-class="{'invisible': $ctrl.date}">
 					<div class="glyphicon glyphicon-time"></div>
 					<div class="no-sel-label">Select<br/>Time</div>
 				</div>
 				<div class="left-value">
-					<span ng-class="{'invisible': !ctrl.date}">{{ctrl.displayDate | date:'hh'}}</span>
+					<span ng-class="{'invisible': !$ctrl.date}">{{$ctrl.displayDate | date:'hh'}}</span>
 				</div>
 				<div class="middle-value">
-					<span ng-class="{'invisible': !ctrl.date}">:{{ctrl.displayDate | date:'mm'}}<br/>{{ctrl.displayDate | date:'a'}}</span>
+					<span ng-class="{'invisible': !$ctrl.date}">:{{$ctrl.displayDate | date:'mm'}}<br/>{{$ctrl.displayDate | date:'a'}}</span>
 				</div>
 				<div class="right-value text-right">
 					<span class="glyphicon glyphicon-menu-down"></span>
@@ -60,19 +60,19 @@
 		<div id="time-picker-dropdown" class="dropdown-menu" uib-dropdown-menu aria-labelledby="time-picker-toggle">
 			<div class="input-wrapper">
 				<uib-timepicker
-					ng-model="ctrl.date"
-					hour-step="ctrl.hstep"
-					minute-step="ctrl.mstep"
+					ng-model="$ctrl.date"
+					hour-step="$ctrl.hstep"
+					minute-step="$ctrl.mstep"
 					show-meridian="true">
 				</uib-timepicker>
 			</div>
 		</div>
 	</div>
 	
-	<div class="now-button" ng-if="ctrl.showNowButton">
+	<div class="now-button" ng-if="$ctrl.showNowButton">
 		<button type="button"
 			class="btn btn-default btn-block"
-			ng-click="ctrl.useCurrentTime()">
+			ng-click="$ctrl.useCurrentTime()">
 			Use Current<br/>Date/Time
 		</button>
 	</div>

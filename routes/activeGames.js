@@ -7,12 +7,20 @@ var bundler = require('./_bundler.js');
 
 /* GET active game page. */
 router.get('/', function(req, res, next) {
-  res.render('activeGames', { title: 'Active Games', scripts: bundler.scripts('activeGames')});
+  res.render('activeGames', {
+	  title: 'Active Games',
+	  scripts: bundler.scripts('activeGames'),
+	  pageModule: 'ActiveGameModule'
+	});
 });
 
 /* GET edit active game page. */
 router.get('/edit', function(req, res, next) {
-  res.render('editActiveGame', { title: 'Edit Game', scripts: bundler.scripts('editGame')});
+  res.render('editActiveGame', {
+	  title: 'Edit Game',
+	  scripts: bundler.scripts('editGame'),
+	  pageModule: 'EditGameModule'
+	});
 });
 
 /* GET games listing. */

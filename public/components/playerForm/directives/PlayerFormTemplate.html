@@ -1,28 +1,28 @@
-<div ng-form="ctrl.playerForm" class="form-group">
+<div ng-form="$ctrl.playerForm" class="form-group">
 	<text-input name="firstName"
 		placeholder="First Name"
-		value="ctrl.player.firstName"
-		disabled="ctrl.disableForm"
+		value="$ctrl.player.firstName"
+		disabled="$ctrl.disableForm"
 		required="true">
 	</text-input>
 
 	<text-input name="lastName"
 		placeholder="Last Name"
-		value="ctrl.player.lastName"
-		disabled="ctrl.disableForm"
+		value="$ctrl.player.lastName"
+		disabled="$ctrl.disableForm"
 		required="true">
 	</text-input>
 
 	<text-input name="customInitials"
 		placeholder="Custom Initials (Optional)"
-		value="ctrl.player.customInitials"
-		disabled="ctrl.disableForm"
+		value="$ctrl.player.customInitials"
+		disabled="$ctrl.disableForm"
 		maxlength="2">
 	</text-input>
 
 	<text-input name="nickName"
 		placeholder="Nickname (Optional)"
-		value="ctrl.player.nickname"
-		disabled="ctrl.disableForm">
+		value="$ctrl.player.nickname"
+		disabled="$ctrl.disableForm">
 	</text-input>
 </div>

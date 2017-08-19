@@ -1,51 +1,3 @@
-var Dotm;
-(function (Dotm) {
-    function DotmDirective() {
-        return {
-            scope: {
-                month: "=",
-                year: "="
-            },
-            templateUrl: '/areas/dotm/directives/DotmTemplate.html',
-            controller: 'DotmController',
-            controllerAs: 'ctrl',
-            bindToController: true
-        };
-    }
-    Dotm.DotmDirective = DotmDirective;
-    var DotmController = (function () {
-        function DotmController($scope, apiService) {
-            var _this = this;
-            this.$scope = $scope;
-            this.apiService = apiService;
-            this.hasUberdorks = false;
-            this.getDotm();
-            $scope.$watchGroup([function () { return _this.month; }, function () { return _this.year; }], function (newValue, oldValue) {
-                if (newValue !== oldValue) {
-                    _this.getDotm();
-                }
-            });
-        }
-        DotmController.prototype.getDotm = function () {
-            var _this = this;
-            this.hasUberdorks = false;
-            this.apiService.getDotm(this.month, this.year).then(function (data) {
-                _this.dotm = data;
-                _this.hasUberdorks = data.uberdorks.length > 0;
-            }, function () {
-                console.error("Cannot get DOTM.");
-            });
-        };
-        DotmController.$inject = ['$scope', 'apiService'];
-        return DotmController;
-    }());
-    Dotm.DotmController = DotmController;
-})(Dotm || (Dotm = {}));
-
-var DotmModule = angular.module('DotmModule', []);
-DotmModule.controller('DotmController', Dotm.DotmController);
-DotmModule.directive('dotm', Dotm.DotmDirective);
-
 var Rankings;
 (function (Rankings) {
     var PlayerSelection;
@@ -121,18 +73,16 @@ var Rankings;
 
 var Rankings;
 (function (Rankings) {
-    function RankingsCardDirective() {
+    function RankingsCard() {
         return {
-            scope: {
+            bindings: {
                 player: "="
             },
-            templateUrl: '/areas/rankings/directives/RankingsCardTemplate.html',
-            controller: 'RankingsCardController',
-            controllerAs: 'ctrl',
-            bindToController: true
+            templateUrl: '/components/rankings/directives/RankingsCardTemplate.html',
+            controller: RankingsCardController
         };
     }
-    Rankings.RankingsCardDirective = RankingsCardDirective;
+    Rankings.RankingsCard = RankingsCard;
     var RankingsCardController = (function () {
         function RankingsCardController(monthYearQueryService) {
             var _this = this;
@@ -169,20 +119,18 @@ var Rankings;
 
 var Rankings;
 (function (Rankings) {
-    function RankingsDirective() {
+    function RankingsPanel() {
         return {
-            scope: {
+            bindings: {
                 month: "=",
                 year: "=",
                 hideUnranked: "="
             },
-            templateUrl: '/areas/rankings/directives/RankingsTemplate.html',
-            controller: 'RankingsController',
-            controllerAs: 'ctrl',
-            bindToController: true
+            templateUrl: '/components/rankings/directives/RankingsPanelTemplate.html',
+            controller: RankingsPanelController
         };
     }
-    Rankings.RankingsDirective = RankingsDirective;
+    Rankings.RankingsPanel = RankingsPanel;
     var State;
     (function (State) {
         State[State["Loading"] = 0] = "Loading";
@@ -191,8 +139,8 @@ var Rankings;
         State[State["NoRankings"] = 3] = "NoRankings";
     })(State || (State = {}));
     ;
-    var RankingsController = (function () {
-        function RankingsController($scope, rankingsService) {
+    var RankingsPanelController = (function () {
+        function RankingsPanelController($scope, rankingsService) {
             var _this = this;
             this.$scope = $scope;
             this.rankingsService = rankingsService;
@@ -212,7 +160,7 @@ var Rankings;
             });
             this.changeState(State.Loading);
         }
-        RankingsController.prototype.changeState = function (newState) {
+        RankingsPanelController.prototype.changeState = function (newState) {
             this.showLoading = newState === State.Loading;
             this.showRankings = newState === State.Loaded;
             this.showUnrankBtn = newState === State.Loaded && this.numberNoGames > 0;
@@ -224,7 +172,7 @@ var Rankings;
                     break;
             }
         };
-        RankingsController.prototype.getRankings = function () {
+        RankingsPanelController.prototype.getRankings = function () {
             var _this = this;
             this.rankingsService.getRankings(this.month, this.year, this.hideUnranked)
                 .then(this.loadingSuccess.bind(this), function (data) {
@@ -232,7 +180,7 @@ var Rankings;
                 console.error(data);
             });
         };
-        RankingsController.prototype.loadingSuccess = function () {
+        RankingsPanelController.prototype.loadingSuccess = function () {
             this.players = this.rankingsService.getPlayersOverTenGames();
             this.playersUnderTen = this.rankingsService.getPlayersUnderTenGames();
             if (this.playersUnderTen.some(function (elem) { return elem.gamesPlayed > 0; })) {
@@ -243,7 +191,7 @@ var Rankings;
                 this.changeState(State.NoRankings);
             }
         };
-        RankingsController.prototype.hasNoRank = function (player) {
+        RankingsPanelController.prototype.hasNoRank = function (player) {
             if (player.gamesPlayed > 0) {
                 return '';
             }
@@ -252,43 +200,128 @@ var Rankings;
             }
             return 'ranking-no-rank';
         };
-        RankingsController.prototype.toggleUnrankedPlayers = function () {
+        RankingsPanelController.prototype.toggleUnrankedPlayers = function () {
             this.showUnrankedPlayers = !this.showUnrankedPlayers;
         };
-        RankingsController.$inject = ['$scope', 'rankingsService'];
-        return RankingsController;
+        RankingsPanelController.$inject = ['$scope', 'rankingsService'];
+        return RankingsPanelController;
     }());
-    Rankings.RankingsController = RankingsController;
+    Rankings.RankingsPanelController = RankingsPanelController;
 })(Rankings || (Rankings = {}));
-
-var RankingsModule = angular.module('RankingsModule', []);
-RankingsModule.service('rankingsService', Rankings.RankingsService);
-RankingsModule.controller('RankingsCardController', Rankings.RankingsCardController);
-RankingsModule.directive('rankingsCard', Rankings.RankingsCardDirective);
-RankingsModule.controller('RankingsController', Rankings.RankingsController);
-RankingsModule.directive('rankings', Rankings.RankingsDirective);
 
 var Rankings;
 (function (Rankings) {
-    function LeaderboardDirective() {
+    var RankingsModule = angular.module('RankingsModule', []);
+    RankingsModule.service('rankingsService', Rankings.RankingsService);
+    RankingsModule.component('rankingsCard', Rankings.RankingsCard());
+    RankingsModule.component('rankingsPanel', Rankings.RankingsPanel());
+})(Rankings || (Rankings = {}));
+
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var Components;
+(function (Components) {
+    var DotmService = (function (_super) {
+        __extends(DotmService, _super);
+        function DotmService($timeout, apiService) {
+            _super.call(this, $timeout);
+            this.apiService = apiService;
+            this.events = {
+                dateChanged: "dateChanged"
+            };
+        }
+        Object.defineProperty(DotmService.prototype, "data", {
+            get: function () {
+                return this.localDotmData;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        DotmService.prototype.changeDate = function (month, year) {
+            this.getDotm(month, year);
+        };
+        DotmService.prototype.subscribeDateChange = function (callback) {
+            this.subscribe(this.events.dateChanged, callback);
+        };
+        DotmService.prototype.getDotm = function (month, year) {
+            var _this = this;
+            this.apiService.getDotm(month, year).then(function (data) {
+                _this.localDotmData = data;
+                _this.publish(_this.events.dateChanged, null);
+            }, function () {
+                console.error("Cannot get DOTM.");
+            });
+        };
+        DotmService.$inject = ["$timeout", "apiService"];
+        return DotmService;
+    }(Shared.PubSubServiceBase));
+    Components.DotmService = DotmService;
+})(Components || (Components = {}));
+
+var Components;
+(function (Components) {
+    function Dotm() {
         return {
-            scope: {},
-            templateUrl: '/areas/rankings/directives/LeaderboardTemplate.html',
-            controller: 'LeaderboardController',
-            controllerAs: 'ctrl',
-            bindToController: true
+            templateUrl: '/components/dotm/directives/DotmTemplate.html',
+            controller: DotmController
         };
     }
-    Rankings.LeaderboardDirective = LeaderboardDirective;
+    Components.Dotm = Dotm;
+    var DotmController = (function () {
+        function DotmController(dotmService, apiService) {
+            this.dotmService = dotmService;
+            this.apiService = apiService;
+        }
+        Object.defineProperty(DotmController.prototype, "dotm", {
+            get: function () {
+                return this.dotmService.data;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(DotmController.prototype, "hasUberdorks", {
+            get: function () {
+                return !this.dotm ? false : this.dotm.uberdorks.length > 0;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        DotmController.$inject = ['dotmService', 'apiService'];
+        return DotmController;
+    }());
+    Components.DotmController = DotmController;
+})(Components || (Components = {}));
+
+var Components;
+(function (Components) {
+    var DotmModule = angular.module('DotmModule', []);
+    DotmModule.service('dotmService', Components.DotmService);
+    DotmModule.component('dotm', Components.Dotm());
+})(Components || (Components = {}));
+
+var Leaderboard;
+(function (Leaderboard_1) {
+    function Leaderboard() {
+        return {
+            templateUrl: '/areas/leaderboard/directives/LeaderboardTemplate.html',
+            controller: LeaderboardController
+        };
+    }
+    Leaderboard_1.Leaderboard = Leaderboard;
     var LeaderboardController = (function () {
-        function LeaderboardController(dateTimeService, apiService) {
+        function LeaderboardController(dateTimeService, dotmService, apiService) {
             this.dateTimeService = dateTimeService;
+            this.dotmService = dotmService;
             this.apiService = apiService;
             this.noGamesThisMonth = false;
             this.currentMonth = dateTimeService.currentMonthValue();
             this.currentYear = dateTimeService.currentYear();
             this.lastMonth = dateTimeService.lastMonthValue();
             this.lastMonthYear = dateTimeService.lastMonthYear();
+            this.dotmService.changeDate(this.lastMonth, this.lastMonthYear);
             this.getLastPlayedGame();
         }
         LeaderboardController.prototype.getLastPlayedGame = function () {
@@ -303,14 +336,16 @@ var Rankings;
                 console.error("Cannot get last game played.");
             });
         };
-        LeaderboardController.$inject = ['dateTimeService', 'apiService'];
+        LeaderboardController.$inject = ['dateTimeService', 'dotmService', 'apiService'];
         return LeaderboardController;
     }());
-    Rankings.LeaderboardController = LeaderboardController;
-})(Rankings || (Rankings = {}));
+    Leaderboard_1.LeaderboardController = LeaderboardController;
+})(Leaderboard || (Leaderboard = {}));
 
-var DorkModule = angular.module('DorkModule', ['UxControlsModule', 'DotmModule', 'RankingsModule']);
+var Leaderboard;
+(function (Leaderboard) {
+    var LeaderboardModule = angular.module('LeaderboardModule', ['UxControlsModule', 'DotmModule', 'RankingsModule']);
+    LeaderboardModule.component('leaderboard', Leaderboard.Leaderboard());
+})(Leaderboard || (Leaderboard = {}));
 
-DorkModule.controller('LeaderboardController', Rankings.LeaderboardController);
-DorkModule.directive('leaderboard', Rankings.LeaderboardDirective);
 //# sourceMappingURL=maps/index.js.map
