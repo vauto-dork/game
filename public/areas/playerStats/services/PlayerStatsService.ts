@@ -4,6 +4,7 @@ module PlayerStats {
     import IMonthYearParams = Shared.IMonthYearParams;
 
     export interface IPlayerStatsService {
+        ready(): ng.IPromise<void>;
         playerStats: IPlayerStats;
         latestGame: IPlayerStatsGame;
         hasPlayedGames: boolean;
@@ -14,6 +15,7 @@ module PlayerStats {
     export class PlayerStatsService implements IPlayerStatsService {
         public static $inject: string[] = ["$q", "playerId", "apiService"];
         
+        private readyPromise: ng.IPromise<void>;
         private localLoading: boolean;
         private localPlayerStats: IPlayerStats;
 
@@ -41,8 +43,14 @@ module PlayerStats {
             
         }
 
+        public ready(): ng.IPromise<void> {
+            return this.readyPromise;
+        }
+
         public getPlayerStats(date?: IMonthYearParams): ng.IPromise<void> {
             var def = this.$q.defer<void>();
+
+            this.readyPromise = def.promise;
 
             this.apiService.getPlayerStats(this.playerId, date).then((playerStats) => {
                 this.localPlayerStats = playerStats;
