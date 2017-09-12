@@ -196,6 +196,7 @@ var PlayerStats;
             var g = svg.append("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
             var yMax = d3.max(this.gameDayData, function (d) { return +d.gamesPlayed; });
+            yMax = yMax > 5 ? yMax : 5;
             x.domain(this.gameDayData.map(function (d) { return d.date.toString(); }));
             y.domain([0, yMax]);
             var xAxis = d3.axisBottom(x)

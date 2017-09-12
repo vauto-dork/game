@@ -74,6 +74,7 @@ module PlayerStats {
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
             var yMax = d3.max(this.gameDayData, (d) => { return +d.gamesPlayed; });
+            yMax = yMax > 5 ? yMax : 5;
 
             x.domain(this.gameDayData.map((d) => { return d.date.toString(); }));
             y.domain([0, yMax]);
@@ -94,10 +95,10 @@ module PlayerStats {
                 .data(this.gameDayData)
                 .enter().append("rect")
                 .attr("class", "bar")
-                .attr("x", function (d) { return x(d.date.toString()); })
-                .attr("y", function (d) { return y(d.gamesPlayed); })
+                .attr("x", (d) => { return x(d.date.toString()); })
+                .attr("y", (d) => { return y(d.gamesPlayed); })
                 .attr("width", x.bandwidth())
-                .attr("height", function (d) { return height - y(d.gamesPlayed); });
+                .attr("height", (d) => { return height - y(d.gamesPlayed); });            
 
             g.append("g")
                 .attr("class", "axis axis-x")
