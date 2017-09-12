@@ -61,8 +61,7 @@ module PlayerStats {
         private createGraph(): void {
             var svg = d3.select("svg");
 
-            svg.selectAll(".axis").remove();
-            svg.selectAll(".bar").remove();
+            svg.selectAll("g").remove();
 
             var margin = { top: 20, right: 20, bottom: 30, left: 40 };
             var width = +svg.attr("width") - margin.left - margin.right;
@@ -89,16 +88,7 @@ module PlayerStats {
                 .tickFormat(d3.format("d"))
                 .tickSizeInner(-width)
                 .tickSizeOuter(0)
-                .tickPadding(10);            
-
-            g.append("g")
-                .attr("class", "axis axis-x")
-                .attr("transform", "translate(0," + height + ")")
-                .call(xAxis);
-
-            g.append("g")
-                .attr("class", "axis axis-y")
-                .call(yAxis);
+                .tickPadding(10);
 
             g.selectAll(".bar")
                 .data(this.gameDayData)
@@ -108,6 +98,15 @@ module PlayerStats {
                 .attr("y", function (d) { return y(d.gamesPlayed); })
                 .attr("width", x.bandwidth())
                 .attr("height", function (d) { return height - y(d.gamesPlayed); });
+
+            g.append("g")
+                .attr("class", "axis axis-x")
+                .attr("transform", "translate(0," + height + ")")
+                .call(xAxis);
+
+            g.append("g")
+                .attr("class", "axis axis-y")
+                .call(yAxis);
         }
     }
 }

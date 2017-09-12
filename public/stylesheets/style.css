@@ -649,6 +649,11 @@ input.ng-touched.ng-invalid {
   .game-graph svg .axis path,
   .game-graph svg .tick line {
     stroke: #999999; }
+  .game-graph svg .axis-y path.domain {
+    -webkit-transform: translate(-1px);
+    transform: translate(-1px); }
+  .game-graph svg .axis-y .tick:not(:first-of-type) line {
+    stroke: #E6EBEF; }
   .game-graph svg .bar {
     fill: #508425; }
 

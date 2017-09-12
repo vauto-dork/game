@@ -27,6 +27,16 @@
             stroke: $med-gray;
         }
 
+        .axis-y {
+            path.domain {
+                @include transform(translate(-1px));
+            }
+            
+            .tick:not(:first-of-type) line {
+                stroke: $background-color;            
+            }
+        }
+
         .bar {
             fill: $dark-green;
         }

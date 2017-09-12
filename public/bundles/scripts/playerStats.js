@@ -187,8 +187,7 @@ var PlayerStats;
         };
         GameGraphController.prototype.createGraph = function () {
             var svg = d3.select("svg");
-            svg.selectAll(".axis").remove();
-            svg.selectAll(".bar").remove();
+            svg.selectAll("g").remove();
             var margin = { top: 20, right: 20, bottom: 30, left: 40 };
             var width = +svg.attr("width") - margin.left - margin.right;
             var height = +svg.attr("height") - margin.top - margin.bottom;
@@ -209,13 +208,6 @@ var PlayerStats;
                 .tickSizeInner(-width)
                 .tickSizeOuter(0)
                 .tickPadding(10);
-            g.append("g")
-                .attr("class", "axis axis-x")
-                .attr("transform", "translate(0," + height + ")")
-                .call(xAxis);
-            g.append("g")
-                .attr("class", "axis axis-y")
-                .call(yAxis);
             g.selectAll(".bar")
                 .data(this.gameDayData)
                 .enter().append("rect")
@@ -224,6 +216,13 @@ var PlayerStats;
                 .attr("y", function (d) { return y(d.gamesPlayed); })
                 .attr("width", x.bandwidth())
                 .attr("height", function (d) { return height - y(d.gamesPlayed); });
+            g.append("g")
+                .attr("class", "axis axis-x")
+                .attr("transform", "translate(0," + height + ")")
+                .call(xAxis);
+            g.append("g")
+                .attr("class", "axis axis-y")
+                .call(yAxis);
         };
         GameGraphController.$inject = ["$element", "playerStatsService"];
         return GameGraphController;
