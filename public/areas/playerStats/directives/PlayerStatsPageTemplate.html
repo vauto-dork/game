@@ -15,11 +15,11 @@
 <load-spinner ng-show="$ctrl.showLoading"></load-spinner>
 
 <div class="col-xs-12 player-stats" ng-show="$ctrl.showContent && $ctrl.hasPlayedGames">
+    <game-graph></game-graph>
+    
     <p>
         Rank deltas are measured when the player hits the ten game minimum.
     </p>
-
-    <game-graph></game-graph>
 
     <div class="stats-table-header">
         <div class="row">

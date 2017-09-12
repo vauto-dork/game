@@ -12,6 +12,7 @@ module PlayerStats {
 
     interface IGameDayData {
         date: number;
+        rating: number;
         gamesPlayed: number;
     }
 
@@ -26,33 +27,49 @@ module PlayerStats {
 
         constructor(private $element: ng.IAugmentedJQuery, private playerStatsService: IPlayerStatsService) {
             this.playerStatsService.ready().then(() => {
-                var gameMonth = new Date(this.playerStats.dateRange[0]).getMonth();
-                var gameYear = new Date(this.playerStats.dateRange[0]).getFullYear();
-                var numDaysInMonth = new Date(gameYear, gameMonth + 1, 0).getDate();
-
-                this.gameDayData = [];
-
-                for (var i = 0; i < numDaysInMonth; i++) {
-                    this.gameDayData.push({ date: i + 1, gamesPlayed: 0 });
-                }
-
-                this.playerStats.games.forEach((game) => {
-                    var day = new Date(game.gameDate).getDate();
-                    this.gameDayData[day - 1].gamesPlayed++;
-                });
-
+                this.updateData();
                 this.createGraph();
+
+                this.playerStatsService.subscribeDataRefresh(() => {
+                    this.updateData();
+                    this.createGraph();
+                });
+            });
+        }
+
+        private updateData(): void {
+            var gameMonth = new Date(this.playerStats.dateRange[0]).getMonth();
+            var gameYear = new Date(this.playerStats.dateRange[0]).getFullYear();
+            var numDaysInMonth = new Date(gameYear, gameMonth + 1, 0).getDate();
+
+            this.gameDayData = [];
+
+            for (var i = 0; i < numDaysInMonth; i++) {
+                this.gameDayData.push({ date: i + 1, gamesPlayed: 0, rating: 0 });
+            }
+
+            this.playerStats.games.forEach((game) => {
+                if(game.played) {
+                    var day = new Date(game.gameDate).getDate();
+                    var index = day - 1;
+                    this.gameDayData[index].gamesPlayed++;
+                    this.gameDayData[index].rating += game.rating;
+                }
             });
         }
 
         private createGraph(): void {
-            var svg = d3.select("svg"),
-                margin = { top: 20, right: 20, bottom: 30, left: 40 },
-                width = +svg.attr("width") - margin.left - margin.right,
-                height = +svg.attr("height") - margin.top - margin.bottom;
+            var svg = d3.select("svg");
 
-            var x = d3.scaleBand().rangeRound([0, width]).padding(0.1),
-                y = d3.scaleLinear().rangeRound([height, 0]);
+            svg.selectAll(".axis").remove();
+            svg.selectAll(".bar").remove();
+
+            var margin = { top: 20, right: 20, bottom: 30, left: 40 };
+            var width = +svg.attr("width") - margin.left - margin.right;
+            var height = +svg.attr("height") - margin.top - margin.bottom;
+
+            var x = d3.scaleBand().rangeRound([0, width]).padding(0.1);
+            var y = d3.scaleLinear().rangeRound([height, 0]);
 
             var g = svg.append("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -62,14 +79,26 @@ module PlayerStats {
             x.domain(this.gameDayData.map((d) => { return d.date.toString(); }));
             y.domain([0, yMax]);
 
-            g.append("g")
-                .attr("class", "axis axis--x")
-                .attr("transform", "translate(0," + height + ")")
-                .call(d3.axisBottom(x));
+            var xAxis = d3.axisBottom(x)
+                .tickSizeInner(0)
+                .tickSizeOuter(0)
+                .tickPadding(10);
+
+            var yAxis = d3.axisLeft(y)
+                .ticks(yMax)
+                .tickFormat(d3.format("d"))
+                .tickSizeInner(-width)
+                .tickSizeOuter(0)
+                .tickPadding(10);            
 
             g.append("g")
-                .attr("class", "axis axis--y")
-                .call(d3.axisLeft(y).ticks(yMax).tickFormat(d3.format("d")));
+                .attr("class", "axis axis-x")
+                .attr("transform", "translate(0," + height + ")")
+                .call(xAxis);
+
+            g.append("g")
+                .attr("class", "axis axis-y")
+                .call(yAxis);
 
             g.selectAll(".bar")
                 .data(this.gameDayData)

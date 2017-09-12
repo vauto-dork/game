@@ -33,6 +33,11 @@
     filter: blur($var);
 }
 
+@mixin transform($var) {
+	-webkit-transform: $var;
+	transform: $var;
+}
+
 @mixin panel-overlay{
 	position: absolute;
 	height: 100%;

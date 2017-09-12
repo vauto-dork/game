@@ -1,10 +1,26 @@
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var PlayerStats;
 (function (PlayerStats) {
-    var PlayerStatsService = (function () {
-        function PlayerStatsService($q, playerId, apiService) {
-            this.$q = $q;
-            this.playerId = playerId;
-            this.apiService = apiService;
+    var PlayerStatsService = (function (_super) {
+        __extends(PlayerStatsService, _super);
+        function PlayerStatsService($timeout, $q, playerId, apiService) {
+            var _this = _super.call(this, $timeout) || this;
+            _this.$q = $q;
+            _this.playerId = playerId;
+            _this.apiService = apiService;
+            _this.events = {
+                dataRefresh: "dataRefresh"
+            };
+            return _this;
         }
         Object.defineProperty(PlayerStatsService.prototype, "playerStats", {
             get: function () {
@@ -39,15 +55,19 @@ var PlayerStats;
             this.readyPromise = def.promise;
             this.apiService.getPlayerStats(this.playerId, date).then(function (playerStats) {
                 _this.localPlayerStats = playerStats;
+                _this.publish(_this.events.dataRefresh, null);
                 def.resolve();
             }, function () {
                 def.reject();
             });
             return def.promise;
         };
-        PlayerStatsService.$inject = ["$q", "playerId", "apiService"];
+        PlayerStatsService.prototype.subscribeDataRefresh = function (callback) {
+            this.subscribe(this.events.dataRefresh, callback);
+        };
+        PlayerStatsService.$inject = ["$timeout", "$q", "playerId", "apiService"];
         return PlayerStatsService;
-    }());
+    }(Shared.PubSubServiceBase));
     PlayerStats.PlayerStatsService = PlayerStatsService;
 })(PlayerStats || (PlayerStats = {}));
 
@@ -132,18 +152,12 @@ var PlayerStats;
             this.playerStatsService = playerStatsService;
             this.gameDayData = [];
             this.playerStatsService.ready().then(function () {
-                var gameMonth = new Date(_this.playerStats.dateRange[0]).getMonth();
-                var gameYear = new Date(_this.playerStats.dateRange[0]).getFullYear();
-                var numDaysInMonth = new Date(gameYear, gameMonth + 1, 0).getDate();
-                _this.gameDayData = [];
-                for (var i = 0; i < numDaysInMonth; i++) {
-                    _this.gameDayData.push({ date: i + 1, gamesPlayed: 0 });
-                }
-                _this.playerStats.games.forEach(function (game) {
-                    var day = new Date(game.gameDate).getDate();
-                    _this.gameDayData[day - 1].gamesPlayed++;
-                });
+                _this.updateData();
                 _this.createGraph();
+                _this.playerStatsService.subscribeDataRefresh(function () {
+                    _this.updateData();
+                    _this.createGraph();
+                });
             });
         }
         Object.defineProperty(GameGraphController.prototype, "playerStats", {
@@ -153,27 +167,55 @@ var PlayerStats;
             enumerable: true,
             configurable: true
         });
+        GameGraphController.prototype.updateData = function () {
+            var _this = this;
+            var gameMonth = new Date(this.playerStats.dateRange[0]).getMonth();
+            var gameYear = new Date(this.playerStats.dateRange[0]).getFullYear();
+            var numDaysInMonth = new Date(gameYear, gameMonth + 1, 0).getDate();
+            this.gameDayData = [];
+            for (var i = 0; i < numDaysInMonth; i++) {
+                this.gameDayData.push({ date: i + 1, gamesPlayed: 0, rating: 0 });
+            }
+            this.playerStats.games.forEach(function (game) {
+                if (game.played) {
+                    var day = new Date(game.gameDate).getDate();
+                    var index = day - 1;
+                    _this.gameDayData[index].gamesPlayed++;
+                    _this.gameDayData[index].rating += game.rating;
+                }
+            });
+        };
         GameGraphController.prototype.createGraph = function () {
-            var svg = d3.select("svg"), margin = { top: 20, right: 20, bottom: 30, left: 40 }, width = +svg.attr("width") - margin.left - margin.right, height = +svg.attr("height") - margin.top - margin.bottom;
-            var x = d3.scaleBand().rangeRound([0, width]).padding(0.1), y = d3.scaleLinear().rangeRound([height, 0]);
+            var svg = d3.select("svg");
+            svg.selectAll(".axis").remove();
+            svg.selectAll(".bar").remove();
+            var margin = { top: 20, right: 20, bottom: 30, left: 40 };
+            var width = +svg.attr("width") - margin.left - margin.right;
+            var height = +svg.attr("height") - margin.top - margin.bottom;
+            var x = d3.scaleBand().rangeRound([0, width]).padding(0.1);
+            var y = d3.scaleLinear().rangeRound([height, 0]);
             var g = svg.append("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
             var yMax = d3.max(this.gameDayData, function (d) { return +d.gamesPlayed; });
             x.domain(this.gameDayData.map(function (d) { return d.date.toString(); }));
             y.domain([0, yMax]);
+            var xAxis = d3.axisBottom(x)
+                .tickSizeInner(0)
+                .tickSizeOuter(0)
+                .tickPadding(10);
+            var yAxis = d3.axisLeft(y)
+                .ticks(yMax)
+                .tickFormat(d3.format("d"))
+                .tickSizeInner(-width)
+                .tickSizeOuter(0)
+                .tickPadding(10);
             g.append("g")
-                .attr("class", "axis axis--x")
+                .attr("class", "axis axis-x")
                 .attr("transform", "translate(0," + height + ")")
-                .call(d3.axisBottom(x));
+                .call(xAxis);
             g.append("g")
-                .attr("class", "axis axis--y")
-                .call(d3.axisLeft(y).ticks(yMax).tickFormat(d3.format("d")))
-                .append("text")
-                .attr("transform", "rotate(-90)")
-                .attr("y", 6)
-                .attr("dy", "0.71em")
-                .attr("text-anchor", "end")
-                .text("Frequency");
+                .attr("class", "axis axis-y")
+                .call(yAxis);
             g.selectAll(".bar")
                 .data(this.gameDayData)
                 .enter().append("rect")

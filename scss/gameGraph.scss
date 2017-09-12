@@ -1,0 +1,34 @@
+@import "variables";
+@import "mixins";
+
+.game-graph {    
+    margin: 1em 0;
+
+    .graph-title {            
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .svg-container {
+        overflow-x: auto;
+    }
+
+    svg {
+        text {
+            fill: $gray;
+            font-family: 'Ubuntu', sans-serif;
+            font-size: $font-large;
+        }
+
+        .axis path,
+        .tick line {
+            stroke: $med-gray;
+        }
+
+        .bar {
+            fill: $dark-green;
+        }
+    }    
+}

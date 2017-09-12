@@ -633,6 +633,25 @@ input.ng-touched.ng-invalid {
 .create-game-container .create-game-new-player-btn {
   margin-bottom: 2.5em; }
 
+.game-graph {
+  margin: 1em 0; }
+  .game-graph .graph-title {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 12px;
+    font-weight: bold; }
+  .game-graph .svg-container {
+    overflow-x: auto; }
+  .game-graph svg text {
+    fill: #7a8394;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 1.4em; }
+  .game-graph svg .axis path,
+  .game-graph svg .tick line {
+    stroke: #999999; }
+  .game-graph svg .bar {
+    fill: #508425; }
+
 /* 
 .ranking-row,
 .ranking-rank,
