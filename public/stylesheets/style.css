@@ -652,9 +652,16 @@ input.ng-touched.ng-invalid {
   .game-graph svg .axis-y path.domain {
     -webkit-transform: translate(-1px);
     transform: translate(-1px); }
-  .game-graph svg .axis-y .tick:not(:first-of-type) line {
+  .game-graph .rating-svg .line.data {
+    fill: none;
+    stroke: #508425;
+    stroke-width: 2px; }
+  .game-graph .rating-svg .axis-x .tick line,
+  .game-graph .rating-svg .axis-y .tick:not(:first-of-type) line {
+    stroke: #C0C0C0; }
+  .game-graph .games-played-svg .axis-y .tick:not(:first-of-type) line {
     stroke: #E6EBEF; }
-  .game-graph svg .bar {
+  .game-graph .games-played-svg .bar {
     fill: #508425; }
 
 /* 

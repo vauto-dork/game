@@ -31,14 +31,33 @@
             path.domain {
                 @include transform(translate(-1px));
             }
-            
+        }
+    }
+
+    .rating-svg {
+        .line.data {
+            fill: none;
+            stroke: $dark-green;
+            stroke-width: 2px;
+        }
+
+        .axis-x .tick,
+        .axis-y .tick:not(:first-of-type) {
+            line {
+                stroke: $silver;
+            }
+        }
+    }
+
+    .games-played-svg {
+        .axis-y {
             .tick:not(:first-of-type) line {
-                stroke: $background-color;            
+                stroke: $background-color;
             }
         }
 
         .bar {
             fill: $dark-green;
         }
-    }    
+    }
 }
