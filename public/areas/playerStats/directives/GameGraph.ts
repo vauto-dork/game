@@ -16,6 +16,24 @@ module PlayerStats {
         gamesPlayed: number;
     }
 
+    interface IMargin {
+        top: number;
+        right: number;
+        bottom: number;
+        left: number
+    }
+
+    interface IGraphConfig {
+        group?: ID3Selection;
+        margin?: IMargin;
+        width?: number;
+        height?: number;
+        xScale?: d3.ScaleBand<string>;
+        yScale?: d3.ScaleLinear<number, number>;
+    }
+
+    interface ID3Selection extends d3.Selection<SVGElement, {}, HTMLElement, any> {}
+
     export class GameGraphController {
         public static $inject: string[] = ["$element", "playerStatsService"];
 
@@ -28,18 +46,18 @@ module PlayerStats {
         constructor(private $element: ng.IAugmentedJQuery, private playerStatsService: IPlayerStatsService) {
             this.playerStatsService.ready().then(() => {
                 this.updateData();
-                this.createRatingGraph();
-                this.createGamesPlayedGraph();
 
                 this.playerStatsService.subscribeDataRefresh(() => {
                     this.updateData();
-                    this.createRatingGraph();
-                    this.createGamesPlayedGraph();
                 });
             });
         }
 
         private updateData(): void {
+            if(!this.playerStats.gamesPlayed) {
+                return;
+            }
+
             var gameMonth = new Date(this.playerStats.dateRange[0]).getMonth();
             var gameYear = new Date(this.playerStats.dateRange[0]).getFullYear();
             var numDaysInMonth = new Date(gameYear, gameMonth + 1, 0).getDate();
@@ -50,21 +68,25 @@ module PlayerStats {
                 this.gameDayData.push({ date: i + 1, gamesPlayed: 0, rating: 0 });
             }
 
-            this.playerStats.games.forEach((game) => {
-                if(game.played) {
-                    var day = new Date(game.gameDate).getDate();
-                    var index = day - 1;
-                    this.gameDayData[index].gamesPlayed++;
-                    this.gameDayData[index].rating += game.rating;
+            var prevDay = 0;
+            this.playerStats.games.filter((game) => { return game.played; }).forEach((game) => {
+                var day = new Date(game.gameDate).getDate();
+                var index = day - 1;
+                this.gameDayData[index].gamesPlayed++;
+
+                if(prevDay !== day){
+                    this.gameDayData[index].rating = game.rating;
+                    prevDay = day;
                 }
             });
+
+            this.createRatingGraph();
+            this.createGamesPlayedGraph();
         }
 
-        private createRatingGraph(): void {
-            var svg = d3.select("svg.rating-svg");
+        private initGraph(svgClass: string, yMin: number, yMax: number): IGraphConfig {
+            var svg = d3.select("svg." + svgClass);
             
-            svg.selectAll("g").remove();
-
             var margin = { top: 20, right: 20, bottom: 30, left: 40 };
             var width = +svg.attr("width") - margin.left - margin.right;
             var height = +svg.attr("height") - margin.top - margin.bottom;
@@ -72,50 +94,78 @@ module PlayerStats {
             var xScale = d3.scaleBand().rangeRound([0, width]).padding(0.1);
             var yScale = d3.scaleLinear().rangeRound([height, 0]);
 
-            var g = svg.append("g")
+            xScale.domain(this.gameDayData.map((d) => { return d.date.toString(); }));
+            yScale.domain([yMin, yMax]);
+
+            svg.selectAll("g").remove();
+            svg.append("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-            var yMax = d3.max(this.gameDayData, (d) => { return d.rating; }) + 12;
-            yMax = yMax - (yMax % 8);
+            return <IGraphConfig>{
+                group: d3.select("svg." + svgClass).select("g"),
+                margin: margin,
+                width: width,
+                height: height,
+                xScale: xScale,
+                yScale: yScale
+            };
+        }
 
-            xScale.domain(this.gameDayData.map((d) => { return d.date.toString(); }));
-            yScale.domain([0, yMax]);
+        private drawAxes(config: IGraphConfig, xAxis: d3.Axis<{}>, yAxis: d3.Axis<{}>): void {
+            xAxis.tickSizeOuter(0).tickPadding(10);
+            yAxis.tickSizeOuter(0).tickPadding(10);
 
-            var xAxis = d3.axisBottom(xScale)
-                .tickSizeInner(-height)
-                .tickSizeOuter(0)
-                .tickPadding(10);
+            config.group.append("g")
+                .attr("class", "axis axis-x")
+                .attr("transform", "translate(0," + config.height + ")")
+                .call(xAxis);
 
-            var yAxis = d3.axisLeft(yScale)
+            config.group.append("g")
+                .attr("class", "axis axis-y")
+                .call(yAxis);
+        }
+
+        private createRatingGraph(): void {
+            var svgClass = "rating-svg";
+
+            var yMin = d3.min(this.gameDayData, (d) => { return d.rating; });            
+            var yMax = d3.max(this.gameDayData, (d) => { return d.rating; });
+            
+            yMin = Math.floor(yMin);
+            yMax = Math.ceil(yMax);
+            
+            if(yMin === yMax) {
+                yMin = yMin - 1;
+                yMax = yMax + 1;
+            }
+
+            var config = this.initGraph(svgClass, yMin, yMax);
+
+            var xAxis = d3.axisBottom(config.xScale).tickSizeInner(-config.height);
+            
+            var yAxis = d3.axisLeft(config.yScale)
                 .ticks(8)
-                .tickSizeInner(-width)
-                .tickSizeOuter(0)
-                .tickPadding(10);
+                .tickSizeInner(-config.width);
+
+            this.drawAxes(config, xAxis, yAxis);
 
             var valueline = d3.line()
-                .x((d) => { return xScale(d[0].toString()); })
-                .y((d) => { return yScale(d[1]) });
+                .x((d) => { return config.xScale(d[0].toString()); })
+                .y((d) => { return config.yScale(d[1]); });
 
+            
             var lineData = this.gameDayData.filter((game) => { return game.gamesPlayed > 0; })
                 .map((d) => {
                     return [d.date, d.rating];
                 });
 
             var lastDay = this.gameDayData[this.gameDayData.length - 1].date;
-            var lastDayValue = lineData[lineData.length - 1][1];
-            lineData.unshift([1,0]);
-            lineData.push([lastDay, lastDayValue]);
-          
-            g.append("g")
-                .attr("class", "axis axis-x")
-                .attr("transform", "translate(0," + height + ")")
-                .call(xAxis);
+            var lastRanking = lineData[lineData.length - 1][1];
 
-            g.append("g")
-                .attr("class", "axis axis-y")
-                .call(yAxis);
-            
-            g.append("path")
+            lineData.unshift([1,0]);
+            lineData.push([lastDay, lastRanking]);
+
+            config.group.append("path")
                 .data([lineData])
                 .attr("class", "line data")
                 .attr("transform", "translate(18,0)")
@@ -123,55 +173,31 @@ module PlayerStats {
         }
 
         private createGamesPlayedGraph(): void {
-            var svg = d3.select("svg.games-played-svg");
-
-            svg.selectAll("g").remove();
-
-            var margin = { top: 20, right: 20, bottom: 30, left: 40 };
-            var width = +svg.attr("width") - margin.left - margin.right;
-            var height = +svg.attr("height") - margin.top - margin.bottom;
-
-            var xScale = d3.scaleBand().rangeRound([0, width]).padding(0.1);
-            var yScale = d3.scaleLinear().rangeRound([height, 0]);
-
-            var g = svg.append("g")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+            var svgClass = "games-played-svg";
 
             var yMax = d3.max(this.gameDayData, (d) => { return d.gamesPlayed; });
             yMax = yMax > 5 ? yMax : 5;
 
-            xScale.domain(this.gameDayData.map((d) => { return d.date.toString(); }));
-            yScale.domain([0, yMax]);
-
-            var xAxis = d3.axisBottom(xScale)
-                .tickSizeInner(0)
-                .tickSizeOuter(0)
-                .tickPadding(10);
-
-            var yAxis = d3.axisLeft(yScale)
-                .ticks(yMax)
-                .tickFormat(d3.format("d"))
-                .tickSizeInner(-width)
-                .tickSizeOuter(0)
-                .tickPadding(10);
-
-            g.selectAll(".bar")
+            var config = this.initGraph(svgClass, 0, yMax);
+            
+            config.group.selectAll(".bar")
                 .data(this.gameDayData)
                 .enter().append("rect")
                 .attr("class", "bar")
-                .attr("x", (d) => { return xScale(d.date.toString()); })
-                .attr("y", (d) => { return yScale(d.gamesPlayed); })
-                .attr("width", xScale.bandwidth())
-                .attr("height", (d) => { return height - yScale(d.gamesPlayed); });            
+                .attr("x", (d) => { return config.xScale(d.date.toString()); })
+                .attr("y", (d) => { return config.yScale(d.gamesPlayed); })
+                .attr("width", config.xScale.bandwidth())
+                .attr("height", (d) => { return config.height - config.yScale(d.gamesPlayed); });     
+                   
 
-            g.append("g")
-                .attr("class", "axis axis-x")
-                .attr("transform", "translate(0," + height + ")")
-                .call(xAxis);
+            var xAxis = d3.axisBottom(config.xScale).tickSizeInner(0);
+            
+            var yAxis = d3.axisLeft(config.yScale)
+                .ticks(yMax)
+                .tickFormat(d3.format("d"))
+                .tickSizeInner(-config.width);
 
-            g.append("g")
-                .attr("class", "axis axis-y")
-                .call(yAxis);
+            this.drawAxes(config, xAxis, yAxis);
         }
     }
 }

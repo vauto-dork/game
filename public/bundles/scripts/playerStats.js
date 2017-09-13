@@ -153,12 +153,8 @@ var PlayerStats;
             this.gameDayData = [];
             this.playerStatsService.ready().then(function () {
                 _this.updateData();
-                _this.createRatingGraph();
-                _this.createGamesPlayedGraph();
                 _this.playerStatsService.subscribeDataRefresh(function () {
                     _this.updateData();
-                    _this.createRatingGraph();
-                    _this.createGamesPlayedGraph();
                 });
             });
         }
@@ -171,6 +167,9 @@ var PlayerStats;
         });
         GameGraphController.prototype.updateData = function () {
             var _this = this;
+            if (!this.playerStats.gamesPlayed) {
+                return;
+            }
             var gameMonth = new Date(this.playerStats.dateRange[0]).getMonth();
             var gameYear = new Date(this.playerStats.dateRange[0]).getFullYear();
             var numDaysInMonth = new Date(gameYear, gameMonth + 1, 0).getDate();
@@ -178,101 +177,103 @@ var PlayerStats;
             for (var i = 0; i < numDaysInMonth; i++) {
                 this.gameDayData.push({ date: i + 1, gamesPlayed: 0, rating: 0 });
             }
-            this.playerStats.games.forEach(function (game) {
-                if (game.played) {
-                    var day = new Date(game.gameDate).getDate();
-                    var index = day - 1;
-                    _this.gameDayData[index].gamesPlayed++;
-                    _this.gameDayData[index].rating += game.rating;
+            var prevDay = 0;
+            this.playerStats.games.filter(function (game) { return game.played; }).forEach(function (game) {
+                var day = new Date(game.gameDate).getDate();
+                var index = day - 1;
+                _this.gameDayData[index].gamesPlayed++;
+                if (prevDay !== day) {
+                    _this.gameDayData[index].rating = game.rating;
+                    prevDay = day;
                 }
             });
+            this.createRatingGraph();
+            this.createGamesPlayedGraph();
         };
-        GameGraphController.prototype.createRatingGraph = function () {
-            var svg = d3.select("svg.rating-svg");
-            svg.selectAll("g").remove();
+        GameGraphController.prototype.initGraph = function (svgClass, yMin, yMax) {
+            var svg = d3.select("svg." + svgClass);
             var margin = { top: 20, right: 20, bottom: 30, left: 40 };
             var width = +svg.attr("width") - margin.left - margin.right;
             var height = +svg.attr("height") - margin.top - margin.bottom;
             var xScale = d3.scaleBand().rangeRound([0, width]).padding(0.1);
             var yScale = d3.scaleLinear().rangeRound([height, 0]);
-            var g = svg.append("g")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-            var yMax = d3.max(this.gameDayData, function (d) { return d.rating; }) + 12;
-            yMax = yMax - (yMax % 8);
             xScale.domain(this.gameDayData.map(function (d) { return d.date.toString(); }));
-            yScale.domain([0, yMax]);
-            var xAxis = d3.axisBottom(xScale)
-                .tickSizeInner(-height)
-                .tickSizeOuter(0)
-                .tickPadding(10);
-            var yAxis = d3.axisLeft(yScale)
+            yScale.domain([yMin, yMax]);
+            svg.selectAll("g").remove();
+            svg.append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+            return {
+                group: d3.select("svg." + svgClass).select("g"),
+                margin: margin,
+                width: width,
+                height: height,
+                xScale: xScale,
+                yScale: yScale
+            };
+        };
+        GameGraphController.prototype.drawAxes = function (config, xAxis, yAxis) {
+            xAxis.tickSizeOuter(0).tickPadding(10);
+            yAxis.tickSizeOuter(0).tickPadding(10);
+            config.group.append("g")
+                .attr("class", "axis axis-x")
+                .attr("transform", "translate(0," + config.height + ")")
+                .call(xAxis);
+            config.group.append("g")
+                .attr("class", "axis axis-y")
+                .call(yAxis);
+        };
+        GameGraphController.prototype.createRatingGraph = function () {
+            var svgClass = "rating-svg";
+            var yMin = d3.min(this.gameDayData, function (d) { return d.rating; });
+            var yMax = d3.max(this.gameDayData, function (d) { return d.rating; });
+            yMin = Math.floor(yMin);
+            yMax = Math.ceil(yMax);
+            if (yMin === yMax) {
+                yMin = yMin - 1;
+                yMax = yMax + 1;
+            }
+            var config = this.initGraph(svgClass, yMin, yMax);
+            var xAxis = d3.axisBottom(config.xScale).tickSizeInner(-config.height);
+            var yAxis = d3.axisLeft(config.yScale)
                 .ticks(8)
-                .tickSizeInner(-width)
-                .tickSizeOuter(0)
-                .tickPadding(10);
+                .tickSizeInner(-config.width);
+            this.drawAxes(config, xAxis, yAxis);
             var valueline = d3.line()
-                .x(function (d) { return xScale(d[0].toString()); })
-                .y(function (d) { return yScale(d[1]); });
+                .x(function (d) { return config.xScale(d[0].toString()); })
+                .y(function (d) { return config.yScale(d[1]); });
             var lineData = this.gameDayData.filter(function (game) { return game.gamesPlayed > 0; })
                 .map(function (d) {
                 return [d.date, d.rating];
             });
             var lastDay = this.gameDayData[this.gameDayData.length - 1].date;
-            var lastDayValue = lineData[lineData.length - 1][1];
+            var lastRanking = lineData[lineData.length - 1][1];
             lineData.unshift([1, 0]);
-            lineData.push([lastDay, lastDayValue]);
-            g.append("g")
-                .attr("class", "axis axis-x")
-                .attr("transform", "translate(0," + height + ")")
-                .call(xAxis);
-            g.append("g")
-                .attr("class", "axis axis-y")
-                .call(yAxis);
-            g.append("path")
+            lineData.push([lastDay, lastRanking]);
+            config.group.append("path")
                 .data([lineData])
                 .attr("class", "line data")
                 .attr("transform", "translate(18,0)")
                 .attr("d", valueline);
         };
         GameGraphController.prototype.createGamesPlayedGraph = function () {
-            var svg = d3.select("svg.games-played-svg");
-            svg.selectAll("g").remove();
-            var margin = { top: 20, right: 20, bottom: 30, left: 40 };
-            var width = +svg.attr("width") - margin.left - margin.right;
-            var height = +svg.attr("height") - margin.top - margin.bottom;
-            var xScale = d3.scaleBand().rangeRound([0, width]).padding(0.1);
-            var yScale = d3.scaleLinear().rangeRound([height, 0]);
-            var g = svg.append("g")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+            var svgClass = "games-played-svg";
             var yMax = d3.max(this.gameDayData, function (d) { return d.gamesPlayed; });
             yMax = yMax > 5 ? yMax : 5;
-            xScale.domain(this.gameDayData.map(function (d) { return d.date.toString(); }));
-            yScale.domain([0, yMax]);
-            var xAxis = d3.axisBottom(xScale)
-                .tickSizeInner(0)
-                .tickSizeOuter(0)
-                .tickPadding(10);
-            var yAxis = d3.axisLeft(yScale)
-                .ticks(yMax)
-                .tickFormat(d3.format("d"))
-                .tickSizeInner(-width)
-                .tickSizeOuter(0)
-                .tickPadding(10);
-            g.selectAll(".bar")
+            var config = this.initGraph(svgClass, 0, yMax);
+            config.group.selectAll(".bar")
                 .data(this.gameDayData)
                 .enter().append("rect")
                 .attr("class", "bar")
-                .attr("x", function (d) { return xScale(d.date.toString()); })
-                .attr("y", function (d) { return yScale(d.gamesPlayed); })
-                .attr("width", xScale.bandwidth())
-                .attr("height", function (d) { return height - yScale(d.gamesPlayed); });
-            g.append("g")
-                .attr("class", "axis axis-x")
-                .attr("transform", "translate(0," + height + ")")
-                .call(xAxis);
-            g.append("g")
-                .attr("class", "axis axis-y")
-                .call(yAxis);
+                .attr("x", function (d) { return config.xScale(d.date.toString()); })
+                .attr("y", function (d) { return config.yScale(d.gamesPlayed); })
+                .attr("width", config.xScale.bandwidth())
+                .attr("height", function (d) { return config.height - config.yScale(d.gamesPlayed); });
+            var xAxis = d3.axisBottom(config.xScale).tickSizeInner(0);
+            var yAxis = d3.axisLeft(config.yScale)
+                .ticks(yMax)
+                .tickFormat(d3.format("d"))
+                .tickSizeInner(-config.width);
+            this.drawAxes(config, xAxis, yAxis);
         };
         GameGraphController.$inject = ["$element", "playerStatsService"];
         return GameGraphController;
