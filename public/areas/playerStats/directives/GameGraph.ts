@@ -131,8 +131,8 @@ module PlayerStats {
             var yMin = d3.min(this.gameDayData, (d) => { return d.rating; });            
             var yMax = d3.max(this.gameDayData, (d) => { return d.rating; });
             
-            yMin = Math.floor(yMin);
-            yMax = Math.ceil(yMax);
+            yMin = !yMin ? 0 : Math.floor(yMin - 1);
+            yMax = Math.ceil(yMax + 1);
             
             if(yMin === yMax) {
                 yMin = yMin - 1;
@@ -170,6 +170,21 @@ module PlayerStats {
                 .attr("class", "line data")
                 .attr("transform", "translate(18,0)")
                 .attr("d", valueline);
+
+            var outsideBorder = d3.line()
+                .x((d) => { return d[0]; })
+                .y((d) => { return d[1]; });
+
+            var outsideBorderPoints = [ 
+                [0,0],
+                [config.width, 0],
+                [config.width, config.height]
+            ];
+
+            config.group.append("path")
+                .data([outsideBorderPoints])
+                .attr("class", "rating-outside-border")
+                .attr("d", outsideBorder)
         }
 
         private createGamesPlayedGraph(): void {

@@ -659,6 +659,10 @@ input.ng-touched.ng-invalid {
   .game-graph .rating-svg .axis-x .tick line,
   .game-graph .rating-svg .axis-y .tick:not(:first-of-type) line {
     stroke: #C0C0C0; }
+  .game-graph .rating-svg .rating-outside-border {
+    stroke: #999999;
+    stroke-width: 1px;
+    fill: none; }
   .game-graph .games-played-svg .axis-y .tick:not(:first-of-type) line {
     stroke: #E6EBEF; }
   .game-graph .games-played-svg .bar {

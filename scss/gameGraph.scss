@@ -1,7 +1,10 @@
 @import "variables";
 @import "mixins";
 
-.game-graph {    
+.game-graph {
+    $axis-color: $med-gray;
+    $graph-data-color: $dark-green;
+
     margin: 1em 0;
 
     .graph-title {            
@@ -24,7 +27,7 @@
 
         .axis path,
         .tick line {
-            stroke: $med-gray;
+            stroke: $axis-color;
         }
 
         .axis-y {
@@ -37,7 +40,7 @@
     .rating-svg {
         .line.data {
             fill: none;
-            stroke: $dark-green;
+            stroke: $graph-data-color;
             stroke-width: 2px;
         }
 
@@ -46,6 +49,12 @@
             line {
                 stroke: $silver;
             }
+        }
+
+        .rating-outside-border {
+            stroke: $axis-color;
+            stroke-width: 1px;
+            fill: none;
         }
     }
 
@@ -57,7 +66,7 @@
         }
 
         .bar {
-            fill: $dark-green;
+            fill: $graph-data-color;
         }
     }
 }
