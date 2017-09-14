@@ -258,12 +258,13 @@ var PlayerStats;
             var valueline = d3.line()
                 .x(function (d) { return config.xScale(d[0].toString()); })
                 .y(function (d) { return config.yScale(d[1]); });
-            var lineData = this.gameDayData.filter(function (game) { return game.gamesPlayed > 0; })
+            var originalLineData = this.gameDayData.filter(function (game) { return game.gamesPlayed > 0; })
                 .map(function (d) {
                 return [d.date, d.rating];
             });
             var lastDay = this.gameDayData[this.gameDayData.length - 1].date;
-            var lastRanking = lineData[lineData.length - 1][1];
+            var lastRanking = originalLineData[originalLineData.length - 1][1];
+            var lineData = angular.copy(originalLineData);
             lineData.unshift([1, 0]);
             lineData.push([lastDay, lastRanking]);
             lineData.push([lastDay, 0]);
@@ -272,6 +273,44 @@ var PlayerStats;
                 .attr("class", "line data")
                 .attr("transform", "translate(18,0)")
                 .attr("d", valueline);
+            var div = d3.select(".rating-tooltip");
+            var hoverArea = config.group.append("g");
+            var marker = config.group.append("circle");
+            marker.attr("class", "hover-marker")
+                .attr("r", 4)
+                .attr("cx", 0)
+                .attr("cy", 0)
+                .style("opacity", 0);
+            hoverArea.selectAll(".hover-bar")
+                .data(originalLineData)
+                .enter().append("rect")
+                .attr("class", "hover-bar")
+                .attr("x", function (d) { return config.xScale(d[0].toString()); })
+                .attr("y", 0)
+                .attr("width", config.xScale.bandwidth())
+                .attr("height", function (d) { return config.height; })
+                .on("mouseover", function (d) {
+                var xPx = config.xScale(d[0].toString());
+                var yPx = config.yScale(d[1]);
+                marker.transition()
+                    .duration(200)
+                    .style("opacity", 0.75);
+                marker.attr("transform", "translate(" + (xPx + 17) + "," + yPx + ")");
+                div.transition()
+                    .duration(200)
+                    .style("opacity", 1);
+                div.html("EOD Rating: " + d[1])
+                    .style("left", xPx + 35 + "px")
+                    .style("top", yPx + 25 + "px");
+            })
+                .on("mouseout", function (d) {
+                marker.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+                div.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+            });
             var outsideBorder = d3.line()
                 .x(function (d) { return d[0]; })
                 .y(function (d) { return d[1]; });

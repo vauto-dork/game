@@ -7,6 +7,22 @@
 
     margin: 1em 0;
 
+    .rating-tooltip {
+        @include shadow($card-shadow);
+        position: absolute;
+        width: 120px;
+        background-color: white;
+        opacity: 0;
+        font-size: 12px;
+        border: 1px solid $axis-color;
+        pointer-events: none;
+    }
+
+    .hover-bar {
+        fill: black;
+        fill-opacity: 0.075;
+    }
+
     .graph-container {
         &:first-of-type {
             margin-bottom: 1em;

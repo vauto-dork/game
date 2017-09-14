@@ -1,5 +1,19 @@
 .game-graph {
   margin: 1em 0; }
+  .game-graph .rating-tooltip {
+    -moz-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.15);
+    -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.15);
+    position: absolute;
+    width: 120px;
+    background-color: white;
+    opacity: 0;
+    font-size: 12px;
+    border: 1px solid #999999;
+    pointer-events: none; }
+  .game-graph .hover-bar {
+    fill: black;
+    fill-opacity: 0.075; }
   .game-graph .graph-container:first-of-type {
     margin-bottom: 1em; }
   .game-graph .graph-container:not(:first-of-type) {
