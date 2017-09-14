@@ -131,8 +131,8 @@ module PlayerStats {
             var yMin = d3.min(this.gameDayData, (d) => { return d.rating; });            
             var yMax = d3.max(this.gameDayData, (d) => { return d.rating; });
             
-            yMin = !yMin ? 0 : Math.floor(yMin - 1);
-            yMax = Math.ceil(yMax + 1);
+            yMin = !yMin ? 0 : Math.floor(yMin - 0.5);
+            yMax = Math.ceil(yMax + 0.5);
             
             if(yMin === yMax) {
                 yMin = yMin - 1;
@@ -149,6 +149,30 @@ module PlayerStats {
 
             this.drawAxes(config, xAxis, yAxis);
 
+
+            // Color the lines to show positive and negative values
+
+            config.group.append("linearGradient")
+                .attr("id", "rating-gradient")
+                .attr("gradientUnits", "userSpaceOnUse")
+                .attr("x1", 0).attr("y1", config.yScale(0.1))
+                .attr("x2", 0).attr("y2", config.yScale(-0.1))
+                .selectAll("stop")
+                .data([
+                    { offset: "0%", class: "positive-stop-color" },
+                    { offset: "45%", class: "positive-stop-color" },
+                    { offset: "45%", class: "neutral-stop-color" },
+                    { offset: "55%", class: "neutral-stop-color" },
+                    { offset: "55%", class: "negative-stop-color" },
+                    { offset: "100%", class: "negative-stop-color" }
+                ])
+                .enter().append("stop")
+                .attr("offset", (d) => { return d.offset; })
+                .attr("class", (d) => { return d.class; });
+
+
+            // Generate the data line
+
             var valueline = d3.line()
                 .x((d) => { return config.xScale(d[0].toString()); })
                 .y((d) => { return config.yScale(d[1]); });
@@ -164,12 +188,16 @@ module PlayerStats {
 
             lineData.unshift([1,0]);
             lineData.push([lastDay, lastRanking]);
+            lineData.push([lastDay, 0]);
 
             config.group.append("path")
                 .data([lineData])
                 .attr("class", "line data")
                 .attr("transform", "translate(18,0)")
                 .attr("d", valueline);
+
+
+            // Draw the outside graph border
 
             var outsideBorder = d3.line()
                 .x((d) => { return d[0]; })
@@ -184,7 +212,7 @@ module PlayerStats {
             config.group.append("path")
                 .data([outsideBorderPoints])
                 .attr("class", "rating-outside-border")
-                .attr("d", outsideBorder)
+                .attr("d", outsideBorder);
         }
 
         private createGamesPlayedGraph(): void {

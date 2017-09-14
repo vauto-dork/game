@@ -226,8 +226,8 @@ var PlayerStats;
             var svgClass = "rating-svg";
             var yMin = d3.min(this.gameDayData, function (d) { return d.rating; });
             var yMax = d3.max(this.gameDayData, function (d) { return d.rating; });
-            yMin = !yMin ? 0 : Math.floor(yMin - 1);
-            yMax = Math.ceil(yMax + 1);
+            yMin = !yMin ? 0 : Math.floor(yMin - 0.5);
+            yMax = Math.ceil(yMax + 0.5);
             if (yMin === yMax) {
                 yMin = yMin - 1;
                 yMax = yMax + 1;
@@ -238,6 +238,23 @@ var PlayerStats;
                 .ticks(8)
                 .tickSizeInner(-config.width);
             this.drawAxes(config, xAxis, yAxis);
+            config.group.append("linearGradient")
+                .attr("id", "rating-gradient")
+                .attr("gradientUnits", "userSpaceOnUse")
+                .attr("x1", 0).attr("y1", config.yScale(0.1))
+                .attr("x2", 0).attr("y2", config.yScale(-0.1))
+                .selectAll("stop")
+                .data([
+                { offset: "0%", class: "positive-stop-color" },
+                { offset: "45%", class: "positive-stop-color" },
+                { offset: "45%", class: "neutral-stop-color" },
+                { offset: "55%", class: "neutral-stop-color" },
+                { offset: "55%", class: "negative-stop-color" },
+                { offset: "100%", class: "negative-stop-color" }
+            ])
+                .enter().append("stop")
+                .attr("offset", function (d) { return d.offset; })
+                .attr("class", function (d) { return d.class; });
             var valueline = d3.line()
                 .x(function (d) { return config.xScale(d[0].toString()); })
                 .y(function (d) { return config.yScale(d[1]); });
@@ -249,6 +266,7 @@ var PlayerStats;
             var lastRanking = lineData[lineData.length - 1][1];
             lineData.unshift([1, 0]);
             lineData.push([lastDay, lastRanking]);
+            lineData.push([lastDay, 0]);
             config.group.append("path")
                 .data([lineData])
                 .attr("class", "line data")

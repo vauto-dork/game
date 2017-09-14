@@ -7,7 +7,17 @@
 
     margin: 1em 0;
 
-    .graph-title {            
+    .graph-container {
+        &:first-of-type {
+            margin-bottom: 1em;
+        }
+
+        &:not(:first-of-type) {
+            margin-top: 1em;
+        }
+    }
+
+    .graph-title {
         text-transform: uppercase;
         letter-spacing: 1px;
         font-size: 12px;
@@ -39,8 +49,9 @@
 
     .rating-svg {
         .line.data {
-            fill: none;
-            stroke: $graph-data-color;
+            fill: url(#rating-gradient);
+            fill-opacity: 0.5;
+            stroke: url(#rating-gradient);
             stroke-width: 2px;
         }
 
@@ -55,6 +66,18 @@
             stroke: $axis-color;
             stroke-width: 1px;
             fill: none;
+        }
+
+        .positive-stop-color {
+            stop-color: $graph-data-color;            
+        }
+
+        .neutral-stop-color {
+            stop-color: black;
+        }
+
+        .negative-stop-color {
+            stop-color: $red;
         }
     }
 
