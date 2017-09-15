@@ -4,6 +4,7 @@
 .game-graph {
     $axis-color: $med-gray;
     $graph-data-color: $dark-green;
+    $graph-data-fill-opacity: 0.5;
 
     margin: 1em 0;
 
@@ -74,7 +75,7 @@
     .rating-svg {
         .line.data {
             fill: url(#rating-gradient);
-            fill-opacity: 0.5;
+            fill-opacity: $graph-data-fill-opacity;
             stroke: url(#rating-gradient);
             stroke-width: 2px;
         }
@@ -102,7 +103,7 @@
     .games-played-svg {
         .axis-y {
             .tick:not(:last-child) line {
-                stroke: $background-color;
+                stroke: $silver;
             }
         }
 
@@ -116,6 +117,9 @@
 
         .bar {
             fill: $graph-data-color;
+            fill-opacity: $graph-data-fill-opacity;
+            stroke: $graph-data-color;
+            stroke-width: 2px;
         }
     }
 }

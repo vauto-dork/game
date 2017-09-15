@@ -220,6 +220,7 @@ module PlayerStats {
             var div = d3.select(".rating-tooltip");                
             var hoverArea = config.group.append("g");
             var marker = config.group.append("circle");
+            var duration = 250;
 
             marker.attr("class", "hover-marker")
                 .attr("r", 4)
@@ -240,22 +241,24 @@ module PlayerStats {
                     var yPx = config.yScale(d[1]);
 
                     marker.transition()
-                        .duration(200)
+                        .duration(duration)
                         .style("opacity", 0.75);
                     marker.attr("transform", "translate(" + (xPx + 17) + "," + yPx + ")")
+
                     div.transition()
-                        .duration(200)
+                        .duration(duration)
                         .style("opacity", 1);
                     div.html("EOD Rating: " + d3.format(".2f")(d[1]))
                         .style("left", xPx + 20 + "px")
                         .style("top", yPx - 10 + "px");
                 })
-                .on("mouseout", function (d) {
+                .on("mouseout", (d) => {
                     marker.transition()
-                        .duration(500)
+                        .duration(duration)
                         .style("opacity", 0);
+
                     div.transition()
-                        .duration(500)
+                        .duration(duration)
                         .style("opacity", 0);
                 });
 
@@ -276,16 +279,6 @@ module PlayerStats {
 
             // Redo the yScale to reverse order
             config.yScale.domain([yMax, 0]);
-            
-            config.group.selectAll(".bar")
-                .data(this.gameDayData.filter((game) => { return game.gamesPlayed > 0; }))
-                .enter().append("rect")
-                .attr("class", "bar")
-                .attr("x", (d) => { return config.xScale(d.date.toString()); })
-                .attr("y", (d) => { return 0 })
-                .attr("width", config.xScale.bandwidth())
-                .attr("height", (d) => { return config.yScale(d.gamesPlayed); });     
-                   
 
             var xAxis = d3.axisTop(config.xScale).tickSizeInner(0);
             
@@ -295,6 +288,16 @@ module PlayerStats {
                 .tickSizeInner(-config.width);
 
             this.drawAxes(config, xAxis, yAxis);
+            
+            // Remember that bars are drawn upside-down from upper axis
+            config.group.selectAll(".bar")
+                .data(this.gameDayData.filter((game) => { return game.gamesPlayed > 0; }))
+                .enter().append("rect")
+                .attr("class", "bar")
+                .attr("x", (d) => { return config.xScale(d.date.toString()); })
+                .attr("y", (d) => { return 0 })
+                .attr("width", config.xScale.bandwidth())
+                .attr("height", (d) => { return config.yScale(d.gamesPlayed); });
 
             // Draw the outside graph border (has to be last)
             this.drawOutsideBorder(config);

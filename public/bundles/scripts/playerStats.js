@@ -293,6 +293,7 @@ var PlayerStats;
             var div = d3.select(".rating-tooltip");
             var hoverArea = config.group.append("g");
             var marker = config.group.append("circle");
+            var duration = 250;
             marker.attr("class", "hover-marker")
                 .attr("r", 4)
                 .attr("cx", 0)
@@ -310,11 +311,11 @@ var PlayerStats;
                 var xPx = config.xScale(d[0].toString());
                 var yPx = config.yScale(d[1]);
                 marker.transition()
-                    .duration(200)
+                    .duration(duration)
                     .style("opacity", 0.75);
                 marker.attr("transform", "translate(" + (xPx + 17) + "," + yPx + ")");
                 div.transition()
-                    .duration(200)
+                    .duration(duration)
                     .style("opacity", 1);
                 div.html("EOD Rating: " + d3.format(".2f")(d[1]))
                     .style("left", xPx + 20 + "px")
@@ -322,10 +323,10 @@ var PlayerStats;
             })
                 .on("mouseout", function (d) {
                 marker.transition()
-                    .duration(500)
+                    .duration(duration)
                     .style("opacity", 0);
                 div.transition()
-                    .duration(500)
+                    .duration(duration)
                     .style("opacity", 0);
             });
             this.drawOutsideBorder(config);
@@ -337,6 +338,12 @@ var PlayerStats;
             var config = this.initGraph(svgClass, 0, yMax);
             config.group.attr("transform", "translate(" + config.margin.left + ",5)");
             config.yScale.domain([yMax, 0]);
+            var xAxis = d3.axisTop(config.xScale).tickSizeInner(0);
+            var yAxis = d3.axisLeft(config.yScale)
+                .ticks(yMax)
+                .tickFormat(d3.format("d"))
+                .tickSizeInner(-config.width);
+            this.drawAxes(config, xAxis, yAxis);
             config.group.selectAll(".bar")
                 .data(this.gameDayData.filter(function (game) { return game.gamesPlayed > 0; }))
                 .enter().append("rect")
@@ -345,12 +352,6 @@ var PlayerStats;
                 .attr("y", function (d) { return 0; })
                 .attr("width", config.xScale.bandwidth())
                 .attr("height", function (d) { return config.yScale(d.gamesPlayed); });
-            var xAxis = d3.axisTop(config.xScale).tickSizeInner(0);
-            var yAxis = d3.axisLeft(config.yScale)
-                .ticks(yMax)
-                .tickFormat(d3.format("d"))
-                .tickSizeInner(-config.width);
-            this.drawAxes(config, xAxis, yAxis);
             this.drawOutsideBorder(config);
         };
         GameGraphController.$inject = ["$element", "playerStatsService"];
