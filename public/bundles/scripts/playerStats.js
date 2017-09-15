@@ -359,7 +359,7 @@ var PlayerStats;
             var _this = this;
             var svgClass = "games-played-svg";
             var yMax = d3.max(this.gameDayData, function (d) { return d.gamesPlayed; });
-            yMax = yMax > 5 ? yMax : 5;
+            yMax = yMax > 4 ? yMax + 1 : 5;
             var config = this.initGraph(svgClass, 0, yMax);
             config.group.attr("transform", "translate(" + config.margin.left + ",5)");
             config.yScale.domain([yMax, 0]);
@@ -380,6 +380,12 @@ var PlayerStats;
                 .attr("height", function (d) { return config.yScale(d.gamesPlayed); });
             var div = d3.select(".games-played-tooltip");
             var hoverArea = config.group.append("g");
+            var marker = config.group.append("circle");
+            marker.attr("class", "hover-marker")
+                .attr("r", 4)
+                .attr("cx", 0)
+                .attr("cy", 0)
+                .style("opacity", 0);
             hoverArea.selectAll(".hover-bar")
                 .data(filteredGames)
                 .enter().append("rect")
@@ -391,6 +397,9 @@ var PlayerStats;
                 .on("mouseover", function (d) {
                 var xPx = config.xScale(d.date.toString());
                 var yPx = config.yScale(d.gamesPlayed);
+                marker.transition()
+                    .duration(_this.duration)
+                    .style("opacity", 0.75);
                 div.transition()
                     .duration(_this.duration)
                     .style("opacity", 1);
@@ -398,16 +407,21 @@ var PlayerStats;
                 var divWidth = _this.$element.find(".games-played-tooltip").outerWidth(true);
                 var divHeight = _this.$element.find(".games-played-tooltip").outerHeight(true);
                 var bandwidth = config.xScale.bandwidth();
+                var markerLeft = xPx + Math.floor(bandwidth / 2) + 1;
+                marker.attr("transform", "translate(" + markerLeft + "," + yPx + ")");
                 var divLeft = (xPx + divWidth > config.width)
                     ? xPx - (bandwidth / 2) - 2
                     : xPx + divWidth;
                 var divTop = (yPx + divHeight > config.height)
                     ? -divHeight + config.height
-                    : yPx;
+                    : yPx - (divHeight / 2) + 4;
                 div.style("left", divLeft + "px")
                     .style("top", divTop + "px");
             })
                 .on("mouseout", function (d) {
+                marker.transition()
+                    .duration(_this.duration)
+                    .style("opacity", 0);
                 div.transition()
                     .duration(_this.duration)
                     .style("opacity", 0);
