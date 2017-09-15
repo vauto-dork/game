@@ -401,9 +401,9 @@ var PlayerStats;
                 var divLeft = (xPx + divWidth > config.width)
                     ? xPx - (bandwidth / 2) - 2
                     : xPx + divWidth;
-                var divTop = (divHeight > config.height)
+                var divTop = (yPx + divHeight > config.height)
                     ? -divHeight + config.height
-                    : 10;
+                    : yPx;
                 div.style("left", divLeft + "px")
                     .style("top", divTop + "px");
             })
