@@ -27,10 +27,6 @@
     fill-opacity: 0.075; }
   .game-graph .graph-container {
     overflow-x: auto; }
-    .game-graph .graph-container:first-of-type {
-      margin-bottom: 1em; }
-    .game-graph .graph-container:not(:first-of-type) {
-      margin-top: 1em; }
   .game-graph .graph-title {
     text-transform: uppercase;
     letter-spacing: 1px;

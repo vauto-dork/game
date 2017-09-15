@@ -49,14 +49,6 @@
 
     .graph-container {
         overflow-x: auto;
-
-        &:first-of-type {
-            margin-bottom: 1em;
-        }
-
-        &:not(:first-of-type) {
-            margin-top: 1em;
-        }
     }
 
     .graph-title {
