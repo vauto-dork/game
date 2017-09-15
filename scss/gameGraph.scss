@@ -24,6 +24,8 @@
     }
 
     .graph-container {
+        overflow-x: auto;
+
         &:first-of-type {
             margin-bottom: 1em;
         }
@@ -41,7 +43,7 @@
     }
 
     .svg-container {
-        overflow-x: auto;
+        position: relative;
     }
 
     svg {
@@ -61,6 +63,12 @@
                 @include transform(translate(-1px));
             }
         }
+
+        .outside-border {
+            stroke: $axis-color;
+            stroke-width: 1px;
+            fill: none;
+        }
     }
 
     .rating-svg {
@@ -78,12 +86,6 @@
             }
         }
 
-        .rating-outside-border {
-            stroke: $axis-color;
-            stroke-width: 1px;
-            fill: none;
-        }
-
         .positive-stop-color {
             stop-color: $graph-data-color;            
         }
@@ -99,8 +101,16 @@
 
     .games-played-svg {
         .axis-y {
-            .tick:not(:first-of-type) line {
+            .tick:not(:last-child) line {
                 stroke: $background-color;
+            }
+        }
+
+        .axis-x {
+            .tick {
+                text {
+                    display: none;
+                }
             }
         }
 

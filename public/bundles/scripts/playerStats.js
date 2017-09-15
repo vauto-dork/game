@@ -192,7 +192,7 @@ var PlayerStats;
         };
         GameGraphController.prototype.initGraph = function (svgClass, yMin, yMax) {
             var svg = d3.select("svg." + svgClass);
-            var margin = { top: 20, right: 20, bottom: 30, left: 40 };
+            var margin = { top: 20, right: 20, bottom: 20, left: 40 };
             var width = +svg.attr("width") - margin.left - margin.right;
             var height = +svg.attr("height") - margin.top - margin.bottom;
             var xScale = d3.scaleBand().rangeRound([0, width]).padding(0.1);
@@ -201,6 +201,7 @@ var PlayerStats;
             yScale.domain([yMin, yMax]);
             svg.selectAll("g").remove();
             svg.append("g")
+                .attr("class", "main-graph-group")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
             return {
                 group: d3.select("svg." + svgClass).select("g"),
@@ -214,13 +215,28 @@ var PlayerStats;
         GameGraphController.prototype.drawAxes = function (config, xAxis, yAxis) {
             xAxis.tickSizeOuter(0).tickPadding(10);
             yAxis.tickSizeOuter(0).tickPadding(10);
-            config.group.append("g")
+            var xAxisGroup = config.group.append("g")
                 .attr("class", "axis axis-x")
-                .attr("transform", "translate(0," + config.height + ")")
                 .call(xAxis);
             config.group.append("g")
                 .attr("class", "axis axis-y")
                 .call(yAxis);
+        };
+        GameGraphController.prototype.drawOutsideBorder = function (config) {
+            var outsideBorder = d3.line()
+                .x(function (d) { return d[0]; })
+                .y(function (d) { return d[1]; });
+            var outsideBorderPoints = [
+                [0, 0],
+                [config.width, 0],
+                [config.width, config.height],
+                [0, config.height],
+                [0, 0]
+            ];
+            config.group.append("path")
+                .data([outsideBorderPoints])
+                .attr("class", "outside-border")
+                .attr("d", outsideBorder);
         };
         GameGraphController.prototype.createRatingGraph = function () {
             var svgClass = "rating-svg";
@@ -238,6 +254,7 @@ var PlayerStats;
                 .ticks(8)
                 .tickSizeInner(-config.width);
             this.drawAxes(config, xAxis, yAxis);
+            d3.select(".axis-x").attr("transform", "translate(0," + config.height + ")");
             config.group.append("linearGradient")
                 .attr("id", "rating-gradient")
                 .attr("gradientUnits", "userSpaceOnUse")
@@ -299,9 +316,9 @@ var PlayerStats;
                 div.transition()
                     .duration(200)
                     .style("opacity", 1);
-                div.html("EOD Rating: " + d[1])
-                    .style("left", xPx + 35 + "px")
-                    .style("top", yPx + 25 + "px");
+                div.html("EOD Rating: " + d3.format(".2f")(d[1]))
+                    .style("left", xPx + 20 + "px")
+                    .style("top", yPx - 10 + "px");
             })
                 .on("mouseout", function (d) {
                 marker.transition()
@@ -311,38 +328,30 @@ var PlayerStats;
                     .duration(500)
                     .style("opacity", 0);
             });
-            var outsideBorder = d3.line()
-                .x(function (d) { return d[0]; })
-                .y(function (d) { return d[1]; });
-            var outsideBorderPoints = [
-                [0, 0],
-                [config.width, 0],
-                [config.width, config.height]
-            ];
-            config.group.append("path")
-                .data([outsideBorderPoints])
-                .attr("class", "rating-outside-border")
-                .attr("d", outsideBorder);
+            this.drawOutsideBorder(config);
         };
         GameGraphController.prototype.createGamesPlayedGraph = function () {
             var svgClass = "games-played-svg";
             var yMax = d3.max(this.gameDayData, function (d) { return d.gamesPlayed; });
             yMax = yMax > 5 ? yMax : 5;
             var config = this.initGraph(svgClass, 0, yMax);
+            config.group.attr("transform", "translate(" + config.margin.left + ",5)");
+            config.yScale.domain([yMax, 0]);
             config.group.selectAll(".bar")
-                .data(this.gameDayData)
+                .data(this.gameDayData.filter(function (game) { return game.gamesPlayed > 0; }))
                 .enter().append("rect")
                 .attr("class", "bar")
                 .attr("x", function (d) { return config.xScale(d.date.toString()); })
-                .attr("y", function (d) { return config.yScale(d.gamesPlayed); })
+                .attr("y", function (d) { return 0; })
                 .attr("width", config.xScale.bandwidth())
-                .attr("height", function (d) { return config.height - config.yScale(d.gamesPlayed); });
-            var xAxis = d3.axisBottom(config.xScale).tickSizeInner(0);
+                .attr("height", function (d) { return config.yScale(d.gamesPlayed); });
+            var xAxis = d3.axisTop(config.xScale).tickSizeInner(0);
             var yAxis = d3.axisLeft(config.yScale)
                 .ticks(yMax)
                 .tickFormat(d3.format("d"))
                 .tickSizeInner(-config.width);
             this.drawAxes(config, xAxis, yAxis);
+            this.drawOutsideBorder(config);
         };
         GameGraphController.$inject = ["$element", "playerStatsService"];
         return GameGraphController;

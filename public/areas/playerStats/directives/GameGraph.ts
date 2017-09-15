@@ -87,7 +87,7 @@ module PlayerStats {
         private initGraph(svgClass: string, yMin: number, yMax: number): IGraphConfig {
             var svg = d3.select("svg." + svgClass);
             
-            var margin = { top: 20, right: 20, bottom: 30, left: 40 };
+            var margin = { top: 20, right: 20, bottom: 20, left: 40 };
             var width = +svg.attr("width") - margin.left - margin.right;
             var height = +svg.attr("height") - margin.top - margin.bottom;
 
@@ -99,6 +99,7 @@ module PlayerStats {
 
             svg.selectAll("g").remove();
             svg.append("g")
+                .attr("class", "main-graph-group")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
             return <IGraphConfig>{
@@ -115,14 +116,32 @@ module PlayerStats {
             xAxis.tickSizeOuter(0).tickPadding(10);
             yAxis.tickSizeOuter(0).tickPadding(10);
 
-            config.group.append("g")
+            var xAxisGroup = config.group.append("g")
                 .attr("class", "axis axis-x")
-                .attr("transform", "translate(0," + config.height + ")")
                 .call(xAxis);
-
+            
             config.group.append("g")
                 .attr("class", "axis axis-y")
                 .call(yAxis);
+        }
+
+        private drawOutsideBorder(config: IGraphConfig): void {
+            var outsideBorder = d3.line()
+                .x((d) => { return d[0]; })
+                .y((d) => { return d[1]; });
+
+            var outsideBorderPoints = [ 
+                [0,0],
+                [config.width, 0],
+                [config.width, config.height],
+                [0, config.height],
+                [0,0]
+            ];
+
+            config.group.append("path")
+                .data([outsideBorderPoints])
+                .attr("class", "outside-border")
+                .attr("d", outsideBorder);
         }
 
         private createRatingGraph(): void {
@@ -149,6 +168,7 @@ module PlayerStats {
 
             this.drawAxes(config, xAxis, yAxis);
 
+            d3.select(".axis-x").attr("transform", "translate(0," + config.height + ")");
 
             // Color the lines to show positive and negative values
 
@@ -226,9 +246,9 @@ module PlayerStats {
                     div.transition()
                         .duration(200)
                         .style("opacity", 1);
-                    div.html("EOD Rating: " + d[1])
-                        .style("left", xPx + 35 + "px")
-                        .style("top", yPx + 25 + "px");
+                    div.html("EOD Rating: " + d3.format(".2f")(d[1]))
+                        .style("left", xPx + 20 + "px")
+                        .style("top", yPx - 10 + "px");
                 })
                 .on("mouseout", function (d) {
                     marker.transition()
@@ -239,22 +259,8 @@ module PlayerStats {
                         .style("opacity", 0);
                 });
 
-            // Draw the outside graph border
-
-            var outsideBorder = d3.line()
-                .x((d) => { return d[0]; })
-                .y((d) => { return d[1]; });
-
-            var outsideBorderPoints = [ 
-                [0,0],
-                [config.width, 0],
-                [config.width, config.height]
-            ];
-
-            config.group.append("path")
-                .data([outsideBorderPoints])
-                .attr("class", "rating-outside-border")
-                .attr("d", outsideBorder);
+            // Draw the outside graph border (has to be last)
+            this.drawOutsideBorder(config);
         }
 
         private createGamesPlayedGraph(): void {
@@ -264,18 +270,24 @@ module PlayerStats {
             yMax = yMax > 5 ? yMax : 5;
 
             var config = this.initGraph(svgClass, 0, yMax);
+
+            // Shift the graph up to give even spacing on common X-axis
+            config.group.attr("transform", "translate(" + config.margin.left + ",5)");
+
+            // Redo the yScale to reverse order
+            config.yScale.domain([yMax, 0]);
             
             config.group.selectAll(".bar")
-                .data(this.gameDayData)
+                .data(this.gameDayData.filter((game) => { return game.gamesPlayed > 0; }))
                 .enter().append("rect")
                 .attr("class", "bar")
                 .attr("x", (d) => { return config.xScale(d.date.toString()); })
-                .attr("y", (d) => { return config.yScale(d.gamesPlayed); })
+                .attr("y", (d) => { return 0 })
                 .attr("width", config.xScale.bandwidth())
-                .attr("height", (d) => { return config.height - config.yScale(d.gamesPlayed); });     
+                .attr("height", (d) => { return config.yScale(d.gamesPlayed); });     
                    
 
-            var xAxis = d3.axisBottom(config.xScale).tickSizeInner(0);
+            var xAxis = d3.axisTop(config.xScale).tickSizeInner(0);
             
             var yAxis = d3.axisLeft(config.yScale)
                 .ticks(yMax)
@@ -283,6 +295,9 @@ module PlayerStats {
                 .tickSizeInner(-config.width);
 
             this.drawAxes(config, xAxis, yAxis);
+
+            // Draw the outside graph border (has to be last)
+            this.drawOutsideBorder(config);
         }
     }
 }

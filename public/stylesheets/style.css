@@ -649,17 +649,19 @@ input.ng-touched.ng-invalid {
   .game-graph .hover-bar {
     fill: black;
     fill-opacity: 0.075; }
-  .game-graph .graph-container:first-of-type {
-    margin-bottom: 1em; }
-  .game-graph .graph-container:not(:first-of-type) {
-    margin-top: 1em; }
+  .game-graph .graph-container {
+    overflow-x: auto; }
+    .game-graph .graph-container:first-of-type {
+      margin-bottom: 1em; }
+    .game-graph .graph-container:not(:first-of-type) {
+      margin-top: 1em; }
   .game-graph .graph-title {
     text-transform: uppercase;
     letter-spacing: 1px;
     font-size: 12px;
     font-weight: bold; }
   .game-graph .svg-container {
-    overflow-x: auto; }
+    position: relative; }
   .game-graph svg text {
     fill: #7a8394;
     font-family: 'Ubuntu', sans-serif;
@@ -670,6 +672,10 @@ input.ng-touched.ng-invalid {
   .game-graph svg .axis-y path.domain {
     -webkit-transform: translate(-1px);
     transform: translate(-1px); }
+  .game-graph svg .outside-border {
+    stroke: #999999;
+    stroke-width: 1px;
+    fill: none; }
   .game-graph .rating-svg .line.data {
     fill: url(#rating-gradient);
     fill-opacity: 0.5;
@@ -678,18 +684,16 @@ input.ng-touched.ng-invalid {
   .game-graph .rating-svg .axis-x .tick line,
   .game-graph .rating-svg .axis-y .tick:not(:first-of-type) line {
     stroke: #C0C0C0; }
-  .game-graph .rating-svg .rating-outside-border {
-    stroke: #999999;
-    stroke-width: 1px;
-    fill: none; }
   .game-graph .rating-svg .positive-stop-color {
     stop-color: #508425; }
   .game-graph .rating-svg .neutral-stop-color {
     stop-color: black; }
   .game-graph .rating-svg .negative-stop-color {
     stop-color: #E94B35; }
-  .game-graph .games-played-svg .axis-y .tick:not(:first-of-type) line {
+  .game-graph .games-played-svg .axis-y .tick:not(:last-child) line {
     stroke: #E6EBEF; }
+  .game-graph .games-played-svg .axis-x .tick text {
+    display: none; }
   .game-graph .games-played-svg .bar {
     fill: #508425; }
 
