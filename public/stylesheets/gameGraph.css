@@ -1,16 +1,27 @@
 .game-graph {
   margin: 1em 0; }
-  .game-graph .rating-tooltip {
+  .game-graph .game-graph-tooltip {
     -moz-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.15);
     -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.15);
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.15);
     position: absolute;
-    width: 120px;
     background-color: white;
     opacity: 0;
     font-size: 12px;
     border: 1px solid #999999;
     pointer-events: none; }
+  .game-graph .rating-tooltip {
+    width: 120px; }
+  .game-graph .games-played-tooltip {
+    width: 90px; }
+    .game-graph .games-played-tooltip table {
+      margin: 0 auto; }
+      .game-graph .games-played-tooltip table td {
+        padding: 0.25em; }
+      .game-graph .games-played-tooltip table .game-num {
+        text-align: right; }
+      .game-graph .games-played-tooltip table .game-rating {
+        text-align: right; }
   .game-graph .hover-bar {
     fill: black;
     fill-opacity: 0.075; }

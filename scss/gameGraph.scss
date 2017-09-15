@@ -8,15 +8,38 @@
 
     margin: 1em 0;
 
-    .rating-tooltip {
+    .game-graph-tooltip {
         @include shadow($card-shadow);
         position: absolute;
-        width: 120px;
         background-color: white;
         opacity: 0;
         font-size: 12px;
         border: 1px solid $axis-color;
         pointer-events: none;
+    }
+
+    .rating-tooltip {
+        width: 120px;
+    }
+
+    .games-played-tooltip {
+        width: 90px;
+
+        table {
+            margin: 0 auto;
+
+            td {
+                padding: 0.25em;
+            }
+
+            .game-num {
+                text-align: right;
+            }
+
+            .game-rating {
+                text-align: right;
+            }
+        }
     }
 
     .hover-bar {

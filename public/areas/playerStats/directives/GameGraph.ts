@@ -1,5 +1,6 @@
 module PlayerStats {
     import IPlayerStats = Shared.IPlayerStats;
+    import IPlayerStatsGame = Shared.IPlayerStatsGame;
 
     export function GameGraph(): ng.IComponentOptions {
         return {
@@ -14,6 +15,7 @@ module PlayerStats {
         date: number;
         rating: number;
         gamesPlayed: number;
+        games: IPlayerStatsGame[];
     }
 
     interface IMargin {
@@ -38,6 +40,7 @@ module PlayerStats {
         public static $inject: string[] = ["$element", "playerStatsService"];
 
         private gameDayData: IGameDayData[] = [];
+        private duration = 250;
 
         private get playerStats(): IPlayerStats {
             return this.playerStatsService.playerStats;
@@ -65,7 +68,7 @@ module PlayerStats {
             this.gameDayData = [];
 
             for (var i = 0; i < numDaysInMonth; i++) {
-                this.gameDayData.push({ date: i + 1, gamesPlayed: 0, rating: 0 });
+                this.gameDayData.push({ date: i + 1, gamesPlayed: 0, rating: 0, games: [] });
             }
 
             var prevDay = 0;
@@ -73,6 +76,7 @@ module PlayerStats {
                 var day = new Date(game.gameDate).getDate();
                 var index = day - 1;
                 this.gameDayData[index].gamesPlayed++;
+                this.gameDayData[index].games.unshift(game);
 
                 if(prevDay !== day){
                     this.gameDayData[index].rating = game.rating;
@@ -217,10 +221,9 @@ module PlayerStats {
                 .attr("d", valueline);
 
             // add the dot and tooltip
-            var div = d3.select(".rating-tooltip");                
+            var div = d3.select(".rating-tooltip");
             var hoverArea = config.group.append("g");
             var marker = config.group.append("circle");
-            var duration = 250;
 
             marker.attr("class", "hover-marker")
                 .attr("r", 4)
@@ -241,24 +244,29 @@ module PlayerStats {
                     var yPx = config.yScale(d[1]);
 
                     marker.transition()
-                        .duration(duration)
+                        .duration(this.duration)
                         .style("opacity", 0.75);
-                    marker.attr("transform", "translate(" + (xPx + 17) + "," + yPx + ")")
 
                     div.transition()
-                        .duration(duration)
+                        .duration(this.duration)
                         .style("opacity", 1);
+
+                    var bandwidth = config.xScale.bandwidth();
+                    var markerLeft = xPx + Math.floor(bandwidth / 2) + 1;
+
+                    marker.attr("transform", "translate(" + markerLeft + "," + yPx + ")");
+
                     div.html("EOD Rating: " + d3.format(".2f")(d[1]))
-                        .style("left", xPx + 20 + "px")
+                        .style("left", xPx + 5 + Math.ceil(bandwidth / 2) + "px")
                         .style("top", yPx - 10 + "px");
                 })
                 .on("mouseout", (d) => {
                     marker.transition()
-                        .duration(duration)
+                        .duration(this.duration)
                         .style("opacity", 0);
 
                     div.transition()
-                        .duration(duration)
+                        .duration(this.duration)
                         .style("opacity", 0);
                 });
 
@@ -289,6 +297,8 @@ module PlayerStats {
 
             this.drawAxes(config, xAxis, yAxis);
             
+            var div = d3.select(".games-played-tooltip");
+
             // Remember that bars are drawn upside-down from upper axis
             config.group.selectAll(".bar")
                 .data(this.gameDayData.filter((game) => { return game.gamesPlayed > 0; }))
@@ -297,10 +307,63 @@ module PlayerStats {
                 .attr("x", (d) => { return config.xScale(d.date.toString()); })
                 .attr("y", (d) => { return 0 })
                 .attr("width", config.xScale.bandwidth())
-                .attr("height", (d) => { return config.yScale(d.gamesPlayed); });
+                .attr("height", (d) => { return config.yScale(d.gamesPlayed); })
+                .on("mouseover", (d) => {
+                    var xPx = config.xScale(d.date.toString());
+                    var yPx = config.yScale(d.gamesPlayed);
+
+                    div.transition()
+                        .duration(this.duration)
+                        .style("opacity", 1);
+
+                    div.html(this.generateGamesPlayedTooltipHtml(d.games));
+
+                    var divWidth = this.$element.find(".games-played-tooltip").outerWidth(true);
+                    var divHeight = this.$element.find(".games-played-tooltip").outerHeight(true);
+
+                    var bandwidth = config.xScale.bandwidth();
+
+                    // Determine if popover is outside bounds and shift to other side if outside bounds
+                    var divLeft = (xPx + divWidth > config.width)
+                        ? xPx - (bandwidth / 2) - 2
+                        : xPx + divWidth;
+
+                    var divTop = (divHeight > config.height)
+                        ? -divHeight + config.height
+                        : 10;
+
+                    div.style("left", divLeft + "px")
+                        .style("top", divTop + "px");
+                })
+                .on("mouseout", (d) => {
+                    div.transition()
+                        .duration(this.duration)
+                        .style("opacity", 0);
+                });
 
             // Draw the outside graph border (has to be last)
             this.drawOutsideBorder(config);
+        }
+
+        private generateGamesPlayedTooltipHtml(games: IPlayerStatsGame[]): string {
+            var sb: string[] = [];
+
+            sb.push("<table>");
+
+            games.forEach((game, index) => {
+                var gameDate = new Date(game.gameDate);
+                var hour = gameDate.getHours() > 12 ? gameDate.getHours() - 12: gameDate.getHours();
+                var minStr = gameDate.getMinutes() < 10 ? "0" + gameDate.getMinutes() : gameDate.getMinutes().toString();
+                var timeStr = `${hour || 12}:${minStr}${gameDate.getHours() >= 12 ? 'p' : 'a'}`;
+                sb.push("<tr>");
+                sb.push(`<td class="game-num">${timeStr}</td>`);
+                sb.push(`<td class="game-rating">${d3.format(".2f")(game.rating)}</td>`);
+                sb.push("</tr>");
+            });
+
+            sb.push("</table>");
+
+            return sb.join('');
         }
     }
 }
