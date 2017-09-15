@@ -14,6 +14,7 @@ module PlayerStats {
     interface IGameDayData {
         date: number;
         rating: number;
+        rank: number;
         gamesPlayed: number;
         games: IPlayerStatsGame[];
     }
@@ -68,7 +69,12 @@ module PlayerStats {
             this.gameDayData = [];
 
             for (var i = 0; i < numDaysInMonth; i++) {
-                this.gameDayData.push({ date: i + 1, gamesPlayed: 0, rating: 0, games: [] });
+                this.gameDayData.push({
+                    date: i + 1,
+                    gamesPlayed: 0,
+                    rank: 0,
+                    rating: 0,
+                    games: [] });
             }
 
             var prevDay = 0;
@@ -79,6 +85,7 @@ module PlayerStats {
                 this.gameDayData[index].games.unshift(game);
 
                 if(prevDay !== day){
+                    this.gameDayData[index].rank = game.rank;
                     this.gameDayData[index].rating = game.rating;
                     prevDay = day;
                 }
@@ -256,9 +263,15 @@ module PlayerStats {
 
                     marker.attr("transform", "translate(" + markerLeft + "," + yPx + ")");
 
-                    div.html("EOD Rating: " + d3.format(".2f")(d[1]))
+                    var divHeight = this.$element.find(".rating-tooltip").outerHeight(true);
+
+                    var divTop = yPx - 40 < 0
+                        ? yPx + 30
+                        : yPx - 40;
+
+                    div.html(this.generateRatingTooltipHtml(d[0]))
                         .style("left", xPx + 5 + Math.ceil(bandwidth / 2) + "px")
-                        .style("top", yPx - 10 + "px");
+                        .style("top", divTop + "px");
                 })
                 .on("mouseout", (d) => {
                     marker.transition()
@@ -272,6 +285,19 @@ module PlayerStats {
 
             // Draw the outside graph border (has to be last)
             this.drawOutsideBorder(config);
+        }
+
+        private generateRatingTooltipHtml(day: number): string {
+            var sb: string[] = [];
+
+            var ratingStr = d3.format(".2f")(this.gameDayData[day - 1].rating);
+
+            sb.push("<table>");
+            sb.push(`<tr><td class="eod-label">EOD Rating</td><td class="eod-value">${ratingStr}</td></tr>`)
+            sb.push(`<tr><td class="eod-label">EOD Rank</td><td class="eod-value">${this.gameDayData[day - 1].rank}</td></tr>`)
+            sb.push("</table>");
+
+            return sb.join('');
         }
 
         private createGamesPlayedGraph(): void {

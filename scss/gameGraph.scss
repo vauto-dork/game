@@ -16,14 +16,6 @@
         font-size: 12px;
         border: 1px solid $axis-color;
         pointer-events: none;
-    }
-
-    .rating-tooltip {
-        width: 120px;
-    }
-
-    .games-played-tooltip {
-        width: 90px;
 
         table {
             margin: 0 auto;
@@ -31,7 +23,27 @@
             td {
                 padding: 0.25em;
             }
+        }
+    }
 
+    .rating-tooltip {
+        width: 120px;
+
+        table {
+            .eod-label {
+                text-align: left;
+            }
+
+            .eod-value {
+                text-align: right;
+            }
+        }
+    }
+
+    .games-played-tooltip {
+        width: 90px;
+
+        table {
             .game-num {
                 text-align: right;
             }

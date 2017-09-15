@@ -176,7 +176,13 @@ var PlayerStats;
             var numDaysInMonth = new Date(gameYear, gameMonth + 1, 0).getDate();
             this.gameDayData = [];
             for (var i = 0; i < numDaysInMonth; i++) {
-                this.gameDayData.push({ date: i + 1, gamesPlayed: 0, rating: 0, games: [] });
+                this.gameDayData.push({
+                    date: i + 1,
+                    gamesPlayed: 0,
+                    rank: 0,
+                    rating: 0,
+                    games: []
+                });
             }
             var prevDay = 0;
             this.playerStats.games.filter(function (game) { return game.played; }).forEach(function (game) {
@@ -185,6 +191,7 @@ var PlayerStats;
                 _this.gameDayData[index].gamesPlayed++;
                 _this.gameDayData[index].games.unshift(game);
                 if (prevDay !== day) {
+                    _this.gameDayData[index].rank = game.rank;
                     _this.gameDayData[index].rating = game.rating;
                     prevDay = day;
                 }
@@ -321,9 +328,13 @@ var PlayerStats;
                 var bandwidth = config.xScale.bandwidth();
                 var markerLeft = xPx + Math.floor(bandwidth / 2) + 1;
                 marker.attr("transform", "translate(" + markerLeft + "," + yPx + ")");
-                div.html("EOD Rating: " + d3.format(".2f")(d[1]))
+                var divHeight = _this.$element.find(".rating-tooltip").outerHeight(true);
+                var divTop = yPx - 40 < 0
+                    ? yPx + 30
+                    : yPx - 40;
+                div.html(_this.generateRatingTooltipHtml(d[0]))
                     .style("left", xPx + 5 + Math.ceil(bandwidth / 2) + "px")
-                    .style("top", yPx - 10 + "px");
+                    .style("top", divTop + "px");
             })
                 .on("mouseout", function (d) {
                 marker.transition()
@@ -334,6 +345,15 @@ var PlayerStats;
                     .style("opacity", 0);
             });
             this.drawOutsideBorder(config);
+        };
+        GameGraphController.prototype.generateRatingTooltipHtml = function (day) {
+            var sb = [];
+            var ratingStr = d3.format(".2f")(this.gameDayData[day - 1].rating);
+            sb.push("<table>");
+            sb.push("<tr><td class=\"eod-label\">EOD Rating</td><td class=\"eod-value\">" + ratingStr + "</td></tr>");
+            sb.push("<tr><td class=\"eod-label\">EOD Rank</td><td class=\"eod-value\">" + this.gameDayData[day - 1].rank + "</td></tr>");
+            sb.push("</table>");
+            return sb.join('');
         };
         GameGraphController.prototype.createGamesPlayedGraph = function () {
             var _this = this;
