@@ -296,18 +296,31 @@ module PlayerStats {
                 .tickSizeInner(-config.width);
 
             this.drawAxes(config, xAxis, yAxis);
-            
-            var div = d3.select(".games-played-tooltip");
 
+            var filteredGames = this.gameDayData.filter((game) => { return game.gamesPlayed > 0; });
+            
             // Remember that bars are drawn upside-down from upper axis
             config.group.selectAll(".bar")
-                .data(this.gameDayData.filter((game) => { return game.gamesPlayed > 0; }))
+                .data(filteredGames)
                 .enter().append("rect")
                 .attr("class", "bar")
                 .attr("x", (d) => { return config.xScale(d.date.toString()); })
                 .attr("y", (d) => { return 0 })
                 .attr("width", config.xScale.bandwidth())
-                .attr("height", (d) => { return config.yScale(d.gamesPlayed); })
+                .attr("height", (d) => { return config.yScale(d.gamesPlayed); });
+
+            // Draw the shaded hover area
+            var div = d3.select(".games-played-tooltip");
+            var hoverArea = config.group.append("g");
+
+            hoverArea.selectAll(".hover-bar")
+                .data(filteredGames)
+                .enter().append("rect")
+                .attr("class", "hover-bar")
+                .attr("x", (d) => { return config.xScale(d.date.toString()); })
+                .attr("y", 0)
+                .attr("width", config.xScale.bandwidth())
+                .attr("height", (d) => { return config.height; })
                 .on("mouseover", (d) => {
                     var xPx = config.xScale(d.date.toString());
                     var yPx = config.yScale(d.gamesPlayed);
