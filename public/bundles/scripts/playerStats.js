@@ -221,6 +221,36 @@ var PlayerStats;
                 yScale: yScale
             };
         };
+        GameGraphController.prototype.drawHoverMarker = function (config, svgClass) {
+            var hoverMakerClass = svgClass + "-hover-marker";
+            config.group.append("circle")
+                .attr("class", hoverMakerClass)
+                .attr("r", 4)
+                .attr("cx", 0)
+                .attr("cy", 0)
+                .style("opacity", 0);
+            return hoverMakerClass;
+        };
+        GameGraphController.prototype.hoverBarMouseOver = function (hoverMarkerClass, tooltipDivClass) {
+            var marker = d3.select("." + hoverMarkerClass);
+            var div = d3.select("." + tooltipDivClass);
+            marker.transition()
+                .duration(this.duration)
+                .style("opacity", 0.75);
+            div.transition()
+                .duration(this.duration)
+                .style("opacity", 1);
+        };
+        GameGraphController.prototype.hoverBarMouseOut = function (hoverMarkerClass, tooltipDivClass) {
+            var marker = d3.select("." + hoverMarkerClass);
+            var div = d3.select("." + tooltipDivClass);
+            marker.transition()
+                .duration(this.duration)
+                .style("opacity", 0);
+            div.transition()
+                .duration(this.duration)
+                .style("opacity", 0);
+        };
         GameGraphController.prototype.drawAxes = function (config, xAxis, yAxis) {
             xAxis.tickSizeOuter(0).tickPadding(10);
             yAxis.tickSizeOuter(0).tickPadding(10);
@@ -300,14 +330,10 @@ var PlayerStats;
                 .attr("class", "line data")
                 .attr("transform", "translate(18,0)")
                 .attr("d", valueline);
-            var div = d3.select(".rating-tooltip");
-            var hoverArea = config.group.append("g");
-            var marker = config.group.append("circle");
-            marker.attr("class", "hover-marker")
-                .attr("r", 4)
-                .attr("cx", 0)
-                .attr("cy", 0)
-                .style("opacity", 0);
+            var tooltipDivClass = "rating-tooltip";
+            var hoverArea = config.group.append("g").attr("class", svgClass + "-hover-bars");
+            var hoverMarkerClass = this.drawHoverMarker(config, svgClass);
+            var marker = d3.select("." + hoverMarkerClass);
             hoverArea.selectAll(".hover-bar")
                 .data(originalLineData)
                 .enter().append("rect")
@@ -319,30 +345,21 @@ var PlayerStats;
                 .on("mouseover", function (d) {
                 var xPx = config.xScale(d[0].toString());
                 var yPx = config.yScale(d[1]);
-                marker.transition()
-                    .duration(_this.duration)
-                    .style("opacity", 0.75);
-                div.transition()
-                    .duration(_this.duration)
-                    .style("opacity", 1);
+                _this.hoverBarMouseOver(hoverMarkerClass, tooltipDivClass);
+                var div = d3.select("." + tooltipDivClass);
+                div.html(_this.generateRatingTooltipHtml(d[0]));
                 var bandwidth = config.xScale.bandwidth();
                 var markerLeft = xPx + Math.floor(bandwidth / 2) + 1;
                 marker.attr("transform", "translate(" + markerLeft + "," + yPx + ")");
-                var divHeight = _this.$element.find(".rating-tooltip").outerHeight(true);
+                var divHeight = _this.$element.find("." + tooltipDivClass).outerHeight(true);
                 var divTop = yPx - 40 < 0
                     ? yPx + 30
                     : yPx - 40;
-                div.html(_this.generateRatingTooltipHtml(d[0]))
-                    .style("left", xPx + 5 + Math.ceil(bandwidth / 2) + "px")
+                div.style("left", xPx + 5 + Math.ceil(bandwidth / 2) + "px")
                     .style("top", divTop + "px");
             })
                 .on("mouseout", function (d) {
-                marker.transition()
-                    .duration(_this.duration)
-                    .style("opacity", 0);
-                div.transition()
-                    .duration(_this.duration)
-                    .style("opacity", 0);
+                _this.hoverBarMouseOut(hoverMarkerClass, tooltipDivClass);
             });
             this.drawOutsideBorder(config);
         };
@@ -378,14 +395,10 @@ var PlayerStats;
                 .attr("y", function (d) { return 0; })
                 .attr("width", config.xScale.bandwidth())
                 .attr("height", function (d) { return config.yScale(d.gamesPlayed); });
-            var div = d3.select(".games-played-tooltip");
-            var hoverArea = config.group.append("g");
-            var marker = config.group.append("circle");
-            marker.attr("class", "hover-marker")
-                .attr("r", 4)
-                .attr("cx", 0)
-                .attr("cy", 0)
-                .style("opacity", 0);
+            var tooltipDivClass = "games-played-tooltip";
+            var hoverArea = config.group.append("g").attr("class", svgClass + "-hover-bars");
+            var hoverMarkerClass = this.drawHoverMarker(config, svgClass);
+            var marker = d3.select("." + hoverMarkerClass);
             hoverArea.selectAll(".hover-bar")
                 .data(filteredGames)
                 .enter().append("rect")
@@ -397,15 +410,11 @@ var PlayerStats;
                 .on("mouseover", function (d) {
                 var xPx = config.xScale(d.date.toString());
                 var yPx = config.yScale(d.gamesPlayed);
-                marker.transition()
-                    .duration(_this.duration)
-                    .style("opacity", 0.75);
-                div.transition()
-                    .duration(_this.duration)
-                    .style("opacity", 1);
+                _this.hoverBarMouseOver(hoverMarkerClass, tooltipDivClass);
+                var div = d3.select("." + tooltipDivClass);
                 div.html(_this.generateGamesPlayedTooltipHtml(d.games));
-                var divWidth = _this.$element.find(".games-played-tooltip").outerWidth(true);
-                var divHeight = _this.$element.find(".games-played-tooltip").outerHeight(true);
+                var divWidth = _this.$element.find("." + tooltipDivClass).outerWidth(true);
+                var divHeight = _this.$element.find("." + tooltipDivClass).outerHeight(true);
                 var bandwidth = config.xScale.bandwidth();
                 var markerLeft = xPx + Math.floor(bandwidth / 2) + 1;
                 marker.attr("transform", "translate(" + markerLeft + "," + yPx + ")");
@@ -419,12 +428,7 @@ var PlayerStats;
                     .style("top", divTop + "px");
             })
                 .on("mouseout", function (d) {
-                marker.transition()
-                    .duration(_this.duration)
-                    .style("opacity", 0);
-                div.transition()
-                    .duration(_this.duration)
-                    .style("opacity", 0);
+                _this.hoverBarMouseOut(hoverMarkerClass, tooltipDivClass);
             });
             this.drawOutsideBorder(config);
         };

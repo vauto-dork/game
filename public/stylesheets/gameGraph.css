@@ -37,7 +37,8 @@
     font-size: 12px;
     font-weight: bold; }
   .game-graph .svg-container {
-    position: relative; }
+    position: relative;
+    width: 1200px; }
   .game-graph svg text {
     fill: #7a8394;
     font-family: 'Ubuntu', sans-serif;

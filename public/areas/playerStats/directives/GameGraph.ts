@@ -123,6 +123,44 @@ module PlayerStats {
             };
         }
 
+        private drawHoverMarker(config: IGraphConfig, svgClass: string): string {
+            var hoverMakerClass = svgClass + "-hover-marker";
+            config.group.append("circle")
+                .attr("class", hoverMakerClass)
+                .attr("r", 4)
+                .attr("cx", 0)
+                .attr("cy", 0)
+                .style("opacity", 0);
+
+            return hoverMakerClass;
+        }
+
+        private hoverBarMouseOver(hoverMarkerClass: string, tooltipDivClass: string): void {
+            var marker = d3.select(`.${hoverMarkerClass}`);
+            var div = d3.select(`.${tooltipDivClass}`);
+            
+            marker.transition()
+                .duration(this.duration)
+                .style("opacity", 0.75);
+
+            div.transition()
+                .duration(this.duration)
+                .style("opacity", 1);
+        }
+
+        private hoverBarMouseOut(hoverMarkerClass: string, tooltipDivClass: string): void {
+            var marker = d3.select(`.${hoverMarkerClass}`);
+            var div = d3.select(`.${tooltipDivClass}`);
+
+            marker.transition()
+                .duration(this.duration)
+                .style("opacity", 0);
+
+            div.transition()
+                .duration(this.duration)
+                .style("opacity", 0);
+        }
+
         private drawAxes(config: IGraphConfig, xAxis: d3.Axis<{}>, yAxis: d3.Axis<{}>): void {
             xAxis.tickSizeOuter(0).tickPadding(10);
             yAxis.tickSizeOuter(0).tickPadding(10);
@@ -228,15 +266,11 @@ module PlayerStats {
                 .attr("d", valueline);
 
             // add the dot and tooltip
-            var div = d3.select(".rating-tooltip");
-            var hoverArea = config.group.append("g");
-            var marker = config.group.append("circle");
+            var tooltipDivClass = "rating-tooltip";
+            var hoverArea = config.group.append("g").attr("class", `${svgClass}-hover-bars`);
 
-            marker.attr("class", "hover-marker")
-                .attr("r", 4)
-                .attr("cx", 0)
-                .attr("cy", 0)
-                .style("opacity", 0);
+            var hoverMarkerClass = this.drawHoverMarker(config, svgClass);
+            var marker = d3.select(`.${hoverMarkerClass}`);
 
             hoverArea.selectAll(".hover-bar")
                 .data(originalLineData)
@@ -250,37 +284,27 @@ module PlayerStats {
                     var xPx = config.xScale(d[0].toString());
                     var yPx = config.yScale(d[1]);
 
-                    marker.transition()
-                        .duration(this.duration)
-                        .style("opacity", 0.75);
+                    this.hoverBarMouseOver(hoverMarkerClass, tooltipDivClass);
 
-                    div.transition()
-                        .duration(this.duration)
-                        .style("opacity", 1);
+                    var div = d3.select(`.${tooltipDivClass}`);
+                    div.html(this.generateRatingTooltipHtml(d[0]));
 
                     var bandwidth = config.xScale.bandwidth();
                     var markerLeft = xPx + Math.floor(bandwidth / 2) + 1;
 
                     marker.attr("transform", "translate(" + markerLeft + "," + yPx + ")");
 
-                    var divHeight = this.$element.find(".rating-tooltip").outerHeight(true);
+                    var divHeight = this.$element.find(`.${tooltipDivClass}`).outerHeight(true);
 
                     var divTop = yPx - 40 < 0
                         ? yPx + 30
                         : yPx - 40;
 
-                    div.html(this.generateRatingTooltipHtml(d[0]))
-                        .style("left", xPx + 5 + Math.ceil(bandwidth / 2) + "px")
+                    div.style("left", xPx + 5 + Math.ceil(bandwidth / 2) + "px")
                         .style("top", divTop + "px");
                 })
                 .on("mouseout", (d) => {
-                    marker.transition()
-                        .duration(this.duration)
-                        .style("opacity", 0);
-
-                    div.transition()
-                        .duration(this.duration)
-                        .style("opacity", 0);
+                    this.hoverBarMouseOut(hoverMarkerClass, tooltipDivClass);
                 });
 
             // Draw the outside graph border (has to be last)
@@ -336,16 +360,11 @@ module PlayerStats {
                 .attr("height", (d) => { return config.yScale(d.gamesPlayed); });
 
             // Draw the shaded hover area
-            var div = d3.select(".games-played-tooltip");
-            var hoverArea = config.group.append("g");
+            var tooltipDivClass = "games-played-tooltip";
+            var hoverArea = config.group.append("g").attr("class", `${svgClass}-hover-bars`);
 
-            var marker = config.group.append("circle");
-            
-            marker.attr("class", "hover-marker")
-                .attr("r", 4)
-                .attr("cx", 0)
-                .attr("cy", 0)
-                .style("opacity", 0);
+            var hoverMarkerClass = this.drawHoverMarker(config, svgClass);
+            var marker = d3.select(`.${hoverMarkerClass}`);
 
             hoverArea.selectAll(".hover-bar")
                 .data(filteredGames)
@@ -359,21 +378,15 @@ module PlayerStats {
                     var xPx = config.xScale(d.date.toString());
                     var yPx = config.yScale(d.gamesPlayed);
                     
-                    marker.transition()
-                        .duration(this.duration)
-                        .style("opacity", 0.75);
+                    this.hoverBarMouseOver(hoverMarkerClass, tooltipDivClass);
 
-                    div.transition()
-                        .duration(this.duration)
-                        .style("opacity", 1);
-
+                    var div = d3.select(`.${tooltipDivClass}`);
                     div.html(this.generateGamesPlayedTooltipHtml(d.games));
 
-                    var divWidth = this.$element.find(".games-played-tooltip").outerWidth(true);
-                    var divHeight = this.$element.find(".games-played-tooltip").outerHeight(true);
+                    var divWidth = this.$element.find(`.${tooltipDivClass}`).outerWidth(true);
+                    var divHeight = this.$element.find(`.${tooltipDivClass}`).outerHeight(true);
 
                     var bandwidth = config.xScale.bandwidth();
-
                     var markerLeft = xPx + Math.floor(bandwidth / 2) + 1;
                     
                     marker.attr("transform", "translate(" + markerLeft + "," + yPx + ")");
@@ -391,13 +404,7 @@ module PlayerStats {
                         .style("top", divTop + "px");
                 })
                 .on("mouseout", (d) => {
-                    marker.transition()
-                        .duration(this.duration)
-                        .style("opacity", 0);
-
-                    div.transition()
-                        .duration(this.duration)
-                        .style("opacity", 0);
+                    this.hoverBarMouseOut(hoverMarkerClass, tooltipDivClass);
                 });
 
             // Draw the outside graph border (has to be last)
