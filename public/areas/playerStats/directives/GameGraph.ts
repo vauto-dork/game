@@ -35,6 +35,18 @@ module PlayerStats {
         yScale?: d3.ScaleLinear<number, number>;
     }
 
+    interface IPopoverConfig {
+        marker?: {
+            left?: number;
+        },
+        div?: {
+            left?: number;
+            top?: number;
+            width?: number;
+            height?: number;
+        }
+    }
+
     interface ID3Selection extends d3.Selection<SVGElement, {}, HTMLElement, any> {}
 
     export class GameGraphController {
@@ -193,6 +205,29 @@ module PlayerStats {
                 .attr("d", outsideBorder);
         }
 
+        private configurePopover(xPx: number, yPx: number, tooltipDivClass: string, config: IGraphConfig): IPopoverConfig {
+            var bandwidth = config.xScale.bandwidth();
+            var markerLeft = xPx + Math.floor(bandwidth / 2) + 1;
+
+            var divWidth = this.$element.find(`.${tooltipDivClass}`).outerWidth(true);
+            var divHeight = this.$element.find(`.${tooltipDivClass}`).outerHeight(true);
+
+            var divLeft = config.margin.left + markerLeft;
+            var divTop = config.margin.top + yPx;
+
+            return {
+                marker: {
+                    left: markerLeft
+                },
+                div: {
+                    width: divWidth,
+                    height: divHeight,
+                    left: divLeft,
+                    top: divTop
+                }
+            };
+        }
+
         private createRatingGraph(): void {
             var svgClass = "rating-svg";
 
@@ -289,18 +324,24 @@ module PlayerStats {
                     var div = d3.select(`.${tooltipDivClass}`);
                     div.html(this.generateRatingTooltipHtml(d[0]));
 
-                    var bandwidth = config.xScale.bandwidth();
-                    var markerLeft = xPx + Math.floor(bandwidth / 2) + 1;
+                    var popoverConfig = this.configurePopover(xPx, yPx, tooltipDivClass, config);
+                    var divWidth = popoverConfig.div.width;
+                    var divHeight = popoverConfig.div.height;
 
+                    var bandwidth = config.xScale.bandwidth();
+                    var markerLeft = popoverConfig.marker.left;
                     marker.attr("transform", "translate(" + markerLeft + "," + yPx + ")");
 
-                    var divHeight = this.$element.find(`.${tooltipDivClass}`).outerHeight(true);
+                    var divLeft = popoverConfig.div.left;
+                    divLeft = divLeft - (divWidth / 2);
 
-                    var divTop = yPx - 40 < 0
-                        ? yPx + 30
-                        : yPx - 40;
+                    // Determine if popover is outside bounds and shift to other side if outside bounds
+                    var divTop = popoverConfig.div.top;
+                    divTop += (divTop - divHeight - 10 < 0)
+                        ? 10
+                        : -(divHeight + 10);
 
-                    div.style("left", xPx + 5 + Math.ceil(bandwidth / 2) + "px")
+                    div.style("left", divLeft + "px")
                         .style("top", divTop + "px");
                 })
                 .on("mouseout", (d) => {
@@ -383,18 +424,20 @@ module PlayerStats {
                     var div = d3.select(`.${tooltipDivClass}`);
                     div.html(this.generateGamesPlayedTooltipHtml(d.games));
 
-                    var divWidth = this.$element.find(`.${tooltipDivClass}`).outerWidth(true);
-                    var divHeight = this.$element.find(`.${tooltipDivClass}`).outerHeight(true);
-
-                    var bandwidth = config.xScale.bandwidth();
-                    var markerLeft = xPx + Math.floor(bandwidth / 2) + 1;
+                    var popoverConfig = this.configurePopover(xPx, yPx, tooltipDivClass, config);
+                    var divWidth = popoverConfig.div.width;
+                    var divHeight = popoverConfig.div.height;
                     
+                    var markerLeft = popoverConfig.marker.left;
                     marker.attr("transform", "translate(" + markerLeft + "," + yPx + ")");
 
                     // Determine if popover is outside bounds and shift to other side if outside bounds
-                    var divLeft = (xPx + divWidth > config.width)
-                        ? xPx - (bandwidth / 2) - 2
-                        : xPx + divWidth;
+                    var bandwidth = config.xScale.bandwidth();
+                    var offset = Math.floor(bandwidth / 4);
+                    var divLeft = popoverConfig.div.left;
+                    divLeft += (markerLeft + divWidth + offset > config.width)
+                        ? -(offset + divWidth)
+                        : offset
 
                     var divTop = (yPx + divHeight > config.height)
                         ? -divHeight + config.height
