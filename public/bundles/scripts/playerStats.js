@@ -221,7 +221,7 @@ var PlayerStats;
                 yScale: yScale
             };
         };
-        GameGraphController.prototype.drawHoverMarker = function (config, svgClass) {
+        GameGraphController.prototype.configHoverMarker = function (config, svgClass) {
             var hoverMakerClass = svgClass + "-hover-marker";
             config.group.append("circle")
                 .attr("class", hoverMakerClass)
@@ -230,6 +230,21 @@ var PlayerStats;
                 .attr("cy", 0)
                 .style("opacity", 0);
             return hoverMakerClass;
+        };
+        GameGraphController.prototype.configurePopover = function (xPx, yPx, config) {
+            var bandwidth = config.xScale.bandwidth();
+            var markerLeft = xPx + Math.floor(bandwidth / 2) + 1;
+            var divLeft = config.margin.left + markerLeft;
+            var divTop = config.margin.top + yPx;
+            return {
+                marker: {
+                    left: markerLeft
+                },
+                div: {
+                    left: divLeft,
+                    top: divTop
+                }
+            };
         };
         GameGraphController.prototype.hoverBarMouseOver = function (hoverMarkerClass, tooltipDivClass) {
             var marker = d3.select("." + hoverMarkerClass);
@@ -277,24 +292,13 @@ var PlayerStats;
                 .attr("class", "outside-border")
                 .attr("d", outsideBorder);
         };
-        GameGraphController.prototype.configurePopover = function (xPx, yPx, tooltipDivClass, config) {
-            var bandwidth = config.xScale.bandwidth();
-            var markerLeft = xPx + Math.floor(bandwidth / 2) + 1;
-            var divWidth = this.$element.find("." + tooltipDivClass).outerWidth(true);
-            var divHeight = this.$element.find("." + tooltipDivClass).outerHeight(true);
-            var divLeft = config.margin.left + markerLeft;
-            var divTop = config.margin.top + yPx;
-            return {
-                marker: {
-                    left: markerLeft
-                },
-                div: {
-                    width: divWidth,
-                    height: divHeight,
-                    left: divLeft,
-                    top: divTop
-                }
-            };
+        GameGraphController.prototype.drawHoverMarker = function (markerClass, left, top) {
+            d3.select("." + markerClass)
+                .attr("transform", "translate(" + left + "," + top + ")");
+        };
+        GameGraphController.prototype.drawPopover = function (div, left, top) {
+            div.css("left", left + "px")
+                .css("top", top + "px");
         };
         GameGraphController.prototype.createRatingGraph = function () {
             var _this = this;
@@ -351,8 +355,7 @@ var PlayerStats;
                 .attr("d", valueline);
             var tooltipDivClass = "rating-tooltip";
             var hoverArea = config.group.append("g").attr("class", svgClass + "-hover-bars");
-            var hoverMarkerClass = this.drawHoverMarker(config, svgClass);
-            var marker = d3.select("." + hoverMarkerClass);
+            var hoverMarkerClass = this.configHoverMarker(config, svgClass);
             hoverArea.selectAll(".hover-bar")
                 .data(originalLineData)
                 .enter().append("rect")
@@ -365,22 +368,22 @@ var PlayerStats;
                 var xPx = config.xScale(d[0].toString());
                 var yPx = config.yScale(d[1]);
                 _this.hoverBarMouseOver(hoverMarkerClass, tooltipDivClass);
-                var div = d3.select("." + tooltipDivClass);
+                var div = _this.$element.find("." + tooltipDivClass);
                 div.html(_this.generateRatingTooltipHtml(d[0]));
-                var popoverConfig = _this.configurePopover(xPx, yPx, tooltipDivClass, config);
-                var divWidth = popoverConfig.div.width;
-                var divHeight = popoverConfig.div.height;
-                var bandwidth = config.xScale.bandwidth();
+                var divWidth = div.outerWidth(true);
+                var divHeight = div.outerHeight(true);
+                var popoverConfig = _this.configurePopover(xPx, yPx, config);
                 var markerLeft = popoverConfig.marker.left;
-                marker.attr("transform", "translate(" + markerLeft + "," + yPx + ")");
+                _this.drawHoverMarker(hoverMarkerClass, markerLeft, yPx);
                 var divLeft = popoverConfig.div.left;
-                divLeft = divLeft - (divWidth / 2);
+                divLeft = (markerLeft + (divWidth / 2) > config.width)
+                    ? config.width - divWidth + config.margin.left
+                    : divLeft - (divWidth / 2);
                 var divTop = popoverConfig.div.top;
                 divTop += (divTop - divHeight - 10 < 0)
                     ? 10
                     : -(divHeight + 10);
-                div.style("left", divLeft + "px")
-                    .style("top", divTop + "px");
+                _this.drawPopover(div, divLeft, divTop);
             })
                 .on("mouseout", function (d) {
                 _this.hoverBarMouseOut(hoverMarkerClass, tooltipDivClass);
@@ -421,7 +424,7 @@ var PlayerStats;
                 .attr("height", function (d) { return config.yScale(d.gamesPlayed); });
             var tooltipDivClass = "games-played-tooltip";
             var hoverArea = config.group.append("g").attr("class", svgClass + "-hover-bars");
-            var hoverMarkerClass = this.drawHoverMarker(config, svgClass);
+            var hoverMarkerClass = this.configHoverMarker(config, svgClass);
             var marker = d3.select("." + hoverMarkerClass);
             hoverArea.selectAll(".hover-bar")
                 .data(filteredGames)
@@ -435,13 +438,13 @@ var PlayerStats;
                 var xPx = config.xScale(d.date.toString());
                 var yPx = config.yScale(d.gamesPlayed);
                 _this.hoverBarMouseOver(hoverMarkerClass, tooltipDivClass);
-                var div = d3.select("." + tooltipDivClass);
+                var div = _this.$element.find("." + tooltipDivClass);
                 div.html(_this.generateGamesPlayedTooltipHtml(d.games));
-                var popoverConfig = _this.configurePopover(xPx, yPx, tooltipDivClass, config);
-                var divWidth = popoverConfig.div.width;
-                var divHeight = popoverConfig.div.height;
+                var divWidth = div.outerWidth(true);
+                var divHeight = div.outerHeight(true);
+                var popoverConfig = _this.configurePopover(xPx, yPx, config);
                 var markerLeft = popoverConfig.marker.left;
-                marker.attr("transform", "translate(" + markerLeft + "," + yPx + ")");
+                _this.drawHoverMarker(hoverMarkerClass, markerLeft, yPx);
                 var bandwidth = config.xScale.bandwidth();
                 var offset = Math.floor(bandwidth / 4);
                 var divLeft = popoverConfig.div.left;
@@ -451,8 +454,7 @@ var PlayerStats;
                 var divTop = (yPx + divHeight > config.height)
                     ? -divHeight + config.height
                     : yPx - (divHeight / 2) + 4;
-                div.style("left", divLeft + "px")
-                    .style("top", divTop + "px");
+                _this.drawPopover(div, divLeft, divTop);
             })
                 .on("mouseout", function (d) {
                 _this.hoverBarMouseOut(hoverMarkerClass, tooltipDivClass);

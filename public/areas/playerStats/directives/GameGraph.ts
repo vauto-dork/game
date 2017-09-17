@@ -42,8 +42,6 @@ module PlayerStats {
         div?: {
             left?: number;
             top?: number;
-            width?: number;
-            height?: number;
         }
     }
 
@@ -135,7 +133,7 @@ module PlayerStats {
             };
         }
 
-        private drawHoverMarker(config: IGraphConfig, svgClass: string): string {
+        private configHoverMarker(config: IGraphConfig, svgClass: string): string {
             var hoverMakerClass = svgClass + "-hover-marker";
             config.group.append("circle")
                 .attr("class", hoverMakerClass)
@@ -145,6 +143,24 @@ module PlayerStats {
                 .style("opacity", 0);
 
             return hoverMakerClass;
+        }
+
+        private configurePopover(xPx: number, yPx: number, config: IGraphConfig): IPopoverConfig {
+            var bandwidth = config.xScale.bandwidth();
+            var markerLeft = xPx + Math.floor(bandwidth / 2) + 1;
+
+            var divLeft = config.margin.left + markerLeft;
+            var divTop = config.margin.top + yPx;
+
+            return {
+                marker: {
+                    left: markerLeft
+                },
+                div: {
+                    left: divLeft,
+                    top: divTop
+                }
+            };
         }
 
         private hoverBarMouseOver(hoverMarkerClass: string, tooltipDivClass: string): void {
@@ -205,27 +221,14 @@ module PlayerStats {
                 .attr("d", outsideBorder);
         }
 
-        private configurePopover(xPx: number, yPx: number, tooltipDivClass: string, config: IGraphConfig): IPopoverConfig {
-            var bandwidth = config.xScale.bandwidth();
-            var markerLeft = xPx + Math.floor(bandwidth / 2) + 1;
+        private drawHoverMarker(markerClass: string, left: number, top: number): void {
+            d3.select(`.${markerClass}`)
+                .attr("transform", "translate(" + left + "," + top + ")");
+        }
 
-            var divWidth = this.$element.find(`.${tooltipDivClass}`).outerWidth(true);
-            var divHeight = this.$element.find(`.${tooltipDivClass}`).outerHeight(true);
-
-            var divLeft = config.margin.left + markerLeft;
-            var divTop = config.margin.top + yPx;
-
-            return {
-                marker: {
-                    left: markerLeft
-                },
-                div: {
-                    width: divWidth,
-                    height: divHeight,
-                    left: divLeft,
-                    top: divTop
-                }
-            };
+        private drawPopover(div: ng.IAugmentedJQuery, left: number, top: number) {
+            div.css("left", left + "px")
+                .css("top", top + "px");
         }
 
         private createRatingGraph(): void {
@@ -304,8 +307,7 @@ module PlayerStats {
             var tooltipDivClass = "rating-tooltip";
             var hoverArea = config.group.append("g").attr("class", `${svgClass}-hover-bars`);
 
-            var hoverMarkerClass = this.drawHoverMarker(config, svgClass);
-            var marker = d3.select(`.${hoverMarkerClass}`);
+            var hoverMarkerClass = this.configHoverMarker(config, svgClass);
 
             hoverArea.selectAll(".hover-bar")
                 .data(originalLineData)
@@ -321,19 +323,20 @@ module PlayerStats {
 
                     this.hoverBarMouseOver(hoverMarkerClass, tooltipDivClass);
 
-                    var div = d3.select(`.${tooltipDivClass}`);
+                    var div = this.$element.find(`.${tooltipDivClass}`);
                     div.html(this.generateRatingTooltipHtml(d[0]));
 
-                    var popoverConfig = this.configurePopover(xPx, yPx, tooltipDivClass, config);
-                    var divWidth = popoverConfig.div.width;
-                    var divHeight = popoverConfig.div.height;
+                    var divWidth = div.outerWidth(true);
+                    var divHeight = div.outerHeight(true);
 
-                    var bandwidth = config.xScale.bandwidth();
+                    var popoverConfig = this.configurePopover(xPx, yPx, config);
                     var markerLeft = popoverConfig.marker.left;
-                    marker.attr("transform", "translate(" + markerLeft + "," + yPx + ")");
+                    this.drawHoverMarker(hoverMarkerClass, markerLeft, yPx);
 
                     var divLeft = popoverConfig.div.left;
-                    divLeft = divLeft - (divWidth / 2);
+                    divLeft = (markerLeft + (divWidth / 2) > config.width)
+                        ? config.width - divWidth + config.margin.left
+                        : divLeft - (divWidth / 2);
 
                     // Determine if popover is outside bounds and shift to other side if outside bounds
                     var divTop = popoverConfig.div.top;
@@ -341,8 +344,7 @@ module PlayerStats {
                         ? 10
                         : -(divHeight + 10);
 
-                    div.style("left", divLeft + "px")
-                        .style("top", divTop + "px");
+                    this.drawPopover(div, divLeft, divTop);
                 })
                 .on("mouseout", (d) => {
                     this.hoverBarMouseOut(hoverMarkerClass, tooltipDivClass);
@@ -404,7 +406,7 @@ module PlayerStats {
             var tooltipDivClass = "games-played-tooltip";
             var hoverArea = config.group.append("g").attr("class", `${svgClass}-hover-bars`);
 
-            var hoverMarkerClass = this.drawHoverMarker(config, svgClass);
+            var hoverMarkerClass = this.configHoverMarker(config, svgClass);
             var marker = d3.select(`.${hoverMarkerClass}`);
 
             hoverArea.selectAll(".hover-bar")
@@ -421,15 +423,16 @@ module PlayerStats {
                     
                     this.hoverBarMouseOver(hoverMarkerClass, tooltipDivClass);
 
-                    var div = d3.select(`.${tooltipDivClass}`);
+                    var div = this.$element.find(`.${tooltipDivClass}`);
                     div.html(this.generateGamesPlayedTooltipHtml(d.games));
 
-                    var popoverConfig = this.configurePopover(xPx, yPx, tooltipDivClass, config);
-                    var divWidth = popoverConfig.div.width;
-                    var divHeight = popoverConfig.div.height;
+                    var divWidth = div.outerWidth(true);
+                    var divHeight = div.outerHeight(true);
+
+                    var popoverConfig = this.configurePopover(xPx, yPx, config);
                     
                     var markerLeft = popoverConfig.marker.left;
-                    marker.attr("transform", "translate(" + markerLeft + "," + yPx + ")");
+                    this.drawHoverMarker(hoverMarkerClass, markerLeft, yPx);
 
                     // Determine if popover is outside bounds and shift to other side if outside bounds
                     var bandwidth = config.xScale.bandwidth();
@@ -443,8 +446,7 @@ module PlayerStats {
                         ? -divHeight + config.height
                         : yPx - (divHeight / 2) + 4;
 
-                    div.style("left", divLeft + "px")
-                        .style("top", divTop + "px");
+                    this.drawPopover(div, divLeft, divTop);
                 })
                 .on("mouseout", (d) => {
                     this.hoverBarMouseOut(hoverMarkerClass, tooltipDivClass);
