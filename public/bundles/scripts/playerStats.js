@@ -191,8 +191,16 @@ var PlayerStats;
                 _this.gameDayData[index].gamesPlayed++;
                 _this.gameDayData[index].games.unshift(game);
                 if (prevDay !== day) {
-                    _this.gameDayData[index].rank = game.rank;
                     _this.gameDayData[index].rating = game.rating;
+                    prevDay = day;
+                }
+            });
+            prevDay = 0;
+            this.playerStats.games.forEach(function (game) {
+                var day = new Date(game.gameDate).getDate();
+                var index = day - 1;
+                if (prevDay !== day) {
+                    _this.gameDayData[index].rank = game.rank;
                     prevDay = day;
                 }
             });

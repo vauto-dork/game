@@ -95,8 +95,20 @@ module PlayerStats {
                 this.gameDayData[index].games.unshift(game);
 
                 if(prevDay !== day){
-                    this.gameDayData[index].rank = game.rank;
                     this.gameDayData[index].rating = game.rating;
+                    prevDay = day;
+                }
+            });
+
+            // Calculate EOD rank for every game since it could change
+            // on a game that wasn't played.
+            prevDay = 0;
+            this.playerStats.games.forEach((game) => {
+                var day = new Date(game.gameDate).getDate();
+                var index = day - 1;
+
+                if(prevDay !== day){
+                    this.gameDayData[index].rank = game.rank;
                     prevDay = day;
                 }
             });
