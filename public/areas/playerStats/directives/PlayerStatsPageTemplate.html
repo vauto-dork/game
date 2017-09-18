@@ -17,9 +17,18 @@
 <div class="col-xs-12 player-stats" ng-show="$ctrl.showContent && $ctrl.hasPlayedGames">
     <game-graph></game-graph>
     
-    <p>
-        Rank deltas are measured when the player hits the ten game minimum.
-    </p>
+    <div class="pre-header">
+        <div class="ten-game-min-message">
+            Rank deltas are measured when the player hits the ten game minimum.
+        </div>
+
+        <div class="value-percent-radio-group">
+            <div class="btn-group btn-group-justified">
+                <label class="btn btn-primary" ng-model="$ctrl.showAsPercent" uib-btn-radio="false">Value</label>
+                <label class="btn btn-primary" ng-model="$ctrl.showAsPercent" uib-btn-radio="true">Percent</label>
+            </div>
+        </div>
+    </div>
 
     <div class="stats-table-header">
         <div class="row">
@@ -71,7 +80,7 @@
             <div class="col-xs-12 col-sm-4">
                     <div class="stats-info-row-container delta-row">
                         <div class="stats-label visible-xs-block">Rating:</div>
-                        <delta-box value="game.rating" diff="game.ratingDiff" decimal="2"></delta-box>
+                        <delta-box value="game.rating" diff="$ctrl.diffValue(game)" decimal="2" is-percent="$ctrl.showAsPercent"></delta-box>
                     </div>
                 </div>
         </div>

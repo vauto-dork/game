@@ -396,6 +396,23 @@ input.ng-touched.ng-invalid {
 
 .player-stats {
   font-size: 1.4em; }
+  .player-stats .pre-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin: 1em 0; }
+    .player-stats .pre-header .ten-game-min-message {
+      padding-right: 1em; }
+    .player-stats .pre-header .value-percent-radio-group {
+      text-align: right; }
+  @media (max-width: 599px) {
+    .player-stats .pre-header {
+      flex-wrap: wrap; }
+      .player-stats .pre-header .ten-game-min-message {
+        padding-bottom: 1em; } }
+  @media (min-width: 600px) {
+    .player-stats .pre-header .value-percent-radio-group .btn-group {
+      width: 13em; } }
   .player-stats .stats-row-even {
     background-color: #373935;
     color: #E6EBEF; }
@@ -428,7 +445,7 @@ input.ng-touched.ng-invalid {
     border-bottom: 1px solid #7a8394; }
   .player-stats .header-rating,
   .player-stats .header-rank {
-    width: 9em;
+    width: 13em;
     text-align: center; }
   .player-stats .gold-star {
     color: #FFCB00; }
@@ -439,14 +456,16 @@ input.ng-touched.ng-invalid {
       justify-content: flex-end; } }
   .player-stats .delta-box {
     margin: 0.5em auto;
-    text-align: center; }
+    text-align: center;
+    padding: 0 1em; }
     .player-stats .delta-box .delta-box-value,
     .player-stats .delta-box .delta-box-symbol,
     .player-stats .delta-box .delta-box-diff {
       display: inline-block; }
-    .player-stats .delta-box .delta-box-value,
-    .player-stats .delta-box .delta-box-diff {
+    .player-stats .delta-box .delta-box-value {
       width: 4em; }
+    .player-stats .delta-box .delta-box-diff {
+      width: 5em; }
     .player-stats .delta-box .delta-box-value {
       text-align: right; }
     .player-stats .delta-box .delta-box-symbol {

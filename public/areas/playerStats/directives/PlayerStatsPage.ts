@@ -1,5 +1,6 @@
 module PlayerStats {
     import IPlayerStats = Shared.IPlayerStats;
+    import IPlayerStatsGame = Shared.IPlayerStatsGame;
     import IMonthYearParams = Shared.IMonthYearParams;
     import MonthYearParams = Shared.MonthYearParams;
 
@@ -23,6 +24,7 @@ module PlayerStats {
         private showLoading: boolean = false;
         private showErrorMessage: boolean = false;
         private showContent: boolean = false;
+        private showAsPercent: boolean = false;
 
         private date: IMonthYearParams;
 
@@ -72,6 +74,10 @@ module PlayerStats {
             this.$timeout(()=>{
                 this.monthYearQueryService.saveQueryParams(this.date.month, this.date.year);
             });
-		}
+        }
+        
+        private diffValue(game: IPlayerStatsGame): number {
+            return this.showAsPercent ? game.ratingPctDiff : game.ratingDiff;
+        }
     }
 }

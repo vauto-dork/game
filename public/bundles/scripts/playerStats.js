@@ -78,7 +78,8 @@ var PlayerStats;
             bindings: {
                 value: "=",
                 decimal: "@",
-                diff: "="
+                diff: "=",
+                isPercent: "="
             },
             templateUrl: "/areas/playerStats/directives/DeltaBoxTemplate.html",
             controller: DeltaBoxController
@@ -606,6 +607,7 @@ var PlayerStats;
             this.showLoading = false;
             this.showErrorMessage = false;
             this.showContent = false;
+            this.showAsPercent = false;
             this.changeState(State.Loading);
             monthYearQueryService.subscribeDateChange(function (event, date) {
                 _this.getPlayerStats(date);
@@ -649,6 +651,9 @@ var PlayerStats;
             this.$timeout(function () {
                 _this.monthYearQueryService.saveQueryParams(_this.date.month, _this.date.year);
             });
+        };
+        PlayerStatsPageController.prototype.diffValue = function (game) {
+            return this.showAsPercent ? game.ratingPctDiff : game.ratingDiff;
         };
         PlayerStatsPageController.$inject = ["$timeout", "monthYearQueryService", "playerStatsService"];
         return PlayerStatsPageController;

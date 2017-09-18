@@ -45,6 +45,7 @@ var statsHelper = {
             var result = games.map(function(game, index) {
                 var playerRank = previousRank;
                 var playerRating = previousRating;
+                var ratingPctDiff = 0;
                 var ratingDiff = 0;
                 var rankDiff = 0;
 
@@ -54,6 +55,9 @@ var statsHelper = {
                     if(player.id == playerId) {
                         playerRating = statsHelper.round(player.rating, 2);
                         ratingDiff = statsHelper.round(playerRating - previousRating, 2);
+                        ratingPctDiff = previousRating === 0
+                            ? 100
+                            : statsHelper.round(100 * ratingDiff / previousRating, 2);
                         previousRating = playerRating;
 
                         playerRank = player.rank;
@@ -75,6 +79,7 @@ var statsHelper = {
                     played: GameHelper.hasPlayedGame(playerId, game),
                     rating: playerRating,
                     ratingDiff: ratingDiff,
+                    ratingPctDiff: ratingPctDiff,
                     rank: playerRank,
                     rankDiff: rankDiff
                 };

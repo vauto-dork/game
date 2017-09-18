@@ -54,6 +54,7 @@ module Shared {
 		played: boolean,
 		rating: number,
 		ratingDiff: number,
+		ratingPctDiff: number,
 		rank: number,
 		rankDiff: number
 	}

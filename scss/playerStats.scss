@@ -27,7 +27,40 @@
 }
 
 .player-stats {
+    $delta-width: 13em;
     font-size: $font-large;
+
+    .pre-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;        
+        margin: 1em 0;
+
+        .ten-game-min-message {
+            padding-right: 1em;
+        }
+
+        .value-percent-radio-group {
+            text-align: right;
+        }
+    }
+    @media (max-width: 599px) {
+        .pre-header {
+            flex-wrap: wrap;
+
+            .ten-game-min-message {
+                padding-bottom: 1em;
+            }
+        }
+     }
+
+    @media (min-width: 600px) {
+        .pre-header {
+            .value-percent-radio-group .btn-group {
+                width: $delta-width;
+            }
+        }
+     }
 
     .stats-row-even {
         background-color: $zebra-stripe-even;
@@ -83,7 +116,7 @@
 
     .header-rating,
     .header-rank {
-        width: 9em;
+        width: $delta-width;
         text-align: center;
     }
 
@@ -104,6 +137,7 @@
     .delta-box {
         margin: $standard-spacing auto;
         text-align: center;
+        padding: 0 1em;
 
         .delta-box-value,
         .delta-box-symbol,
@@ -111,9 +145,12 @@
             display: inline-block;
         }
 
-        .delta-box-value,
-        .delta-box-diff {
+        .delta-box-value {
             width: 4em;
+        }
+
+        .delta-box-diff {
+            width: 5em;
         }
 
         .delta-box-value {
