@@ -105,9 +105,9 @@ module PlayerStats {
                 return;
             }
 
-            var gameMonth = new Date(this.playerStats.dateRange[0]).getMonth();
-            var gameYear = new Date(this.playerStats.dateRange[0]).getFullYear();
-            var numDaysInMonth = new Date(gameYear, gameMonth + 1, 0).getDate();
+            var gameMonth = new Date(this.playerStats.dateRange[0]).getUTCMonth();
+            var gameYear = new Date(this.playerStats.dateRange[0]).getUTCFullYear();
+            var numDaysInMonth = new Date(gameYear, gameMonth + 1, 0).getUTCDate();
 
             this.isCurrentMonth =
                 gameMonth === this.dateTimeService.currentMonthValue()
