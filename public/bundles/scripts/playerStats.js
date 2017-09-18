@@ -146,17 +146,24 @@ var PlayerStats;
     }
     PlayerStats.GameGraph = GameGraph;
     var GameGraphController = (function () {
-        function GameGraphController($element, playerStatsService) {
+        function GameGraphController($element, $window, playerStatsService) {
             var _this = this;
             this.$element = $element;
+            this.$window = $window;
             this.playerStatsService = playerStatsService;
             this.gameDayData = [];
             this.duration = 250;
+            this.graphMinPx = 700;
             this.playerStatsService.ready().then(function () {
+                _this.resizeWindow();
                 _this.updateData();
                 _this.playerStatsService.subscribeDataRefresh(function () {
                     _this.updateData();
                 });
+            });
+            angular.element($window).bind("resize", function () {
+                _this.resizeWindow();
+                _this.redraw();
             });
         }
         Object.defineProperty(GameGraphController.prototype, "playerStats", {
@@ -166,6 +173,23 @@ var PlayerStats;
             enumerable: true,
             configurable: true
         });
+        GameGraphController.prototype.resizeWindow = function () {
+            this.graphWidthPx = Math.min(this.$window.innerWidth - 30, 1200);
+            this.graphWidthPx = Math.max(this.graphWidthPx, this.graphMinPx);
+            if (this.graphWidthPx === this.graphMinPx) {
+                this.$element.find(".graph-container").addClass("overflowed");
+            }
+            else {
+                this.$element.find(".graph-container").removeClass("overflowed");
+            }
+            this.$element.find(".rating-container").width(this.graphWidthPx);
+            this.$element.find(".rating-svg").attr("width", this.graphWidthPx);
+            this.$element.find(".games-played-container").width(this.graphWidthPx);
+            this.$element.find(".games-played-svg").attr("width", this.graphWidthPx);
+        };
+        GameGraphController.prototype.translate = function (x, y) {
+            return "translate(" + x + "," + y + ")";
+        };
         GameGraphController.prototype.updateData = function () {
             var _this = this;
             if (!this.playerStats.gamesPlayed) {
@@ -204,6 +228,9 @@ var PlayerStats;
                     prevDay = day;
                 }
             });
+            this.redraw();
+        };
+        GameGraphController.prototype.redraw = function () {
             this.createRatingGraph();
             this.createGamesPlayedGraph();
         };
@@ -219,7 +246,7 @@ var PlayerStats;
             svg.selectAll("g").remove();
             svg.append("g")
                 .attr("class", "main-graph-group")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+                .attr("transform", this.translate(margin.left, margin.top));
             return {
                 group: d3.select("svg." + svgClass).select("g"),
                 margin: margin,
@@ -302,7 +329,7 @@ var PlayerStats;
         };
         GameGraphController.prototype.drawHoverMarker = function (markerClass, left, top) {
             d3.select("." + markerClass)
-                .attr("transform", "translate(" + left + "," + top + ")");
+                .attr("transform", this.translate(left, top));
         };
         GameGraphController.prototype.drawPopover = function (div, left, top) {
             div.css("left", left + "px")
@@ -320,12 +347,13 @@ var PlayerStats;
                 yMax = yMax + 1;
             }
             var config = this.initGraph(svgClass, yMin, yMax);
-            var xAxis = d3.axisBottom(config.xScale).tickSizeInner(-config.height);
+            var xAxis = d3.axisBottom(config.xScale)
+                .tickSizeInner(-config.height);
             var yAxis = d3.axisLeft(config.yScale)
                 .ticks(8)
                 .tickSizeInner(-config.width);
             this.drawAxes(config, xAxis, yAxis);
-            d3.select(".axis-x").attr("transform", "translate(0," + config.height + ")");
+            d3.select(".axis-x").attr("transform", this.translate(0, config.height));
             config.group.append("linearGradient")
                 .attr("id", "rating-gradient")
                 .attr("gradientUnits", "userSpaceOnUse")
@@ -356,10 +384,11 @@ var PlayerStats;
             lineData.unshift([1, 0]);
             lineData.push([lastDay, lastRanking]);
             lineData.push([lastDay, 0]);
+            var lineLeftOffset = Math.floor(config.xScale.bandwidth() / 2) + 1;
             config.group.append("path")
                 .data([lineData])
                 .attr("class", "line data")
-                .attr("transform", "translate(18,0)")
+                .attr("transform", this.translate(lineLeftOffset, 0))
                 .attr("d", valueline);
             var tooltipDivClass = "rating-tooltip";
             var hoverArea = config.group.append("g").attr("class", svgClass + "-hover-bars");
@@ -413,7 +442,7 @@ var PlayerStats;
             var yMax = d3.max(this.gameDayData, function (d) { return d.gamesPlayed; });
             yMax = yMax > 4 ? yMax + 1 : 5;
             var config = this.initGraph(svgClass, 0, yMax);
-            config.group.attr("transform", "translate(" + config.margin.left + ",5)");
+            config.group.attr("transform", this.translate(config.margin.left, 5));
             config.yScale.domain([yMax, 0]);
             var xAxis = d3.axisTop(config.xScale).tickSizeInner(0);
             var yAxis = d3.axisLeft(config.yScale)
@@ -485,7 +514,7 @@ var PlayerStats;
             sb.push("</table>");
             return sb.join('');
         };
-        GameGraphController.$inject = ["$element", "playerStatsService"];
+        GameGraphController.$inject = ["$element", "$window", "playerStatsService"];
         return GameGraphController;
     }());
     PlayerStats.GameGraphController = GameGraphController;

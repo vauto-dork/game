@@ -666,6 +666,8 @@ input.ng-touched.ng-invalid {
     fill-opacity: 0.075; }
   .game-graph .graph-container {
     overflow-x: auto; }
+    .game-graph .graph-container.overflowed {
+      border: 1px solid #999999; }
   .game-graph .graph-title {
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -673,7 +675,7 @@ input.ng-touched.ng-invalid {
     font-weight: bold; }
   .game-graph .svg-container {
     position: relative;
-    width: 1200px; }
+    margin: auto; }
   .game-graph svg text {
     fill: #7a8394;
     font-family: 'Ubuntu', sans-serif;

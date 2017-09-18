@@ -48,23 +48,54 @@ module PlayerStats {
     interface ID3Selection extends d3.Selection<SVGElement, {}, HTMLElement, any> {}
 
     export class GameGraphController {
-        public static $inject: string[] = ["$element", "playerStatsService"];
+        public static $inject: string[] = ["$element", "$window", "playerStatsService"];
 
         private gameDayData: IGameDayData[] = [];
         private duration = 250;
+        private graphWidthPx: number;
+        private graphMinPx = 700;
 
         private get playerStats(): IPlayerStats {
             return this.playerStatsService.playerStats;
         }
 
-        constructor(private $element: ng.IAugmentedJQuery, private playerStatsService: IPlayerStatsService) {
+        constructor(private $element: ng.IAugmentedJQuery,
+            private $window: ng.IWindowService,
+            private playerStatsService: IPlayerStatsService) {
             this.playerStatsService.ready().then(() => {
+                this.resizeWindow();
                 this.updateData();
 
                 this.playerStatsService.subscribeDataRefresh(() => {
                     this.updateData();
                 });
             });
+
+            angular.element($window).bind("resize", () => {
+                this.resizeWindow();
+                this.redraw();
+            });
+        }
+
+        private resizeWindow(): void {
+            this.graphWidthPx = Math.min(this.$window.innerWidth - 30, 1200);
+            this.graphWidthPx = Math.max(this.graphWidthPx, this.graphMinPx);
+
+            if(this.graphWidthPx === this.graphMinPx) {
+                this.$element.find(".graph-container").addClass("overflowed");
+            } else {
+                this.$element.find(".graph-container").removeClass("overflowed");
+            }
+
+            this.$element.find(".rating-container").width(this.graphWidthPx);
+            this.$element.find(".rating-svg").attr("width", this.graphWidthPx);
+
+            this.$element.find(".games-played-container").width(this.graphWidthPx);
+            this.$element.find(".games-played-svg").attr("width", this.graphWidthPx);
+        }
+
+        private translate(x, y): string {
+            return `translate(${x},${y})`;
         }
 
         private updateData(): void {
@@ -84,7 +115,8 @@ module PlayerStats {
                     gamesPlayed: 0,
                     rank: 0,
                     rating: 0,
-                    games: [] });
+                    games: []
+                });
             }
 
             var prevDay = 0;
@@ -113,6 +145,10 @@ module PlayerStats {
                 }
             });
 
+            this.redraw();
+        }
+
+        private redraw(): void {
             this.createRatingGraph();
             this.createGamesPlayedGraph();
         }
@@ -133,7 +169,7 @@ module PlayerStats {
             svg.selectAll("g").remove();
             svg.append("g")
                 .attr("class", "main-graph-group")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+                .attr("transform", this.translate(margin.left, margin.top));
 
             return <IGraphConfig>{
                 group: d3.select("svg." + svgClass).select("g"),
@@ -235,7 +271,7 @@ module PlayerStats {
 
         private drawHoverMarker(markerClass: string, left: number, top: number): void {
             d3.select(`.${markerClass}`)
-                .attr("transform", "translate(" + left + "," + top + ")");
+                .attr("transform", this.translate(left, top));
         }
 
         private drawPopover(div: ng.IAugmentedJQuery, left: number, top: number) {
@@ -259,15 +295,16 @@ module PlayerStats {
 
             var config = this.initGraph(svgClass, yMin, yMax);
 
-            var xAxis = d3.axisBottom(config.xScale).tickSizeInner(-config.height);
-            
+            var xAxis = d3.axisBottom(config.xScale)
+                .tickSizeInner(-config.height);
+
             var yAxis = d3.axisLeft(config.yScale)
                 .ticks(8)
                 .tickSizeInner(-config.width);
 
             this.drawAxes(config, xAxis, yAxis);
 
-            d3.select(".axis-x").attr("transform", "translate(0," + config.height + ")");
+            d3.select(".axis-x").attr("transform", this.translate(0, config.height));
 
             // Color the lines to show positive and negative values
 
@@ -309,10 +346,11 @@ module PlayerStats {
             lineData.push([lastDay, lastRanking]);
             lineData.push([lastDay, 0]);
 
+            var lineLeftOffset = Math.floor(config.xScale.bandwidth() / 2) + 1;
             config.group.append("path")
                 .data([lineData])
                 .attr("class", "line data")
-                .attr("transform", "translate(18,0)")
+                .attr("transform", this.translate(lineLeftOffset, 0))
                 .attr("d", valueline);
 
             // add the dot and tooltip
@@ -388,7 +426,7 @@ module PlayerStats {
             var config = this.initGraph(svgClass, 0, yMax);
 
             // Shift the graph up to give even spacing on common X-axis
-            config.group.attr("transform", "translate(" + config.margin.left + ",5)");
+            config.group.attr("transform", this.translate(config.margin.left, 5));
 
             // Redo the yScale to reverse order
             config.yScale.domain([yMax, 0]);

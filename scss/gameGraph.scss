@@ -61,6 +61,10 @@
 
     .graph-container {
         overflow-x: auto;
+
+        &.overflowed {
+            border: 1px solid $axis-color;
+        }
     }
 
     .graph-title {
@@ -72,7 +76,7 @@
 
     .svg-container {
         position: relative;
-        width: 1200px;
+        margin: auto;
     }
 
     svg {
