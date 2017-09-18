@@ -162,7 +162,7 @@ var PlayerStats;
             this.playerStatsService = playerStatsService;
             this.gameDayData = [];
             this.isCurrentMonth = false;
-            this.duration = 250;
+            this.duration = 200;
             this.graphMinPx = 700;
             this.playerStatsService.ready().then(function () {
                 _this.resizeWindow();
@@ -361,7 +361,7 @@ var PlayerStats;
             }
             var config = this.initGraph(svgClass, yMin, yMax);
             var xAxis = d3.axisBottom(config.xScale)
-                .tickSizeInner(-config.height);
+                .tickSizeInner(0);
             var yAxis = d3.axisLeft(config.yScale)
                 .ticks(8)
                 .tickSizeInner(-config.width);

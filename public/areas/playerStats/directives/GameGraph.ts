@@ -52,7 +52,7 @@ module PlayerStats {
 
         private gameDayData: IGameDayData[] = [];
         private isCurrentMonth: boolean = false;
-        private duration = 250;
+        private duration = 200;
         private graphWidthPx: number;
         private graphMinPx = 700;
 
@@ -302,7 +302,7 @@ module PlayerStats {
             var config = this.initGraph(svgClass, yMin, yMax);
 
             var xAxis = d3.axisBottom(config.xScale)
-                .tickSizeInner(-config.height);
+                .tickSizeInner(0);
 
             var yAxis = d3.axisLeft(config.yScale)
                 .ticks(8)
