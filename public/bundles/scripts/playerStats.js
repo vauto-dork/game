@@ -131,6 +131,13 @@ var PlayerStats;
             enumerable: true,
             configurable: true
         });
+        Object.defineProperty(DeltaBoxController.prototype, "decimalPlaces", {
+            get: function () {
+                return (this.isPercent && (this.diff >= 100 || this.diff <= -100)) ? 0 : this.decimal;
+            },
+            enumerable: true,
+            configurable: true
+        });
         return DeltaBoxController;
     }());
     PlayerStats.DeltaBoxController = DeltaBoxController;
@@ -584,6 +591,7 @@ var PlayerStats;
 var PlayerStats;
 (function (PlayerStats) {
     var MonthYearParams = Shared.MonthYearParams;
+    var LocalStorageKeys = Shared.LocalStorageKeys;
     function PlayerStatsPage() {
         return {
             templateUrl: "/areas/playerStats/directives/PlayerStatsPageTemplate.html",
@@ -599,9 +607,10 @@ var PlayerStats;
         State[State["Error"] = 3] = "Error";
     })(State || (State = {}));
     var PlayerStatsPageController = (function () {
-        function PlayerStatsPageController($timeout, monthYearQueryService, playerStatsService) {
+        function PlayerStatsPageController($timeout, localStorageService, monthYearQueryService, playerStatsService) {
             var _this = this;
             this.$timeout = $timeout;
+            this.localStorageService = localStorageService;
             this.monthYearQueryService = monthYearQueryService;
             this.playerStatsService = playerStatsService;
             this.showLoading = false;
@@ -609,6 +618,7 @@ var PlayerStats;
             this.showContent = false;
             this.showAsPercent = false;
             this.changeState(State.Loading);
+            this.showAsPercent = this.localStorageService.getStoredBoolean(LocalStorageKeys.PlayerStatsRatingView);
             monthYearQueryService.subscribeDateChange(function (event, date) {
                 _this.getPlayerStats(date);
             });
@@ -655,7 +665,10 @@ var PlayerStats;
         PlayerStatsPageController.prototype.diffValue = function (game) {
             return this.showAsPercent ? game.ratingPctDiff : game.ratingDiff;
         };
-        PlayerStatsPageController.$inject = ["$timeout", "monthYearQueryService", "playerStatsService"];
+        PlayerStatsPageController.prototype.valuePercentClick = function () {
+            this.localStorageService.setStoredValue(LocalStorageKeys.PlayerStatsRatingView, this.showAsPercent);
+        };
+        PlayerStatsPageController.$inject = ["$timeout", "localStorageService", "monthYearQueryService", "playerStatsService"];
         return PlayerStatsPageController;
     }());
     PlayerStats.PlayerStatsPageController = PlayerStatsPageController;

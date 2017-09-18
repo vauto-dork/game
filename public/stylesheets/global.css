@@ -10,6 +10,7 @@ body {
   font-size: 12px; }
 
 body {
+  min-width: 320px;
   margin-bottom: 2em;
   background-color: #E6EBEF; }
 

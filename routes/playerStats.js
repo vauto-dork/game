@@ -55,9 +55,12 @@ var statsHelper = {
                     if(player.id == playerId) {
                         playerRating = statsHelper.round(player.rating, 2);
                         ratingDiff = statsHelper.round(playerRating - previousRating, 2);
+
+                        // Get the percent with an upper and lower bound
                         ratingPctDiff = previousRating === 0
-                            ? 100
-                            : statsHelper.round(100 * ratingDiff / previousRating, 2);
+                            ? (playerRating < 0 ? -100 : (playerRating > 0 ? 100 : 0))
+                            : Math.max(-999, Math.min(statsHelper.round(100 * ratingDiff / previousRating, 2), 999));
+                        
                         previousRating = playerRating;
 
                         playerRank = player.rank;

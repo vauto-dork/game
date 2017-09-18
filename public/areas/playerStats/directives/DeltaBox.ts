@@ -45,6 +45,10 @@ module PlayerStats {
             return Math.abs(this.value);
         }
 
+        private get decimalPlaces(): number {
+            return (this.isPercent && (this.diff >= 100 || this.diff <= -100)) ? 0 : this.decimal;
+        }
+
         constructor() {
         }
     }

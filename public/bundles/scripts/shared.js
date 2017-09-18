@@ -819,6 +819,36 @@ var Shared;
     Shared.DateTimeService = DateTimeService;
 })(Shared || (Shared = {}));
 
+var Shared;
+(function (Shared) {
+    var LocalStorageKeys;
+    (function (LocalStorageKeys) {
+        LocalStorageKeys["PlayerStatsRatingView"] = "PlayerStatsRatingView";
+    })(LocalStorageKeys = Shared.LocalStorageKeys || (Shared.LocalStorageKeys = {}));
+    var LocalStorageService = (function () {
+        function LocalStorageService($window) {
+            this.$window = $window;
+        }
+        LocalStorageService.prototype.getStoredValue = function (key) {
+            return this.$window.localStorage.getItem(key);
+        };
+        LocalStorageService.prototype.getStoredBoolean = function (key) {
+            var value = this.getStoredValue(key);
+            return !value ? false : value.toLowerCase() === "true";
+        };
+        LocalStorageService.prototype.getStoredNumber = function (key) {
+            var value = this.getStoredValue(key);
+            return !value ? null : parseFloat(value);
+        };
+        LocalStorageService.prototype.setStoredValue = function (key, value) {
+            this.$window.localStorage.setItem(key, value.toString());
+        };
+        LocalStorageService.$inject = ["$window"];
+        return LocalStorageService;
+    }());
+    Shared.LocalStorageService = LocalStorageService;
+})(Shared || (Shared = {}));
+
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -1239,6 +1269,7 @@ var Shared;
 var Shared;
 (function (Shared) {
     var UxControlsModule = angular.module('UxControlsModule', ['ngAnimate', 'ui.bootstrap']);
+    UxControlsModule.service('localStorageService', Shared.LocalStorageService);
     UxControlsModule.service('dateTimeService', Shared.DateTimeService);
     UxControlsModule.service('monthYearQueryService', Shared.MonthYearQueryService);
     UxControlsModule.service('apiService', Shared.ApiService);
