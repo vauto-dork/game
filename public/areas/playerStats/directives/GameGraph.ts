@@ -48,9 +48,10 @@ module PlayerStats {
     interface ID3Selection extends d3.Selection<SVGElement, {}, HTMLElement, any> {}
 
     export class GameGraphController {
-        public static $inject: string[] = ["$element", "$window", "playerStatsService"];
+        public static $inject: string[] = ["$element", "$window", "dateTimeService", "playerStatsService"];
 
         private gameDayData: IGameDayData[] = [];
+        private isCurrentMonth: boolean = false;
         private duration = 250;
         private graphWidthPx: number;
         private graphMinPx = 700;
@@ -61,6 +62,7 @@ module PlayerStats {
 
         constructor(private $element: ng.IAugmentedJQuery,
             private $window: ng.IWindowService,
+            private dateTimeService: Shared.IDateTimeService,
             private playerStatsService: IPlayerStatsService) {
             this.playerStatsService.ready().then(() => {
                 this.resizeWindow();
@@ -106,6 +108,10 @@ module PlayerStats {
             var gameMonth = new Date(this.playerStats.dateRange[0]).getMonth();
             var gameYear = new Date(this.playerStats.dateRange[0]).getFullYear();
             var numDaysInMonth = new Date(gameYear, gameMonth + 1, 0).getDate();
+
+            this.isCurrentMonth =
+                gameMonth === this.dateTimeService.currentMonthValue()
+                && gameYear === this.dateTimeService.currentYear();
 
             this.gameDayData = [];
 
@@ -338,11 +344,18 @@ module PlayerStats {
                     return [d.date, d.rating];
                 });
 
-            var lastDay = this.gameDayData[this.gameDayData.length - 1].date;
+            var lastDay = this.isCurrentMonth
+                ? this.dateTimeService.currentDate()
+                : this.gameDayData[this.gameDayData.length - 1].date;
+
             var lastRanking = originalLineData[originalLineData.length - 1][1];
 
             var lineData = angular.copy(originalLineData);
+
+            // Start graph at zero on first day
             lineData.unshift([1,0]);
+
+            // Draw a straight vertical line on the last day
             lineData.push([lastDay, lastRanking]);
             lineData.push([lastDay, 0]);
 

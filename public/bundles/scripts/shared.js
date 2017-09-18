@@ -789,6 +789,9 @@ var Shared;
         DateTimeService.prototype.currentYear = function () {
             return new Date().getFullYear();
         };
+        DateTimeService.prototype.currentDate = function () {
+            return new Date().getDate();
+        };
         DateTimeService.prototype.currentMonthValue = function () {
             return new Date().getMonth();
         };

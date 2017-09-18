@@ -146,12 +146,14 @@ var PlayerStats;
     }
     PlayerStats.GameGraph = GameGraph;
     var GameGraphController = (function () {
-        function GameGraphController($element, $window, playerStatsService) {
+        function GameGraphController($element, $window, dateTimeService, playerStatsService) {
             var _this = this;
             this.$element = $element;
             this.$window = $window;
+            this.dateTimeService = dateTimeService;
             this.playerStatsService = playerStatsService;
             this.gameDayData = [];
+            this.isCurrentMonth = false;
             this.duration = 250;
             this.graphMinPx = 700;
             this.playerStatsService.ready().then(function () {
@@ -198,6 +200,9 @@ var PlayerStats;
             var gameMonth = new Date(this.playerStats.dateRange[0]).getMonth();
             var gameYear = new Date(this.playerStats.dateRange[0]).getFullYear();
             var numDaysInMonth = new Date(gameYear, gameMonth + 1, 0).getDate();
+            this.isCurrentMonth =
+                gameMonth === this.dateTimeService.currentMonthValue()
+                    && gameYear === this.dateTimeService.currentYear();
             this.gameDayData = [];
             for (var i = 0; i < numDaysInMonth; i++) {
                 this.gameDayData.push({
@@ -378,7 +383,9 @@ var PlayerStats;
                 .map(function (d) {
                 return [d.date, d.rating];
             });
-            var lastDay = this.gameDayData[this.gameDayData.length - 1].date;
+            var lastDay = this.isCurrentMonth
+                ? this.dateTimeService.currentDate()
+                : this.gameDayData[this.gameDayData.length - 1].date;
             var lastRanking = originalLineData[originalLineData.length - 1][1];
             var lineData = angular.copy(originalLineData);
             lineData.unshift([1, 0]);
@@ -514,7 +521,7 @@ var PlayerStats;
             sb.push("</table>");
             return sb.join('');
         };
-        GameGraphController.$inject = ["$element", "$window", "playerStatsService"];
+        GameGraphController.$inject = ["$element", "$window", "dateTimeService", "playerStatsService"];
         return GameGraphController;
     }());
     PlayerStats.GameGraphController = GameGraphController;
