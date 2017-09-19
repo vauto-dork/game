@@ -164,21 +164,20 @@ var PlayerStats;
             this.isCurrentMonth = false;
             this.graphMinPx = 700;
             this.duration = {
-                base: 200,
+                axis: 600,
                 popover: 200,
                 hoverBars: 800,
-                data: 200
+                data: 600
             };
-            this.resizeWindow();
+            this.resizeGraphs();
             this.playerStatsService.ready().then(function () {
                 _this.updateData();
-                _this.resizeWindow();
                 _this.playerStatsService.subscribeDataRefresh(function () {
                     _this.updateData();
                 });
             });
             angular.element($window).resize(function () {
-                _this.resizeWindow();
+                _this.resizeGraphs();
                 _this.redraw();
             });
             var ratingGraphContainer = this.$element.find(".rating-graph-container");
@@ -197,14 +196,15 @@ var PlayerStats;
             enumerable: true,
             configurable: true
         });
-        GameGraphController.prototype.resizeWindow = function () {
+        GameGraphController.prototype.resizeGraphs = function () {
             this.graphWidthPx = Math.min(this.$window.innerWidth - 30, 1200);
             this.graphWidthPx = Math.max(this.graphWidthPx, this.graphMinPx);
+            var graphContainer = this.$element.find(".graph-container");
             if (this.graphWidthPx === this.graphMinPx) {
-                this.$element.find(".graph-container").addClass("overflowed");
+                graphContainer.addClass("overflowed");
             }
             else {
-                this.$element.find(".graph-container").removeClass("overflowed");
+                graphContainer.removeClass("overflowed");
             }
             this.$element.find(".rating-container").width(this.graphWidthPx);
             this.$element.find(".rating-svg").attr("width", this.graphWidthPx);
@@ -256,12 +256,15 @@ var PlayerStats;
                 }
             });
             var gamesPlayed = this.gameDayData.map(function (game) { return game.gamesPlayed; });
+            var gamesPlayedGraph = this.$element.find(".games-played-svg");
             if (Math.max.apply(Math, gamesPlayed) > 6) {
-                this.$element.find(".games-played-svg").attr("height", 300);
+                gamesPlayedGraph.attr("height", 300);
+                this.resizeGraphs();
             }
-            else {
-                this.$element.find(".games-played-svg").attr("height", 200);
+            else if (+gamesPlayedGraph.attr("height") !== 200) {
+                gamesPlayedGraph.attr("height", 200);
                 this.$element.find(".games-played-tooltip").html(" ").css("opacity", 0);
+                this.resizeGraphs();
             }
             this.redraw();
         };
@@ -351,11 +354,19 @@ var PlayerStats;
             xAxis.tickSizeOuter(0).tickPadding(10);
             yAxis.tickSizeOuter(0).tickPadding(10);
             var xAxisGroup = config.group.append("g")
+                .style("opacity", 0)
                 .attr("class", "axis axis-x")
-                .call(xAxis);
+                .call(xAxis)
+                .transition()
+                .duration(this.duration.axis)
+                .style("opacity", 1);
             config.group.append("g")
+                .style("opacity", 0)
                 .attr("class", "axis axis-y")
-                .call(yAxis);
+                .call(yAxis)
+                .transition()
+                .duration(this.duration.axis)
+                .style("opacity", 1);
             config.group.select(".axis-x").attr("transform", this.translate(0, config.height));
         };
         GameGraphController.prototype.drawOutsideBorder = function (config) {
@@ -419,26 +430,28 @@ var PlayerStats;
                 .enter().append("stop")
                 .attr("offset", function (d) { return d.offset; })
                 .attr("class", function (d) { return d.class; });
-            var valueline = d3.line()
-                .x(function (d) { return config.xScale(d[0].toString()); })
-                .y(function (d) { return config.yScale(d[1]); });
             var filteredGames = this.gameDayData.filter(function (game) { return game.gamesPlayed > 0; });
             var lineData = filteredGames.map(function (d) {
                 return [d.date, d.rating];
             });
-            ;
             var lastDay = lineData[lineData.length - 1][0];
             var lastRanking = lineData[lineData.length - 1][1];
             var zeroLine = Math.max(yMin, 0);
             lineData.unshift([lineData[0][0], zeroLine]);
             lineData.push([lastDay, lastRanking]);
             lineData.push([lastDay, zeroLine]);
+            var valueline = d3.line()
+                .x(function (d) { return config.xScale(d[0].toString()); })
+                .y(function (d) { return config.yScale(d[1]); });
+            var startline = d3.line()
+                .x(function (d) { return config.xScale(d[0].toString()); })
+                .y(function (d) { return Math.min(config.yScale(0), config.height); });
             var lineLeftOffset = Math.floor(config.xScale.bandwidth() / 2) + 1;
             config.group.append("path")
                 .data([lineData])
                 .attr("class", "line data")
                 .attr("transform", this.translate(lineLeftOffset, 0))
-                .attr("d", d3.line().x(function (d) { return config.xScale(d[0].toString()); }).y(function (d) { return config.height; }))
+                .attr("d", startline)
                 .transition().duration(this.duration.data)
                 .attr("d", valueline);
             var tooltipDivClass = "rating-tooltip";

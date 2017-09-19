@@ -57,10 +57,10 @@ module PlayerStats {
         private graphMinPx = 700;
 
         private duration = {
-            base: 200,
+            axis: 600,
             popover: 200,
             hoverBars: 800,
-            data: 200
+            data: 600
         };
 
         private get playerStats(): IPlayerStats {
@@ -72,11 +72,10 @@ module PlayerStats {
             private dateTimeService: Shared.IDateTimeService,
             private playerStatsService: IPlayerStatsService) {
             
-            this.resizeWindow();
+            this.resizeGraphs();
             
             this.playerStatsService.ready().then(() => {
                 this.updateData();
-                this.resizeWindow();
 
                 this.playerStatsService.subscribeDataRefresh(() => {
                     this.updateData();
@@ -84,7 +83,7 @@ module PlayerStats {
             });
 
             angular.element($window).resize(() => {
-                this.resizeWindow();
+                this.resizeGraphs();
                 this.redraw();
             });
 
@@ -100,14 +99,16 @@ module PlayerStats {
             })
         }
 
-        private resizeWindow(): void {
+        private resizeGraphs(): void {
             this.graphWidthPx = Math.min(this.$window.innerWidth - 30, 1200);
             this.graphWidthPx = Math.max(this.graphWidthPx, this.graphMinPx);
 
+            var graphContainer = this.$element.find(".graph-container");
+
             if(this.graphWidthPx === this.graphMinPx) {
-                this.$element.find(".graph-container").addClass("overflowed");
+                graphContainer.addClass("overflowed");
             } else {
-                this.$element.find(".graph-container").removeClass("overflowed");
+                graphContainer.removeClass("overflowed");
             }
 
             this.$element.find(".rating-container").width(this.graphWidthPx);
@@ -175,12 +176,16 @@ module PlayerStats {
             // Adjust games played graph height
             // (there was an edge case where someone played 11 games in a day)
             var gamesPlayed = this.gameDayData.map((game) => { return game.gamesPlayed; });
+            var gamesPlayedGraph = this.$element.find(".games-played-svg");
+
             if(Math.max(...gamesPlayed) > 6) {
-                this.$element.find(".games-played-svg").attr("height", 300);
+                gamesPlayedGraph.attr("height", 300);
+                this.resizeGraphs();
             }
-            else {
-                this.$element.find(".games-played-svg").attr("height", 200);
+            else if(+gamesPlayedGraph.attr("height") !== 200) {
+                gamesPlayedGraph.attr("height", 200);
                 this.$element.find(".games-played-tooltip").html(" ").css("opacity", 0);
+                this.resizeGraphs();
             }
 
             this.redraw();
@@ -292,12 +297,20 @@ module PlayerStats {
             yAxis.tickSizeOuter(0).tickPadding(10);
 
             var xAxisGroup = config.group.append("g")
+                .style("opacity", 0)
                 .attr("class", "axis axis-x")
-                .call(xAxis);
+                .call(xAxis)
+                .transition()
+                .duration(this.duration.axis)
+                .style("opacity", 1);
             
             config.group.append("g")
+                .style("opacity", 0)
                 .attr("class", "axis axis-y")
-                .call(yAxis);
+                .call(yAxis)
+                .transition()
+                .duration(this.duration.axis)
+                .style("opacity", 1);
 
             config.group.select(".axis-x").attr("transform", this.translate(0, config.height));
         }
@@ -380,17 +393,12 @@ module PlayerStats {
                 .attr("class", (d) => { return d.class; });
 
 
-            // Generate the data line
-
-            var valueline = d3.line()
-                .x((d) => { return config.xScale(d[0].toString()); })
-                .y((d) => { return config.yScale(d[1]); });
-            
+            // Generate the data line            
             var filteredGames = this.gameDayData.filter((game) => { return game.gamesPlayed > 0; });
             
             var lineData = filteredGames.map((d) => {
                 return [d.date, d.rating];
-            });;
+            });
 
             var lastDay = lineData[lineData.length - 1][0];
             var lastRanking = lineData[lineData.length - 1][1];
@@ -403,12 +411,21 @@ module PlayerStats {
             lineData.push([lastDay, lastRanking]);
             lineData.push([lastDay, zeroLine]);
 
+            var valueline = d3.line()
+                .x((d) => { return config.xScale(d[0].toString()); })
+                .y((d) => { return config.yScale(d[1]); });
+
+            var startline = d3.line()
+                .x(d => config.xScale(d[0].toString()))
+                .y(d => Math.min(config.yScale(0), config.height));
+
             var lineLeftOffset = Math.floor(config.xScale.bandwidth() / 2) + 1;
+
             config.group.append("path")
                 .data([lineData])
                 .attr("class", "line data")
                 .attr("transform", this.translate(lineLeftOffset, 0))
-                .attr("d", d3.line().x(d => config.xScale(d[0].toString())).y(d => config.height))
+                .attr("d", startline)
                 .transition().duration(this.duration.data)
                 .attr("d", valueline);
 
