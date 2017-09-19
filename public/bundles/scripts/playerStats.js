@@ -162,8 +162,13 @@ var PlayerStats;
             this.playerStatsService = playerStatsService;
             this.gameDayData = [];
             this.isCurrentMonth = false;
-            this.duration = 200;
             this.graphMinPx = 700;
+            this.duration = {
+                base: 200,
+                popover: 200,
+                hoverBars: 800,
+                data: 200
+            };
             this.resizeWindow();
             this.playerStatsService.ready().then(function () {
                 _this.updateData();
@@ -278,6 +283,7 @@ var PlayerStats;
                 .attr("class", "main-graph-group")
                 .attr("transform", this.translate(margin.left, margin.top));
             return {
+                svgClass: svgClass,
                 group: d3.select("svg." + svgClass).select("g"),
                 margin: margin,
                 width: width,
@@ -295,6 +301,16 @@ var PlayerStats;
                 .attr("cy", 0)
                 .style("opacity", 0);
             return hoverMakerClass;
+        };
+        GameGraphController.prototype.configIndividualHoverBar = function (hoverBarEnter, config) {
+            hoverBarEnter.attr("class", "hover-bar")
+                .attr("x", function (d) { return config.xScale(d.date.toString()); })
+                .attr("y", config.height)
+                .attr("width", config.xScale.bandwidth())
+                .attr("height", 0)
+                .transition().duration(this.duration.hoverBars).delay(this.duration.data)
+                .attr("y", 0)
+                .attr("height", function (d) { return config.height; });
         };
         GameGraphController.prototype.configurePopover = function (xPx, yPx, config) {
             var bandwidth = config.xScale.bandwidth();
@@ -315,20 +331,20 @@ var PlayerStats;
             var marker = d3.select("." + hoverMarkerClass);
             var div = d3.select("." + tooltipDivClass);
             marker.transition()
-                .duration(this.duration)
+                .duration(this.duration.popover)
                 .style("opacity", 0.75);
             div.transition()
-                .duration(this.duration)
+                .duration(this.duration.popover)
                 .style("opacity", 1);
         };
         GameGraphController.prototype.hoverBarMouseOut = function (hoverMarkerClass, tooltipDivClass) {
             var marker = d3.select("." + hoverMarkerClass);
             var div = d3.select("." + tooltipDivClass);
             marker.transition()
-                .duration(this.duration)
+                .duration(this.duration.popover)
                 .style("opacity", 0);
             div.transition()
-                .duration(this.duration)
+                .duration(this.duration.popover)
                 .style("opacity", 0);
         };
         GameGraphController.prototype.drawAxes = function (config, xAxis, yAxis) {
@@ -406,14 +422,13 @@ var PlayerStats;
             var valueline = d3.line()
                 .x(function (d) { return config.xScale(d[0].toString()); })
                 .y(function (d) { return config.yScale(d[1]); });
-            var originalLineData = this.gameDayData.filter(function (game) { return game.gamesPlayed > 0; })
-                .map(function (d) {
+            var filteredGames = this.gameDayData.filter(function (game) { return game.gamesPlayed > 0; });
+            var lineData = filteredGames.map(function (d) {
                 return [d.date, d.rating];
             });
-            var lastDataPoint = originalLineData[originalLineData.length - 1];
-            var lastDay = lastDataPoint[0];
-            var lastRanking = lastDataPoint[1];
-            var lineData = angular.copy(originalLineData);
+            ;
+            var lastDay = lineData[lineData.length - 1][0];
+            var lastRanking = lineData[lineData.length - 1][1];
             var zeroLine = Math.max(yMin, 0);
             lineData.unshift([lineData[0][0], zeroLine]);
             lineData.push([lastDay, lastRanking]);
@@ -423,24 +438,22 @@ var PlayerStats;
                 .data([lineData])
                 .attr("class", "line data")
                 .attr("transform", this.translate(lineLeftOffset, 0))
+                .attr("d", d3.line().x(function (d) { return config.xScale(d[0].toString()); }).y(function (d) { return config.height; }))
+                .transition().duration(this.duration.data)
                 .attr("d", valueline);
             var tooltipDivClass = "rating-tooltip";
-            var hoverArea = config.group.append("g").attr("class", svgClass + "-hover-bars");
+            var hoverArea = config.group.append("g");
             var hoverMarkerClass = this.configHoverMarker(config, svgClass);
-            hoverArea.selectAll(".hover-bar")
-                .data(originalLineData)
+            hoverArea.attr("class", svgClass + "-hover-bars");
+            var hoverBarEnter = hoverArea.selectAll(".hover-bar")
+                .data(filteredGames)
                 .enter().append("rect")
-                .attr("class", "hover-bar")
-                .attr("x", function (d) { return config.xScale(d[0].toString()); })
-                .attr("y", 0)
-                .attr("width", config.xScale.bandwidth())
-                .attr("height", function (d) { return config.height; })
                 .on("mouseover", function (d) {
-                var xPx = config.xScale(d[0].toString());
-                var yPx = config.yScale(d[1]);
+                var xPx = config.xScale(d.date.toString());
+                var yPx = config.yScale(d.rating);
                 _this.hoverBarMouseOver(hoverMarkerClass, tooltipDivClass);
                 var div = _this.$element.find("." + tooltipDivClass);
-                div.html(_this.generateRatingTooltipHtml(d[0]));
+                div.html(_this.generateRatingTooltipHtml(d.date));
                 var divWidth = div.outerWidth(true);
                 var divHeight = div.outerHeight(true);
                 var popoverConfig = _this.configurePopover(xPx, yPx, config);
@@ -459,6 +472,7 @@ var PlayerStats;
                 .on("mouseout", function (d) {
                 _this.hoverBarMouseOut(hoverMarkerClass, tooltipDivClass);
             });
+            this.configIndividualHoverBar(hoverBarEnter, config);
             this.drawOutsideBorder(config);
         };
         GameGraphController.prototype.generateRatingTooltipHtml = function (day) {
@@ -488,21 +502,20 @@ var PlayerStats;
                 .enter().append("rect")
                 .attr("class", "bar")
                 .attr("x", function (d) { return config.xScale(d.date.toString()); })
-                .attr("y", function (d) { return config.yScale(d.gamesPlayed); })
+                .attr("y", config.height)
                 .attr("width", config.xScale.bandwidth())
+                .attr("height", 0)
+                .transition().duration(this.duration.data)
+                .attr("y", function (d) { return config.yScale(d.gamesPlayed); })
                 .attr("height", function (d) { return config.height - config.yScale(d.gamesPlayed); });
             var tooltipDivClass = "games-played-tooltip";
             var hoverArea = config.group.append("g").attr("class", svgClass + "-hover-bars");
             var hoverMarkerClass = this.configHoverMarker(config, svgClass);
             var marker = d3.select("." + hoverMarkerClass);
-            hoverArea.selectAll(".hover-bar")
+            var hoverBarEnter = hoverArea.selectAll(".hover-bar")
                 .data(filteredGames)
                 .enter().append("rect")
                 .attr("class", "hover-bar")
-                .attr("x", function (d) { return config.xScale(d.date.toString()); })
-                .attr("y", 0)
-                .attr("width", config.xScale.bandwidth())
-                .attr("height", function (d) { return config.height; })
                 .on("mouseover", function (d) {
                 var xPx = config.xScale(d.date.toString());
                 var yPx = config.yScale(d.gamesPlayed);
@@ -529,6 +542,7 @@ var PlayerStats;
                 .on("mouseout", function (d) {
                 _this.hoverBarMouseOut(hoverMarkerClass, tooltipDivClass);
             });
+            this.configIndividualHoverBar(hoverBarEnter, config);
             this.drawOutsideBorder(config);
         };
         GameGraphController.prototype.generateGamesPlayedTooltipHtml = function (games) {
