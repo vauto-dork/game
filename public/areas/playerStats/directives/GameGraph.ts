@@ -184,7 +184,6 @@ module PlayerStats {
             }
             else if(+gamesPlayedGraph.attr("height") !== 200) {
                 gamesPlayedGraph.attr("height", 200);
-                this.$element.find(".games-played-tooltip").html(" ").css("opacity", 0);
                 this.resizeGraphs();
             }
 
@@ -192,6 +191,12 @@ module PlayerStats {
         }
 
         private redraw(): void {
+            // Reset tooltips
+            [this.$element.find(".games-played-tooltip"), this.$element.find(".rating-tooltip")].forEach((element)=>{
+                element.html(" ").css("opacity", 0);
+                this.drawPopover(element, 0, 0);
+            });
+
             this.createRatingGraph();
             this.createGamesPlayedGraph();
         }
@@ -269,48 +274,41 @@ module PlayerStats {
         private hoverBarMouseOver(hoverMarkerClass: string, tooltipDivClass: string): void {
             var marker = d3.select(`.${hoverMarkerClass}`);
             var div = d3.select(`.${tooltipDivClass}`);
-            
-            marker.transition()
-                .duration(this.duration.popover)
-                .style("opacity", 0.75);
 
-            div.transition()
-                .duration(this.duration.popover)
-                .style("opacity", 1);
+            [marker, div].forEach((element) => {
+                element.transition()
+                    .duration(this.duration.popover)
+                    .style("opacity", 1);
+            });
         }
 
         private hoverBarMouseOut(hoverMarkerClass: string, tooltipDivClass: string): void {
             var marker = d3.select(`.${hoverMarkerClass}`);
             var div = d3.select(`.${tooltipDivClass}`);
 
-            marker.transition()
-                .duration(this.duration.popover)
-                .style("opacity", 0);
-
-            div.transition()
-                .duration(this.duration.popover)
-                .style("opacity", 0);
+            [marker, div].forEach((element) => {
+                element.transition()
+                    .duration(this.duration.popover)
+                    .style("opacity", 0);
+            });
         }
 
         private drawAxes(config: IGraphConfig, xAxis: d3.Axis<{}>, yAxis: d3.Axis<{}>): void {
             xAxis.tickSizeOuter(0).tickPadding(10);
             yAxis.tickSizeOuter(0).tickPadding(10);
 
-            var xAxisGroup = config.group.append("g")
-                .style("opacity", 0)
-                .attr("class", "axis axis-x")
-                .call(xAxis)
-                .transition()
-                .duration(this.duration.axis)
-                .style("opacity", 1);
-            
-            config.group.append("g")
-                .style("opacity", 0)
-                .attr("class", "axis axis-y")
-                .call(yAxis)
-                .transition()
-                .duration(this.duration.axis)
-                .style("opacity", 1);
+            var processAxis = (axisClass: string, axis: d3.Axis<{}>) => {
+                config.group.append("g")
+                    .style("opacity", 0)
+                    .attr("class", "axis " + axisClass)
+                    .call(axis)
+                    .transition()
+                    .duration(this.duration.axis)
+                    .style("opacity", 1);
+            };
+
+            processAxis("axis-x", xAxis);
+            processAxis("axis-y", yAxis);
 
             config.group.select(".axis-x").attr("transform", this.translate(0, config.height));
         }
@@ -353,7 +351,12 @@ module PlayerStats {
             var yMin = Math.min(...yData);
             var yMax = d3.max(this.gameDayData, (d) => { return d.rating; });
             
-            yMin = !yMin ? 0 : Math.floor(yMin - 0.5);
+            yMin = !yMin
+                ? 0
+                : (yMin >= 0 && yMin < 1)
+                    ? 0
+                    : Math.floor(yMin - 0.5);
+
             yMax = Math.ceil(yMax + 0.5);
             
             if(yMin === yMax) {
@@ -404,16 +407,16 @@ module PlayerStats {
             var lastRanking = lineData[lineData.length - 1][1];
             var zeroLine = Math.max(yMin, 0);
 
-            // Start graph on first day
+            // Start graph on first game day
             lineData.unshift([lineData[0][0], zeroLine]);
 
-            // Draw a straight vertical line on the last day
+            // Draw a straight vertical line on the last game day
             lineData.push([lastDay, lastRanking]);
             lineData.push([lastDay, zeroLine]);
 
             var valueline = d3.line()
-                .x((d) => { return config.xScale(d[0].toString()); })
-                .y((d) => { return config.yScale(d[1]); });
+                .x(d => config.xScale(d[0].toString()))
+                .y(d => config.yScale(d[1]));
 
             var startline = d3.line()
                 .x(d => config.xScale(d[0].toString()))
@@ -430,13 +433,14 @@ module PlayerStats {
                 .attr("d", valueline);
 
             // add the dot and tooltip
-            var tooltipDivClass = "rating-tooltip";
-            var hoverArea = config.group.append("g");
+            var hoverArea = config.group.append("g")
+                .attr("class", `${svgClass}-hover-bars`);
             
+            var tooltipDivClass = "rating-tooltip";
             var hoverMarkerClass = this.configHoverMarker(config, svgClass);
 
-            hoverArea.attr("class", `${svgClass}-hover-bars`);
-            var hoverBarEnter = hoverArea.selectAll(".hover-bar")
+            var hoverBarEnter = hoverArea
+                .selectAll(".hover-bar")
                 .data(filteredGames)
                 .enter().append("rect")
                 .on("mouseover", (d) => {
@@ -481,11 +485,12 @@ module PlayerStats {
         private generateRatingTooltipHtml(day: number): string {
             var sb: string[] = [];
 
-            var ratingStr = d3.format(".2f")(this.gameDayData[day - 1].rating);
+            var index = day - 1;
+            var ratingStr = d3.format(".2f")(this.gameDayData[index].rating);
 
             sb.push("<table>");
             sb.push(`<tr><td class="eod-label">EOD Rating</td><td class="eod-value">${ratingStr}</td></tr>`)
-            sb.push(`<tr><td class="eod-label">EOD Rank</td><td class="eod-value">${this.gameDayData[day - 1].rank}</td></tr>`)
+            sb.push(`<tr><td class="eod-label">EOD Rank</td><td class="eod-value">${this.gameDayData[index].rank}</td></tr>`)
             sb.push("</table>");
 
             return sb.join('');
@@ -523,13 +528,14 @@ module PlayerStats {
                 .attr("height", (d) => { return config.height - config.yScale(d.gamesPlayed); });
 
             // Draw the shaded hover area
+            var hoverArea = config.group.append("g")
+                .attr("class", `${svgClass}-hover-bars`);
+
             var tooltipDivClass = "games-played-tooltip";
-            var hoverArea = config.group.append("g").attr("class", `${svgClass}-hover-bars`);
-
             var hoverMarkerClass = this.configHoverMarker(config, svgClass);
-            var marker = d3.select(`.${hoverMarkerClass}`);
 
-            var hoverBarEnter = hoverArea.selectAll(".hover-bar")
+            var hoverBarEnter = hoverArea
+                .selectAll(".hover-bar")
                 .data(filteredGames)
                 .enter().append("rect")
                 .attr("class", "hover-bar")

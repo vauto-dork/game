@@ -263,12 +263,16 @@ var PlayerStats;
             }
             else if (+gamesPlayedGraph.attr("height") !== 200) {
                 gamesPlayedGraph.attr("height", 200);
-                this.$element.find(".games-played-tooltip").html(" ").css("opacity", 0);
                 this.resizeGraphs();
             }
             this.redraw();
         };
         GameGraphController.prototype.redraw = function () {
+            var _this = this;
+            [this.$element.find(".games-played-tooltip"), this.$element.find(".rating-tooltip")].forEach(function (element) {
+                element.html(" ").css("opacity", 0);
+                _this.drawPopover(element, 0, 0);
+            });
             this.createRatingGraph();
             this.createGamesPlayedGraph();
         };
@@ -331,42 +335,40 @@ var PlayerStats;
             };
         };
         GameGraphController.prototype.hoverBarMouseOver = function (hoverMarkerClass, tooltipDivClass) {
+            var _this = this;
             var marker = d3.select("." + hoverMarkerClass);
             var div = d3.select("." + tooltipDivClass);
-            marker.transition()
-                .duration(this.duration.popover)
-                .style("opacity", 0.75);
-            div.transition()
-                .duration(this.duration.popover)
-                .style("opacity", 1);
+            [marker, div].forEach(function (element) {
+                element.transition()
+                    .duration(_this.duration.popover)
+                    .style("opacity", 1);
+            });
         };
         GameGraphController.prototype.hoverBarMouseOut = function (hoverMarkerClass, tooltipDivClass) {
+            var _this = this;
             var marker = d3.select("." + hoverMarkerClass);
             var div = d3.select("." + tooltipDivClass);
-            marker.transition()
-                .duration(this.duration.popover)
-                .style("opacity", 0);
-            div.transition()
-                .duration(this.duration.popover)
-                .style("opacity", 0);
+            [marker, div].forEach(function (element) {
+                element.transition()
+                    .duration(_this.duration.popover)
+                    .style("opacity", 0);
+            });
         };
         GameGraphController.prototype.drawAxes = function (config, xAxis, yAxis) {
+            var _this = this;
             xAxis.tickSizeOuter(0).tickPadding(10);
             yAxis.tickSizeOuter(0).tickPadding(10);
-            var xAxisGroup = config.group.append("g")
-                .style("opacity", 0)
-                .attr("class", "axis axis-x")
-                .call(xAxis)
-                .transition()
-                .duration(this.duration.axis)
-                .style("opacity", 1);
-            config.group.append("g")
-                .style("opacity", 0)
-                .attr("class", "axis axis-y")
-                .call(yAxis)
-                .transition()
-                .duration(this.duration.axis)
-                .style("opacity", 1);
+            var processAxis = function (axisClass, axis) {
+                config.group.append("g")
+                    .style("opacity", 0)
+                    .attr("class", "axis " + axisClass)
+                    .call(axis)
+                    .transition()
+                    .duration(_this.duration.axis)
+                    .style("opacity", 1);
+            };
+            processAxis("axis-x", xAxis);
+            processAxis("axis-y", yAxis);
             config.group.select(".axis-x").attr("transform", this.translate(0, config.height));
         };
         GameGraphController.prototype.drawOutsideBorder = function (config) {
@@ -400,7 +402,11 @@ var PlayerStats;
                 .map(function (game) { return game.rating; });
             var yMin = Math.min.apply(Math, yData);
             var yMax = d3.max(this.gameDayData, function (d) { return d.rating; });
-            yMin = !yMin ? 0 : Math.floor(yMin - 0.5);
+            yMin = !yMin
+                ? 0
+                : (yMin >= 0 && yMin < 1)
+                    ? 0
+                    : Math.floor(yMin - 0.5);
             yMax = Math.ceil(yMax + 0.5);
             if (yMin === yMax) {
                 yMin = yMin - 1;
@@ -454,11 +460,12 @@ var PlayerStats;
                 .attr("d", startline)
                 .transition().duration(this.duration.data)
                 .attr("d", valueline);
+            var hoverArea = config.group.append("g")
+                .attr("class", svgClass + "-hover-bars");
             var tooltipDivClass = "rating-tooltip";
-            var hoverArea = config.group.append("g");
             var hoverMarkerClass = this.configHoverMarker(config, svgClass);
-            hoverArea.attr("class", svgClass + "-hover-bars");
-            var hoverBarEnter = hoverArea.selectAll(".hover-bar")
+            var hoverBarEnter = hoverArea
+                .selectAll(".hover-bar")
                 .data(filteredGames)
                 .enter().append("rect")
                 .on("mouseover", function (d) {
@@ -490,10 +497,11 @@ var PlayerStats;
         };
         GameGraphController.prototype.generateRatingTooltipHtml = function (day) {
             var sb = [];
-            var ratingStr = d3.format(".2f")(this.gameDayData[day - 1].rating);
+            var index = day - 1;
+            var ratingStr = d3.format(".2f")(this.gameDayData[index].rating);
             sb.push("<table>");
             sb.push("<tr><td class=\"eod-label\">EOD Rating</td><td class=\"eod-value\">" + ratingStr + "</td></tr>");
-            sb.push("<tr><td class=\"eod-label\">EOD Rank</td><td class=\"eod-value\">" + this.gameDayData[day - 1].rank + "</td></tr>");
+            sb.push("<tr><td class=\"eod-label\">EOD Rank</td><td class=\"eod-value\">" + this.gameDayData[index].rank + "</td></tr>");
             sb.push("</table>");
             return sb.join('');
         };
@@ -521,11 +529,12 @@ var PlayerStats;
                 .transition().duration(this.duration.data)
                 .attr("y", function (d) { return config.yScale(d.gamesPlayed); })
                 .attr("height", function (d) { return config.height - config.yScale(d.gamesPlayed); });
+            var hoverArea = config.group.append("g")
+                .attr("class", svgClass + "-hover-bars");
             var tooltipDivClass = "games-played-tooltip";
-            var hoverArea = config.group.append("g").attr("class", svgClass + "-hover-bars");
             var hoverMarkerClass = this.configHoverMarker(config, svgClass);
-            var marker = d3.select("." + hoverMarkerClass);
-            var hoverBarEnter = hoverArea.selectAll(".hover-bar")
+            var hoverBarEnter = hoverArea
+                .selectAll(".hover-bar")
                 .data(filteredGames)
                 .enter().append("rect")
                 .attr("class", "hover-bar")
