@@ -64,6 +64,10 @@
 
         &.overflowed {
             border: 1px solid $axis-color;
+
+            .svg-container {
+                margin: 1em auto;
+            }
         }
     }
 
@@ -72,6 +76,10 @@
         letter-spacing: 1px;
         font-size: 12px;
         font-weight: bold;
+
+        &:not(:first-of-type) {
+            margin-top: 2em;
+        }
     }
 
     .svg-container {
@@ -136,14 +144,6 @@
         .axis-y {
             .tick:not(:last-child) line {
                 stroke: $silver;
-            }
-        }
-
-        .axis-x {
-            .tick {
-                text {
-                    display: none;
-                }
             }
         }
 

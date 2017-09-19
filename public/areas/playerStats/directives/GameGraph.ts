@@ -64,19 +64,33 @@ module PlayerStats {
             private $window: ng.IWindowService,
             private dateTimeService: Shared.IDateTimeService,
             private playerStatsService: IPlayerStatsService) {
+            
+            this.resizeWindow();
+            
             this.playerStatsService.ready().then(() => {
-                this.resizeWindow();
                 this.updateData();
+                this.resizeWindow();
 
                 this.playerStatsService.subscribeDataRefresh(() => {
                     this.updateData();
                 });
             });
 
-            angular.element($window).bind("resize", () => {
+            angular.element($window).resize(() => {
                 this.resizeWindow();
                 this.redraw();
             });
+
+            var ratingGraphContainer = this.$element.find(".rating-graph-container");
+            var gamesPlayedGraphContainer = this.$element.find(".games-played-graph-container");
+            
+            ratingGraphContainer.scroll(() => {
+                gamesPlayedGraphContainer.scrollLeft(ratingGraphContainer.scrollLeft());
+            });
+
+            gamesPlayedGraphContainer.scroll(() => {
+                ratingGraphContainer.scrollLeft(gamesPlayedGraphContainer.scrollLeft());
+            })
         }
 
         private resizeWindow(): void {
@@ -150,6 +164,17 @@ module PlayerStats {
                     prevDay = day;
                 }
             });
+
+            // Adjust games played graph height
+            // (there was an edge case where someone played 11 games in a day)
+            var gamesPlayed = this.gameDayData.map((game) => { return game.gamesPlayed; });
+            if(Math.max(...gamesPlayed) > 6) {
+                this.$element.find(".games-played-svg").attr("height", 300);
+            }
+            else {
+                this.$element.find(".games-played-svg").attr("height", 200);
+                this.$element.find(".games-played-tooltip").html(" ").css("opacity", 0);
+            }
 
             this.redraw();
         }
@@ -254,6 +279,8 @@ module PlayerStats {
             config.group.append("g")
                 .attr("class", "axis axis-y")
                 .call(yAxis);
+
+            config.group.select(".axis-x").attr("transform", this.translate(0, config.height));
         }
 
         private drawOutsideBorder(config: IGraphConfig): void {
@@ -288,7 +315,10 @@ module PlayerStats {
         private createRatingGraph(): void {
             var svgClass = "rating-svg";
 
-            var yMin = d3.min(this.gameDayData, (d) => { return d.rating; });            
+            var yData = this.gameDayData.filter((game) => { return game.gamesPlayed > 0; })
+                .map((game) => { return game.rating; });
+
+            var yMin = Math.min(...yData);
             var yMax = d3.max(this.gameDayData, (d) => { return d.rating; });
             
             yMin = !yMin ? 0 : Math.floor(yMin - 0.5);
@@ -305,12 +335,10 @@ module PlayerStats {
                 .tickSizeInner(0);
 
             var yAxis = d3.axisLeft(config.yScale)
-                .ticks(8)
+                .ticks(10)
                 .tickSizeInner(-config.width);
 
             this.drawAxes(config, xAxis, yAxis);
-
-            d3.select(".axis-x").attr("transform", this.translate(0, config.height));
 
             // Color the lines to show positive and negative values
 
@@ -344,20 +372,19 @@ module PlayerStats {
                     return [d.date, d.rating];
                 });
 
-            var lastDay = this.isCurrentMonth
-                ? this.dateTimeService.currentDate()
-                : this.gameDayData[this.gameDayData.length - 1].date;
-
-            var lastRanking = originalLineData[originalLineData.length - 1][1];
+            var lastDataPoint = originalLineData[originalLineData.length - 1];
+            var lastDay = lastDataPoint[0];
+            var lastRanking = lastDataPoint[1];
 
             var lineData = angular.copy(originalLineData);
+            var zeroLine = Math.max(yMin, 0);
 
-            // Start graph at zero on first day
-            lineData.unshift([1,0]);
+            // Start graph on first day
+            lineData.unshift([lineData[0][0], zeroLine]);
 
             // Draw a straight vertical line on the last day
             lineData.push([lastDay, lastRanking]);
-            lineData.push([lastDay, 0]);
+            lineData.push([lastDay, zeroLine]);
 
             var lineLeftOffset = Math.floor(config.xScale.bandwidth() / 2) + 1;
             config.group.append("path")
@@ -438,13 +465,7 @@ module PlayerStats {
 
             var config = this.initGraph(svgClass, 0, yMax);
 
-            // Shift the graph up to give even spacing on common X-axis
-            config.group.attr("transform", this.translate(config.margin.left, 5));
-
-            // Redo the yScale to reverse order
-            config.yScale.domain([yMax, 0]);
-
-            var xAxis = d3.axisTop(config.xScale).tickSizeInner(0);
+            var xAxis = d3.axisBottom(config.xScale).tickSizeInner(0);
             
             var yAxis = d3.axisLeft(config.yScale)
                 .ticks(yMax)
@@ -461,9 +482,9 @@ module PlayerStats {
                 .enter().append("rect")
                 .attr("class", "bar")
                 .attr("x", (d) => { return config.xScale(d.date.toString()); })
-                .attr("y", (d) => { return 0 })
+                .attr("y", (d) => { return config.yScale(d.gamesPlayed); })
                 .attr("width", config.xScale.bandwidth())
-                .attr("height", (d) => { return config.yScale(d.gamesPlayed); });
+                .attr("height", (d) => { return config.height - config.yScale(d.gamesPlayed); });
 
             // Draw the shaded hover area
             var tooltipDivClass = "games-played-tooltip";
@@ -505,9 +526,10 @@ module PlayerStats {
                         ? -(offset + divWidth)
                         : offset
 
-                    var divTop = (yPx + divHeight > config.height)
-                        ? -divHeight + config.height
-                        : yPx - (divHeight / 2) + 4;
+                    var desiredTop = yPx - (divHeight / 2) + config.margin.top;
+                    var divTop = (desiredTop < 0)
+                        ? 5
+                        : desiredTop;
 
                     this.drawPopover(div, divLeft, divTop);
                 })

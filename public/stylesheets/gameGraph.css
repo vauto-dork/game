@@ -33,11 +33,15 @@
     overflow-x: auto; }
     .game-graph .graph-container.overflowed {
       border: 1px solid #999999; }
+      .game-graph .graph-container.overflowed .svg-container {
+        margin: 1em auto; }
   .game-graph .graph-title {
     text-transform: uppercase;
     letter-spacing: 1px;
     font-size: 12px;
     font-weight: bold; }
+    .game-graph .graph-title:not(:first-of-type) {
+      margin-top: 2em; }
   .game-graph .svg-container {
     position: relative;
     margin: auto; }
@@ -71,8 +75,6 @@
     stop-color: #E94B35; }
   .game-graph .games-played-svg .axis-y .tick:not(:last-child) line {
     stroke: #C0C0C0; }
-  .game-graph .games-played-svg .axis-x .tick text {
-    display: none; }
   .game-graph .games-played-svg .bar {
     fill: #508425;
     fill-opacity: 0.5;

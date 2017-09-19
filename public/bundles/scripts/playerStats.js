@@ -164,16 +164,25 @@ var PlayerStats;
             this.isCurrentMonth = false;
             this.duration = 200;
             this.graphMinPx = 700;
+            this.resizeWindow();
             this.playerStatsService.ready().then(function () {
-                _this.resizeWindow();
                 _this.updateData();
+                _this.resizeWindow();
                 _this.playerStatsService.subscribeDataRefresh(function () {
                     _this.updateData();
                 });
             });
-            angular.element($window).bind("resize", function () {
+            angular.element($window).resize(function () {
                 _this.resizeWindow();
                 _this.redraw();
+            });
+            var ratingGraphContainer = this.$element.find(".rating-graph-container");
+            var gamesPlayedGraphContainer = this.$element.find(".games-played-graph-container");
+            ratingGraphContainer.scroll(function () {
+                gamesPlayedGraphContainer.scrollLeft(ratingGraphContainer.scrollLeft());
+            });
+            gamesPlayedGraphContainer.scroll(function () {
+                ratingGraphContainer.scrollLeft(gamesPlayedGraphContainer.scrollLeft());
             });
         }
         Object.defineProperty(GameGraphController.prototype, "playerStats", {
@@ -241,6 +250,14 @@ var PlayerStats;
                     prevDay = day;
                 }
             });
+            var gamesPlayed = this.gameDayData.map(function (game) { return game.gamesPlayed; });
+            if (Math.max.apply(Math, gamesPlayed) > 6) {
+                this.$element.find(".games-played-svg").attr("height", 300);
+            }
+            else {
+                this.$element.find(".games-played-svg").attr("height", 200);
+                this.$element.find(".games-played-tooltip").html(" ").css("opacity", 0);
+            }
             this.redraw();
         };
         GameGraphController.prototype.redraw = function () {
@@ -323,6 +340,7 @@ var PlayerStats;
             config.group.append("g")
                 .attr("class", "axis axis-y")
                 .call(yAxis);
+            config.group.select(".axis-x").attr("transform", this.translate(0, config.height));
         };
         GameGraphController.prototype.drawOutsideBorder = function (config) {
             var outsideBorder = d3.line()
@@ -351,7 +369,9 @@ var PlayerStats;
         GameGraphController.prototype.createRatingGraph = function () {
             var _this = this;
             var svgClass = "rating-svg";
-            var yMin = d3.min(this.gameDayData, function (d) { return d.rating; });
+            var yData = this.gameDayData.filter(function (game) { return game.gamesPlayed > 0; })
+                .map(function (game) { return game.rating; });
+            var yMin = Math.min.apply(Math, yData);
             var yMax = d3.max(this.gameDayData, function (d) { return d.rating; });
             yMin = !yMin ? 0 : Math.floor(yMin - 0.5);
             yMax = Math.ceil(yMax + 0.5);
@@ -363,10 +383,9 @@ var PlayerStats;
             var xAxis = d3.axisBottom(config.xScale)
                 .tickSizeInner(0);
             var yAxis = d3.axisLeft(config.yScale)
-                .ticks(8)
+                .ticks(10)
                 .tickSizeInner(-config.width);
             this.drawAxes(config, xAxis, yAxis);
-            d3.select(".axis-x").attr("transform", this.translate(0, config.height));
             config.group.append("linearGradient")
                 .attr("id", "rating-gradient")
                 .attr("gradientUnits", "userSpaceOnUse")
@@ -391,14 +410,14 @@ var PlayerStats;
                 .map(function (d) {
                 return [d.date, d.rating];
             });
-            var lastDay = this.isCurrentMonth
-                ? this.dateTimeService.currentDate()
-                : this.gameDayData[this.gameDayData.length - 1].date;
-            var lastRanking = originalLineData[originalLineData.length - 1][1];
+            var lastDataPoint = originalLineData[originalLineData.length - 1];
+            var lastDay = lastDataPoint[0];
+            var lastRanking = lastDataPoint[1];
             var lineData = angular.copy(originalLineData);
-            lineData.unshift([1, 0]);
+            var zeroLine = Math.max(yMin, 0);
+            lineData.unshift([lineData[0][0], zeroLine]);
             lineData.push([lastDay, lastRanking]);
-            lineData.push([lastDay, 0]);
+            lineData.push([lastDay, zeroLine]);
             var lineLeftOffset = Math.floor(config.xScale.bandwidth() / 2) + 1;
             config.group.append("path")
                 .data([lineData])
@@ -457,9 +476,7 @@ var PlayerStats;
             var yMax = d3.max(this.gameDayData, function (d) { return d.gamesPlayed; });
             yMax = yMax > 4 ? yMax + 1 : 5;
             var config = this.initGraph(svgClass, 0, yMax);
-            config.group.attr("transform", this.translate(config.margin.left, 5));
-            config.yScale.domain([yMax, 0]);
-            var xAxis = d3.axisTop(config.xScale).tickSizeInner(0);
+            var xAxis = d3.axisBottom(config.xScale).tickSizeInner(0);
             var yAxis = d3.axisLeft(config.yScale)
                 .ticks(yMax)
                 .tickFormat(d3.format("d"))
@@ -471,9 +488,9 @@ var PlayerStats;
                 .enter().append("rect")
                 .attr("class", "bar")
                 .attr("x", function (d) { return config.xScale(d.date.toString()); })
-                .attr("y", function (d) { return 0; })
+                .attr("y", function (d) { return config.yScale(d.gamesPlayed); })
                 .attr("width", config.xScale.bandwidth())
-                .attr("height", function (d) { return config.yScale(d.gamesPlayed); });
+                .attr("height", function (d) { return config.height - config.yScale(d.gamesPlayed); });
             var tooltipDivClass = "games-played-tooltip";
             var hoverArea = config.group.append("g").attr("class", svgClass + "-hover-bars");
             var hoverMarkerClass = this.configHoverMarker(config, svgClass);
@@ -503,9 +520,10 @@ var PlayerStats;
                 divLeft += (markerLeft + divWidth + offset > config.width)
                     ? -(offset + divWidth)
                     : offset;
-                var divTop = (yPx + divHeight > config.height)
-                    ? -divHeight + config.height
-                    : yPx - (divHeight / 2) + 4;
+                var desiredTop = yPx - (divHeight / 2) + config.margin.top;
+                var divTop = (desiredTop < 0)
+                    ? 5
+                    : desiredTop;
                 _this.drawPopover(div, divLeft, divTop);
             })
                 .on("mouseout", function (d) {
