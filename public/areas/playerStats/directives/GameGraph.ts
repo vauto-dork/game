@@ -74,6 +74,17 @@ module PlayerStats {
             private dateTimeService: Shared.IDateTimeService,
             private playerStatsService: IPlayerStatsService) {
 
+            var ratingGraphContainer = this.$element.find(".rating-graph-container");
+            var gamesPlayedGraphContainer = this.$element.find(".games-played-graph-container");
+            
+            ratingGraphContainer.scroll(() => {
+                gamesPlayedGraphContainer.scrollLeft(ratingGraphContainer.scrollLeft());
+            });
+
+            gamesPlayedGraphContainer.scroll(() => {
+                ratingGraphContainer.scrollLeft(gamesPlayedGraphContainer.scrollLeft());
+            });
+
             this.screenSize = this.$window.innerWidth;
             this.resizeGraphs();
             
@@ -82,6 +93,10 @@ module PlayerStats {
 
                 this.playerStatsService.subscribeDataRefresh(() => {
                     this.updateData();
+
+                    // Reset scroll position on one of the graphs
+                    // Other graph will follow
+                    ratingGraphContainer.scrollLeft(0);
                 });
             });
 
@@ -103,17 +118,6 @@ module PlayerStats {
                 }
                 
             });
-
-            var ratingGraphContainer = this.$element.find(".rating-graph-container");
-            var gamesPlayedGraphContainer = this.$element.find(".games-played-graph-container");
-            
-            ratingGraphContainer.scroll(() => {
-                gamesPlayedGraphContainer.scrollLeft(ratingGraphContainer.scrollLeft());
-            });
-
-            gamesPlayedGraphContainer.scroll(() => {
-                ratingGraphContainer.scrollLeft(gamesPlayedGraphContainer.scrollLeft());
-            })
         }
 
         private resizeGraphs(): void {

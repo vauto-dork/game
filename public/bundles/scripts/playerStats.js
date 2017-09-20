@@ -170,12 +170,21 @@ var PlayerStats;
                 hoverBars: 800,
                 data: 600
             };
+            var ratingGraphContainer = this.$element.find(".rating-graph-container");
+            var gamesPlayedGraphContainer = this.$element.find(".games-played-graph-container");
+            ratingGraphContainer.scroll(function () {
+                gamesPlayedGraphContainer.scrollLeft(ratingGraphContainer.scrollLeft());
+            });
+            gamesPlayedGraphContainer.scroll(function () {
+                ratingGraphContainer.scrollLeft(gamesPlayedGraphContainer.scrollLeft());
+            });
             this.screenSize = this.$window.innerWidth;
             this.resizeGraphs();
             this.playerStatsService.ready().then(function () {
                 _this.updateData();
                 _this.playerStatsService.subscribeDataRefresh(function () {
                     _this.updateData();
+                    ratingGraphContainer.scrollLeft(0);
                 });
             });
             angular.element($window).resize(function () {
@@ -187,14 +196,6 @@ var PlayerStats;
                         _this.redraw();
                     }
                 }
-            });
-            var ratingGraphContainer = this.$element.find(".rating-graph-container");
-            var gamesPlayedGraphContainer = this.$element.find(".games-played-graph-container");
-            ratingGraphContainer.scroll(function () {
-                gamesPlayedGraphContainer.scrollLeft(ratingGraphContainer.scrollLeft());
-            });
-            gamesPlayedGraphContainer.scroll(function () {
-                ratingGraphContainer.scrollLeft(gamesPlayedGraphContainer.scrollLeft());
             });
         }
         Object.defineProperty(GameGraphController.prototype, "playerStats", {
