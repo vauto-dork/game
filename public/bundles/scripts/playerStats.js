@@ -161,7 +161,6 @@ var PlayerStats;
             this.dateTimeService = dateTimeService;
             this.playerStatsService = playerStatsService;
             this.gameDayData = [];
-            this.isCurrentMonth = false;
             this.graphMinPx = 700;
             this.totalPageWidthMargins = 30;
             this.duration = {
@@ -178,7 +177,7 @@ var PlayerStats;
             gamesPlayedGraphContainer.scroll(function () {
                 ratingGraphContainer.scrollLeft(gamesPlayedGraphContainer.scrollLeft());
             });
-            this.screenSize = this.$window.innerWidth;
+            this.windowWidth = this.$window.innerWidth;
             this.resizeGraphs();
             this.playerStatsService.ready().then(function () {
                 _this.updateData();
@@ -189,8 +188,8 @@ var PlayerStats;
             });
             angular.element($window).resize(function () {
                 var windowWidth = _this.$window.innerWidth;
-                if (windowWidth !== _this.screenSize) {
-                    _this.screenSize = _this.$window.innerWidth;
+                if (windowWidth !== _this.windowWidth) {
+                    _this.windowWidth = _this.$window.innerWidth;
                     _this.resizeGraphs();
                     if ((windowWidth - _this.totalPageWidthMargins) >= _this.graphMinPx) {
                         _this.redraw();
@@ -206,11 +205,11 @@ var PlayerStats;
             configurable: true
         });
         GameGraphController.prototype.resizeGraphs = function () {
-            var graphWidthMinusMargins = this.$window.innerWidth - this.totalPageWidthMargins;
-            this.graphWidthPx = Math.min(graphWidthMinusMargins, 1200);
+            var widthMinusMargins = this.$window.innerWidth - this.totalPageWidthMargins;
+            this.graphWidthPx = Math.min(widthMinusMargins, 1200);
             this.graphWidthPx = Math.max(this.graphWidthPx, this.graphMinPx);
             var graphContainer = this.$element.find(".graph-container");
-            if (graphWidthMinusMargins <= this.graphMinPx) {
+            if (widthMinusMargins <= this.graphMinPx) {
                 graphContainer.addClass("overflowed");
             }
             else {
@@ -232,9 +231,6 @@ var PlayerStats;
             var gameMonth = new Date(this.playerStats.dateRange[0]).getUTCMonth();
             var gameYear = new Date(this.playerStats.dateRange[0]).getUTCFullYear();
             var numDaysInMonth = new Date(gameYear, gameMonth + 1, 0).getUTCDate();
-            this.isCurrentMonth =
-                gameMonth === this.dateTimeService.currentMonthValue()
-                    && gameYear === this.dateTimeService.currentYear();
             this.gameDayData = [];
             for (var i = 0; i < numDaysInMonth; i++) {
                 this.gameDayData.push({

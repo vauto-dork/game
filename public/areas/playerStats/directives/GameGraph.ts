@@ -52,8 +52,7 @@ module PlayerStats {
         public static $inject: string[] = ["$element", "$window", "dateTimeService", "playerStatsService"];
 
         private gameDayData: IGameDayData[] = [];
-        private isCurrentMonth: boolean = false;
-        private screenSize: number;
+        private windowWidth: number;
         private graphWidthPx: number;
         private graphMinPx = 700;
         private totalPageWidthMargins = 30;
@@ -85,7 +84,7 @@ module PlayerStats {
                 ratingGraphContainer.scrollLeft(gamesPlayedGraphContainer.scrollLeft());
             });
 
-            this.screenSize = this.$window.innerWidth;
+            this.windowWidth = this.$window.innerWidth;
             this.resizeGraphs();
             
             this.playerStatsService.ready().then(() => {
@@ -107,9 +106,9 @@ module PlayerStats {
 
                 var windowWidth = this.$window.innerWidth;
                 
-                if(windowWidth !== this.screenSize) {
+                if(windowWidth !== this.windowWidth) {
                     
-                    this.screenSize = this.$window.innerWidth;
+                    this.windowWidth = this.$window.innerWidth;
                     this.resizeGraphs();
 
                     if((windowWidth - this.totalPageWidthMargins) >= this.graphMinPx) {
@@ -121,13 +120,13 @@ module PlayerStats {
         }
 
         private resizeGraphs(): void {
-            var graphWidthMinusMargins = this.$window.innerWidth - this.totalPageWidthMargins;
-            this.graphWidthPx = Math.min(graphWidthMinusMargins, 1200);
+            var widthMinusMargins = this.$window.innerWidth - this.totalPageWidthMargins;
+            this.graphWidthPx = Math.min(widthMinusMargins, 1200);
             this.graphWidthPx = Math.max(this.graphWidthPx, this.graphMinPx);
 
             var graphContainer = this.$element.find(".graph-container");
 
-            if(graphWidthMinusMargins <= this.graphMinPx) {
+            if(widthMinusMargins <= this.graphMinPx) {
                 graphContainer.addClass("overflowed");
             } else {
                 graphContainer.removeClass("overflowed");
@@ -152,10 +151,6 @@ module PlayerStats {
             var gameMonth = new Date(this.playerStats.dateRange[0]).getUTCMonth();
             var gameYear = new Date(this.playerStats.dateRange[0]).getUTCFullYear();
             var numDaysInMonth = new Date(gameYear, gameMonth + 1, 0).getUTCDate();
-
-            this.isCurrentMonth =
-                gameMonth === this.dateTimeService.currentMonthValue()
-                && gameYear === this.dateTimeService.currentYear();
 
             this.gameDayData = [];
 
