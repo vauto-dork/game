@@ -53,8 +53,10 @@ module PlayerStats {
 
         private gameDayData: IGameDayData[] = [];
         private isCurrentMonth: boolean = false;
+        private screenSize: number;
         private graphWidthPx: number;
         private graphMinPx = 700;
+        private totalPageWidthMargins = 30;
 
         private duration = {
             axis: 600,
@@ -71,7 +73,8 @@ module PlayerStats {
             private $window: ng.IWindowService,
             private dateTimeService: Shared.IDateTimeService,
             private playerStatsService: IPlayerStatsService) {
-            
+
+            this.screenSize = this.$window.innerWidth;
             this.resizeGraphs();
             
             this.playerStatsService.ready().then(() => {
@@ -83,8 +86,22 @@ module PlayerStats {
             });
 
             angular.element($window).resize(() => {
-                this.resizeGraphs();
-                this.redraw();
+                
+                // Window width check exists because there is an issue where
+                // mobile browser would trigger a resize event on scroll.
+
+                var windowWidth = this.$window.innerWidth;
+                
+                if(windowWidth !== this.screenSize) {
+                    
+                    this.screenSize = this.$window.innerWidth;
+                    this.resizeGraphs();
+
+                    if((windowWidth - this.totalPageWidthMargins) >= this.graphMinPx) {
+                        this.redraw();
+                    }
+                }
+                
             });
 
             var ratingGraphContainer = this.$element.find(".rating-graph-container");
@@ -100,12 +117,13 @@ module PlayerStats {
         }
 
         private resizeGraphs(): void {
-            this.graphWidthPx = Math.min(this.$window.innerWidth - 30, 1200);
+            var graphWidthMinusMargins = this.$window.innerWidth - this.totalPageWidthMargins;
+            this.graphWidthPx = Math.min(graphWidthMinusMargins, 1200);
             this.graphWidthPx = Math.max(this.graphWidthPx, this.graphMinPx);
 
             var graphContainer = this.$element.find(".graph-container");
 
-            if(this.graphWidthPx === this.graphMinPx) {
+            if(graphWidthMinusMargins <= this.graphMinPx) {
                 graphContainer.addClass("overflowed");
             } else {
                 graphContainer.removeClass("overflowed");
