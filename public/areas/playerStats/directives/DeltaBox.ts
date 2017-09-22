@@ -15,6 +15,7 @@ module PlayerStats {
     }
 
     export class DeltaBoxController {
+        public static $inject: string[] = [];
 
         private value: number;
         private decimal: number;

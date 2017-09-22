@@ -302,6 +302,7 @@ var Components;
     var NewPlayerButtonController = (function () {
         function NewPlayerButtonController() {
         }
+        NewPlayerButtonController.$inject = [];
         return NewPlayerButtonController;
     }());
     Components.NewPlayerButtonController = NewPlayerButtonController;

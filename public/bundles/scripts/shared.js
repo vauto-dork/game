@@ -814,6 +814,7 @@ var Shared;
             }
             return '';
         };
+        DateTimeService.$inject = [];
         return DateTimeService;
     }());
     Shared.DateTimeService = DateTimeService;
@@ -1261,6 +1262,7 @@ var Shared;
         TextInputController.prototype.clearInput = function () {
             this.value = "";
         };
+        TextInputController.$inject = [];
         return TextInputController;
     }());
     Shared.TextInputController = TextInputController;

@@ -16,6 +16,8 @@ module Shared {
     }
 
     export class TextInputController {
+        public static $inject: string[] = [];
+        
         private name: string;
         private placeholder: string;
         private value: string;

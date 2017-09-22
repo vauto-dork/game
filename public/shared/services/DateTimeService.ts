@@ -12,6 +12,7 @@ module Shared {
 	}
 	
 	export class DateTimeService implements IDateTimeService {
+		public static $inject: string[] = [];
 		
 		private get monthNames(): string[] {
 			return Months.Names;

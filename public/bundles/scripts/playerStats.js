@@ -138,6 +138,7 @@ var PlayerStats;
             enumerable: true,
             configurable: true
         });
+        DeltaBoxController.$inject = [];
         return DeltaBoxController;
     }());
     PlayerStats.DeltaBoxController = DeltaBoxController;

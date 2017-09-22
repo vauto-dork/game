@@ -10,6 +10,7 @@ var AdminPanel;
     var AdminPanelController = (function () {
         function AdminPanelController() {
         }
+        AdminPanelController.$inject = [];
         return AdminPanelController;
     }());
     AdminPanel_1.AdminPanelController = AdminPanelController;

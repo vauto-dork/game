@@ -302,6 +302,7 @@ var Components;
     var NewPlayerButtonController = (function () {
         function NewPlayerButtonController() {
         }
+        NewPlayerButtonController.$inject = [];
         return NewPlayerButtonController;
     }());
     Components.NewPlayerButtonController = NewPlayerButtonController;
@@ -431,6 +432,7 @@ var EditGame;
         EditGameCollapseService.prototype.enableModifyPlayers = function () {
             this.collapseModifyPlayers = false;
         };
+        EditGameCollapseService.$inject = [];
         return EditGameCollapseService;
     }());
     EditGame.EditGameCollapseService = EditGameCollapseService;

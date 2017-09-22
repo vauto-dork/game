@@ -11,6 +11,8 @@ module Components {
     }
 
     export class NewPlayerButtonController {
+        public static $inject: string[] = [];
+        
         private click: Function;
         private disabled: boolean;
 

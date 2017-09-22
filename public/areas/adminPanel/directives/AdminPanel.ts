@@ -7,6 +7,8 @@ module AdminPanel {
     }
 
     export class AdminPanelController {
+        public static $inject: string[] = [];
+        
         constructor() {
             
         }

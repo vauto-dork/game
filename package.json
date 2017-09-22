@@ -7,7 +7,6 @@
     "start": "heroku local web"
   },
   "dependencies": {
-    "@types/d3": "^4.10.0",
     "base64-mongo-id": "^2.0.1",
     "body-parser": "~1.17.2",
     "cookie-parser": "~1.4.3",
@@ -21,6 +20,10 @@
     "node": "8.3.x"
   },
   "devDependencies": {
+    "@types/angular": "1.5.7",
+    "@types/angular-ui-bootstrap": "0.13.45",
+    "@types/d3": "4.10.0",
+    "@types/jquery": "2.0.42",
     "gulp": "^3.9.1",
     "gulp-bundle-assets": "^2.27.1",
     "gulp-sass": "^3.1.0",

@@ -11,6 +11,7 @@ module EditGame {
     }
 
     export class EditGameCollapseService implements IEditGameCollapseService {
+        public static $inject: string[] = [];
         public collapseScoreForm: boolean = false;
         public collapseModifyPlayers: boolean = true;
 
