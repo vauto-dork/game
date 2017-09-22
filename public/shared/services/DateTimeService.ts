@@ -1,6 +1,7 @@
 module Shared {
 	export interface IDateTimeService {
 		minimumYear: number;
+		currentDate(): number;
 		currentYear(): number;
 		currentMonthValue(): number;
 		currentMonthName(): string;
@@ -29,6 +30,10 @@ module Shared {
 
 		public currentYear() {
 			return new Date().getFullYear();
+		}
+
+		public currentDate() {
+			return new Date().getDate();
 		}
 		
 		public currentMonthValue() {

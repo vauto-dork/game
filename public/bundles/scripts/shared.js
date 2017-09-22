@@ -227,13 +227,29 @@ var Shared;
 
 var Shared;
 (function (Shared) {
+    var EditGameType;
     (function (EditGameType) {
         EditGameType[EditGameType["ActiveGame"] = 0] = "ActiveGame";
         EditGameType[EditGameType["FinalizedGame"] = 1] = "FinalizedGame";
-    })(Shared.EditGameType || (Shared.EditGameType = {}));
-    var EditGameType = Shared.EditGameType;
+    })(EditGameType = Shared.EditGameType || (Shared.EditGameType = {}));
 })(Shared || (Shared = {}));
 
+
+var Shared;
+(function (Shared) {
+    var Months = (function () {
+        function Months() {
+        }
+        Months.Names = ["January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+        Months.ShortNames = ["Jan", "Feb", "Mar", "Apr", "May", "June",
+            "July", "Aug", "Sept", "Oct", "Nov", "Dec"
+        ];
+        return Months;
+    }());
+    Shared.Months = Months;
+})(Shared || (Shared = {}));
 
 var Shared;
 (function (Shared) {
@@ -253,22 +269,6 @@ var Shared;
         return MonthYearParams;
     }());
     Shared.MonthYearParams = MonthYearParams;
-})(Shared || (Shared = {}));
-
-var Shared;
-(function (Shared) {
-    var Months = (function () {
-        function Months() {
-        }
-        Months.Names = ["January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"
-        ];
-        Months.ShortNames = ["Jan", "Feb", "Mar", "Apr", "May", "June",
-            "July", "Aug", "Sept", "Oct", "Nov", "Dec"
-        ];
-        return Months;
-    }());
-    Shared.Months = Months;
 })(Shared || (Shared = {}));
 
 var Shared;
@@ -789,6 +789,9 @@ var Shared;
         DateTimeService.prototype.currentYear = function () {
             return new Date().getFullYear();
         };
+        DateTimeService.prototype.currentDate = function () {
+            return new Date().getDate();
+        };
         DateTimeService.prototype.currentMonthValue = function () {
             return new Date().getMonth();
         };
@@ -816,22 +819,58 @@ var Shared;
     Shared.DateTimeService = DateTimeService;
 })(Shared || (Shared = {}));
 
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var Shared;
+(function (Shared) {
+    var LocalStorageKeys;
+    (function (LocalStorageKeys) {
+        LocalStorageKeys["PlayerStatsRatingView"] = "PlayerStatsRatingView";
+    })(LocalStorageKeys = Shared.LocalStorageKeys || (Shared.LocalStorageKeys = {}));
+    var LocalStorageService = (function () {
+        function LocalStorageService($window) {
+            this.$window = $window;
+        }
+        LocalStorageService.prototype.getStoredValue = function (key) {
+            return this.$window.localStorage.getItem(key);
+        };
+        LocalStorageService.prototype.getStoredBoolean = function (key) {
+            var value = this.getStoredValue(key);
+            return !value ? false : value.toLowerCase() === "true";
+        };
+        LocalStorageService.prototype.getStoredNumber = function (key) {
+            var value = this.getStoredValue(key);
+            return !value ? null : parseFloat(value);
+        };
+        LocalStorageService.prototype.setStoredValue = function (key, value) {
+            this.$window.localStorage.setItem(key, value.toString());
+        };
+        LocalStorageService.$inject = ["$window"];
+        return LocalStorageService;
+    }());
+    Shared.LocalStorageService = LocalStorageService;
+})(Shared || (Shared = {}));
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var Shared;
 (function (Shared) {
     var MonthYearQueryService = (function (_super) {
         __extends(MonthYearQueryService, _super);
         function MonthYearQueryService($timeout, $location) {
-            _super.call(this, $timeout);
-            this.$location = $location;
-            this.minimumYear = 2015;
-            this.events = {
+            var _this = _super.call(this, $timeout) || this;
+            _this.$location = $location;
+            _this.minimumYear = 2015;
+            _this.events = {
                 dateChange: "dateChange"
             };
+            return _this;
         }
         MonthYearQueryService.prototype.sanitizeParam = function (value) {
             if (value === undefined) {
@@ -969,90 +1008,6 @@ var Shared;
 
 var Shared;
 (function (Shared) {
-    function DatePickerDirective() {
-        return {
-            scope: {
-                date: "=",
-                showNowButton: "=",
-                disabled: "="
-            },
-            templateUrl: '/shared/directives/DatePickerTemplate.html',
-            controller: 'DatePickerController',
-            controllerAs: 'ctrl',
-            bindToController: true
-        };
-    }
-    Shared.DatePickerDirective = DatePickerDirective;
-    var DatePickerController = (function () {
-        function DatePickerController($element, $window, $timeout, dateTimeService) {
-            var _this = this;
-            this.$element = $element;
-            this.$window = $window;
-            this.$timeout = $timeout;
-            this.dateTimeService = dateTimeService;
-            this.format = 'MMMM dd, yyyy';
-            this.hstep = 1;
-            this.mstep = 1;
-            this.datePickerOpened = false;
-            this.timePickerOpened = false;
-            this.dateOptions = {
-                minDate: new Date(2015, 4, 1),
-                maxDate: new Date(),
-                showWeeks: false,
-                startingDay: 0
-            };
-            this.emptyDate = new Date(1970, 1, 1);
-            $timeout(function () {
-                _this.resizeTimePickerDropdown();
-                _this.markInputSelectOnClick(".hours");
-                _this.markInputSelectOnClick(".minutes");
-            }, 0);
-        }
-        Object.defineProperty(DatePickerController.prototype, "displayDate", {
-            get: function () {
-                return this.date || this.emptyDate;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        DatePickerController.prototype.markInputSelectOnClick = function (className) {
-            var _this = this;
-            var element = this.$element.find(".uib-time" + className).find("input");
-            element.on('click', function () {
-                if (!_this.$window.getSelection().toString()) {
-                    element.select();
-                }
-            });
-        };
-        DatePickerController.prototype.openDatePicker = function () {
-            this.datePickerOpened = !this.datePickerOpened;
-        };
-        DatePickerController.prototype.openTimePicker = function () {
-            this.timePickerOpened = !this.timePickerOpened;
-            if (this.timePickerOpened) {
-                this.resizeTimePickerDropdown();
-            }
-        };
-        DatePickerController.prototype.resizeTimePickerDropdown = function () {
-            var buttonWidth = this.$element.find("#time-picker-toggle").outerWidth();
-            var dropdownMinWidth = parseInt(this.$element.find("#time-picker-dropdown").css("min-width"), 10);
-            var dropdownWidth = this.$element.find("#time-picker-dropdown").width();
-            if (dropdownWidth !== buttonWidth) {
-                var newWidth = buttonWidth > dropdownMinWidth ? buttonWidth : dropdownMinWidth;
-                this.$element.find("#time-picker-dropdown").width(newWidth);
-            }
-        };
-        DatePickerController.prototype.useCurrentTime = function () {
-            this.date = new Date();
-        };
-        DatePickerController.$inject = ['$element', '$window', '$timeout', 'dateTimeService'];
-        return DatePickerController;
-    }());
-    Shared.DatePickerController = DatePickerController;
-})(Shared || (Shared = {}));
-
-var Shared;
-(function (Shared) {
     function GlobalNav() {
         return {
             templateUrl: '/shared/directives/GlobalNavTemplate.html',
@@ -1060,33 +1015,6 @@ var Shared;
         };
     }
     Shared.GlobalNav = GlobalNav;
-    var GlobalNavController = (function () {
-        function GlobalNavController() {
-            this.sidebarOpen = false;
-        }
-        GlobalNavController.prototype.closeSidebar = function () {
-            if (this.sidebarOpen) {
-                this.sidebarOpen = false;
-            }
-        };
-        GlobalNavController.$inject = [];
-        return GlobalNavController;
-    }());
-    Shared.GlobalNavController = GlobalNavController;
-})(Shared || (Shared = {}));
-
-var Shared;
-(function (Shared) {
-    function GlobalNavDirective() {
-        return {
-            scope: {},
-            templateUrl: '/shared/directives/GlobalNavTemplate.html',
-            controller: 'GlobalNavController',
-            controllerAs: 'ctrl',
-            bindToController: true
-        };
-    }
-    Shared.GlobalNavDirective = GlobalNavDirective;
     var GlobalNavController = (function () {
         function GlobalNavController() {
             this.sidebarOpen = false;
@@ -1122,27 +1050,6 @@ var Shared;
 
 var Shared;
 (function (Shared) {
-    function LoadSpinnerDirective() {
-        return {
-            scope: {},
-            template: '<div class="load-bar"><img src="/images/loader.gif" width="220" height="19" /></div>',
-            controller: 'LoadSpinnerController',
-            controllerAs: 'ctrl',
-            bindToController: true
-        };
-    }
-    Shared.LoadSpinnerDirective = LoadSpinnerDirective;
-    var LoadSpinnerController = (function () {
-        function LoadSpinnerController() {
-        }
-        LoadSpinnerController.$inject = [];
-        return LoadSpinnerController;
-    }());
-    Shared.LoadSpinnerController = LoadSpinnerController;
-})(Shared || (Shared = {}));
-
-var Shared;
-(function (Shared) {
     function MonthYearPicker() {
         return {
             bindings: {
@@ -1156,115 +1063,6 @@ var Shared;
         };
     }
     Shared.MonthYearPicker = MonthYearPicker;
-    var MonthYearPickerController = (function () {
-        function MonthYearPickerController(dateTimeService) {
-            this.dateTimeService = dateTimeService;
-            this.disableYear = false;
-            this.years = [];
-            this.months = Shared.Months.Names;
-            this.init();
-        }
-        Object.defineProperty(MonthYearPickerController.prototype, "month", {
-            get: function () {
-                return this.localMonth;
-            },
-            set: function (value) {
-                this.localMonth = value;
-                this.selectedMonth = (value === null || value === undefined || !this.months)
-                    ? this.selectedMonth
-                    : this.months[value];
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(MonthYearPickerController.prototype, "year", {
-            get: function () {
-                return this.localYear;
-            },
-            set: function (value) {
-                this.localYear = value;
-                this.selectedYear = (value === null || value === undefined) ? this.selectedYear : value;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(MonthYearPickerController.prototype, "minimumYear", {
-            get: function () {
-                return this.dateTimeService.minimumYear;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(MonthYearPickerController.prototype, "disablePrev", {
-            get: function () {
-                return this.month <= 4 && this.year === this.minimumYear;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(MonthYearPickerController.prototype, "disableNext", {
-            get: function () {
-                return this.month >= this.dateTimeService.currentMonthValue() && this.year >= this.dateTimeService.currentYear();
-            },
-            enumerable: true,
-            configurable: true
-        });
-        MonthYearPickerController.prototype.init = function () {
-            this.selectedMonth = this.months[this.month];
-            for (var i = this.minimumYear; i <= this.dateTimeService.currentYear(); i++) {
-                this.years.push(i);
-                if (i === this.year) {
-                    this.selectedYear = i;
-                }
-            }
-            this.disableYear = this.disableYear || this.years.length <= 1;
-        };
-        MonthYearPickerController.prototype.updateParams = function () {
-            this.month = this.months.indexOf(this.selectedMonth);
-            this.year = this.selectedYear;
-            if (this.change !== undefined) {
-                this.change();
-            }
-        };
-        MonthYearPickerController.prototype.prev = function () {
-            var monthIndex = (this.month === 0) ? 11 : this.month - 1;
-            if (monthIndex === 11) {
-                this.selectedYear--;
-            }
-            this.selectedMonth = this.months[monthIndex];
-            this.updateParams();
-        };
-        MonthYearPickerController.prototype.next = function () {
-            var monthIndex = (this.month + 1) % 12;
-            if (monthIndex === 0) {
-                this.selectedYear++;
-            }
-            this.selectedMonth = this.months[monthIndex];
-            this.updateParams();
-        };
-        MonthYearPickerController.$inject = ['dateTimeService'];
-        return MonthYearPickerController;
-    }());
-    Shared.MonthYearPickerController = MonthYearPickerController;
-})(Shared || (Shared = {}));
-
-var Shared;
-(function (Shared) {
-    function MonthYearPickerDirective() {
-        return {
-            scope: {
-                month: "=",
-                year: "=",
-                disabled: "=?",
-                change: "&"
-            },
-            templateUrl: '/shared/directives/MonthYearPickerTemplate.html',
-            controller: 'MonthYearPickerController',
-            controllerAs: 'ctrl',
-            bindToController: true
-        };
-    }
-    Shared.MonthYearPickerDirective = MonthYearPickerDirective;
     var MonthYearPickerController = (function () {
         function MonthYearPickerController(dateTimeService) {
             this.dateTimeService = dateTimeService;
@@ -1390,29 +1188,6 @@ var Shared;
 
 var Shared;
 (function (Shared) {
-    function PlayerBonusPanelDirective() {
-        return {
-            scope: {
-                numPlayers: "="
-            },
-            templateUrl: '/shared/directives/PlayerBonusPanelTemplate.html',
-            controller: 'PlayerBonusPanelController',
-            controllerAs: 'ctrl',
-            bindToController: true
-        };
-    }
-    Shared.PlayerBonusPanelDirective = PlayerBonusPanelDirective;
-    var PlayerBonusPanelController = (function () {
-        function PlayerBonusPanelController() {
-        }
-        PlayerBonusPanelController.$inject = [];
-        return PlayerBonusPanelController;
-    }());
-    Shared.PlayerBonusPanelController = PlayerBonusPanelController;
-})(Shared || (Shared = {}));
-
-var Shared;
-(function (Shared) {
     function PlayerNametag() {
         return {
             bindings: {
@@ -1434,29 +1209,6 @@ var Shared;
 
 var Shared;
 (function (Shared) {
-    function PlayerNametagDirective() {
-        return {
-            scope: {
-                player: '='
-            },
-            templateUrl: '/shared/directives/PlayerNametagTemplate.html',
-            controller: 'PlayerNametagController',
-            controllerAs: 'ctrl',
-            bindToController: true
-        };
-    }
-    Shared.PlayerNametagDirective = PlayerNametagDirective;
-    var PlayerNametagController = (function () {
-        function PlayerNametagController() {
-        }
-        PlayerNametagController.$inject = [];
-        return PlayerNametagController;
-    }());
-    Shared.PlayerNametagController = PlayerNametagController;
-})(Shared || (Shared = {}));
-
-var Shared;
-(function (Shared) {
     function PlayerScoretag() {
         return {
             bindings: {
@@ -1467,38 +1219,6 @@ var Shared;
         };
     }
     Shared.PlayerScoretag = PlayerScoretag;
-    var PlayerScoretagController = (function () {
-        function PlayerScoretagController() {
-            var rankArray = !this.player.rank ? 0 : this.player.rank;
-            this.rank = new Array(rankArray);
-        }
-        Object.defineProperty(PlayerScoretagController.prototype, "playerName", {
-            get: function () {
-                return this.player.player;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        PlayerScoretagController.$inject = [];
-        return PlayerScoretagController;
-    }());
-    Shared.PlayerScoretagController = PlayerScoretagController;
-})(Shared || (Shared = {}));
-
-var Shared;
-(function (Shared) {
-    function PlayerScoretagDirective() {
-        return {
-            scope: {
-                player: '='
-            },
-            templateUrl: '/shared/directives/PlayerScoretagTemplate.html',
-            controller: 'PlayerScoretagController',
-            controllerAs: 'ctrl',
-            bindToController: true
-        };
-    }
-    Shared.PlayerScoretagDirective = PlayerScoretagDirective;
     var PlayerScoretagController = (function () {
         function PlayerScoretagController() {
             var rankArray = !this.player.rank ? 0 : this.player.rank;
@@ -1548,38 +1268,8 @@ var Shared;
 
 var Shared;
 (function (Shared) {
-    function TextInputDirective() {
-        return {
-            scope: {
-                name: "@",
-                placeholder: "@",
-                value: "=",
-                disabled: "=",
-                required: "=",
-                maxlength: "@",
-                showClearBtn: "="
-            },
-            templateUrl: "/shared/directives/TextInputTemplate.html",
-            controller: "TextInputController",
-            controllerAs: "ctrl",
-            bindToController: true
-        };
-    }
-    Shared.TextInputDirective = TextInputDirective;
-    var TextInputController = (function () {
-        function TextInputController() {
-        }
-        TextInputController.prototype.clearInput = function () {
-            this.value = "";
-        };
-        return TextInputController;
-    }());
-    Shared.TextInputController = TextInputController;
-})(Shared || (Shared = {}));
-
-var Shared;
-(function (Shared) {
     var UxControlsModule = angular.module('UxControlsModule', ['ngAnimate', 'ui.bootstrap']);
+    UxControlsModule.service('localStorageService', Shared.LocalStorageService);
     UxControlsModule.service('dateTimeService', Shared.DateTimeService);
     UxControlsModule.service('monthYearQueryService', Shared.MonthYearQueryService);
     UxControlsModule.service('apiService', Shared.ApiService);

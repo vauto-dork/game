@@ -6,7 +6,8 @@ module PlayerStats {
 			bindings: {
                 value: "=",
                 decimal: "@",
-                diff: "="
+                diff: "=",
+                isPercent: "="
 			},
 			templateUrl: "/areas/playerStats/directives/DeltaBoxTemplate.html",
 			controller: DeltaBoxController
@@ -18,6 +19,7 @@ module PlayerStats {
         private value: number;
         private decimal: number;
         private diff: number;
+        private isPercent: boolean;
 
         private get hasNoValue(): boolean {
             return this.value === null || this.value === undefined;
@@ -41,6 +43,10 @@ module PlayerStats {
 
         private get absValue(): number {
             return Math.abs(this.value);
+        }
+
+        private get decimalPlaces(): number {
+            return (this.isPercent && (this.diff >= 100 || this.diff <= -100)) ? 0 : this.decimal;
         }
 
         constructor() {

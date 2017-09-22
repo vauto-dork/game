@@ -1,6 +1,7 @@
 module Shared {
     var UxControlsModule = angular.module('UxControlsModule', ['ngAnimate', 'ui.bootstrap']);
 
+    UxControlsModule.service('localStorageService', LocalStorageService);
     UxControlsModule.service('dateTimeService', DateTimeService);
     UxControlsModule.service('monthYearQueryService', MonthYearQueryService);
     UxControlsModule.service('apiService', ApiService);

@@ -13,6 +13,6 @@
         <span ng-if="$ctrl.isDiffNegative">-</span>
         <span ng-if="$ctrl.isDiffPositive">+</span>
         <span ng-if="!$ctrl.diff">&mdash;</span>
-        <span ng-if="$ctrl.diff">{{$ctrl.absDiff | number:$ctrl.decimal}}</span>
+        <span ng-if="$ctrl.diff">{{$ctrl.absDiff | number:$ctrl.decimalPlaces}}{{$ctrl.isPercent ? " %": ""}}</span>
     </div>
 </div>

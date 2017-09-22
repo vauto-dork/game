@@ -33,6 +33,11 @@
     filter: blur($var);
 }
 
+@mixin transform($var) {
+	-webkit-transform: $var;
+	transform: $var;
+}
+
 @mixin panel-overlay{
 	position: absolute;
 	height: 100%;
@@ -53,9 +58,9 @@
 }
 
 @mixin card() {
+	@include shadow($card-shadow);
 	padding: 1em;
 	border-radius: $card-border-radius;
 	background-color: $light-gray;
 	border: 1px solid lighten($gray, 30%);
-	box-shadow: 0 2px 2px 0 rgba(0,0,0,0.15);
 }

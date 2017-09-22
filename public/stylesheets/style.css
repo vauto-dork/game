@@ -10,6 +10,7 @@ body {
   font-size: 12px; }
 
 body {
+  min-width: 320px;
   margin-bottom: 2em;
   background-color: #E6EBEF; }
 
@@ -396,6 +397,23 @@ input.ng-touched.ng-invalid {
 
 .player-stats {
   font-size: 1.4em; }
+  .player-stats .pre-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin: 1em 0; }
+    .player-stats .pre-header .ten-game-min-message {
+      padding-right: 1em; }
+    .player-stats .pre-header .value-percent-radio-group {
+      text-align: right; }
+  @media (max-width: 599px) {
+    .player-stats .pre-header {
+      flex-wrap: wrap; }
+      .player-stats .pre-header .ten-game-min-message {
+        padding-bottom: 1em; } }
+  @media (min-width: 600px) {
+    .player-stats .pre-header .value-percent-radio-group .btn-group {
+      width: 13em; } }
   .player-stats .stats-row-even {
     background-color: #373935;
     color: #E6EBEF; }
@@ -428,7 +446,7 @@ input.ng-touched.ng-invalid {
     border-bottom: 1px solid #7a8394; }
   .player-stats .header-rating,
   .player-stats .header-rank {
-    width: 9em;
+    width: 13em;
     text-align: center; }
   .player-stats .gold-star {
     color: #FFCB00; }
@@ -439,14 +457,16 @@ input.ng-touched.ng-invalid {
       justify-content: flex-end; } }
   .player-stats .delta-box {
     margin: 0.5em auto;
-    text-align: center; }
+    text-align: center;
+    padding: 0 1em; }
     .player-stats .delta-box .delta-box-value,
     .player-stats .delta-box .delta-box-symbol,
     .player-stats .delta-box .delta-box-diff {
       display: inline-block; }
-    .player-stats .delta-box .delta-box-value,
-    .player-stats .delta-box .delta-box-diff {
+    .player-stats .delta-box .delta-box-value {
       width: 4em; }
+    .player-stats .delta-box .delta-box-diff {
+      width: 5em; }
     .player-stats .delta-box .delta-box-value {
       text-align: right; }
     .player-stats .delta-box .delta-box-symbol {
@@ -632,6 +652,89 @@ input.ng-touched.ng-invalid {
 
 .create-game-container .create-game-new-player-btn {
   margin-bottom: 2.5em; }
+
+.game-graph {
+  margin: 1em 0; }
+  .game-graph .game-graph-tooltip {
+    -moz-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.15);
+    -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.15);
+    position: absolute;
+    background-color: white;
+    opacity: 0;
+    font-size: 12px;
+    border: 1px solid #999999;
+    pointer-events: none; }
+    .game-graph .game-graph-tooltip table {
+      margin: 0 auto; }
+      .game-graph .game-graph-tooltip table td {
+        padding: 0.25em; }
+  .game-graph .rating-tooltip {
+    width: 120px; }
+    .game-graph .rating-tooltip table .eod-label {
+      text-align: left; }
+    .game-graph .rating-tooltip table .eod-value {
+      text-align: right; }
+  .game-graph .games-played-tooltip {
+    width: 90px; }
+    .game-graph .games-played-tooltip table .game-num {
+      text-align: right; }
+    .game-graph .games-played-tooltip table .game-rating {
+      text-align: right; }
+  .game-graph .hover-bar {
+    fill: black;
+    fill-opacity: 0.075; }
+  .game-graph .graph-container {
+    overflow-x: auto; }
+    .game-graph .graph-container.overflowed {
+      border: 1px solid #999999; }
+      .game-graph .graph-container.overflowed .svg-container {
+        margin: 1em auto; }
+  .game-graph .graph-title {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 12px;
+    font-weight: bold; }
+    .game-graph .graph-title:not(:first-of-type) {
+      margin-top: 2em; }
+  .game-graph .svg-container {
+    position: relative;
+    margin: auto; }
+  .game-graph svg text {
+    fill: #7a8394;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 1.4em; }
+  .game-graph svg .axis path,
+  .game-graph svg .tick line {
+    stroke: #999999; }
+  .game-graph svg .axis-y path.domain {
+    -webkit-transform: translate(-1px);
+    transform: translate(-1px); }
+  .game-graph svg .outside-border {
+    stroke: #999999;
+    stroke-width: 1px;
+    fill: none; }
+  .game-graph .rating-svg .line.data {
+    fill: url(#rating-gradient);
+    fill-opacity: 0.5;
+    stroke: url(#rating-gradient);
+    stroke-width: 2px; }
+  .game-graph .rating-svg .axis-x .tick line,
+  .game-graph .rating-svg .axis-y .tick:not(:first-of-type) line {
+    stroke: #C0C0C0; }
+  .game-graph .rating-svg .positive-stop-color {
+    stop-color: #508425; }
+  .game-graph .rating-svg .neutral-stop-color {
+    stop-color: black; }
+  .game-graph .rating-svg .negative-stop-color {
+    stop-color: #E94B35; }
+  .game-graph .games-played-svg .axis-y .tick:not(:last-child) line {
+    stroke: #C0C0C0; }
+  .game-graph .games-played-svg .bar {
+    fill: #508425;
+    fill-opacity: 0.5;
+    stroke: #508425;
+    stroke-width: 2px; }
 
 /* 
 .ranking-row,

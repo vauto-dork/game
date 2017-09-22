@@ -1,0 +1,157 @@
+@import "variables";
+@import "mixins";
+
+.game-graph {
+    $axis-color: $med-gray;
+    $graph-data-color: $dark-green;
+    $graph-data-fill-opacity: 0.5;
+
+    margin: 1em 0;
+
+    .game-graph-tooltip {
+        @include shadow($card-shadow);
+        position: absolute;
+        background-color: white;
+        opacity: 0;
+        font-size: 12px;
+        border: 1px solid $axis-color;
+        pointer-events: none;
+
+        table {
+            margin: 0 auto;
+
+            td {
+                padding: 0.25em;
+            }
+        }
+    }
+
+    .rating-tooltip {
+        width: 120px;
+
+        table {
+            .eod-label {
+                text-align: left;
+            }
+
+            .eod-value {
+                text-align: right;
+            }
+        }
+    }
+
+    .games-played-tooltip {
+        width: 90px;
+
+        table {
+            .game-num {
+                text-align: right;
+            }
+
+            .game-rating {
+                text-align: right;
+            }
+        }
+    }
+
+    .hover-bar {
+        fill: black;
+        fill-opacity: 0.075;
+    }
+
+    .graph-container {
+        overflow-x: auto;
+
+        &.overflowed {
+            border: 1px solid $axis-color;
+
+            .svg-container {
+                margin: 1em auto;
+            }
+        }
+    }
+
+    .graph-title {
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 12px;
+        font-weight: bold;
+
+        &:not(:first-of-type) {
+            margin-top: 2em;
+        }
+    }
+
+    .svg-container {
+        position: relative;
+        margin: auto;
+    }
+
+    svg {
+        text {
+            fill: $gray;
+            font-family: 'Ubuntu', sans-serif;
+            font-size: $font-large;
+        }
+
+        .axis path,
+        .tick line {
+            stroke: $axis-color;
+        }
+
+        .axis-y {
+            path.domain {
+                @include transform(translate(-1px));
+            }
+        }
+
+        .outside-border {
+            stroke: $axis-color;
+            stroke-width: 1px;
+            fill: none;
+        }
+    }
+
+    .rating-svg {
+        .line.data {
+            fill: url(#rating-gradient);
+            fill-opacity: $graph-data-fill-opacity;
+            stroke: url(#rating-gradient);
+            stroke-width: 2px;
+        }
+
+        .axis-x .tick,
+        .axis-y .tick:not(:first-of-type) {
+            line {
+                stroke: $silver;
+            }
+        }
+
+        .positive-stop-color {
+            stop-color: $graph-data-color;            
+        }
+
+        .neutral-stop-color {
+            stop-color: black;
+        }
+
+        .negative-stop-color {
+            stop-color: $red;
+        }
+    }
+
+    .games-played-svg {
+        .axis-y {
+            .tick:not(:last-child) line {
+                stroke: $silver;
+            }
+        }
+
+        .bar {
+            fill: $graph-data-color;
+            fill-opacity: $graph-data-fill-opacity;
+            stroke: $graph-data-color;
+            stroke-width: 2px;
+        }
+    }
+}

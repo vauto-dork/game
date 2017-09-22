@@ -22,53 +22,35 @@ var Components;
 
 var Components;
 (function (Components) {
-    function PlayerFormDirective() {
-        return {
-            scope: {
-                player: "=",
-                disableForm: "=?"
-            },
-            templateUrl: "/components/playerForm/directives/PlayerFormTemplate.html",
-            controller: "PlayerFormController",
-            controllerAs: "ctrl",
-            bindToController: true
-        };
-    }
-    Components.PlayerFormDirective = PlayerFormDirective;
-    var PlayerFormController = (function () {
-        function PlayerFormController() {
-        }
-        PlayerFormController.$inject = [];
-        return PlayerFormController;
-    }());
-    Components.PlayerFormController = PlayerFormController;
-})(Components || (Components = {}));
-
-var Components;
-(function (Components) {
     var PlayerFormModule = angular.module('PlayerFormModule', []);
     PlayerFormModule.component('playerForm', Components.PlayerForm());
 })(Components || (Components = {}));
 
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var PlayersList;
 (function (PlayersList) {
     var PlayersListService = (function (_super) {
         __extends(PlayersListService, _super);
         function PlayersListService($timeout, $q, apiService) {
-            _super.call(this, $timeout);
-            this.$q = $q;
-            this.apiService = apiService;
-            this.event = {
+            var _this = _super.call(this, $timeout) || this;
+            _this.$q = $q;
+            _this.apiService = apiService;
+            _this.event = {
                 editOpen: "editOpen",
                 editCancel: "editCancel",
                 editSave: "editSave"
             };
-            this.playerLoadPromise = this.loadPlayers();
+            _this.playerLoadPromise = _this.loadPlayers();
+            return _this;
         }
         Object.defineProperty(PlayersListService.prototype, "players", {
             get: function () {

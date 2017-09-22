@@ -7,14 +7,15 @@
     "start": "heroku local web"
   },
   "dependencies": {
+    "@types/d3": "^4.10.0",
+    "base64-mongo-id": "^2.0.1",
     "body-parser": "~1.17.2",
     "cookie-parser": "~1.4.3",
     "debug": "~3.0.0",
     "express": "~4.15.4",
     "mongoose": "^4.0.1",
     "morgan": "^1.7.0",
-    "pug": "^2.0.0-beta6",
-    "base64-mongo-id": "^2.0.1"
+    "pug": "^2.0.0-beta6"
   },
   "engines": {
     "node": "8.3.x"
