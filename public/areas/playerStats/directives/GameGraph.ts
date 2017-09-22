@@ -209,7 +209,10 @@ module PlayerStats {
 
         private redraw(): void {
             // Reset tooltips
-            [this.$element.find(".games-played-tooltip"), this.$element.find(".rating-tooltip")].forEach((element)=>{
+            [
+                this.$element.find(".games-played-tooltip"),
+                this.$element.find(".rating-tooltip")
+            ].forEach((element) => {
                 element.html(" ").css("opacity", 0);
                 this.drawPopover(element, 0, 0);
             });
@@ -365,12 +368,10 @@ module PlayerStats {
             var yData = this.gameDayData.filter((game) => { return game.gamesPlayed > 0; })
                 .map((game) => { return game.rating; });
 
-            var yMin = Math.min(...yData);
+            var yMin = yData.length === 0 ? 0 : Math.min(...yData);
             var yMax = d3.max(this.gameDayData, (d) => { return d.rating; });
             
-            yMin = !yMin
-                ? 0
-                : (yMin >= 0 && yMin < 1)
+            yMin = (yMin >= 0 && yMin < 1)
                     ? 0
                     : Math.floor(yMin - 0.5);
 
@@ -606,7 +607,7 @@ module PlayerStats {
             games.forEach((game, index) => {
                 var gameDate = new Date(game.gameDate);
                 var hour = gameDate.getHours() > 12 ? gameDate.getHours() - 12: gameDate.getHours();
-                var minStr = gameDate.getMinutes() < 10 ? "0" + gameDate.getMinutes() : gameDate.getMinutes().toString();
+                var minStr = d3.format("02")(gameDate.getMinutes());
                 var timeStr = `${hour || 12}:${minStr}${gameDate.getHours() >= 12 ? 'p' : 'a'}`;
                 sb.push("<tr>");
                 sb.push(`<td class="game-num">${timeStr}</td>`);

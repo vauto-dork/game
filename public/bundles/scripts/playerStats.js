@@ -275,7 +275,10 @@ var PlayerStats;
         };
         GameGraphController.prototype.redraw = function () {
             var _this = this;
-            [this.$element.find(".games-played-tooltip"), this.$element.find(".rating-tooltip")].forEach(function (element) {
+            [
+                this.$element.find(".games-played-tooltip"),
+                this.$element.find(".rating-tooltip")
+            ].forEach(function (element) {
                 element.html(" ").css("opacity", 0);
                 _this.drawPopover(element, 0, 0);
             });
@@ -406,13 +409,11 @@ var PlayerStats;
             var svgClass = "rating-svg";
             var yData = this.gameDayData.filter(function (game) { return game.gamesPlayed > 0; })
                 .map(function (game) { return game.rating; });
-            var yMin = Math.min.apply(Math, yData);
+            var yMin = yData.length === 0 ? 0 : Math.min.apply(Math, yData);
             var yMax = d3.max(this.gameDayData, function (d) { return d.rating; });
-            yMin = !yMin
+            yMin = (yMin >= 0 && yMin < 1)
                 ? 0
-                : (yMin >= 0 && yMin < 1)
-                    ? 0
-                    : Math.floor(yMin - 0.5);
+                : Math.floor(yMin - 0.5);
             yMax = Math.ceil(yMax + 0.5);
             if (yMin === yMax) {
                 yMin = yMin - 1;
@@ -579,7 +580,7 @@ var PlayerStats;
             games.forEach(function (game, index) {
                 var gameDate = new Date(game.gameDate);
                 var hour = gameDate.getHours() > 12 ? gameDate.getHours() - 12 : gameDate.getHours();
-                var minStr = gameDate.getMinutes() < 10 ? "0" + gameDate.getMinutes() : gameDate.getMinutes().toString();
+                var minStr = d3.format("02")(gameDate.getMinutes());
                 var timeStr = (hour || 12) + ":" + minStr + (gameDate.getHours() >= 12 ? 'p' : 'a');
                 sb.push("<tr>");
                 sb.push("<td class=\"game-num\">" + timeStr + "</td>");
