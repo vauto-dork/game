@@ -206,7 +206,7 @@ router.get('/doty/', function(req, res, next) {
 							//winningGames: winningGames, // used for debug only
 							numWins: winningGames.length,
 							totalPoints: totalPoints,
-							totalGames: gamesPlayed,
+							gamesPlayed: gamesPlayed,
 							finalRating: (totalPoints / gamesPlayed) + winningGames.length
 						});
 					}
@@ -220,17 +220,19 @@ router.get('/doty/', function(req, res, next) {
 					return winner.finalRating >= maxRating;
 				});
 
-				var doty = winners.map(function(winner) {
+				var now = new Date();
+				var yearDefined = req.query.year !== undefined && req.query.year !== null;
+				var year = yearDefined ? parseInt(req.query.year) : now.getFullYear();
+				var isCurrentYear = year === now.getFullYear();
+
+				var doty = isCurrentYear ? null : winners.map(function(winner) {
 					return {
 						player: winner.player,
 						totalPoints: winner.totalPoints,
-						gamesPlayed: winner.totalGames,
+						gamesPlayed: winner.gamesPlayed,
 						rating: winner.finalRating
 					};
 				});
-
-				var yearDefined = req.query.year !== undefined && req.query.year !== null;
-				var year = yearDefined ? parseInt(req.query.year) : now.getFullYear();	
 
 				res.json({ year: year, doty: doty, monthlyDorks: monthlyDorks });
 			}

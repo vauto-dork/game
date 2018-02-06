@@ -2,7 +2,7 @@ module Components {
     export interface IDotyService {
         data: Shared.IDotyViewModel;
         
-        changeDate(month: number, year: number);
+        changeDate(year: number);
         subscribeDateChange(callback: Function);
     }
 
@@ -23,15 +23,15 @@ module Components {
             super($timeout);
         }
 
-        public changeDate(month: number, year: number): void {
-            this.getDoty(month, year);
+        public changeDate(year: number): void {
+            this.getDoty(year);
         }
 
         public subscribeDateChange(callback: Function): void {
             this.subscribe(this.events.dateChanged, callback);
         }
 
-        private getDoty(month: number, year: number) {
+        private getDoty(year: number) {
 			this.apiService.getDoty(year).then((data: Shared.IDotyViewModel) => {
                 this.localDotyData = data;
                 this.publish(this.events.dateChanged, null);

@@ -7,17 +7,21 @@ module Components {
     }
 
     export class DotyController {
-		public static $inject: string[] = ['dotmService', 'apiService'];
-		
-		private get doty(): Shared.IDotmViewModel {
-			return this.dotmService.data;
-		}
+		public static $inject: string[] = ['dotyService', 'apiService'];
+        
+        private get year(): number {
+            return !this.data ? null : this.data.year;
+        }
+        
+		private get data(): Shared.IDotyViewModel {
+			return this.dotyService.data;
+        }
 
 		private get hasUberdorks(): boolean {
-			return !this.doty ? false : this.doty.uberdorks.length > 0;
+			return !this.data ? false : !!this.data.doty;
 		}
 
-        constructor(private dotmService: IDotmService, private apiService: Shared.IApiService) {
+        constructor(private dotyService: IDotyService, private apiService: Shared.IApiService) {
         }
     }
 }
