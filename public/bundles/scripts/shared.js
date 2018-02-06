@@ -647,6 +647,19 @@ var Shared;
             });
             return def.promise;
         };
+        ApiService.prototype.getDoty = function (year) {
+            var def = this.$q.defer();
+            var queryString = "&year=" + year;
+            this.$http.get("/Players/dotm" + queryString)
+                .success(function (data, status, headers, config) {
+                def.resolve(data);
+            }).
+                error(function (data, status, headers, config) {
+                console.error('Cannot get dorks of the month.');
+                def.reject(data);
+            });
+            return def.promise;
+        };
         ApiService.prototype.getLastPlayedGame = function () {
             var def = this.$q.defer();
             this.$http.get("/Games/LastPlayed")
