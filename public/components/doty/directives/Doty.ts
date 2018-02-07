@@ -18,7 +18,7 @@ module Components {
         }
 
 		private get hasUberdorks(): boolean {
-			return !this.data ? false : !!this.data.doty;
+			return !this.data ? false : this.data.doty.length > 0;
 		}
 
         constructor(private dotyService: IDotyService, private apiService: Shared.IApiService) {

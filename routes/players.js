@@ -225,7 +225,7 @@ router.get('/doty/', function(req, res, next) {
 				var year = yearDefined ? parseInt(req.query.year) : now.getFullYear();
 				var isCurrentYear = year === now.getFullYear();
 
-				var doty = isCurrentYear ? null : winners.map(function(winner) {
+				var doty = isCurrentYear ? [] : winners.map(function(winner) {
 					return {
 						player: winner.player,
 						totalPoints: winner.totalPoints,
@@ -234,7 +234,7 @@ router.get('/doty/', function(req, res, next) {
 					};
 				});
 
-				res.json({ year: year, doty: doty, monthlyDorks: monthlyDorks });
+				res.json({ year: year, doty: doty, monthlyRankings: monthlyDorks });
 			}
 		});
 	};
