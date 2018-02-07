@@ -7,7 +7,7 @@ module Components {
     }
 
     export class DotyController {
-		public static $inject: string[] = ['dotyService', 'apiService'];
+		public static $inject: string[] = ['dotyService'];
         
         private get year(): number {
             return !this.data ? null : this.data.year;
@@ -21,7 +21,8 @@ module Components {
 			return !this.data ? false : this.data.doty.length > 0;
 		}
 
-        constructor(private dotyService: IDotyService, private apiService: Shared.IApiService) {
+        constructor(private dotyService: IDotyService) {
+            this.dotyService.changeDate(2017);
         }
     }
 }

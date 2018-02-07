@@ -46,7 +46,7 @@
                 <div ng-repeat="winner in game.uberdorks">{{winner.player.firstName + ' ' + winner.player.lastName}}</div>
             </div>
             <div>
-                <div ng-repeat="winner in game.uberdorks">{{winner.rating}}</div>
+                <div ng-repeat="winner in game.uberdorks">{{winner.rating | number:2}}</div>
             </div>
             <div>
                 <div ng-repeat="winner in game.uberdorks">{{winner.totalPoints}}</div>

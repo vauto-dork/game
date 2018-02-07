@@ -45,6 +45,13 @@
                 "components/dotm/modules/*.js"
             ]
         },
+        "doty": {
+            "files": [
+                "components/doty/services/*.js",
+                "components/doty/directives/*.js",
+                "components/doty/modules/*.js"
+            ]
+        },
         "rankings": {
             "files": [
                 "components/rankings/services/*.js",
@@ -153,7 +160,8 @@
             ],
             "components": [
                 "rankings",
-                "dotm"
+                "dotm",
+                "doty"
             ]
         }
     }

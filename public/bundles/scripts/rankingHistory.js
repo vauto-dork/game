@@ -308,6 +308,135 @@ var Components;
     DotmModule.component('dotm', Components.Dotm());
 })(Components || (Components = {}));
 
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var Components;
+(function (Components) {
+    var DotyService = (function (_super) {
+        __extends(DotyService, _super);
+        function DotyService($timeout, apiService) {
+            var _this = _super.call(this, $timeout) || this;
+            _this.apiService = apiService;
+            _this.events = {
+                dateChanged: "dateChanged"
+            };
+            return _this;
+        }
+        Object.defineProperty(DotyService.prototype, "data", {
+            get: function () {
+                return this.localDotyData;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        DotyService.prototype.changeDate = function (year) {
+            this.getDoty(year);
+        };
+        DotyService.prototype.subscribeDateChange = function (callback) {
+            this.subscribe(this.events.dateChanged, callback);
+        };
+        DotyService.prototype.getDoty = function (year) {
+            var _this = this;
+            this.apiService.getDoty(year).then(function (data) {
+                _this.localDotyData = data;
+                _this.publish(_this.events.dateChanged, null);
+            }, function () {
+                console.error("Cannot get DOTY.");
+            });
+        };
+        DotyService.$inject = ["$timeout", "apiService"];
+        return DotyService;
+    }(Shared.PubSubServiceBase));
+    Components.DotyService = DotyService;
+})(Components || (Components = {}));
+
+var Components;
+(function (Components) {
+    function Doty() {
+        return {
+            templateUrl: '/components/doty/directives/DotyTemplate.html',
+            controller: DotyController
+        };
+    }
+    Components.Doty = Doty;
+    var DotyController = (function () {
+        function DotyController(dotyService) {
+            this.dotyService = dotyService;
+            this.dotyService.changeDate(2017);
+        }
+        Object.defineProperty(DotyController.prototype, "year", {
+            get: function () {
+                return !this.data ? null : this.data.year;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(DotyController.prototype, "data", {
+            get: function () {
+                return this.dotyService.data;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(DotyController.prototype, "hasUberdorks", {
+            get: function () {
+                return !this.data ? false : this.data.doty.length > 0;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        DotyController.$inject = ['dotyService'];
+        return DotyController;
+    }());
+    Components.DotyController = DotyController;
+})(Components || (Components = {}));
+
+var Components;
+(function (Components) {
+    function UberdorkTable() {
+        return {
+            templateUrl: '/components/doty/directives/UberdorkTableTemplate.html',
+            controller: UberdorkTableController
+        };
+    }
+    Components.UberdorkTable = UberdorkTable;
+    var UberdorkTableController = (function () {
+        function UberdorkTableController(dateTimeService, dotyService) {
+            this.dateTimeService = dateTimeService;
+            this.dotyService = dotyService;
+        }
+        Object.defineProperty(UberdorkTableController.prototype, "monthlyRankings", {
+            get: function () {
+                return !this.dotyService.data ? [] : this.dotyService.data.monthlyRankings;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        UberdorkTableController.prototype.monthName = function (value) {
+            return this.dateTimeService.monthName(value);
+        };
+        UberdorkTableController.$inject = ['dateTimeService', 'dotyService'];
+        return UberdorkTableController;
+    }());
+    Components.UberdorkTableController = UberdorkTableController;
+})(Components || (Components = {}));
+
+var Components;
+(function (Components) {
+    var DotyModule = angular.module('DotyModule', []);
+    DotyModule.service('dotyService', Components.DotyService);
+    DotyModule.component('doty', Components.Doty());
+    DotyModule.component('uberdorkTable', Components.UberdorkTable());
+})(Components || (Components = {}));
+
 var RankingHistory;
 (function (RankingHistory_1) {
     function RankingHistory() {
@@ -376,7 +505,7 @@ var RankingHistory;
 
 var RankingHistory;
 (function (RankingHistory) {
-    var RankingHistoryModule = angular.module('RankingHistoryModule', ['UxControlsModule', 'DotmModule', 'RankingsModule']);
+    var RankingHistoryModule = angular.module('RankingHistoryModule', ['UxControlsModule', 'DotyModule', 'DotmModule', 'RankingsModule']);
     RankingHistoryModule.component('rankingHistory', RankingHistory.RankingHistory());
 })(RankingHistory || (RankingHistory = {}));
 

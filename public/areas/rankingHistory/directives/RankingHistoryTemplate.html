@@ -19,4 +19,11 @@
             <rankings-panel month="$ctrl.month" year="$ctrl.year" hide-unranked="true"></rankings-panel>
         </div>
     </div>
+
+    <div class="row" ng-show="!$ctrl.isCurrentMonth">
+        <div class="col-xs-12">
+            <doty></doty>
+            <uberdork-table></uberdork-table>
+        </div>
+    </div>
 </div>

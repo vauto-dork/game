@@ -250,9 +250,9 @@ module Shared {
 		public getDoty(year: number): ng.IPromise<IDotyViewModel> {
 			var def = this.$q.defer<IDotyViewModel>();
 
-			var queryString = `&year=${year}`;
+			var queryString = `?year=${year}`;
 
-			this.$http.get("/Players/dotm" + queryString)
+			this.$http.get("/Players/doty" + queryString)
 				.success((data: IDotyViewModel, status, headers, config) => {
 					def.resolve(data);
 				}).

@@ -649,8 +649,8 @@ var Shared;
         };
         ApiService.prototype.getDoty = function (year) {
             var def = this.$q.defer();
-            var queryString = "&year=" + year;
-            this.$http.get("/Players/dotm" + queryString)
+            var queryString = "?year=" + year;
+            this.$http.get("/Players/doty" + queryString)
                 .success(function (data, status, headers, config) {
                 def.resolve(data);
             }).

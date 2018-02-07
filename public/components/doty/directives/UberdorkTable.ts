@@ -2,7 +2,7 @@ module Components {
     export function UberdorkTable(): ng.IComponentOptions {
         return {
 			templateUrl: '/components/doty/directives/UberdorkTableTemplate.html',
-			controller: DotyController
+			controller: UberdorkTableController
 		};
     }
 
@@ -10,7 +10,7 @@ module Components {
 		public static $inject: string[] = ['dateTimeService', 'dotyService'];
                 
 		private get monthlyRankings(): Shared.IDotyMonthModel[] {
-			return this.dotyService.data.monthlyRankings;
+			return !this.dotyService.data ? [] : this.dotyService.data.monthlyRankings;
         }
 
         constructor(private dateTimeService: Shared.IDateTimeService, private dotyService: IDotyService) {
