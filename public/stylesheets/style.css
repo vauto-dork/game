@@ -737,11 +737,17 @@ input.ng-touched.ng-invalid {
     stroke-width: 2px; }
 
 .doty-uberdork-table .month-header {
-  font-size: 2em;
   margin: 0.5em; }
 
-.doty-uberdork-table .player-card {
-  margin-left: 0.5em; }
+.doty-uberdork-table .left-push {
+  padding-left: 4em; }
+
+.doty-uberdork-table .month-header,
+.doty-uberdork-table .no-winner {
+  font-size: 2em; }
+
+.doty-uberdork-table .no-winner {
+  height: 98px; }
 
 .doty-uberdork-table .ranking-row .ranking-rank {
   display: none; }

@@ -22,7 +22,7 @@ module Components {
 		}
 
         constructor(private dotyService: IDotyService) {
-            this.dotyService.changeDate(2017);
+            this.dotyService.changeDate(2018);
         }
     }
 }

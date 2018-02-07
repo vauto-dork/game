@@ -76,7 +76,9 @@ var Rankings;
     function RankingsCard() {
         return {
             bindings: {
-                player: "="
+                player: "=",
+                month: "=?",
+                year: "=?"
             },
             templateUrl: '/components/rankings/directives/RankingsCardTemplate.html',
             controller: RankingsCardController
@@ -89,10 +91,14 @@ var Rankings;
             this.monthYearQueryService = monthYearQueryService;
             this.playerStatsUrl = "";
             monthYearQueryService.subscribeDateChange(function (event, date) {
-                _this.appendQueryParams("" + date.getVisibleQueryString());
+                if (_this.useQueryParams()) {
+                    _this.appendQueryParams("" + date.getVisibleQueryString());
+                }
             });
             var date = monthYearQueryService.getQueryParams();
-            this.appendQueryParams(!date ? "" : "" + date.getVisibleQueryString());
+            if (this.useQueryParams()) {
+                this.appendQueryParams(!date ? "" : "" + date.getVisibleQueryString());
+            }
         }
         Object.defineProperty(RankingsCardController.prototype, "playerStatsBaseUrl", {
             get: function () {
@@ -108,6 +114,16 @@ var Rankings;
             enumerable: true,
             configurable: true
         });
+        RankingsCardController.prototype.useQueryParams = function () {
+            var monthNull = this.month === null || this.month === undefined;
+            var yearNull = this.year === null || this.year === undefined;
+            var useMonthAndYearParams = !monthNull && !yearNull;
+            if (useMonthAndYearParams) {
+                this.playerStatsUrl = this.playerStatsBaseUrl + "#?month=" + this.month + "&year=" + this.year;
+                return false;
+            }
+            return true;
+        };
         RankingsCardController.prototype.appendQueryParams = function (value) {
             this.playerStatsUrl = "" + this.playerStatsBaseUrl + value;
         };
@@ -370,7 +386,7 @@ var Components;
     var DotyController = (function () {
         function DotyController(dotyService) {
             this.dotyService = dotyService;
-            this.dotyService.changeDate(2017);
+            this.dotyService.changeDate(2018);
         }
         Object.defineProperty(DotyController.prototype, "year", {
             get: function () {
@@ -420,14 +436,15 @@ var Components;
             enumerable: true,
             configurable: true
         });
-        UberdorkTableController.prototype.monthName = function (value) {
-            return this.dateTimeService.monthName(value);
-        };
-        UberdorkTableController.prototype.playerStatsUrl = function (month, player) {
-            var abbrMonth = this.dateTimeService.monthName(month, true);
-            var playerUrl = player.player.urlId;
-            var year = !this.dotyService.data ? new Date().getFullYear() : this.dotyService.data.year;
-            return "playerStats/" + playerUrl + "#?month=" + abbrMonth + "&year=" + year;
+        Object.defineProperty(UberdorkTableController.prototype, "year", {
+            get: function () {
+                return !this.dotyService.data ? new Date().getFullYear() : this.dotyService.data.year;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        UberdorkTableController.prototype.monthName = function (value, abbreviate) {
+            return this.dateTimeService.monthName(value, abbreviate);
         };
         UberdorkTableController.$inject = ['dateTimeService', 'dotyService'];
         return UberdorkTableController;

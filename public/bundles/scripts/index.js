@@ -76,7 +76,9 @@ var Rankings;
     function RankingsCard() {
         return {
             bindings: {
-                player: "="
+                player: "=",
+                month: "=?",
+                year: "=?"
             },
             templateUrl: '/components/rankings/directives/RankingsCardTemplate.html',
             controller: RankingsCardController
@@ -89,10 +91,14 @@ var Rankings;
             this.monthYearQueryService = monthYearQueryService;
             this.playerStatsUrl = "";
             monthYearQueryService.subscribeDateChange(function (event, date) {
-                _this.appendQueryParams("" + date.getVisibleQueryString());
+                if (_this.useQueryParams()) {
+                    _this.appendQueryParams("" + date.getVisibleQueryString());
+                }
             });
             var date = monthYearQueryService.getQueryParams();
-            this.appendQueryParams(!date ? "" : "" + date.getVisibleQueryString());
+            if (this.useQueryParams()) {
+                this.appendQueryParams(!date ? "" : "" + date.getVisibleQueryString());
+            }
         }
         Object.defineProperty(RankingsCardController.prototype, "playerStatsBaseUrl", {
             get: function () {
@@ -108,6 +114,16 @@ var Rankings;
             enumerable: true,
             configurable: true
         });
+        RankingsCardController.prototype.useQueryParams = function () {
+            var monthNull = this.month === null || this.month === undefined;
+            var yearNull = this.year === null || this.year === undefined;
+            var useMonthAndYearParams = !monthNull && !yearNull;
+            if (useMonthAndYearParams) {
+                this.playerStatsUrl = this.playerStatsBaseUrl + "#?month=" + this.month + "&year=" + this.year;
+                return false;
+            }
+            return true;
+        };
         RankingsCardController.prototype.appendQueryParams = function (value) {
             this.playerStatsUrl = "" + this.playerStatsBaseUrl + value;
         };

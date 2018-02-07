@@ -13,20 +13,24 @@ module Components {
 			return !this.dotyService.data ? [] : this.dotyService.data.monthlyRankings;
         }
 
+        private get year(): number {
+            return !this.dotyService.data ? new Date().getFullYear() : this.dotyService.data.year;
+        }
+
         constructor(private dateTimeService: Shared.IDateTimeService, private dotyService: IDotyService) {
         }
 
-        private monthName(value: number): string {
-            return this.dateTimeService.monthName(value);
+        private monthName(value: number, abbreviate: boolean): string {
+            return this.dateTimeService.monthName(value, abbreviate);
         }
 
-        private playerStatsUrl(month: number, player: Shared.IRankedPlayerViewModel): string {
-            var abbrMonth = this.dateTimeService.monthName(month, true);
-            var playerUrl = player.player.urlId;
-            var year = !this.dotyService.data ? new Date().getFullYear() : this.dotyService.data.year;
+        // private playerStatsUrl(month: number, player: Shared.IRankedPlayerViewModel): string {
+        //     var abbrMonth = this.dateTimeService.monthName(month, true);
+        //     var playerUrl = player.player.urlId;
+        //     var year = !this.dotyService.data ? new Date().getFullYear() : this.dotyService.data.year;
 
-            return `playerStats/${playerUrl}#?month=${abbrMonth}&year=${year}`;
-        }
+        //     return `playerStats/${playerUrl}#?month=${abbrMonth}&year=${year}`;
+        // }
     }
 }
 
