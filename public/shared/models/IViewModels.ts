@@ -45,7 +45,7 @@ module Shared {
 
 	export interface IDotyMonthModel {
 		month: number;
-		uberdorks: IRankedPlayerViewModel[];
+		uberdorks: (IRankedPlayer|IRankedPlayerViewModel)[];
 	}
 	
 	export interface ICreateGameViewModel {

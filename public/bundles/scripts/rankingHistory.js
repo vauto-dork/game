@@ -423,6 +423,12 @@ var Components;
         UberdorkTableController.prototype.monthName = function (value) {
             return this.dateTimeService.monthName(value);
         };
+        UberdorkTableController.prototype.playerStatsUrl = function (month, player) {
+            var abbrMonth = this.dateTimeService.monthName(month, true);
+            var playerUrl = player.player.urlId;
+            var year = !this.dotyService.data ? new Date().getFullYear() : this.dotyService.data.year;
+            return "playerStats/" + playerUrl + "#?month=" + abbrMonth + "&year=" + year;
+        };
         UberdorkTableController.$inject = ['dateTimeService', 'dotyService'];
         return UberdorkTableController;
     }());

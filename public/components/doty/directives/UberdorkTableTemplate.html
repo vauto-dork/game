@@ -1,59 +1,47 @@
-<div class="col-xs-12 player-stats">
-    <div class="stats-table-header">
-        <div class="stats-info-row-container">
-            <div>
-                Month
-            </div>
-            <div>
-                Uberdork
-            </div>
-            <div>
-                Rating
-            </div>
-            <div>
-                Points
-            </div>
-            <div>
-                Games
-            </div>
-        </div>
-    </div>
-
-    <div ng-repeat="game in $ctrl.monthlyRankings" ng-class="{'stats-row-even': $even, 'stats-row-odd': $odd}">
-        <div class="stats-info-row-container" ng-if="game.uberdorks.length === 0">
-            <div>
-                {{$ctrl.monthName(game.month)}}
-            </div>
-            <div>
-                &mdash;
-            </div>
-            <div>
-                &mdash;
-            </div>
-            <div>
-                &mdash;
-            </div>
-            <div>
-                &mdash;
-            </div>
-        </div>
-
-        <div class="stats-info-row-container" ng-if="game.uberdorks.length > 0">
-            <div>
-                {{$ctrl.monthName(game.month)}}
-            </div>
-            <div>
-                <div ng-repeat="winner in game.uberdorks">{{winner.player.firstName + ' ' + winner.player.lastName}}</div>
-            </div>
-            <div>
-                <div ng-repeat="winner in game.uberdorks">{{winner.rating | number:2}}</div>
-            </div>
-            <div>
-                <div ng-repeat="winner in game.uberdorks">{{winner.totalPoints}}</div>
-            </div>
-            <div>
-                <div ng-repeat="winner in game.uberdorks">{{winner.gamesPlayed}}</div>
-            </div>
+<div class="row doty-uberdork-table">
+    <div ng-repeat="game in $ctrl.monthlyRankings" class="ranking-row col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="month-header">{{$ctrl.monthName(game.month)}}</div>
+        <div class="player-card">
+            <rankings-card ng-if="game.uberdorks.length > 0" ng-repeat="winner in game.uberdorks" player="winner"></rankings-card>
+            <span ng-if="game.uberdorks.length === 0">&mdash;</span>
         </div>
     </div>
 </div>
+<!-- <table class="table doty-uberdork-table">
+    <thead class="stats-table-header">
+        <th>Month</th>
+        <th>Uberdork</th>
+        <th class="text-right">Rating</th>
+        <th class="text-right">Points</th>
+        <th class="text-right">Games</th>
+    </thead>
+    <tbody class="stats-table-body">
+        <tr ng-repeat="game in $ctrl.monthlyRankings" ng-class="{'stats-row-even': $even, 'stats-row-odd': $odd}">
+            <td>{{$ctrl.monthName(game.month)}}</td>
+            <td>
+                <div ng-if="game.uberdorks.length > 0" ng-repeat="winner in game.uberdorks">
+                    {{winner.player.firstName + ' ' + winner.player.lastName}}
+                </div>
+                <span ng-if="game.uberdorks.length === 0">&mdash;</span>
+            </td>
+            <td class="text-right">
+                <div ng-if="game.uberdorks.length > 0" ng-repeat="winner in game.uberdorks">
+                    <a href="{{$ctrl.playerStatsUrl(game.month, winner)}}">{{winner.rating | number:2}}</a>
+                </div>
+                <span ng-if="game.uberdorks.length === 0">&mdash;</span>
+            </td>
+            <td class="text-right">
+                <div ng-if="game.uberdorks.length > 0" ng-repeat="winner in game.uberdorks">
+                    {{winner.totalPoints}}
+                </div>
+                <span ng-if="game.uberdorks.length === 0">&mdash;</span>
+            </td>
+            <td class="text-right">
+                <div ng-if="game.uberdorks.length > 0" ng-repeat="winner in game.uberdorks">
+                    {{winner.gamesPlayed}}
+                </div>
+                <span ng-if="game.uberdorks.length === 0">&mdash;</span>
+            </td>
+        </tr>        
+    </tbody>
+</table> -->

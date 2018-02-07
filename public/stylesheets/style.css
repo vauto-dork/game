@@ -443,7 +443,7 @@ input.ng-touched.ng-invalid {
     margin: 0.5em;
     color: #7a8394; }
   .player-stats .stats-table-header {
-    border-bottom: 1px solid #7a8394; }
+    border-bottom: 2px solid #7a8394; }
   .player-stats .header-rating,
   .player-stats .header-rank {
     width: 13em;
@@ -735,6 +735,16 @@ input.ng-touched.ng-invalid {
     fill-opacity: 0.5;
     stroke: #508425;
     stroke-width: 2px; }
+
+.doty-uberdork-table .month-header {
+  font-size: 2em;
+  margin: 0.5em; }
+
+.doty-uberdork-table .player-card {
+  margin-left: 0.5em; }
+
+.doty-uberdork-table .ranking-row .ranking-rank {
+  display: none; }
 
 /* 
 .ranking-row,

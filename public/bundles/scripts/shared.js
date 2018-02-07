@@ -652,6 +652,12 @@ var Shared;
             var queryString = "?year=" + year;
             this.$http.get("/Players/doty" + queryString)
                 .success(function (data, status, headers, config) {
+                data.monthlyRankings.forEach(function (month) {
+                    var uberdorks = month.uberdorks.map(function (winner) {
+                        return new Shared.RankedPlayer(winner);
+                    });
+                    month.uberdorks = uberdorks;
+                });
                 def.resolve(data);
             }).
                 error(function (data, status, headers, config) {

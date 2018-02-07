@@ -254,6 +254,13 @@ module Shared {
 
 			this.$http.get("/Players/doty" + queryString)
 				.success((data: IDotyViewModel, status, headers, config) => {
+					data.monthlyRankings.forEach((month)=>{
+						var uberdorks = month.uberdorks.map((winner) => {
+							return new Shared.RankedPlayer(winner);
+						});
+						month.uberdorks = uberdorks;
+					});
+					
 					def.resolve(data);
 				}).
 				error((data, status, headers, config) => {

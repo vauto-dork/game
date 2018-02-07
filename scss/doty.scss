@@ -1,0 +1,50 @@
+@import "variables";
+@import "mixins";
+
+.doty-uberdork-table {
+    // @mixin cell() {
+    //     font-size: $font-large;
+    //     margin: $standard-spacing;
+    //     border-top: none;
+    // }
+
+    .month-header {
+        font-size: $font-larger;
+        margin: $standard-spacing;
+    }
+
+    .player-card {
+        margin-left: $standard-spacing;
+    }
+
+    .ranking-row {
+        .ranking-rank {
+            display: none;
+        }
+    }
+
+    // .stats-table-header {
+    //     th {
+    //         @include cell;
+    //         font-weight: 400;
+    //         border-bottom: 1px solid $gray;
+    //     }
+    // }
+
+    // .stats-table-body {
+    //     td {
+    //         @include cell;
+    //     }
+    // }
+
+    // .stats-row-even {
+    //     background-color: $zebra-stripe-even;
+    //     color: $background-color;
+    // }
+
+    // .stats-table-header,
+    // .stats-row-odd {
+    //     background-color: $zebra-stripe-odd;
+    //     color: $background-color;
+    // }
+}
