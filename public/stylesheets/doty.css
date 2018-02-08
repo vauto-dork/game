@@ -16,4 +16,5 @@
   -moz-filter: contrast(50%) grayscale(50%) blur(4px);
   -ms-filter: contrast(50%) grayscale(50%) blur(4px);
   -o-filter: contrast(50%) grayscale(50%) blur(4px);
-  filter: contrast(50%) grayscale(50%) blur(4px); }
+  filter: contrast(50%) grayscale(50%) blur(4px);
+  pointer-events: none; }

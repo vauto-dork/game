@@ -24,4 +24,5 @@
 
 .doty-winner-placeholder {
     @include filter(contrast(50%) grayscale(50%) blur(4px));
+    pointer-events: none;
 }
