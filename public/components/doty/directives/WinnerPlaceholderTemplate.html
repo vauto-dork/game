@@ -1,0 +1,25 @@
+<div class="player-card doty-winner-placeholder">
+        <div class="ranking-player-stats">
+            <div class="row">
+                <div class="col-xs-12">
+                    <player-nametag player="$ctrl.player.player"></player-nametag>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-4">
+                    <div class="ranking-label">Rating</div>
+                    <div class="ranking-value">
+                        {{$ctrl.player.rating | number:2}}
+                    </div>
+                </div>
+                <div class="col-xs-4">
+                    <div class="ranking-label">Points</div>
+                    <div class="ranking-value" ng-bind="$ctrl.player.totalPoints"></div>
+                </div>
+                <div class="col-xs-4">
+                    <div class="ranking-label">Games</div>
+                    <div class="ranking-value" ng-bind="$ctrl.player.gamesPlayed"></div>
+                </div>
+            </div>
+        </div>
+    </div>

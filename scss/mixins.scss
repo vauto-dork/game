@@ -33,6 +33,14 @@
     filter: blur($var);
 }
 
+@mixin filter($var) {
+	-webkit-filter: $var;
+    -moz-filter: $var;
+    -ms-filter: $var;
+    -o-filter: $var;
+    filter: $var;
+}
+
 @mixin transform($var) {
 	-webkit-transform: $var;
 	transform: $var;

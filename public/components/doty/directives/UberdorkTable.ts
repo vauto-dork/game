@@ -23,14 +23,6 @@ module Components {
         private monthName(value: number, abbreviate: boolean): string {
             return this.dateTimeService.monthName(value, abbreviate);
         }
-
-        // private playerStatsUrl(month: number, player: Shared.IRankedPlayerViewModel): string {
-        //     var abbrMonth = this.dateTimeService.monthName(month, true);
-        //     var playerUrl = player.player.urlId;
-        //     var year = !this.dotyService.data ? new Date().getFullYear() : this.dotyService.data.year;
-
-        //     return `playerStats/${playerUrl}#?month=${abbrMonth}&year=${year}`;
-        // }
     }
 }
 

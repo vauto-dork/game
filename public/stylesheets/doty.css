@@ -8,8 +8,12 @@
 .doty-uberdork-table .no-winner {
   font-size: 2em; }
 
-.doty-uberdork-table .no-winner {
-  height: 98px; }
-
 .doty-uberdork-table .ranking-row .ranking-rank {
   display: none; }
+
+.doty-winner-placeholder {
+  -webkit-filter: contrast(50%) grayscale(50%) blur(4px);
+  -moz-filter: contrast(50%) grayscale(50%) blur(4px);
+  -ms-filter: contrast(50%) grayscale(50%) blur(4px);
+  -o-filter: contrast(50%) grayscale(50%) blur(4px);
+  filter: contrast(50%) grayscale(50%) blur(4px); }

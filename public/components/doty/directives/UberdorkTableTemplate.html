@@ -7,7 +7,7 @@
                 player="winner"
                 month="$ctrl.monthName(game.month, true)"
                 year="$ctrl.year"></rankings-card>
-            <div ng-if="game.uberdorks.length === 0" class="no-winner">&nbsp;&mdash;</div>
+            <winner-placeholder ng-if="game.uberdorks.length === 0"></winner-placeholder>
         </div>
     </div>
 </div>

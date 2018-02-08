@@ -15,13 +15,13 @@
         font-size: $font-larger;
     }
 
-    .no-winner {
-        height: 98px;
-    }
-
     .ranking-row {
         .ranking-rank {
             display: none;
         }
     }
+}
+
+.doty-winner-placeholder {
+    @include filter(contrast(50%) grayscale(50%) blur(4px));
 }

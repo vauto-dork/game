@@ -454,10 +454,36 @@ var Components;
 
 var Components;
 (function (Components) {
+    function WinnerPlaceholder() {
+        return {
+            templateUrl: '/components/doty/directives/WinnerPlaceholderTemplate.html',
+            controller: WinnerPlaceholderController
+        };
+    }
+    Components.WinnerPlaceholder = WinnerPlaceholder;
+    var WinnerPlaceholderController = (function () {
+        function WinnerPlaceholderController(dotyService) {
+            this.dotyService = dotyService;
+            this.player = new Shared.RankedPlayer();
+            this.player.player.firstName = "Robert";
+            this.player.player.lastName = "Paulson";
+            this.player.rating = 5.363;
+            this.player.totalPoints = 59;
+            this.player.gamesPlayed = 11;
+        }
+        WinnerPlaceholderController.$inject = ['dotyService'];
+        return WinnerPlaceholderController;
+    }());
+    Components.WinnerPlaceholderController = WinnerPlaceholderController;
+})(Components || (Components = {}));
+
+var Components;
+(function (Components) {
     var DotyModule = angular.module('DotyModule', []);
     DotyModule.service('dotyService', Components.DotyService);
     DotyModule.component('doty', Components.Doty());
     DotyModule.component('uberdorkTable', Components.UberdorkTable());
+    DotyModule.component('winnerPlaceholder', Components.WinnerPlaceholder());
 })(Components || (Components = {}));
 
 var RankingHistory;
