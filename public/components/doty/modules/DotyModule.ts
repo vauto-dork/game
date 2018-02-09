@@ -6,5 +6,4 @@ module Components {
     DotyModule.component('dotyContainer', DotyContainer());
     DotyModule.component('uberdorkTable', UberdorkTable());
     DotyModule.component('winnerPlaceholder', WinnerPlaceholder());
-    DotyModule.component('yearPicker', YearPicker());
 }

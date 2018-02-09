@@ -2,7 +2,10 @@ module Components {
     export function WinnerPlaceholder(): ng.IComponentOptions {
         return {
 			templateUrl: '/components/doty/directives/WinnerPlaceholderTemplate.html',
-			controller: WinnerPlaceholderController
+            controller: WinnerPlaceholderController,
+            bindings: {
+				pastGame: "="
+			}
 		};
     }
 
@@ -10,14 +13,16 @@ module Components {
 		public static $inject: string[] = ['dotyService'];
         
         private player: Shared.IRankedPlayer;
+        private pastGame: boolean;
 
         constructor(private dotyService: IDotyService) {
             this.player = new Shared.RankedPlayer();
-            this.player.player.firstName = "Robert";
-            this.player.player.lastName = "Paulson";
-            this.player.rating = 5.363;
-            this.player.totalPoints = 59;
-            this.player.gamesPlayed = 11;
+            this.player.player.firstName = this.pastGame ? "No" : "This could";
+            this.player.player.lastName = this.pastGame ? "Uberdork" : "be you!";
+            this.player.player.customInitials = "—";
+            this.player.rating = 0;
+            this.player.totalPoints = 0;
+            this.player.gamesPlayed = 0;
         }
     }
 }

@@ -1,4 +1,4 @@
-module Components {
+module Shared {
     export function YearPicker(): ng.IComponentOptions {
         return {
 			bindings: {
@@ -6,7 +6,7 @@ module Components {
 				disabled: "=?",
 				change: "&"
 			},
-			templateUrl: '/components/doty/directives/YearPickerTemplate.html',
+			templateUrl: '/shared/directives/YearPickerTemplate.html',
 			controller: YearPickerController
 		};
     }

@@ -750,11 +750,11 @@ input.ng-touched.ng-invalid {
   display: none; }
 
 .doty-winner-placeholder {
-  -webkit-filter: contrast(50%) grayscale(50%) blur(4px);
-  -moz-filter: contrast(50%) grayscale(50%) blur(4px);
-  -ms-filter: contrast(50%) grayscale(50%) blur(4px);
-  -o-filter: contrast(50%) grayscale(50%) blur(4px);
-  filter: contrast(50%) grayscale(50%) blur(4px);
+  -webkit-filter: contrast(50%) grayscale(60%);
+  -moz-filter: contrast(50%) grayscale(60%);
+  -ms-filter: contrast(50%) grayscale(60%);
+  -o-filter: contrast(50%) grayscale(60%);
+  filter: contrast(50%) grayscale(60%);
   pointer-events: none; }
 
 /* 

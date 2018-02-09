@@ -1289,6 +1289,87 @@ var Shared;
 
 var Shared;
 (function (Shared) {
+    function YearPicker() {
+        return {
+            bindings: {
+                year: "=",
+                disabled: "=?",
+                change: "&"
+            },
+            templateUrl: '/shared/directives/YearPickerTemplate.html',
+            controller: YearPickerController
+        };
+    }
+    Shared.YearPicker = YearPicker;
+    var YearPickerController = (function () {
+        function YearPickerController(dateTimeService) {
+            this.dateTimeService = dateTimeService;
+            this.years = [];
+            this.months = Shared.Months.Names;
+            this.init();
+        }
+        Object.defineProperty(YearPickerController.prototype, "year", {
+            get: function () {
+                return this.localYear;
+            },
+            set: function (value) {
+                this.localYear = value;
+                this.selectedYear = (value === null || value === undefined) ? this.selectedYear : value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(YearPickerController.prototype, "minimumYear", {
+            get: function () {
+                return this.dateTimeService.minimumYear;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(YearPickerController.prototype, "disablePrev", {
+            get: function () {
+                return this.year === this.minimumYear;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(YearPickerController.prototype, "disableNext", {
+            get: function () {
+                return this.year >= this.dateTimeService.currentYear();
+            },
+            enumerable: true,
+            configurable: true
+        });
+        YearPickerController.prototype.init = function () {
+            for (var i = this.minimumYear; i <= this.dateTimeService.currentYear(); i++) {
+                this.years.push(i);
+                if (i === this.year) {
+                    this.selectedYear = i;
+                }
+            }
+        };
+        YearPickerController.prototype.updateParams = function () {
+            this.year = this.selectedYear;
+            if (this.change !== undefined) {
+                this.change();
+            }
+        };
+        YearPickerController.prototype.prev = function () {
+            this.selectedYear--;
+            this.updateParams();
+        };
+        YearPickerController.prototype.next = function () {
+            this.selectedYear++;
+            this.updateParams();
+        };
+        YearPickerController.$inject = ['dateTimeService'];
+        return YearPickerController;
+    }());
+    Shared.YearPickerController = YearPickerController;
+})(Shared || (Shared = {}));
+
+var Shared;
+(function (Shared) {
     var UxControlsModule = angular.module('UxControlsModule', ['ngAnimate', 'ui.bootstrap']);
     UxControlsModule.service('localStorageService', Shared.LocalStorageService);
     UxControlsModule.service('dateTimeService', Shared.DateTimeService);
@@ -1298,6 +1379,7 @@ var Shared;
     UxControlsModule.component('loadSpinner', Shared.LoadSpinner());
     UxControlsModule.component('datePicker', Shared.DatePicker());
     UxControlsModule.component('monthYearPicker', Shared.MonthYearPicker());
+    UxControlsModule.component('yearPicker', Shared.YearPicker());
     UxControlsModule.component('playerNametag', Shared.PlayerNametag());
     UxControlsModule.component('playerScoretag', Shared.PlayerScoretag());
     UxControlsModule.component('globalNav', Shared.GlobalNav());

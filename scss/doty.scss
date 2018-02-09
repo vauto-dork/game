@@ -23,6 +23,6 @@
 }
 
 .doty-winner-placeholder {
-    @include filter(contrast(50%) grayscale(50%) blur(4px));
+    @include filter(contrast(50%) grayscale(60%));
     pointer-events: none;
 }

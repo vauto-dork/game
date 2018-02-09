@@ -471,6 +471,13 @@ var Components;
             enumerable: true,
             configurable: true
         });
+        Object.defineProperty(UberdorkTableController.prototype, "currentYear", {
+            get: function () {
+                return this.dateTimeService.currentYear();
+            },
+            enumerable: true,
+            configurable: true
+        });
         UberdorkTableController.prototype.monthName = function (value, abbreviate) {
             return this.dateTimeService.monthName(value, abbreviate);
         };
@@ -485,7 +492,10 @@ var Components;
     function WinnerPlaceholder() {
         return {
             templateUrl: '/components/doty/directives/WinnerPlaceholderTemplate.html',
-            controller: WinnerPlaceholderController
+            controller: WinnerPlaceholderController,
+            bindings: {
+                pastGame: "="
+            }
         };
     }
     Components.WinnerPlaceholder = WinnerPlaceholder;
@@ -493,97 +503,17 @@ var Components;
         function WinnerPlaceholderController(dotyService) {
             this.dotyService = dotyService;
             this.player = new Shared.RankedPlayer();
-            this.player.player.firstName = "Robert";
-            this.player.player.lastName = "Paulson";
-            this.player.rating = 5.363;
-            this.player.totalPoints = 59;
-            this.player.gamesPlayed = 11;
+            this.player.player.firstName = this.pastGame ? "No" : "This could";
+            this.player.player.lastName = this.pastGame ? "Uberdork" : "be you!";
+            this.player.player.customInitials = "—";
+            this.player.rating = 0;
+            this.player.totalPoints = 0;
+            this.player.gamesPlayed = 0;
         }
         WinnerPlaceholderController.$inject = ['dotyService'];
         return WinnerPlaceholderController;
     }());
     Components.WinnerPlaceholderController = WinnerPlaceholderController;
-})(Components || (Components = {}));
-
-var Components;
-(function (Components) {
-    function YearPicker() {
-        return {
-            bindings: {
-                year: "=",
-                disabled: "=?",
-                change: "&"
-            },
-            templateUrl: '/components/doty/directives/YearPickerTemplate.html',
-            controller: YearPickerController
-        };
-    }
-    Components.YearPicker = YearPicker;
-    var YearPickerController = (function () {
-        function YearPickerController(dateTimeService) {
-            this.dateTimeService = dateTimeService;
-            this.years = [];
-            this.months = Shared.Months.Names;
-            this.init();
-        }
-        Object.defineProperty(YearPickerController.prototype, "year", {
-            get: function () {
-                return this.localYear;
-            },
-            set: function (value) {
-                this.localYear = value;
-                this.selectedYear = (value === null || value === undefined) ? this.selectedYear : value;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(YearPickerController.prototype, "minimumYear", {
-            get: function () {
-                return this.dateTimeService.minimumYear;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(YearPickerController.prototype, "disablePrev", {
-            get: function () {
-                return this.year === this.minimumYear;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(YearPickerController.prototype, "disableNext", {
-            get: function () {
-                return this.year >= this.dateTimeService.currentYear();
-            },
-            enumerable: true,
-            configurable: true
-        });
-        YearPickerController.prototype.init = function () {
-            for (var i = this.minimumYear; i <= this.dateTimeService.currentYear(); i++) {
-                this.years.push(i);
-                if (i === this.year) {
-                    this.selectedYear = i;
-                }
-            }
-        };
-        YearPickerController.prototype.updateParams = function () {
-            this.year = this.selectedYear;
-            if (this.change !== undefined) {
-                this.change();
-            }
-        };
-        YearPickerController.prototype.prev = function () {
-            this.selectedYear--;
-            this.updateParams();
-        };
-        YearPickerController.prototype.next = function () {
-            this.selectedYear++;
-            this.updateParams();
-        };
-        YearPickerController.$inject = ['dateTimeService'];
-        return YearPickerController;
-    }());
-    Components.YearPickerController = YearPickerController;
 })(Components || (Components = {}));
 
 var Components;
@@ -594,7 +524,6 @@ var Components;
     DotyModule.component('dotyContainer', Components.DotyContainer());
     DotyModule.component('uberdorkTable', Components.UberdorkTable());
     DotyModule.component('winnerPlaceholder', Components.WinnerPlaceholder());
-    DotyModule.component('yearPicker', Components.YearPicker());
 })(Components || (Components = {}));
 
 var RankingHistory;

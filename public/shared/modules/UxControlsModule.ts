@@ -10,6 +10,7 @@ module Shared {
     UxControlsModule.component('loadSpinner', LoadSpinner());
     UxControlsModule.component('datePicker', DatePicker());
     UxControlsModule.component('monthYearPicker', MonthYearPicker());
+    UxControlsModule.component('yearPicker', YearPicker());
     UxControlsModule.component('playerNametag', PlayerNametag());
     UxControlsModule.component('playerScoretag', PlayerScoretag());
     UxControlsModule.component('globalNav', GlobalNav());

@@ -17,6 +17,10 @@ module Components {
             return !this.dotyService.data ? new Date().getFullYear() : this.dotyService.data.year;
         }
 
+        private get currentYear(): number {
+            return this.dateTimeService.currentYear();
+        }
+
         constructor(private dateTimeService: Shared.IDateTimeService, private dotyService: IDotyService) {
         }
 
