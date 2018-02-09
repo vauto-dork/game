@@ -386,7 +386,6 @@ var Components;
     var DotyController = (function () {
         function DotyController(dotyService) {
             this.dotyService = dotyService;
-            this.dotyService.changeDate(2018);
         }
         Object.defineProperty(DotyController.prototype, "year", {
             get: function () {
@@ -413,6 +412,35 @@ var Components;
         return DotyController;
     }());
     Components.DotyController = DotyController;
+})(Components || (Components = {}));
+
+var Components;
+(function (Components) {
+    function DotyContainer() {
+        return {
+            templateUrl: '/components/doty/directives/DotyContainerTemplate.html',
+            controller: DotyContainerController
+        };
+    }
+    Components.DotyContainer = DotyContainer;
+    var DotyContainerController = (function () {
+        function DotyContainerController($timeout, dateTimeService, dotyService) {
+            this.$timeout = $timeout;
+            this.dateTimeService = dateTimeService;
+            this.dotyService = dotyService;
+            this.year = this.dateTimeService.currentYear();
+            this.dotyService.changeDate(this.year);
+        }
+        DotyContainerController.prototype.updateQueryParams = function () {
+            var _this = this;
+            this.$timeout(function () {
+                _this.dotyService.changeDate(_this.year);
+            }, 0);
+        };
+        DotyContainerController.$inject = ['$timeout', 'dateTimeService', 'dotyService'];
+        return DotyContainerController;
+    }());
+    Components.DotyContainerController = DotyContainerController;
 })(Components || (Components = {}));
 
 var Components;
@@ -479,11 +507,94 @@ var Components;
 
 var Components;
 (function (Components) {
+    function YearPicker() {
+        return {
+            bindings: {
+                year: "=",
+                disabled: "=?",
+                change: "&"
+            },
+            templateUrl: '/components/doty/directives/YearPickerTemplate.html',
+            controller: YearPickerController
+        };
+    }
+    Components.YearPicker = YearPicker;
+    var YearPickerController = (function () {
+        function YearPickerController(dateTimeService) {
+            this.dateTimeService = dateTimeService;
+            this.years = [];
+            this.months = Shared.Months.Names;
+            this.init();
+        }
+        Object.defineProperty(YearPickerController.prototype, "year", {
+            get: function () {
+                return this.localYear;
+            },
+            set: function (value) {
+                this.localYear = value;
+                this.selectedYear = (value === null || value === undefined) ? this.selectedYear : value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(YearPickerController.prototype, "minimumYear", {
+            get: function () {
+                return this.dateTimeService.minimumYear;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(YearPickerController.prototype, "disablePrev", {
+            get: function () {
+                return this.year === this.minimumYear;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(YearPickerController.prototype, "disableNext", {
+            get: function () {
+                return this.year >= this.dateTimeService.currentYear();
+            },
+            enumerable: true,
+            configurable: true
+        });
+        YearPickerController.prototype.init = function () {
+            for (var i = this.minimumYear; i <= this.dateTimeService.currentYear(); i++) {
+                this.years.push(i);
+                if (i === this.year) {
+                    this.selectedYear = i;
+                }
+            }
+        };
+        YearPickerController.prototype.updateParams = function () {
+            this.year = this.selectedYear;
+            if (this.change !== undefined) {
+                this.change();
+            }
+        };
+        YearPickerController.prototype.prev = function () {
+            this.selectedYear--;
+            this.updateParams();
+        };
+        YearPickerController.prototype.next = function () {
+            this.selectedYear++;
+            this.updateParams();
+        };
+        YearPickerController.$inject = ['dateTimeService'];
+        return YearPickerController;
+    }());
+    Components.YearPickerController = YearPickerController;
+})(Components || (Components = {}));
+
+var Components;
+(function (Components) {
     var DotyModule = angular.module('DotyModule', []);
     DotyModule.service('dotyService', Components.DotyService);
     DotyModule.component('doty', Components.Doty());
+    DotyModule.component('dotyContainer', Components.DotyContainer());
     DotyModule.component('uberdorkTable', Components.UberdorkTable());
     DotyModule.component('winnerPlaceholder', Components.WinnerPlaceholder());
+    DotyModule.component('yearPicker', Components.YearPicker());
 })(Components || (Components = {}));
 
 var RankingHistory;

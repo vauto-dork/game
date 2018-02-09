@@ -21,8 +21,7 @@ module Components {
 			return !this.data ? false : this.data.doty.length > 0;
 		}
 
-        constructor(private dotyService: IDotyService) {
-            this.dotyService.changeDate(2018);
+        constructor(private dotyService: IDotyService) {            
         }
     }
 }
