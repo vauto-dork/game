@@ -1,7 +1,7 @@
-module Components {
+module DorkOfTheYear {
     export function UberdorkTable(): ng.IComponentOptions {
         return {
-			templateUrl: '/components/doty/directives/UberdorkTableTemplate.html',
+			templateUrl: '/areas/dorkOfTheYear/directives/UberdorkTableTemplate.html',
 			controller: UberdorkTableController
 		};
     }

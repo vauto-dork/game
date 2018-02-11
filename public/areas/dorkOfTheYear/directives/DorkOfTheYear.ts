@@ -1,12 +1,12 @@
-module Components {
-    export function DotyContainer(): ng.IComponentOptions {
+module DorkOfTheYear {
+    export function DorkOfTheYear(): ng.IComponentOptions {
         return {
-			templateUrl: '/components/doty/directives/DotyContainerTemplate.html',
-			controller: DotyContainerController
+			templateUrl: '/areas/dorkOfTheYear/directives/DorkOfTheYearTemplate.html',
+			controller: DorkOfTheYearController
 		};
     }
 
-    export class DotyContainerController {
+    export class DorkOfTheYearController {
         public static $inject: string[] = ['$timeout', 'dateTimeService', 'dotyService'];
         
         private year: number;

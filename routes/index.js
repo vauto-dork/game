@@ -29,4 +29,13 @@ router.get('/RankingHistory', function(req, res, next) {
   });
 });
 
+/* GET Dork of the Year page. */
+router.get('/DorkOfTheYear', function(req, res, next) {
+  res.render('dorkOfTheYear', {
+    title: 'Dork of the Year',
+    scripts: bundler.scripts('dorkOfTheYear'),
+    pageModule: 'DotyModule'
+  });
+});
+
 module.exports = router;

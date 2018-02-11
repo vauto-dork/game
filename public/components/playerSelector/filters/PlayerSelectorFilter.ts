@@ -1,5 +1,5 @@
 module Components {
-    export function PlayerSelectorFilter() {
+    export function PlayerSelectorFilter(): Function {
         return (playersList: Shared.INewGamePlayer[], filter: string): Shared.INewGamePlayer[] => {
             var caseInsensitiveMatch = (value: string, filter: string) => {
                 return value.toUpperCase().search(filter.toUpperCase()) >= 0;

@@ -1,4 +1,4 @@
-module Components {
+module DorkOfTheYear {
     export interface IDotyService {
         data: Shared.IDotyViewModel;
         

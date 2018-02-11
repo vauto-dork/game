@@ -1,7 +1,7 @@
-module Components {
+module DorkOfTheYear {
     export function Doty(): ng.IComponentOptions {
         return {
-			templateUrl: '/components/doty/directives/DotyTemplate.html',
+			templateUrl: '/areas/dorkOfTheYear/directives/DotyTemplate.html',
 			controller: DotyController
 		};
     }

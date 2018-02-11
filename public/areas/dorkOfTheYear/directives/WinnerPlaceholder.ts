@@ -1,7 +1,7 @@
-module Components {
+module DorkOfTheYear {
     export function WinnerPlaceholder(): ng.IComponentOptions {
         return {
-			templateUrl: '/components/doty/directives/WinnerPlaceholderTemplate.html',
+			templateUrl: '/areas/dorkOfTheYear/directives/WinnerPlaceholderTemplate.html',
             controller: WinnerPlaceholderController,
             bindings: {
 				pastGame: "="

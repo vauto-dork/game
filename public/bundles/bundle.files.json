@@ -45,13 +45,6 @@
                 "components/dotm/modules/*.js"
             ]
         },
-        "doty": {
-            "files": [
-                "components/doty/services/*.js",
-                "components/doty/directives/*.js",
-                "components/doty/modules/*.js"
-            ]
-        },
         "rankings": {
             "files": [
                 "components/rankings/services/*.js",
@@ -103,6 +96,16 @@
             "components": [
                 "playerSelector",
                 "newPlayerPanel"
+            ]
+        },
+        "dorkOfTheYear": {
+            "files": [
+                "areas/dorkOfTheYear/services/*.js",
+                "areas/dorkOfTheYear/directives/*.js",
+                "areas/dorkOfTheYear/modules/*.js"
+            ],
+            "components": [
+                "rankings"
             ]
         },
         "editGame": {
@@ -160,8 +163,7 @@
             ],
             "components": [
                 "rankings",
-                "dotm",
-                "doty"
+                "dotm"
             ]
         }
     }

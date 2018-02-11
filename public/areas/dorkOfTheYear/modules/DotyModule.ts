@@ -1,9 +1,9 @@
-module Components {
-    var DotyModule = angular.module('DotyModule', []);
+module DorkOfTheYear {
+    var DotyModule = angular.module('DotyModule', ['UxControlsModule', 'RankingsModule']);
 
     DotyModule.service('dotyService', DotyService);
     DotyModule.component('doty', Doty());
-    DotyModule.component('dotyContainer', DotyContainer());
+    DotyModule.component('dorkOfTheYear', DorkOfTheYear());
     DotyModule.component('uberdorkTable', UberdorkTable());
     DotyModule.component('winnerPlaceholder', WinnerPlaceholder());
 }
