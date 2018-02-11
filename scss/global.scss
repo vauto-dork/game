@@ -87,7 +87,7 @@ hr {
     -ms-filter: "FlipH";
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .navbar-collapse {
 	  font-size: 2.2em;
 	  
@@ -96,15 +96,22 @@ hr {
 		  padding-bottom: $standard-spacing;
 	  }
   }
+
+  .navbar-nav .open .dropdown-menu>li>a {
+	font-size: 24px;
+	line-height: 28px;
+	padding-left: 3em;
+  }
 }
 
-@media (min-width: 768px) {
+@media (min-width: 767px) {
   .navbar-collapse {
 	  font-size: $font-large;
-	  
-	  li > a {
-		  border-radius: 4px;
-	  }
+  }
+
+  .navbar-nav .open .dropdown-menu>li>a {
+	font-size: 16px;
+	border-radius: 0;
   }
 }
 

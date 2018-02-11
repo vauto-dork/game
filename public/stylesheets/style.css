@@ -66,18 +66,23 @@ hr {
   filter: FlipH;
   -ms-filter: "FlipH"; }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .navbar-collapse {
     font-size: 2.2em; }
     .navbar-collapse li > a {
       padding-top: 0.5em;
-      padding-bottom: 0.5em; } }
+      padding-bottom: 0.5em; }
+  .navbar-nav .open .dropdown-menu > li > a {
+    font-size: 24px;
+    line-height: 28px;
+    padding-left: 3em; } }
 
-@media (min-width: 768px) {
+@media (min-width: 767px) {
   .navbar-collapse {
     font-size: 1.4em; }
-    .navbar-collapse li > a {
-      border-radius: 4px; } }
+  .navbar-nav .open .dropdown-menu > li > a {
+    font-size: 16px;
+    border-radius: 0; } }
 
 .navbar-collapse {
   -moz-box-shadow: inset 0px 8px 9px -6px rgba(0, 0, 0, 0.5);
