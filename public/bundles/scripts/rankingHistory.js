@@ -342,11 +342,16 @@ var RankingHistory;
     ;
     var RankingHistoryController = (function () {
         function RankingHistoryController($timeout, monthYearQueryService, dateTimeService, dotmService) {
+            var _this = this;
             this.$timeout = $timeout;
             this.monthYearQueryService = monthYearQueryService;
             this.dateTimeService = dateTimeService;
             this.dotmService = dotmService;
+            this.showDotm = false;
             this.changeState(State.Init);
+            this.dotmService.subscribeDateChange(function () {
+                _this.showDotm = true;
+            });
         }
         Object.defineProperty(RankingHistoryController.prototype, "isCurrentMonth", {
             get: function () {
@@ -373,6 +378,7 @@ var RankingHistory;
                     }, 0);
                     break;
                 case State.Change:
+                    this.showDotm = false;
                     this.$timeout(function () {
                         _this.monthYearQueryService.saveQueryParams(_this.month, _this.year);
                         _this.dotmService.changeDate(_this.month, _this.year);

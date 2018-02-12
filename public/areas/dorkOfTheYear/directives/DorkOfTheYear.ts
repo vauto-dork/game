@@ -25,12 +25,14 @@ module DorkOfTheYear {
             private dotyService: IDotyService) {
 
             this.changeState(State.Init);
+
+            this.dotyService.subscribeDateChange(() => {
+                this.showLoading = false;
+                this.showDoty = true;
+            });
         }
 
         private changeState(newState: State) {
-            this.showLoading = newState !== State.Ready;
-            this.showDoty = newState === State.Ready;
-
 			// Timeouts are required to force a digest cycle so the query
 			// param factory will update in the correct scope.
 			switch (newState) {
@@ -45,11 +47,15 @@ module DorkOfTheYear {
 						this.changeState(State.Change);
 					}, 0);
 					break;
-				case State.Change:
+                case State.Change:
+                    this.showLoading = true;
+                    this.showDoty = false;
+
 					this.$timeout(() => {
 						this.monthYearQueryService.saveQueryParams(null, this.year);
 						this.dotyService.changeDate(this.year);
-					}, 0);
+                    }, 0);
+                    
 					this.changeState(State.Ready);
 					break;
 			}

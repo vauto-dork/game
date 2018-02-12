@@ -301,6 +301,7 @@ var DorkOfTheYear;
     ;
     var DorkOfTheYearController = (function () {
         function DorkOfTheYearController($timeout, monthYearQueryService, dateTimeService, dotyService) {
+            var _this = this;
             this.$timeout = $timeout;
             this.monthYearQueryService = monthYearQueryService;
             this.dateTimeService = dateTimeService;
@@ -308,11 +309,13 @@ var DorkOfTheYear;
             this.showLoading = true;
             this.showDoty = false;
             this.changeState(State.Init);
+            this.dotyService.subscribeDateChange(function () {
+                _this.showLoading = false;
+                _this.showDoty = true;
+            });
         }
         DorkOfTheYearController.prototype.changeState = function (newState) {
             var _this = this;
-            this.showLoading = newState !== State.Ready;
-            this.showDoty = newState === State.Ready;
             switch (newState) {
                 case State.Init:
                     this.$timeout(function () {
@@ -327,6 +330,8 @@ var DorkOfTheYear;
                     }, 0);
                     break;
                 case State.Change:
+                    this.showLoading = true;
+                    this.showDoty = false;
                     this.$timeout(function () {
                         _this.monthYearQueryService.saveQueryParams(null, _this.year);
                         _this.dotyService.changeDate(_this.year);
