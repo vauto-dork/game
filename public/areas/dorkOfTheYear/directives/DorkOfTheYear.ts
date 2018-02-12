@@ -16,6 +16,8 @@ module DorkOfTheYear {
         public static $inject: string[] = ['$timeout', 'monthYearQueryService', 'dateTimeService', 'dotyService'];
         
         private year: number;
+        private showLoading: boolean = true;
+        private showDoty: boolean = false;
 
         constructor(private $timeout: ng.ITimeoutService,
             private monthYearQueryService: Shared.IMonthYearQueryService,
@@ -26,6 +28,9 @@ module DorkOfTheYear {
         }
 
         private changeState(newState: State) {
+            this.showLoading = newState !== State.Ready;
+            this.showDoty = newState === State.Ready;
+
 			// Timeouts are required to force a digest cycle so the query
 			// param factory will update in the correct scope.
 			switch (newState) {
@@ -36,7 +41,7 @@ module DorkOfTheYear {
 							this.year = date.year;
 						} else {
 							this.year = this.dateTimeService.currentYear();
-						}
+                        }
 						this.changeState(State.Change);
 					}, 0);
 					break;

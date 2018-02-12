@@ -5,13 +5,15 @@
         </div>
     </div>
 
-    <div class="row">
+    <load-spinner ng-show="$ctrl.showLoading"></load-spinner>
+
+    <div class="row" ng-show="$ctrl.showDoty">
         <div class="col-xs-12">
             <doty></doty>
         </div>
     </div>
 
-    <div class="row">
+    <div class="row" ng-show="$ctrl.showDoty">
         <div class="col-xs-12">
             <p class="text-center">
                 Dork of the Year is determined by a value calculated by the sum of points in winning month(s)

@@ -305,10 +305,14 @@ var DorkOfTheYear;
             this.monthYearQueryService = monthYearQueryService;
             this.dateTimeService = dateTimeService;
             this.dotyService = dotyService;
+            this.showLoading = true;
+            this.showDoty = false;
             this.changeState(State.Init);
         }
         DorkOfTheYearController.prototype.changeState = function (newState) {
             var _this = this;
+            this.showLoading = newState !== State.Ready;
+            this.showDoty = newState === State.Ready;
             switch (newState) {
                 case State.Init:
                     this.$timeout(function () {
