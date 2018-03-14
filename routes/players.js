@@ -207,7 +207,7 @@ router.get('/doty/', function(req, res, next) {
 							numWins: winningGames.length,
 							totalPoints: totalPoints,
 							gamesPlayed: gamesPlayed,
-							finalRating: (totalPoints / gamesPlayed) + winningGames.length
+							finalRating: (totalPoints / gamesPlayed) + Math.pow(2, winningGames.length)
 						});
 					}
 				});

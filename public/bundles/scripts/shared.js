@@ -237,6 +237,22 @@ var Shared;
 
 var Shared;
 (function (Shared) {
+    var Months = (function () {
+        function Months() {
+        }
+        Months.Names = ["January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+        Months.ShortNames = ["Jan", "Feb", "Mar", "Apr", "May", "June",
+            "July", "Aug", "Sept", "Oct", "Nov", "Dec"
+        ];
+        return Months;
+    }());
+    Shared.Months = Months;
+})(Shared || (Shared = {}));
+
+var Shared;
+(function (Shared) {
     var MonthYearParams = (function () {
         function MonthYearParams(month, year) {
             this.currentDate = new Date();
@@ -253,22 +269,6 @@ var Shared;
         return MonthYearParams;
     }());
     Shared.MonthYearParams = MonthYearParams;
-})(Shared || (Shared = {}));
-
-var Shared;
-(function (Shared) {
-    var Months = (function () {
-        function Months() {
-        }
-        Months.Names = ["January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"
-        ];
-        Months.ShortNames = ["Jan", "Feb", "Mar", "Apr", "May", "June",
-            "July", "Aug", "Sept", "Oct", "Nov", "Dec"
-        ];
-        return Months;
-    }());
-    Shared.Months = Months;
 })(Shared || (Shared = {}));
 
 var Shared;
