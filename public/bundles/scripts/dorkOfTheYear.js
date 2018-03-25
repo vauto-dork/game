@@ -243,11 +243,11 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Components;
-(function (Components) {
-    var DotmService = (function (_super) {
-        __extends(DotmService, _super);
-        function DotmService($timeout, apiService) {
+var DorkOfTheYear;
+(function (DorkOfTheYear) {
+    var DotyService = (function (_super) {
+        __extends(DotyService, _super);
+        function DotyService($timeout, apiService) {
             var _this = _super.call(this, $timeout) || this;
             _this.apiService = apiService;
             _this.events = {
@@ -255,119 +255,221 @@ var Components;
             };
             return _this;
         }
-        Object.defineProperty(DotmService.prototype, "data", {
+        Object.defineProperty(DotyService.prototype, "data", {
             get: function () {
-                return this.localDotmData;
+                return this.localDotyData;
             },
             enumerable: true,
             configurable: true
         });
-        DotmService.prototype.changeDate = function (month, year) {
-            this.getDotm(month, year);
+        DotyService.prototype.changeDate = function (year) {
+            this.getDoty(year);
         };
-        DotmService.prototype.subscribeDateChange = function (callback) {
+        DotyService.prototype.subscribeDateChange = function (callback) {
             this.subscribe(this.events.dateChanged, callback);
         };
-        DotmService.prototype.getDotm = function (month, year) {
+        DotyService.prototype.getDoty = function (year) {
             var _this = this;
-            this.apiService.getDotm(month, year).then(function (data) {
-                _this.localDotmData = data;
+            this.apiService.getDoty(year).then(function (data) {
+                _this.localDotyData = data;
                 _this.publish(_this.events.dateChanged, null);
             }, function () {
-                console.error("Cannot get DOTM.");
+                console.error("Cannot get DOTY.");
             });
         };
-        DotmService.$inject = ["$timeout", "apiService"];
-        return DotmService;
+        DotyService.$inject = ["$timeout", "apiService"];
+        return DotyService;
     }(Shared.PubSubServiceBase));
-    Components.DotmService = DotmService;
-})(Components || (Components = {}));
+    DorkOfTheYear.DotyService = DotyService;
+})(DorkOfTheYear || (DorkOfTheYear = {}));
 
-var Components;
-(function (Components) {
-    function Dotm() {
+var DorkOfTheYear;
+(function (DorkOfTheYear_1) {
+    function DorkOfTheYear() {
         return {
-            templateUrl: '/components/dotm/directives/DotmTemplate.html',
-            controller: DotmController
+            templateUrl: '/areas/dorkOfTheYear/directives/DorkOfTheYearTemplate.html',
+            controller: DorkOfTheYearController
         };
     }
-    Components.Dotm = Dotm;
-    var DotmController = (function () {
-        function DotmController(dotmService, apiService) {
-            this.dotmService = dotmService;
-            this.apiService = apiService;
-        }
-        Object.defineProperty(DotmController.prototype, "dotm", {
-            get: function () {
-                return this.dotmService.data;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(DotmController.prototype, "hasUberdorks", {
-            get: function () {
-                return !this.dotm ? false : this.dotm.uberdorks.length > 0;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        DotmController.$inject = ['dotmService', 'apiService'];
-        return DotmController;
-    }());
-    Components.DotmController = DotmController;
-})(Components || (Components = {}));
-
-var Components;
-(function (Components) {
-    var DotmModule = angular.module('DotmModule', []);
-    DotmModule.service('dotmService', Components.DotmService);
-    DotmModule.component('dotm', Components.Dotm());
-})(Components || (Components = {}));
-
-var Leaderboard;
-(function (Leaderboard_1) {
-    function Leaderboard() {
-        return {
-            templateUrl: '/areas/leaderboard/directives/LeaderboardTemplate.html',
-            controller: LeaderboardController
-        };
-    }
-    Leaderboard_1.Leaderboard = Leaderboard;
-    var LeaderboardController = (function () {
-        function LeaderboardController(dateTimeService, dotmService, apiService) {
-            this.dateTimeService = dateTimeService;
-            this.dotmService = dotmService;
-            this.apiService = apiService;
-            this.noGamesThisMonth = false;
-            this.currentMonth = dateTimeService.currentMonthValue();
-            this.currentYear = dateTimeService.currentYear();
-            this.lastMonth = dateTimeService.lastMonthValue();
-            this.lastMonthYear = dateTimeService.lastMonthYear();
-            this.dotmService.changeDate(this.lastMonth, this.lastMonthYear);
-            this.getLastPlayedGame();
-        }
-        LeaderboardController.prototype.getLastPlayedGame = function () {
+    DorkOfTheYear_1.DorkOfTheYear = DorkOfTheYear;
+    var State;
+    (function (State) {
+        State[State["Init"] = 0] = "Init";
+        State[State["Ready"] = 1] = "Ready";
+        State[State["Change"] = 2] = "Change";
+    })(State || (State = {}));
+    ;
+    var DorkOfTheYearController = (function () {
+        function DorkOfTheYearController($timeout, monthYearQueryService, dateTimeService, dotyService) {
             var _this = this;
-            this.apiService.getLastPlayedGame().then(function (game) {
-                _this.lastDatePlayed = game.datePlayed;
-                var lastGame = new Date(_this.lastDatePlayed);
-                var lastGameMonth = lastGame.getMonth();
-                var lastGameYear = lastGame.getFullYear();
-                _this.noGamesThisMonth = !(_this.currentMonth === lastGameMonth && _this.currentYear === lastGameYear);
-            }, function () {
-                console.error("Cannot get last game played.");
+            this.$timeout = $timeout;
+            this.monthYearQueryService = monthYearQueryService;
+            this.dateTimeService = dateTimeService;
+            this.dotyService = dotyService;
+            this.showLoading = true;
+            this.showDoty = false;
+            this.changeState(State.Init);
+            this.dotyService.subscribeDateChange(function () {
+                _this.showLoading = false;
+                _this.showDoty = true;
             });
+        }
+        DorkOfTheYearController.prototype.changeState = function (newState) {
+            var _this = this;
+            switch (newState) {
+                case State.Init:
+                    this.$timeout(function () {
+                        var date = _this.monthYearQueryService.getQueryParams();
+                        if (date) {
+                            _this.year = date.year;
+                        }
+                        else {
+                            _this.year = _this.dateTimeService.currentYear();
+                        }
+                        _this.changeState(State.Change);
+                    }, 0);
+                    break;
+                case State.Change:
+                    this.showLoading = true;
+                    this.showDoty = false;
+                    this.$timeout(function () {
+                        _this.monthYearQueryService.saveQueryParams(null, _this.year);
+                        _this.dotyService.changeDate(_this.year);
+                    }, 0);
+                    this.changeState(State.Ready);
+                    break;
+            }
         };
-        LeaderboardController.$inject = ['dateTimeService', 'dotmService', 'apiService'];
-        return LeaderboardController;
+        DorkOfTheYearController.prototype.updateQueryParams = function () {
+            this.changeState(State.Change);
+        };
+        DorkOfTheYearController.$inject = ['$timeout', 'monthYearQueryService', 'dateTimeService', 'dotyService'];
+        return DorkOfTheYearController;
     }());
-    Leaderboard_1.LeaderboardController = LeaderboardController;
-})(Leaderboard || (Leaderboard = {}));
+    DorkOfTheYear_1.DorkOfTheYearController = DorkOfTheYearController;
+})(DorkOfTheYear || (DorkOfTheYear = {}));
 
-var Leaderboard;
-(function (Leaderboard) {
-    var LeaderboardModule = angular.module('LeaderboardModule', ['UxControlsModule', 'DotmModule', 'RankingsModule']);
-    LeaderboardModule.component('leaderboard', Leaderboard.Leaderboard());
-})(Leaderboard || (Leaderboard = {}));
+var DorkOfTheYear;
+(function (DorkOfTheYear) {
+    function Doty() {
+        return {
+            templateUrl: '/areas/dorkOfTheYear/directives/DotyTemplate.html',
+            controller: DotyController
+        };
+    }
+    DorkOfTheYear.Doty = Doty;
+    var DotyController = (function () {
+        function DotyController(dotyService) {
+            this.dotyService = dotyService;
+        }
+        Object.defineProperty(DotyController.prototype, "year", {
+            get: function () {
+                return !this.data ? null : this.data.year;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(DotyController.prototype, "data", {
+            get: function () {
+                return this.dotyService.data;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(DotyController.prototype, "hasUberdorks", {
+            get: function () {
+                return !this.data ? false : this.data.doty.length > 0;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        DotyController.$inject = ['dotyService'];
+        return DotyController;
+    }());
+    DorkOfTheYear.DotyController = DotyController;
+})(DorkOfTheYear || (DorkOfTheYear = {}));
 
-//# sourceMappingURL=maps/index.js.map
+var DorkOfTheYear;
+(function (DorkOfTheYear) {
+    function UberdorkTable() {
+        return {
+            templateUrl: '/areas/dorkOfTheYear/directives/UberdorkTableTemplate.html',
+            controller: UberdorkTableController
+        };
+    }
+    DorkOfTheYear.UberdorkTable = UberdorkTable;
+    var UberdorkTableController = (function () {
+        function UberdorkTableController(dateTimeService, dotyService) {
+            this.dateTimeService = dateTimeService;
+            this.dotyService = dotyService;
+        }
+        Object.defineProperty(UberdorkTableController.prototype, "monthlyRankings", {
+            get: function () {
+                return !this.dotyService.data ? [] : this.dotyService.data.monthlyRankings;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(UberdorkTableController.prototype, "year", {
+            get: function () {
+                return !this.dotyService.data ? new Date().getFullYear() : this.dotyService.data.year;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(UberdorkTableController.prototype, "currentYear", {
+            get: function () {
+                return this.dateTimeService.currentYear();
+            },
+            enumerable: true,
+            configurable: true
+        });
+        UberdorkTableController.prototype.monthName = function (value, abbreviate) {
+            return this.dateTimeService.monthName(value, abbreviate);
+        };
+        UberdorkTableController.$inject = ['dateTimeService', 'dotyService'];
+        return UberdorkTableController;
+    }());
+    DorkOfTheYear.UberdorkTableController = UberdorkTableController;
+})(DorkOfTheYear || (DorkOfTheYear = {}));
+
+var DorkOfTheYear;
+(function (DorkOfTheYear) {
+    function WinnerPlaceholder() {
+        return {
+            templateUrl: '/areas/dorkOfTheYear/directives/WinnerPlaceholderTemplate.html',
+            controller: WinnerPlaceholderController,
+            bindings: {
+                pastGame: "="
+            }
+        };
+    }
+    DorkOfTheYear.WinnerPlaceholder = WinnerPlaceholder;
+    var WinnerPlaceholderController = (function () {
+        function WinnerPlaceholderController(dotyService) {
+            this.dotyService = dotyService;
+            this.player = new Shared.RankedPlayer();
+            this.player.player.firstName = this.pastGame ? "No" : "This could";
+            this.player.player.lastName = this.pastGame ? "Uberdork" : "be you!";
+            this.player.player.customInitials = "—";
+            this.player.rating = 0;
+            this.player.totalPoints = 0;
+            this.player.gamesPlayed = 0;
+        }
+        WinnerPlaceholderController.$inject = ['dotyService'];
+        return WinnerPlaceholderController;
+    }());
+    DorkOfTheYear.WinnerPlaceholderController = WinnerPlaceholderController;
+})(DorkOfTheYear || (DorkOfTheYear = {}));
+
+var DorkOfTheYear;
+(function (DorkOfTheYear) {
+    var DotyModule = angular.module('DotyModule', ['UxControlsModule', 'RankingsModule']);
+    DotyModule.service('dotyService', DorkOfTheYear.DotyService);
+    DotyModule.component('doty', DorkOfTheYear.Doty());
+    DotyModule.component('dorkOfTheYear', DorkOfTheYear.DorkOfTheYear());
+    DotyModule.component('uberdorkTable', DorkOfTheYear.UberdorkTable());
+    DotyModule.component('winnerPlaceholder', DorkOfTheYear.WinnerPlaceholder());
+})(DorkOfTheYear || (DorkOfTheYear = {}));
+
+//# sourceMappingURL=maps/dorkOfTheYear.js.map

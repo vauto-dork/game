@@ -36,6 +36,17 @@ module Shared {
 		uberdorks: IRankedPlayerViewModel[],
 		negadorks: IRankedPlayerViewModel[]
 	}
+
+	export interface IDotyViewModel {
+		year: number;
+		doty: IRankedPlayerViewModel[];
+		monthlyRankings: IDotyMonthModel[];
+	}
+
+	export interface IDotyMonthModel {
+		month: number;
+		uberdorks: (IRankedPlayer|IRankedPlayerViewModel)[];
+	}
 	
 	export interface ICreateGameViewModel {
 		firstGameOfMonth: boolean;

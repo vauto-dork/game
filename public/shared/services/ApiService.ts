@@ -11,6 +11,7 @@ module Shared {
 		getAllPlayers(): ng.IPromise<IPlayer[]>;
 		getRankedPlayers(month: number, year: number, hideUnranked: boolean): ng.IPromise<IRankedPlayer[]>;
 		getDotm(month: number, year: number): ng.IPromise<IDotmViewModel>;
+		getDoty(year: number): ng.IPromise<IDotyViewModel>;
 		getLastPlayedGame(): ng.IPromise<IGame>;
 		getFinalizedGame(id: string): ng.IPromise<IGame>;
 		getGames(month: number, year: number): ng.IPromise<IGame[]>;
@@ -233,6 +234,33 @@ module Shared {
 
 			this.$http.get("/Players/dotm" + queryString)
 				.success((data: IDotmViewModel, status, headers, config) => {
+					def.resolve(data);
+				}).
+				error((data, status, headers, config) => {
+					console.error('Cannot get dorks of the month.');
+					def.reject(data);
+				});
+
+			return def.promise;
+		}
+
+		// --------------------------------------------------------------
+		// Dork of the Year
+		
+		public getDoty(year: number): ng.IPromise<IDotyViewModel> {
+			var def = this.$q.defer<IDotyViewModel>();
+
+			var queryString = `?year=${year}`;
+
+			this.$http.get("/Players/doty" + queryString)
+				.success((data: IDotyViewModel, status, headers, config) => {
+					data.monthlyRankings.forEach((month)=>{
+						var uberdorks = month.uberdorks.map((winner) => {
+							return new Shared.RankedPlayer(winner);
+						});
+						month.uberdorks = uberdorks;
+					});
+					
 					def.resolve(data);
 				}).
 				error((data, status, headers, config) => {

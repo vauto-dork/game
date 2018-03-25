@@ -17,6 +17,7 @@ module RankingHistory {
 
 		private month: number;
 		private year: number;
+		private showDotm: boolean = false;
 
 		private get isCurrentMonth(): boolean {
 			return this.month === this.dateTimeService.currentMonthValue() && this.year === this.dateTimeService.currentYear();
@@ -29,6 +30,10 @@ module RankingHistory {
 			private dotmService: Components.DotmService) {
 
 			this.changeState(State.Init);
+
+			this.dotmService.subscribeDateChange(() => {
+                this.showDotm = true;
+            });
         }
 
 		private changeState(newState: State) {
@@ -49,10 +54,13 @@ module RankingHistory {
 					}, 0);
 					break;
 				case State.Change:
+					this.showDotm = false;
+					
 					this.$timeout(() => {
 						this.monthYearQueryService.saveQueryParams(this.month, this.year);
 						this.dotmService.changeDate(this.month, this.year);
 					}, 0);
+					
 					this.changeState(State.Ready);
 					break;
 			}

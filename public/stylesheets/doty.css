@@ -1,0 +1,20 @@
+.doty-uberdork-table .month-header {
+  margin: 0.5em; }
+
+.doty-uberdork-table .left-push {
+  padding-left: 4em; }
+
+.doty-uberdork-table .month-header,
+.doty-uberdork-table .no-winner {
+  font-size: 2em; }
+
+.doty-uberdork-table .ranking-row .ranking-rank {
+  display: none; }
+
+.doty-winner-placeholder {
+  -webkit-filter: contrast(50%) grayscale(60%);
+  -moz-filter: contrast(50%) grayscale(60%);
+  -ms-filter: contrast(50%) grayscale(60%);
+  -o-filter: contrast(50%) grayscale(60%);
+  filter: contrast(50%) grayscale(60%);
+  pointer-events: none; }

@@ -98,6 +98,16 @@
                 "newPlayerPanel"
             ]
         },
+        "dorkOfTheYear": {
+            "files": [
+                "areas/dorkOfTheYear/services/*.js",
+                "areas/dorkOfTheYear/directives/*.js",
+                "areas/dorkOfTheYear/modules/*.js"
+            ],
+            "components": [
+                "rankings"
+            ]
+        },
         "editGame": {
             "files": [
                 "areas/editGame/services/*.js",

@@ -234,7 +234,7 @@ var Components;
 (function (Components) {
     var PlayerSelectorModule = angular.module('PlayerSelectorModule', []);
     PlayerSelectorModule.service('playerSelectionService', Components.PlayerSelectionService);
-    PlayerSelectorModule.filter('playerSelectorFilter', Components.PlayerSelectorFilter);
+    PlayerSelectorModule.filter('playerSelectorFilter', [Components.PlayerSelectorFilter]);
     PlayerSelectorModule.component('playerSelector', Components.PlayerSelector());
 })(Components || (Components = {}));
 

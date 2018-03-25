@@ -63,7 +63,7 @@
     margin: 0.5em;
     color: #7a8394; }
   .player-stats .stats-table-header {
-    border-bottom: 1px solid #7a8394; }
+    border-bottom: 2px solid #7a8394; }
   .player-stats .header-rating,
   .player-stats .header-rank {
     width: 13em;

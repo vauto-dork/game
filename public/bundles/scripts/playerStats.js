@@ -229,8 +229,8 @@ var PlayerStats;
             if (!this.playerStats.gamesPlayed) {
                 return;
             }
-            var gameMonth = new Date(this.playerStats.dateRange[0]).getUTCMonth();
-            var gameYear = new Date(this.playerStats.dateRange[0]).getUTCFullYear();
+            var gameMonth = new Date(this.playerStats.dateRange[0].toString()).getUTCMonth();
+            var gameYear = new Date(this.playerStats.dateRange[0].toString()).getUTCFullYear();
             var numDaysInMonth = new Date(gameYear, gameMonth + 1, 0).getUTCDate();
             this.gameDayData = [];
             for (var i = 0; i < numDaysInMonth; i++) {
@@ -244,7 +244,7 @@ var PlayerStats;
             }
             var prevDay = 0;
             this.playerStats.games.filter(function (game) { return game.played; }).forEach(function (game) {
-                var day = new Date(game.gameDate).getDate();
+                var day = new Date(game.gameDate.toString()).getDate();
                 var index = day - 1;
                 _this.gameDayData[index].gamesPlayed++;
                 _this.gameDayData[index].games.unshift(game);
@@ -255,7 +255,7 @@ var PlayerStats;
             });
             prevDay = 0;
             this.playerStats.games.forEach(function (game) {
-                var day = new Date(game.gameDate).getDate();
+                var day = new Date(game.gameDate.toString()).getDate();
                 var index = day - 1;
                 if (prevDay !== day) {
                     _this.gameDayData[index].rank = game.rank;
@@ -579,7 +579,7 @@ var PlayerStats;
             var sb = [];
             sb.push("<table>");
             games.forEach(function (game, index) {
-                var gameDate = new Date(game.gameDate);
+                var gameDate = new Date(game.gameDate.toString());
                 var hour = gameDate.getHours() > 12 ? gameDate.getHours() - 12 : gameDate.getHours();
                 var minStr = d3.format("02")(gameDate.getMinutes());
                 var timeStr = (hour || 12) + ":" + minStr + (gameDate.getHours() >= 12 ? 'p' : 'a');

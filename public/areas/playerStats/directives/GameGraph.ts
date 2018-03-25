@@ -148,8 +148,8 @@ module PlayerStats {
                 return;
             }
 
-            var gameMonth = new Date(this.playerStats.dateRange[0]).getUTCMonth();
-            var gameYear = new Date(this.playerStats.dateRange[0]).getUTCFullYear();
+            var gameMonth = new Date(this.playerStats.dateRange[0].toString()).getUTCMonth();
+            var gameYear = new Date(this.playerStats.dateRange[0].toString()).getUTCFullYear();
             var numDaysInMonth = new Date(gameYear, gameMonth + 1, 0).getUTCDate();
 
             this.gameDayData = [];
@@ -166,7 +166,7 @@ module PlayerStats {
 
             var prevDay = 0;
             this.playerStats.games.filter((game) => { return game.played; }).forEach((game) => {
-                var day = new Date(game.gameDate).getDate();
+                var day = new Date(game.gameDate.toString()).getDate();
                 var index = day - 1;
                 this.gameDayData[index].gamesPlayed++;
                 this.gameDayData[index].games.unshift(game);
@@ -181,7 +181,7 @@ module PlayerStats {
             // on a game that wasn't played.
             prevDay = 0;
             this.playerStats.games.forEach((game) => {
-                var day = new Date(game.gameDate).getDate();
+                var day = new Date(game.gameDate.toString()).getDate();
                 var index = day - 1;
 
                 if(prevDay !== day){
@@ -605,7 +605,7 @@ module PlayerStats {
             sb.push("<table>");
 
             games.forEach((game, index) => {
-                var gameDate = new Date(game.gameDate);
+                var gameDate = new Date(game.gameDate.toString());
                 var hour = gameDate.getHours() > 12 ? gameDate.getHours() - 12: gameDate.getHours();
                 var minStr = d3.format("02")(gameDate.getMinutes());
                 var timeStr = `${hour || 12}:${minStr}${gameDate.getHours() >= 12 ? 'p' : 'a'}`;

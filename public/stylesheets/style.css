@@ -66,18 +66,23 @@ hr {
   filter: FlipH;
   -ms-filter: "FlipH"; }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .navbar-collapse {
     font-size: 2.2em; }
     .navbar-collapse li > a {
       padding-top: 0.5em;
-      padding-bottom: 0.5em; } }
+      padding-bottom: 0.5em; }
+  .navbar-nav .open .dropdown-menu > li > a {
+    font-size: 24px;
+    line-height: 28px;
+    padding-left: 3em; } }
 
-@media (min-width: 768px) {
+@media (min-width: 767px) {
   .navbar-collapse {
     font-size: 1.4em; }
-    .navbar-collapse li > a {
-      border-radius: 4px; } }
+  .navbar-nav .open .dropdown-menu > li > a {
+    font-size: 16px;
+    border-radius: 0; } }
 
 .navbar-collapse {
   -moz-box-shadow: inset 0px 8px 9px -6px rgba(0, 0, 0, 0.5);
@@ -443,7 +448,7 @@ input.ng-touched.ng-invalid {
     margin: 0.5em;
     color: #7a8394; }
   .player-stats .stats-table-header {
-    border-bottom: 1px solid #7a8394; }
+    border-bottom: 2px solid #7a8394; }
   .player-stats .header-rating,
   .player-stats .header-rank {
     width: 13em;
@@ -735,6 +740,27 @@ input.ng-touched.ng-invalid {
     fill-opacity: 0.5;
     stroke: #508425;
     stroke-width: 2px; }
+
+.doty-uberdork-table .month-header {
+  margin: 0.5em; }
+
+.doty-uberdork-table .left-push {
+  padding-left: 4em; }
+
+.doty-uberdork-table .month-header,
+.doty-uberdork-table .no-winner {
+  font-size: 2em; }
+
+.doty-uberdork-table .ranking-row .ranking-rank {
+  display: none; }
+
+.doty-winner-placeholder {
+  -webkit-filter: contrast(50%) grayscale(60%);
+  -moz-filter: contrast(50%) grayscale(60%);
+  -ms-filter: contrast(50%) grayscale(60%);
+  -o-filter: contrast(50%) grayscale(60%);
+  filter: contrast(50%) grayscale(60%);
+  pointer-events: none; }
 
 /* 
 .ranking-row,

@@ -1,0 +1,28 @@
+@import "variables";
+@import "mixins";
+
+.doty-uberdork-table {
+    .month-header {
+        margin: $standard-spacing;
+    }
+
+    .left-push {
+        padding-left: 4em;
+    }
+
+    .month-header,
+    .no-winner {
+        font-size: $font-larger;
+    }
+
+    .ranking-row {
+        .ranking-rank {
+            display: none;
+        }
+    }
+}
+
+.doty-winner-placeholder {
+    @include filter(contrast(50%) grayscale(60%));
+    pointer-events: none;
+}

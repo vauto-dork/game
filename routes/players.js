@@ -107,25 +107,7 @@ function getAllPlayersForNewGame(games, res, next) {
 	});
 };
 
-/**
- * Return a list of uberdorks and negadorks by the month's games.
- * You must provide a month and optionally a year to get the list of uberdorks and negadorks in the given time period.
- * Query params:
- * 	month - integer
- * 	year - integer. Default value is the current year.
- *
- * @return A list of ranked players.
- * <pre>
- * 		{
- * 			player: { <see player object> },
- * 			totalPoints: int,
- * 			gamesPlayed: int,
- *	 		rank: int
- *		}
- * 	</pre>
- */
-
-router.get('/dotm/', function (req, res, next) {
+function getDotm(req, next, callback) {
 	getRankedPlayers(req, next, function (rankedPlayers) {
 		rankedPlayers = rankedPlayers.filter(function (element) {
 			return element.gamesPlayed >= 10;
@@ -156,8 +138,115 @@ router.get('/dotm/', function (req, res, next) {
 			negadorks = negativePoints;
 		}
 
-		res.json({ uberdorks: uberdorks, negadorks: negadorks });
+		callback({ uberdorks: uberdorks, negadorks: negadorks })
 	});
+};
+
+/**
+ * Return a list of uberdorks and negadorks by the month's games.
+ * You must provide a month and optionally a year to get the list of uberdorks and negadorks in the given time period.
+ * Query params:
+ * 	month - integer
+ * 	year - integer. Default value is the current year.
+ *
+ * @return A list of ranked players.
+ * <pre>
+ * 		{
+ * 			player: { <see player object> },
+ * 			totalPoints: int,
+ * 			gamesPlayed: int,
+ *	 		rank: int
+ *		}
+ * 	</pre>
+ */
+
+router.get('/dotm/', function (req, res, next) {
+	getDotm(req, next, function(data) {
+		res.json(data);
+	});
+});
+
+router.get('/doty/', function(req, res, next) {
+	var now = new Date();
+	var yearDefined = req.query.year !== undefined && req.query.year !== null;
+	var year = yearDefined ? parseInt(req.query.year) : now.getFullYear();
+	var isCurrentYear = year === now.getFullYear();
+
+	var isCurrentMonth = function(month) {
+		return month === now.getMonth();
+	};
+
+	var step = function(index, monthlyDorks) {
+		req.query.month = index;
+		var nextIndex = index + 1;
+		getDotm(req, next, function(data) {
+			var uberdorks = isCurrentMonth(index) && isCurrentYear ? [] : data.uberdorks;
+			monthlyDorks.push({month: index, uberdorks: uberdorks});
+
+			if(nextIndex < 12) {
+				step(nextIndex, monthlyDorks);
+			} else {
+				var flattenedPlayers = [];
+				monthlyDorks.forEach(function(month) {
+					month.uberdorks.forEach(function(winner) {
+						flattenedPlayers.push(winner);
+					});
+				});
+
+				var winnerCache = [];
+				flattenedPlayers.forEach(function(winner){
+					var currentWinnerId = winner.player.id;
+					var winnerIds = winnerCache.map(function(w) { return w.playerId; });
+					
+					if(winnerIds.indexOf(currentWinnerId) === -1) {
+						var winningGames = flattenedPlayers.filter(function(p) {
+							return currentWinnerId === p.player.id;
+						});
+
+						var totalPoints = 0;
+						var gamesPlayed = 0;
+						winningGames.forEach(function(game) {
+							totalPoints += game.totalPoints;
+							gamesPlayed += game.gamesPlayed;
+						});
+
+						winnerCache.push({
+							playerId: currentWinnerId,
+							player: winner.player, // for output, but clutters debug
+							//playerName: winner.player.firstName + " " + winner.player.lastName, // used for debug only
+							//winningGames: winningGames, // used for debug only
+							numWins: winningGames.length,
+							totalPoints: totalPoints,
+							gamesPlayed: gamesPlayed,
+							finalRating: (totalPoints / gamesPlayed) + Math.pow(2, winningGames.length)
+						});
+					}
+				});
+
+				var maxRating = Math.max(...winnerCache.map(function(winner) {
+					return winner.finalRating;
+				}));
+
+				var winners = winnerCache.filter(function(winner) {
+					return winner.finalRating >= maxRating;
+				});
+
+				var doty = isCurrentYear ? [] : winners.map(function(winner) {
+					return {
+						player: winner.player,
+						totalPoints: winner.totalPoints,
+						gamesPlayed: winner.gamesPlayed,
+						rating: winner.finalRating
+					};
+				});
+
+				res.json({ year: year, doty: doty, monthlyRankings: monthlyDorks });
+			}
+		});
+	};
+
+	var monthlyDorks = [];
+	step(0, monthlyDorks);
 });
 
 /**

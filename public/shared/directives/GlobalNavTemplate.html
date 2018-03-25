@@ -20,8 +20,16 @@
                 <li><a href="/"><span class="glyphicon glyphicon-align-left" aria-hidden="true"></span>Leaderboard</a></li>
                 <li><a href="/CreateGame"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>Create Game</a></li>
                 <li><a href="/ActiveGames"><span class="glyphicon glyphicon-play" aria-hidden="true"></span>Active Games</a></li>
-                <li><a href="/GameHistory"><span class="glyphicon glyphicon-time" aria-hidden="true"></span>Game History</a></li>
-                <li><a href="/RankingHistory"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>Ranking History</a></li>
+                <li class="dropdown" uib-dropdown>
+                    <a href="#" class="dropdown-toggle" uib-dropdown-toggle role="button" aria-haspopup="true" aria-expanded="false">
+                        <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>History <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" uib-dropdown-menu role="menu" >
+                        <li><a href="/GameHistory">Game History</a></li>
+                        <li><a href="/RankingHistory">Ranking History</a></li>
+                        <li><a href="/DorkOfTheYear">Dork of the Year</a></li>
+                    </ul>
+                </li>
             </ul>
         </div>
     </div>

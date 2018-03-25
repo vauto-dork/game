@@ -3,7 +3,7 @@ module Components {
 
     PlayerSelectorModule.service('playerSelectionService', PlayerSelectionService);
 
-    PlayerSelectorModule.filter('playerSelectorFilter', PlayerSelectorFilter);
+    PlayerSelectorModule.filter('playerSelectorFilter', [PlayerSelectorFilter]);
 
     PlayerSelectorModule.component('playerSelector', PlayerSelector());
 }
