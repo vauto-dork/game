@@ -167,11 +167,22 @@ router.get('/dotm/', function (req, res, next) {
 });
 
 router.get('/doty/', function(req, res, next) {
+	var now = new Date();
+	var yearDefined = req.query.year !== undefined && req.query.year !== null;
+	var year = yearDefined ? parseInt(req.query.year) : now.getFullYear();
+	var isCurrentYear = year === now.getFullYear();
+
+	var isCurrentMonth = function(month) {
+		return month === now.getMonth();
+	};
+
 	var step = function(index, monthlyDorks) {
 		req.query.month = index;
 		var nextIndex = index + 1;
 		getDotm(req, next, function(data) {
-			monthlyDorks.push({month: index, uberdorks: data.uberdorks});
+			var uberdorks = isCurrentMonth(index) && isCurrentYear ? [] : data.uberdorks;
+			monthlyDorks.push({month: index, uberdorks: uberdorks});
+
 			if(nextIndex < 12) {
 				step(nextIndex, monthlyDorks);
 			} else {
@@ -219,11 +230,6 @@ router.get('/doty/', function(req, res, next) {
 				var winners = winnerCache.filter(function(winner) {
 					return winner.finalRating >= maxRating;
 				});
-
-				var now = new Date();
-				var yearDefined = req.query.year !== undefined && req.query.year !== null;
-				var year = yearDefined ? parseInt(req.query.year) : now.getFullYear();
-				var isCurrentYear = year === now.getFullYear();
 
 				var doty = isCurrentYear ? [] : winners.map(function(winner) {
 					return {
